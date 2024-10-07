@@ -1,0 +1,178 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Ionic Styles */
+:root {
+  --ion-font-family: "Segoe UI";
+  --ion-letter-spacing: 0.045em;
+}
+ion-menu {
+  z-index: 999;
+}
+@media (min-width: 768px) {
+  ion-app {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  ion-menu {
+    border-right: none;
+    width: 10%;
+  }
+}
+ion-header {
+  background-color: #fff;
+}
+@media (min-width: 768px) {
+  ion-router-outlet {
+    padding-bottom: 4rem;
+  }
+}
+.custom-content {
+  --ion-background-color: #ffffff85;
+  --padding-start: 7.5px;
+  --padding-end: 7.5px;
+  --padding-top: 86px;
+  --padding-bottom: 16px;
+}
+ion-content {
+  --offset-bottom: auto !important;
+  --overflow: hidden;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+ion-card {
+  border-radius: 20px;
+  box-shadow: inset;
+}
+ion-button {
+  --border-radius: 20px;
+}
+ion-item:last-child {
+  --border-width: 0;
+}
+/* Toolbar */
+.no-boder-shadow {
+  border: 0;
+  box-shadow: none;
+}
+.no-boder-shadow-imp {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+/* Spinner  */
+.spinner-center {
+  position: fixed;
+  z-index: 999;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+/* MUI Styles */
+.card-content-md p {
+  font-size: 0.864em;
+  margin-top: 0.564em;
+}
+@media (max-width: 768px) {
+  .MuiStepLabel-label {
+    font-size: 0.75em;
+  }
+  .MuiFormHelperText-root {
+    font-size: 0.75em;
+  }
+}
+@media (min-width: 768px) {
+  .MuiInputLabel-root {
+    font-size: 1.15em;
+  }
+  .MuiFormHelperText-root {
+    font-size: 1.15em;
+  }
+}
+.Mui-error:first-letter {
+  text-transform: uppercase;
+}
+/* Table */
+.styled-table tr > td,
+.styled-table tr > th {
+  letter-spacing: 0.045em;
+}
+.styled-table > thead {
+  background-color: #eee;
+}
+/* Footer */
+.footer {
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.045em;
+  background-color: #fff;
+}
+@media (min-width: 768px) {
+  .footer {
+    font-size: 0.683rem;
+    padding-bottom: 0.5rem;
+  }
+}
+@media (max-width: 768px) {
+  .footer {
+    font-size: 0.578rem;
+    padding-bottom: 2rem;
+  }
+}
+.footer a {
+  text-decoration: none;
+}
+.footer .contact {
+  text-transform: lowercase;
+  font-size: 1.2em;
+}
+/* Custom Styles */
+.google-button {
+  text-transform: none;
+  border-radius: 20px;
+  width: 250px;
+}
+.privacy {
+  font-size: small;
+  letter-spacing: 0.045em;
+}
+.privacy a {
+  text-decoration: none;
+}
+.statement {
+  font-size: small;
+  font-family: "Segoe UI";
+  letter-spacing: 0.045em;
+}
+.statement a {
+  text-decoration: none;
+}
+.sign-label {
+  font-size: small;
+  letter-spacing: 0.045em;
+  text-decoration: none;
+}
+.badge {
+  display: inline;
+  margin-left: 5px;
+  background-color: chocolate;
+}
+/* Profile Pic */
+.profile-pic-img {
+  cursor: pointer;
+  margin: 0 auto;
+  /* Ionic css */
+  --size: 180px;
+  --border-radius: 14px;
+}
+.profile-pic-input {
+  display: none;
+}
+.profile-pic-center {
+  margin: 0 auto;
+  display: table;
+}

@@ -1,0 +1,43 @@
+import { ServiceType } from "@/util";
+import { Expense, IExpense, IExpenseSearch } from "@/models";
+import { authApi } from "./index";
+
+export const getExpensesAsync = async (payload: IExpenseSearch): Promise<IExpense[]> => {
+  const response = await authApi.post(ServiceType.Expenses, payload);
+  return response?.data?.resource ?? [{ ...Expense }];
+};
+
+export const getExpenseAsync = async (id: string) => {
+  try {
+    const url = `${ServiceType.Expenses}/${id}`;
+    const response = await authApi.get(url);
+    const { success, resource } = response.data;
+    return { success, resource };
+  } catch (error) {
+    const err = error as Error;
+    return { success: false, resource: err.message };
+  }
+};
+
+export const upsertExpenseAsync = async (payload: IExpense) => {
+  try {
+    const response = await authApi.post(ServiceType.Expense, payload);
+    const { success, resource } = response.data;
+    return { success, resource };
+  } catch (error) {
+    const err = error as Error;
+    return { success: false, resource: err.message };
+  }
+};
+
+export const deleteExpenseAsync = async (id: string) => {
+  try {
+    const url = `${ServiceType.Expenses}/${id}`;
+    const response = await authApi.delete(url);
+    const { success, resource } = response.data;
+    return { success, resource };
+  } catch (error) {
+    const err = error as Error;
+    return { success: false, resource: err.message };
+  }
+};

@@ -1,0 +1,43 @@
+import { ServiceType } from "@/util";
+import { IProject, Project } from "@/models";
+import { authApi } from "./index";
+
+export const getProjectsAsync = async (): Promise<IProject[]> => {
+  const response = await authApi.get(ServiceType.Projects);
+  return response?.data?.resource ?? [{ ...Project }];
+};
+
+export const getProjectAsync = async (id: string): Promise<IProject> => {
+  try {
+    const url = `${ServiceType.Projects}/${id}`;
+    const response = await authApi.get(url);
+    const { success, resource } = response.data;
+    if (success) return resource;
+  } catch (error) {
+    const err = error as Error;
+  }
+  return { ...Project };
+};
+
+export const upsertProjectAsync = async (payload: IProject) => {
+  try {
+    const response = await authApi.post(ServiceType.Project, payload);
+    const { success, resource } = response.data;
+    return { success, resource };
+  } catch (error) {
+    const err = error as Error;
+    return { success: false, resource: err.message };
+  }
+};
+
+export const deleteProjectAsync = async (id: string) => {
+  try {
+    const url = `${ServiceType.Projects}/${id}`;
+    const response = await authApi.delete(url);
+    const { success, resource } = response.data;
+    return { success, resource };
+  } catch (error) {
+    const err = error as Error;
+    return { success: false, resource: err.message };
+  }
+};

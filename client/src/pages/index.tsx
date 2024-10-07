@@ -1,0 +1,11 @@
+export { RootPage } from "./home.page";
+export { SignInPage } from "./user_auth/login.page";
+export { SignUpPage } from "./user_auth/register.page";
+export { ForgotPasswordPage } from "./user_auth/forgot.password.page";
+export { CallbackPage } from "./user_auth/callback.page";
+export { ResetPasswordPage } from "./user_auth/reset.password.page";
+export { VerifyEmailPage } from "./user_auth/verify.email.page";
+export { ProfileHomePage } from "./user_profile/home.page";
+export { UsersHomePage } from "./admin_user/home.page";
+export { ProjectsHomePage } from "./user_projects/home.page";
+export { NotFoundPage } from "./404.page";

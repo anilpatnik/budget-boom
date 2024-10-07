@@ -1,0 +1,14 @@
+{
+  "hosting": {
+    "public": "client/web-build",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      { "source": "/api/**", "function": "api" },
+      { "source": "!/__/auth/handler/**", "destination": "/index.html" },
+      { "source": "**", "destination": "/index.html" }
+    ]
+  },
+  "firestore": { "rules": "firestore.rules" },
+  "storage": { "rules": "storage.rules" },
+  "functions": { "source": "server", "runtime": "nodejs18" }
+}
