@@ -104,7 +104,7 @@ export function SignUpPage() {
           An email message has been sent containing a link to <strong>Activate</strong> your
           account.
           <div className="ion-margin-top">
-            <Link className="sign-label" to={NavType.SignInUrl}>
+            <Link className="sign-label" to={NavType.SignIn}>
               Return to
               <IonBadge color="secondary" className="badge">
                 SIGN IN
@@ -197,8 +197,8 @@ export function SignUpPage() {
                 </form>
                 <div className="ion-margin-top privacy">
                   By clicking on Sign Up, I agree to the website
-                  <Link to={NavType.TermsConditionsUrl}> Terms and Conditions</Link> and
-                  <Link to={NavType.PrivacyPolicyUrl}> Privacy Policy</Link>
+                  <Link to={NavType.TermsConditions}> Terms and Conditions</Link> and
+                  <Link to={NavType.PrivacyPolicy}> Privacy Policy</Link>
                 </div>
               </IonCardContent>
             </IonCard>
@@ -207,7 +207,7 @@ export function SignUpPage() {
         </IonRow>
         <IonRow>
           <IonCol className="ion-text-center">
-            <Link className="sign-label" to={NavType.SignInUrl}>
+            <Link className="sign-label" to={NavType.SignIn}>
               Already have an account?
               <IonBadge color="secondary" className="badge">
                 SIGN IN

@@ -62,6 +62,7 @@ export const getExpensesAsync = async (req: Request, res: Response, next: NextFu
 
 export const getExpenseAsync = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    // const userId = req?.auth?.id || String.empty;
     const expenseId = req.params.expenseid;
     const dbExpense = await dbhelper.getExpense(expenseId);
     const expense: IExpense = {
@@ -93,6 +94,7 @@ export const upsertExpenseAsync = async (req: Request, res: Response, next: Next
 
 export const deleteExpenseAsync = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    // const userId = req?.auth?.id || String.empty;
     const expenseId = req.params.expenseid;
     await dbhelper.deleteExpense(expenseId);
     const resJson = helper.responseJson<string>(true, "Expense has been deleted!");

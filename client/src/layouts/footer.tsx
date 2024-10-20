@@ -7,16 +7,16 @@ export function Footer() {
     <IonFooter className="ion-hide-md-down ion-text-center no-boder-shadow footer">
       <IonToolbar>
         <div className="flex justify-center items-center">
-          <Link id="id-privacy-policy-link" to={NavType.PrivacyPolicyUrl}>
+          <Link id="id-privacy-policy-link" to={NavType.PrivacyPolicy}>
             privacy policy
           </Link>
           <Link
             id="id-terms-conditions-link"
             className="ion-margin-horizontal"
-            to={NavType.TermsConditionsUrl}>
+            to={NavType.TermsConditions}>
             terms and conditions
           </Link>
-          <Link id="id-disclaimer-link" to={NavType.DisclaimerUrl}>
+          <Link id="id-disclaimer-link" to={NavType.Disclaimer}>
             disclaimer
           </Link>
           <a

@@ -100,7 +100,7 @@ export function SignInPage() {
         if (!external) recaptchaRef.current?.reset();
         if (success) {
           if (state?.from) navigate(state.from);
-          else navigate(NavType.RootUrl);
+          else navigate(NavType.Root);
         }
         setLoading(false);
       }, 200);
@@ -169,8 +169,8 @@ export function SignInPage() {
               </form>
               <div className="ion-margin-top privacy">
                 By clicking on Sign In (Google inclusive), I agree to the website
-                <Link to={NavType.TermsConditionsUrl}> Terms and Conditions</Link> and
-                <Link to={NavType.PrivacyPolicyUrl}> Privacy Policy</Link>
+                <Link to={NavType.TermsConditions}> Terms and Conditions</Link> and
+                <Link to={NavType.PrivacyPolicy}> Privacy Policy</Link>
               </div>
             </IonCardContent>
           </IonCard>
@@ -180,12 +180,12 @@ export function SignInPage() {
       <IonRow>
         <IonCol className="ion-text-center">
           <div>
-            <Link className="sign-label" to={NavType.ForgotPasswordUrl}>
+            <Link className="sign-label" to={NavType.ForgotPassword}>
               Forgot your password?
             </Link>
           </div>
           <div className="mt-4">
-            <Link className="sign-label" to={NavType.SignUpUrl}>
+            <Link className="sign-label" to={NavType.SignUp}>
               Don’t have an account?
               <IonBadge color="secondary" className="badge">
                 SIGN UP

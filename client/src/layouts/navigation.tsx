@@ -33,11 +33,11 @@ export function PreRoute({
   const isAllowed = roles && roles?.length > 0 && roles?.includes(user?.role ?? RoleType.User);
   // render component
   if (!user?.auth && (routerType === RouterType.User || routerType === RouterType.Role)) {
-    return <Navigate to={NavType.SignInUrl} replace state={{ from: location.pathname }} />;
+    return <Navigate to={NavType.SignIn} replace state={{ from: location.pathname }} />;
   } else if (user?.auth && routerType === RouterType.Auth) {
-    return <Navigate to={NavType.RootUrl} replace />;
+    return <Navigate to={NavType.Root} replace />;
   } else if (user?.auth && routerType === RouterType.Role && !isAllowed) {
-    return <Navigate to={NavType.RootUrl} replace />;
+    return <Navigate to={NavType.Root} replace />;
   } else {
     return children ? children : <Outlet />;
   }
@@ -63,51 +63,51 @@ function TabLayout() {
 
 export const router = createBrowserRouter([
   {
-    path: NavType.RootUrl,
+    path: NavType.Root,
     element: <TabLayout />,
     children: [
       {
         index: true,
-        path: NavType.RootUrl,
+        path: NavType.Root,
         element: <RootPage />
       },
       {
-        path: NavType.PrivacyPolicyUrl,
+        path: NavType.PrivacyPolicy,
         element: <PrivacyPolicyPage />
       },
       {
-        path: NavType.TermsConditionsUrl,
+        path: NavType.TermsConditions,
         element: <TermsConditionsPage />
       },
       {
-        path: NavType.DisclaimerUrl,
+        path: NavType.Disclaimer,
         element: <DisclaimerPage />
       },
       {
         element: <PreRoute routerType={RouterType.Auth} />,
         children: [
           {
-            path: NavType.SignInUrl,
+            path: NavType.SignIn,
             element: <SignInPage />
           },
           {
-            path: NavType.SignUpUrl,
+            path: NavType.SignUp,
             element: <SignUpPage />
           },
           {
-            path: NavType.ForgotPasswordUrl,
+            path: NavType.ForgotPassword,
             element: <ForgotPasswordPage />
           },
           {
-            path: NavType.CallbackUrl,
+            path: NavType.Callback,
             element: <CallbackPage />
           },
           {
-            path: `${NavType.VerifyEmailUrl}/:${constants.ACTION_CODE}`,
+            path: `${NavType.VerifyEmail}/:${constants.ACTION_CODE}`,
             element: <VerifyEmailPage />
           },
           {
-            path: `${NavType.ResetPasswordUrl}/:${constants.ACTION_CODE}`,
+            path: `${NavType.ResetPassword}/:${constants.ACTION_CODE}`,
             element: <ResetPasswordPage />
           }
         ]
@@ -116,21 +116,21 @@ export const router = createBrowserRouter([
         element: <PreRoute routerType={RouterType.User} />,
         children: [
           {
-            path: NavType.ProfileUrl,
+            path: NavType.Profile,
             element: <ProfileHomePage />
           }
         ]
       },
       {
-        element: <PreRoute routerType={RouterType.User} />,
+        element: <PreRoute routerType={RouterType.User} roles={[RoleType.User]} />,
         children: [
           {
-            path: NavType.ProjectsUrl,
+            path: NavType.Projects,
             element: <ProjectsHomePage />
           },
           {
-            path: `${NavType.ProjectsUrl}${NavType.NotFoundUrl}`,
-            element: <Navigate to={NavType.ProjectsUrl} replace />
+            path: `${NavType.Projects}${NavType.NotFound}`,
+            element: <Navigate to={NavType.Projects} replace />
           }
         ]
       },
@@ -138,12 +138,12 @@ export const router = createBrowserRouter([
         element: <PreRoute routerType={RouterType.Role} roles={[RoleType.Admin]} />,
         children: [
           {
-            path: NavType.UsersUrl,
+            path: NavType.Users,
             element: <UsersHomePage />
           },
           {
-            path: `${NavType.UsersUrl}${NavType.NotFoundUrl}`,
-            element: <Navigate to={NavType.UsersUrl} replace />
+            path: `${NavType.Users}${NavType.NotFound}`,
+            element: <Navigate to={NavType.Users} replace />
           }
         ]
       },

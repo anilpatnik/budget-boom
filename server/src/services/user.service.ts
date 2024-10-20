@@ -131,8 +131,6 @@ export const deleteUserAsync = async (req: Request, res: Response, next: NextFun
   }
 };
 
-// private functions
-
 const createUserRecordAsync = async (
   name?: string,
   email?: string,

@@ -71,6 +71,12 @@ export interface ICategory {
   code?: string;
   icon?: string;
 }
+export const Category: ICategory = {
+  id: String.empty,
+  name: String.empty,
+  code: String.empty,
+  icon: String.empty
+};
 
 export interface IProject {
   id?: string;

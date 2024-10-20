@@ -1,28 +1,27 @@
 import { ServiceType } from "@/util";
-import { AdminUser, IAdminUser, IAdminUserSearch } from "@/models";
+import { ICategory, Category } from "@/models";
 import { authApi } from "./index";
 
-// user profile
-export const getUsersAsync = async (payload: IAdminUserSearch): Promise<IAdminUser[]> => {
-  const response = await authApi.post(ServiceType.Users, payload);
-  return response?.data?.resource ?? [{ ...AdminUser }];
+export const getCategoriesAsync = async (): Promise<ICategory[]> => {
+  const response = await authApi.get(ServiceType.Categories);
+  return response?.data?.resource ?? [{ ...Category }];
 };
 
-export const getUserAsync = async (id: string): Promise<IAdminUser> => {
+export const getCategoryAsync = async (id: string): Promise<ICategory> => {
   try {
-    const url = `${ServiceType.Users}/${id}`;
+    const url = `${ServiceType.Categories}/${id}`;
     const response = await authApi.get(url);
     const { success, resource } = response.data;
     if (success) return resource;
   } catch (error) {
     const err = error as Error;
   }
-  return { ...AdminUser };
+  return { ...Category };
 };
 
-export const updateUserAsync = async (user: IAdminUser) => {
+export const upsertCategoryAsync = async (payload: ICategory) => {
   try {
-    const response = await authApi.post(ServiceType.User, user);
+    const response = await authApi.post(ServiceType.Category, payload);
     const { success, resource } = response.data;
     return { success, resource };
   } catch (error) {
@@ -31,9 +30,9 @@ export const updateUserAsync = async (user: IAdminUser) => {
   }
 };
 
-export const deleteUserAsync = async (id: string) => {
+export const deleteCategoryAsync = async (id: string) => {
   try {
-    const url = `${ServiceType.Users}/${id}`;
+    const url = `${ServiceType.Categories}/${id}`;
     const response = await authApi.delete(url);
     const { success, resource } = response.data;
     return { success, resource };

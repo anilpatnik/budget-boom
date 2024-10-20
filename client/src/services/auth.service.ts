@@ -42,7 +42,7 @@ export const signInWithGoogle = async () => {
 
 export const getUser = async (fbUser: fb.UserCredential) => {
   // const zone = new Date().getTimezoneOffset().toString();
-  const response = await openApi.post(ServiceType.SignInUrl, fbUser.user);
+  const response = await openApi.post(ServiceType.SignIn, fbUser.user);
   const { success, resource } = response.data;
   return { success, resource };
 };
@@ -122,7 +122,7 @@ export const updateProfilePic = async (photoURL: string) => {
 
 export const updateProfileInfo = async (name: string) => {
   try {
-    const response = await authApi.post(ServiceType.ProfileUrl, { name });
+    const response = await authApi.post(ServiceType.Profile, { name });
     const { success, resource } = response.data;
     return { success, resource };
   } catch (error) {
@@ -133,7 +133,7 @@ export const updateProfileInfo = async (name: string) => {
 
 export const deleteProfileAsync = async () => {
   try {
-    const response = await authApi.delete(ServiceType.ProfileUrl);
+    const response = await authApi.delete(ServiceType.Profile);
     const { success, resource } = response.data;
     return { success, resource };
   } catch (error) {
@@ -144,7 +144,7 @@ export const deleteProfileAsync = async () => {
 
 export const captchaVerify = async (token: string) => {
   try {
-    const response = await openApi.post(ServiceType.CaptchaUrl, { token });
+    const response = await openApi.post(ServiceType.Captcha, { token });
     const { success, hostname } = response.data;
     return { success, resource: hostname };
   } catch (error) {

@@ -5,7 +5,7 @@ import { dbhelper, helper } from "../util";
 
 const cache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
 
-export const getCategoriesAsync = async (req: Request, res: Response, next: NextFunction) => {
+export const getPubCategoriesAsync = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const key = "cache-categories";
     const cachedData: ICategory[] | undefined = cache.get(key);
@@ -14,7 +14,7 @@ export const getCategoriesAsync = async (req: Request, res: Response, next: Next
       res.json(resJson);
       return;
     }
-    const dbCategories = await dbhelper.getCategories();
+    const dbCategories = await dbhelper.getPubCategories();
     const categories: ICategory[] = dbCategories?.map(dbCategory => {
       return {
         id: dbCategory.id,

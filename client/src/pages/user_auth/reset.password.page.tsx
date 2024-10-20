@@ -82,7 +82,7 @@ export function ResetPasswordPage() {
         <IonCardContent>
           Reset password link is invalid or expired.
           <div className="ion-margin-top">
-            <Link className="sign-label" to={NavType.SignInUrl}>
+            <Link className="sign-label" to={NavType.SignIn}>
               Return to
               <IonBadge color="secondary" className="badge">
                 SIGN IN
@@ -103,7 +103,7 @@ export function ResetPasswordPage() {
         <IonCardContent>
           You have successfully changed your password.
           <div className="ion-margin-top">
-            <Link className="sign-label" to={NavType.SignInUrl}>
+            <Link className="sign-label" to={NavType.SignIn}>
               Return to
               <IonBadge color="secondary" className="badge">
                 SIGN IN
@@ -172,7 +172,7 @@ export function ResetPasswordPage() {
       </IonRow>
       <IonRow className="ion-margin-vertical">
         <IonCol className="ion-text-center">
-          <Link className="sign-label" to={NavType.SignInUrl}>
+          <Link className="sign-label" to={NavType.SignIn}>
             Return to
             <IonBadge color="secondary" className="badge">
               SIGN IN

@@ -31,7 +31,7 @@ export function VerifyEmailPage() {
 
   const resendVerificationEmail = async () => {
     const res = await resendVerifySignInEmail();
-    navigate(NavType.RootUrl);
+    navigate(NavType.Root);
   };
 
   if (preLoading)
@@ -45,7 +45,7 @@ export function VerifyEmailPage() {
         <IonCardContent>
           You have successfully verified your email address with us.
           <div className="ion-margin-top">
-            <Link className="sign-label" to={NavType.SignInUrl}>
+            <Link className="sign-label" to={NavType.SignIn}>
               Return to
               <IonBadge color="secondary" className="badge">
                 SIGN IN
@@ -69,7 +69,7 @@ export function VerifyEmailPage() {
             </IonButton>
           </div>
           <div className="ion-margin-top">
-            <Link className="sign-label" to={NavType.SignInUrl}>
+            <Link className="sign-label" to={NavType.SignIn}>
               Return to
               <IonBadge color="secondary" className="badge">
                 SIGN IN

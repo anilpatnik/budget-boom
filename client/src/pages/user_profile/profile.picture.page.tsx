@@ -37,7 +37,7 @@ export const ProfilePicturePage = () => {
   const handleSubmit = async (e: any) => {
     if (file?.size) {
       setLoading(true);
-      const imgFile = `${ServiceType.UsersUrl}/${fb.fAuth.currentUser?.uid}/profile.${file.name
+      const imgFile = `${ServiceType.Users}/${fb.fAuth.currentUser?.uid}/profile.${file.name
         .split(".")
         .pop()}`;
       const snapshot = await uploadFile(file, imgFile);
@@ -91,7 +91,7 @@ export const ProfilePicturePage = () => {
     localStorage.clear();
     setAuth({ ...User });
     await fb.fSignOut();
-    navigate(NavType.RootUrl);
+    navigate(NavType.Root);
   };
 
   return (

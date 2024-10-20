@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { lookup, auth, user, project, expense } from "../services";
+import { lookup, auth, user, category, project, expense } from "../services";
 import { authelper, RoleType } from "../util";
 
 const apiRouter: Router = express.Router();
@@ -15,7 +15,14 @@ apiRouter.get("/users/:userid", authelper.authorize([RoleType.Admin]), user.getU
 apiRouter.post("/user", authelper.authorize([RoleType.Admin]), user.upsertUserAsync);
 apiRouter.delete("/users/:userid", authelper.authorize([RoleType.Admin]), user.deleteUserAsync);
 
-apiRouter.get("/categories", authelper.authorize(), lookup.getCategoriesAsync);
+apiRouter.get("/pub/categories", authelper.authorize(), lookup.getPubCategoriesAsync);
+
+apiRouter.get("/categories", authelper.authorize([RoleType.Admin]), category.getCategoriesAsync);
+// prettier-ignore
+apiRouter.get("/categories/:categoryid",authelper.authorize([RoleType.Admin]),category.getCategoryAsync);
+apiRouter.post("/category", authelper.authorize([RoleType.Admin]), category.upsertCategoryAsync);
+// prettier-ignore
+apiRouter.delete("/categories/:categoryid", authelper.authorize([RoleType.Admin]), category.deleteCategoryAsync);
 
 apiRouter.get("/projects", authelper.authorize(), project.getProjectsAsync);
 apiRouter.get("/projects/:projectid", authelper.authorize(), project.getProjectAsync);

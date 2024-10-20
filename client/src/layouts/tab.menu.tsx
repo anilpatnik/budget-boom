@@ -19,7 +19,7 @@ export function TabMenu({ children }: { children: any }) {
     localStorage.clear();
     setAuth({ ...User });
     await fb.fSignOut();
-    navigate(NavType.RootUrl);
+    navigate(NavType.Root);
   };
   return (
     <IonTabs>
@@ -27,28 +27,28 @@ export function TabMenu({ children }: { children: any }) {
       <IonTabBar className="ion-hide-md-up" slot="bottom">
         {/* Login */}
         {!user.auth && (
-          <IonTabButton tab="login" href={NavType.SignInUrl}>
+          <IonTabButton tab="login" href={NavType.SignIn}>
             <IonIcon icon={lockOpenOutline} />
             <IonLabel>Login</IonLabel>
           </IonTabButton>
         )}
         {/* Users */}
         {user.auth && user?.role === RoleType.Admin && (
-          <IonTabButton tab="users" href={NavType.UsersUrl}>
+          <IonTabButton tab="users" href={NavType.Users}>
             <IonIcon icon={peopleOutline} />
             <IonLabel>Users</IonLabel>
           </IonTabButton>
         )}
         {/* Projects */}
-        {user.auth && (
-          <IonTabButton tab="projects" href={NavType.ProjectsUrl}>
+        {user.auth && user?.role === RoleType.User && (
+          <IonTabButton tab="projects" href={NavType.Projects}>
             <IonIcon icon={libraryOutline} />
             <IonLabel>Projects</IonLabel>
           </IonTabButton>
         )}
         {/* Profile */}
         {user.auth && (
-          <IonTabButton tab="myprofile" href={NavType.ProfileUrl}>
+          <IonTabButton tab="myprofile" href={NavType.Profile}>
             <IonIcon icon={personOutline} />
             <IonLabel>My Profile</IonLabel>
           </IonTabButton>

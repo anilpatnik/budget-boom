@@ -29,12 +29,12 @@ export function ProjectsHomePage() {
   return (
     <>
       <IonBreadcrumbs className="ion-margin-vertical">
-        <IonBreadcrumb onClick={() => navigate(NavType.RootUrl)} className="cursor-pointer">
+        <IonBreadcrumb onClick={() => navigate(NavType.Root)} className="cursor-pointer">
           <IonIcon slot="separator" icon={caretForwardOutline} />
           Home
         </IonBreadcrumb>
         <IonBreadcrumb
-          onClick={() => navigate(`${NavType.ProjectsUrl}${NavType.NotFoundUrl}`)}
+          onClick={() => navigate(`${NavType.Projects}${NavType.NotFound}`)}
           className="cursor-pointer">
           <IonIcon slot="separator" icon={caretForwardOutline} />
           Projects

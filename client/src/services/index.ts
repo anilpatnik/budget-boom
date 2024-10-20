@@ -33,6 +33,7 @@ export function setToken() {
 export * from "./auth.service";
 export * from "./user.service";
 export * from "./lookup.service";
+export * from "./category.service";
 export * from "./project.service";
 export * from "./expense.service";
 export { openApi, authApi };

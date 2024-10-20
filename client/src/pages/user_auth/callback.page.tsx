@@ -10,10 +10,10 @@ export function CallbackPage() {
     const mode = searchParams.get("mode");
     const actionCode = searchParams.get("oobCode");
     if (mode?.toLocaleLowerCase() === "resetpassword")
-      navigate(`${NavType.ResetPasswordUrl}/${actionCode}`);
+      navigate(`${NavType.ResetPassword}/${actionCode}`);
     else if (mode?.toLocaleLowerCase() === "verifyemail")
-      navigate(`${NavType.VerifyEmailUrl}/${actionCode}`);
-    else navigate(NavType.RootUrl);
+      navigate(`${NavType.VerifyEmail}/${actionCode}`);
+    else navigate(NavType.Root);
   }, []);
   return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 }

@@ -89,7 +89,7 @@ export function ForgotPasswordPage() {
         <IonCardContent>
           An email message has been sent containing a link to <strong>Reset</strong> your password.
           <div className="ion-margin-top">
-            <Link className="sign-label" to={NavType.SignInUrl}>
+            <Link className="sign-label" to={NavType.SignIn}>
               Return to
               <IonBadge color="secondary" className="badge">
                 SIGN IN
@@ -147,7 +147,7 @@ export function ForgotPasswordPage() {
         </IonRow>
         <IonRow>
           <IonCol className="ion-text-center">
-            <Link className="sign-label" to={NavType.SignInUrl}>
+            <Link className="sign-label" to={NavType.SignIn}>
               Return to
               <IonBadge color="secondary" className="badge">
                 SIGN IN
