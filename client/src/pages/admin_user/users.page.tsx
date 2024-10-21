@@ -140,6 +140,7 @@ export function UsersPage({ handleClick, searchType, searchInput }: ComponentPro
                       title="CREATE USER"
                       size="small"
                       buttonType="icon"
+                      aria-hidden="false"
                       onClick={() => {
                         const password = newPassword();
                         const newUser = { ...AdminUser, password, type: CrudType.Create };
@@ -168,6 +169,7 @@ export function UsersPage({ handleClick, searchType, searchInput }: ComponentPro
                         id="id-edit-button"
                         title="EDIT USER"
                         size="small"
+                        aria-hidden="false"
                         buttonType="icon"
                         onClick={() => handleEditClick(item.uid || String.empty)}>
                         <IonIcon icon={createOutline}></IonIcon>
@@ -178,6 +180,7 @@ export function UsersPage({ handleClick, searchType, searchInput }: ComponentPro
                         id="id-delete-button"
                         title="Delete"
                         fill="clear"
+                        aria-hidden="false"
                         onClick={() =>
                           presentAlert({
                             header: "Are you sure?",

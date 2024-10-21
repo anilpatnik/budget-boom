@@ -69,6 +69,7 @@ export function Header() {
                       <IonButton
                         id="id-users-menu"
                         size="small"
+                        aria-hidden="false"
                         onClick={() => handleMenuClick(`${NavType.Users}${NavType.NotFound}`)}>
                         <IonIcon icon={peopleOutline} className="mr-2" /> Users
                       </IonButton>
@@ -78,6 +79,7 @@ export function Header() {
                       <IonButton
                         id="id-categories-menu"
                         size="small"
+                        aria-hidden="false"
                         onClick={() => handleMenuClick(`${NavType.Categories}${NavType.NotFound}`)}>
                         <IonIcon icon={gridOutline} className="mr-2" /> Categories
                       </IonButton>
@@ -87,6 +89,7 @@ export function Header() {
                       <IonButton
                         id="id-projects-menu"
                         size="small"
+                        aria-hidden="false"
                         onClick={() => handleMenuClick(`${NavType.Projects}${NavType.NotFound}`)}>
                         <IonIcon icon={libraryOutline} className="mr-2" /> Projects
                       </IonButton>
@@ -95,10 +98,15 @@ export function Header() {
                     <IonButton
                       id="id-my-profile-menu"
                       size="small"
+                      aria-hidden="false"
                       onClick={() => handleMenuClick(NavType.Profile)}>
                       <IonIcon icon={personOutline} className="mr-2" /> My Profile
                     </IonButton>
-                    <IonButton id="id-logoff-menu" size="small" onClick={handleLogout}>
+                    <IonButton
+                      id="id-logoff-menu"
+                      size="small"
+                      aria-hidden="false"
+                      onClick={handleLogout}>
                       <IonIcon icon={lockClosedOutline} className="mr-2" /> Logout
                     </IonButton>
                   </>
@@ -108,6 +116,7 @@ export function Header() {
                   <IonButton
                     id="id-login-menu"
                     size="small"
+                    aria-hidden="false"
                     onClick={() => handleMenuClick(NavType.SignIn)}>
                     <IonIcon icon={lockOpenOutline} className="mr-2" /> Login
                   </IonButton>

@@ -177,6 +177,7 @@ export function SignUpPage() {
                     size="small"
                     type="submit"
                     className="ion-margin-vertical"
+                    aria-hidden="false"
                     disabled={loading}>
                     <button type="submit" hidden />
                     {loading ? (
@@ -190,6 +191,7 @@ export function SignUpPage() {
                     className="ion-margin-horizontal"
                     size="small"
                     color="light"
+                    aria-hidden="false"
                     onClick={formik.handleReset}>
                     <IonIcon icon={refreshOutline} slot="start" />
                     RESET

@@ -64,7 +64,7 @@ export function VerifyEmailPage() {
         <IonCardContent>
           Verify email link is invalid or expired.
           <div className="ion-margin-top">
-            <IonButton size="small" onClick={resendVerificationEmail}>
+            <IonButton size="small" aria-hidden="false" onClick={resendVerificationEmail}>
               Resend Verification Link
             </IonButton>
           </div>

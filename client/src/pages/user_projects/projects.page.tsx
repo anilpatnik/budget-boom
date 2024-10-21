@@ -92,6 +92,7 @@ export function ProjectsPage({ handleClick }: ComponentProps) {
                   id="id-create-button"
                   title="CREATE PROJECT"
                   size="small"
+                  aria-hidden="false"
                   buttonType="icon"
                   onClick={() => {
                     const newProject = { ...Project, type: CrudType.Create };
@@ -123,6 +124,7 @@ export function ProjectsPage({ handleClick }: ComponentProps) {
                     id="id-edit-button"
                     title="EDIT PROJECT"
                     size="small"
+                    aria-hidden="false"
                     buttonType="icon"
                     onClick={() => handleEdit(item.id || String.empty)}>
                     <IonIcon icon={createOutline}></IonIcon>
@@ -133,6 +135,7 @@ export function ProjectsPage({ handleClick }: ComponentProps) {
                     id="id-delete-button"
                     title="Delete"
                     fill="clear"
+                    aria-hidden="false"
                     onClick={() =>
                       presentAlert({
                         header: "Are you sure?",

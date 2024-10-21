@@ -129,6 +129,7 @@ export function ForgotPasswordPage() {
                     id="id-submit-button"
                     size="small"
                     type="submit"
+                    aria-hidden="false"
                     className="ion-margin-vertical"
                     disabled={loading}>
                     <button type="submit" hidden />

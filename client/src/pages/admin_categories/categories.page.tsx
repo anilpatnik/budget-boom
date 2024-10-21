@@ -88,6 +88,7 @@ export function CategoriesPage({ handleClick }: ComponentProps) {
                   id="id-create-button"
                   title="CREATE CATEGORY"
                   size="small"
+                  aria-hidden="false"
                   buttonType="icon"
                   onClick={() => {
                     const newCategory = { ...Category, type: CrudType.Create };
@@ -118,6 +119,7 @@ export function CategoriesPage({ handleClick }: ComponentProps) {
                     id="id-edit-button"
                     title="EDIT CATEGORY"
                     size="small"
+                    aria-hidden="false"
                     buttonType="icon"
                     onClick={() => handleEdit(item.id || String.empty)}>
                     <IonIcon icon={createOutline}></IonIcon>
@@ -128,6 +130,7 @@ export function CategoriesPage({ handleClick }: ComponentProps) {
                     id="id-delete-button"
                     title="Delete"
                     fill="clear"
+                    aria-hidden="false"
                     onClick={() =>
                       presentAlert({
                         header: "Are you sure?",

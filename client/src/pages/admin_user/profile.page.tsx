@@ -225,6 +225,7 @@ export function UserProfilePage({ user, handleClick, searchType, searchInput }: 
                         id="id-submit-button"
                         size="small"
                         type="submit"
+                        aria-hidden="false"
                         disabled={loading}>
                         <button type="submit" hidden />
                         {loading ? (
@@ -236,7 +237,11 @@ export function UserProfilePage({ user, handleClick, searchType, searchInput }: 
                       </IonButton>
                     </IonCol>
                     <IonCol size-md="3" size-sm="4">
-                      <IonButton size="small" color="light" onClick={formik.handleReset}>
+                      <IonButton
+                        size="small"
+                        color="light"
+                        aria-hidden="false"
+                        onClick={formik.handleReset}>
                         <IonIcon icon={refreshOutline} slot="start" />
                         RESET
                       </IonButton>
@@ -246,6 +251,7 @@ export function UserProfilePage({ user, handleClick, searchType, searchInput }: 
                         id="id-back-button"
                         size="small"
                         color="medium"
+                        aria-hidden="false"
                         onClick={(e: any) =>
                           handleClick(PageType.Default, searchType, searchInput)
                         }>
