@@ -102,6 +102,7 @@ export const ProfilePicturePage = () => {
             id="id-delete-button"
             type="submit"
             color="danger"
+            aria-hidden="false"
             onClick={() =>
               presentAlert({
                 header: "Are you sure, you want to leave us?",
@@ -154,6 +155,7 @@ export const ProfilePicturePage = () => {
             id="id-upload-button"
             size="small"
             type="submit"
+            aria-hidden="false"
             disabled={loading}
             onClick={handleSubmit}>
             {loading ? (
@@ -167,6 +169,7 @@ export const ProfilePicturePage = () => {
             className="ion-margin-horizontal"
             size="small"
             color="light"
+            aria-hidden="false"
             onClick={handleReset}>
             <IonIcon icon={refreshOutline} slot="start" />
             RESET

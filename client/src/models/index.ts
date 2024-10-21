@@ -70,12 +70,14 @@ export interface ICategory {
   name?: string;
   code?: string;
   icon?: string;
+  type?: CrudType;
 }
 export const Category: ICategory = {
   id: String.empty,
   name: String.empty,
   code: String.empty,
-  icon: String.empty
+  icon: String.empty,
+  type: CrudType.Read
 };
 
 export interface IProject {

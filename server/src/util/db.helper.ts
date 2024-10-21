@@ -56,12 +56,12 @@ export const upsertCategory = async (category: ICategory) =>
     where: { id: category.id },
     update: {
       name: category.name || String.empty,
-      code: category.name || String.empty,
+      code: category.code || String.empty,
       icon: category.icon || String.empty,
     },
     create: {
       name: category.name || String.empty,
-      code: category.name || String.empty,
+      code: category.code || String.empty,
       icon: category.icon || String.empty,
     }
   });
