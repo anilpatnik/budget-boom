@@ -1,19 +1,3 @@
-export type IconType =
-  | "briefcase-outline"
-  | "gift-outline"
-  | "school-outline"
-  | "ticket-outline"
-  | "restaurant-outline"
-  | "cart-outline"
-  | "heart-outline"
-  | "home-outline"
-  | "cash-outline"
-  | "sparkles-outline"
-  | "bag-handle-outline"
-  | "car-outline"
-  | "airplane-outline"
-  | "receipt-outline";
-
 export enum RouterType {
   Auth = 10,
   User = 20,

@@ -5,4 +5,4 @@ export { PasswordComponent } from "./password.component";
 export { PasswordStrength } from "./password.strength";
 export { DateComponent } from "./date.component";
 export { RichComponent } from "./rich.component";
-export { DynamicIcon } from "./icon.component";
+export { Icon } from "./icon.component";

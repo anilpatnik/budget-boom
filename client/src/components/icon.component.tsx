@@ -1,39 +1,18 @@
 import { IonIcon } from "@ionic/react";
-import {
-  airplaneOutline,
-  bagHandleOutline,
-  briefcaseOutline,
-  carOutline,
-  cartOutline,
-  cashOutline,
-  giftOutline,
-  heartOutline,
-  homeOutline,
-  receiptOutline,
-  restaurantOutline,
-  schoolOutline,
-  sparklesOutline,
-  ticketOutline
-} from "ionicons/icons";
-import { IconType } from "@/util";
+import * as Ionicons from "ionicons/icons";
+import _ from "lodash";
 
-const icons: Record<IconType, string> = {
-  "briefcase-outline": briefcaseOutline,
-  "gift-outline": giftOutline,
-  "school-outline": schoolOutline,
-  "ticket-outline": ticketOutline,
-  "restaurant-outline": restaurantOutline,
-  "cart-outline": cartOutline,
-  "heart-outline": heartOutline,
-  "home-outline": homeOutline,
-  "cash-outline": cashOutline,
-  "sparkles-outline": sparklesOutline,
-  "bag-handle-outline": bagHandleOutline,
-  "car-outline": carOutline,
-  "airplane-outline": airplaneOutline,
-  "receipt-outline": receiptOutline
-};
-export function DynamicIcon({ iconName, size = "small" }: { iconName: IconType; size?: string }) {
-  const icon = icons[iconName];
-  return <IonIcon icon={icon} size={size} />;
+export function Icon({
+  name,
+  size = 24,
+  color = "black"
+}: {
+  name: string;
+  size?: number;
+  color?: string;
+}) {
+  const camelCaseName = _.camelCase(name);
+  const ionIcon = Ionicons[camelCaseName as keyof typeof Ionicons];
+  if (ionIcon) return <IonIcon icon={ionIcon} style={{ fontSize: size, color }} />;
+  else return <IonIcon icon={Ionicons.homeOutline} style={{ fontSize: size, color }} />;
 }

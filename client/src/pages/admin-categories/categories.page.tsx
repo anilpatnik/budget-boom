@@ -11,10 +11,10 @@ import {
   TableRow
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { PageType, CrudType, IconType } from "@/util";
+import { PageType, CrudType } from "@/util";
 import { ICategory, Category } from "@/models";
 import { deleteCategoryAsync, getCategoryAsync, getCategoriesAsync } from "@/services";
-import { DynamicIcon } from "@/components";
+import { Icon } from "@/components";
 
 type ComponentProps = {
   handleClick: (pageType: PageType, category?: ICategory) => void;
@@ -108,11 +108,7 @@ export function CategoriesPage({ handleClick }: ComponentProps) {
                 <TableCell align="left">{item?.name}</TableCell>
                 <TableCell align="left">{item?.code}</TableCell>
                 <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  {item?.icon ? (
-                    <DynamicIcon iconName={item.icon as IconType} size="large" />
-                  ) : (
-                    String.empty
-                  )}
+                  {item?.icon ? <Icon name={item.icon} /> : String.empty}
                 </TableCell>
                 <TableCell align="left">
                   <IonButton
