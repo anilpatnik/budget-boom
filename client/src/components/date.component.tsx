@@ -38,8 +38,7 @@ export function DateComponent({
       onBlur={handleBlur}
       variant="standard"
       onKeyDown={e => e.preventDefault()} // disable keyboard input
-      InputProps={{ inputProps: { min, max } }}
-      InputLabelProps={{ shrink: true }}
+      slotProps={{ input: { min, max }, inputLabel: { shrink: true } }}
       error={touched && Boolean(errorMessage)}
       helperText={touched && errorMessage}
       disabled={disabled}

@@ -29,7 +29,6 @@ export function CategoryPage({ category, handleClick }: ComponentProps) {
   const formik = useFormik({
     initialValues: {
       name: category?.name || String.empty,
-      code: category?.code || String.empty,
       icon: category?.icon || String.empty
     },
     validateOnMount: false,
@@ -44,7 +43,6 @@ export function CategoryPage({ category, handleClick }: ComponentProps) {
         const newCategory: ICategory = {
           id: crypto.randomUUID(),
           name: values?.name,
-          code: values?.code,
           icon: values?.icon,
           type: CrudType.Create
         };
@@ -66,7 +64,6 @@ export function CategoryPage({ category, handleClick }: ComponentProps) {
         const updateCategory: ICategory = {
           id: category?.id,
           name: values?.name,
-          code: values?.code,
           icon: values?.icon,
           type: CrudType.Update
         };
@@ -108,17 +105,6 @@ export function CategoryPage({ category, handleClick }: ComponentProps) {
                     value={formik.values.name}
                     touched={formik.touched.name}
                     errorMessage={formik.errors.name}
-                    handleChange={formik.handleChange}
-                  />
-                </div>
-                <div className="my-6">
-                  <InputComponent
-                    name="code"
-                    label="Code"
-                    type="text"
-                    value={formik.values.code}
-                    touched={formik.touched.code}
-                    errorMessage={formik.errors.code}
                     handleChange={formik.handleChange}
                   />
                 </div>

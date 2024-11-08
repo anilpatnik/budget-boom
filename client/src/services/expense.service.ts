@@ -1,22 +1,23 @@
 import { ServiceType } from "@/util";
-import { Expense, IExpense, IExpenseSearch } from "@/models";
+import { Expense, IExpense, IExpenseData, IExpenseSearch } from "@/models";
 import { authApi } from "./index";
 
-export const getExpensesAsync = async (payload: IExpenseSearch): Promise<IExpense[]> => {
+export const getExpensesAsync = async (payload: IExpenseSearch): Promise<IExpenseData> => {
   const response = await authApi.post(ServiceType.Expenses, payload);
-  return response?.data?.resource ?? [{ ...Expense }];
+  if (response?.data?.resource) return response?.data?.resource;
+  return { data: [{ ...Expense }], count: 0 };
 };
 
-export const getExpenseAsync = async (id: string) => {
+export const getExpenseAsync = async (id: string): Promise<IExpense> => {
   try {
     const url = `${ServiceType.Expenses}/${id}`;
     const response = await authApi.get(url);
     const { success, resource } = response.data;
-    return { success, resource };
+    if (success) return resource;
   } catch (error) {
     const err = error as Error;
-    return { success: false, resource: err.message };
   }
+  return { ...Expense };
 };
 
 export const upsertExpenseAsync = async (payload: IExpense) => {

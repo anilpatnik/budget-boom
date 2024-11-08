@@ -42,19 +42,21 @@ export function PasswordComponent({
       autoComplete={autoComplete}
       fullWidth
       variant="standard"
-      InputLabelProps={{ shrink: true }}
-      InputProps={{
-        endAdornment: (
-          <InputAdornment position="end">
-            <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
-              {showPassword ? (
-                <IonIcon slot="start" icon={eyeOffOutline} />
-              ) : (
-                <IonIcon slot="start" icon={eyeOutline} />
-              )}
-            </IconButton>
-          </InputAdornment>
-        )
+      slotProps={{
+        inputLabel: { shrink: true },
+        input: {
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
+                {showPassword ? (
+                  <IonIcon slot="start" icon={eyeOffOutline} />
+                ) : (
+                  <IonIcon slot="start" icon={eyeOutline} />
+                )}
+              </IconButton>
+            </InputAdornment>
+          )
+        }
       }}
       error={touched && Boolean(errorMessage)}
       helperText={touched && errorMessage}

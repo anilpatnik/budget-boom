@@ -5,7 +5,6 @@ CREATE TYPE "RoleType" AS ENUM ('USER', 'ADMIN');
 CREATE TABLE "Category" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "code" TEXT NOT NULL,
     "icon" TEXT NOT NULL,
     "inactive" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -46,10 +45,11 @@ CREATE TABLE "Project" (
 -- CreateTable
 CREATE TABLE "Expense" (
     "id" TEXT NOT NULL,
-    "projectId" TEXT NOT NULL,
-    "categoryCode" TEXT,
+    "projectId" TEXT,
+    "categoryId" TEXT,
     "entryDate" TIMESTAMP(3) NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
+    "taxable" BOOLEAN NOT NULL DEFAULT false,
     "notes" TEXT,
     "userId" TEXT NOT NULL,
     "inactive" BOOLEAN NOT NULL DEFAULT false,
@@ -58,9 +58,6 @@ CREATE TABLE "Expense" (
 
     CONSTRAINT "Expense_pkey" PRIMARY KEY ("id")
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "Category_code_key" ON "Category"("code");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
@@ -75,7 +72,7 @@ ALTER TABLE "Project" ADD CONSTRAINT "Project_userId_fkey" FOREIGN KEY ("userId"
 ALTER TABLE "Expense" ADD CONSTRAINT "Expense_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Expense" ADD CONSTRAINT "Expense_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Expense" ADD CONSTRAINT "Expense_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Expense" ADD CONSTRAINT "Expense_categoryCode_fkey" FOREIGN KEY ("categoryCode") REFERENCES "Category"("code") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Expense" ADD CONSTRAINT "Expense_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;

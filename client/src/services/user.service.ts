@@ -1,11 +1,12 @@
 import { ServiceType } from "@/util";
-import { AdminUser, IAdminUser, IAdminUserSearch } from "@/models";
+import { AdminUser, IAdminUser, IAdminUserData, IAdminUserSearch } from "@/models";
 import { authApi } from "./index";
 
 // user profile
-export const getUsersAsync = async (payload: IAdminUserSearch): Promise<IAdminUser[]> => {
+export const getUsersAsync = async (payload: IAdminUserSearch): Promise<IAdminUserData> => {
   const response = await authApi.post(ServiceType.Users, payload);
-  return response?.data?.resource ?? [{ ...AdminUser }];
+  if (response?.data?.resource) return response?.data?.resource;
+  return { data: [{ ...AdminUser }], count: 0 };
 };
 
 export const getUserAsync = async (id: string): Promise<IAdminUser> => {

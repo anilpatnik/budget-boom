@@ -10,7 +10,6 @@ export const getCategoriesAsync = async (req: Request, res: Response, next: Next
       return {
         id: dbCategory?.id,
         name: dbCategory?.name,
-        code: dbCategory?.code,
         icon: dbCategory?.icon
       };
     });
@@ -29,7 +28,6 @@ export const getCategoryAsync = async (req: Request, res: Response, next: NextFu
     const category: ICategory = {
       id: dbCategory?.id,
       name: dbCategory?.name,
-      code: dbCategory?.code,
       icon: dbCategory?.icon
     };
     const resJson = helper.responseJson<ICategory>(true, helper.removeUndefined(category));
@@ -56,8 +54,7 @@ export const deleteCategoryAsync = async (req: Request, res: Response, next: Nex
     const userId = req?.auth?.id || String.empty;
     const categoryId = req.params.categoryid;
     // check if expenses exists
-    const dbCategory = await dbhelper.getCategory(categoryId);
-    const count = await dbhelper.getExpenseCountByCategory(dbCategory?.code || String.empty);
+    const count = await dbhelper.getExpenseCountByCategoryId(categoryId || String.empty);
     if (count > 0) throw new Error("Category has expenses!");
     // delete category
     await dbhelper.deleteCategory(categoryId);

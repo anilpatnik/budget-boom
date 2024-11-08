@@ -5,6 +5,23 @@ export interface IResponse<T> {
   resource?: T;
 }
 
+export interface IPaging {
+  page?: number;
+  size?: number;
+}
+
+export interface IAggregate {
+  count?: number;
+  total?: number;
+}
+
+export interface ILookup {
+  id?: string;
+  name?: string;
+  code?: string;
+  icon?: string;
+}
+
 export interface IToken {
   id?: string;
   uid?: string;
@@ -33,19 +50,20 @@ export interface IAdminUser {
   lastUpdated?: string;
 }
 
-export interface IAdminUserSearch {
+export interface IAdminUserData extends IAggregate {
+  data?: IAdminUser[];
+}
+
+export interface IAdminUserSearch extends IPaging {
   searchType?: SearchType;
   searchInput?: string;
   role?: RoleType;
   active?: boolean;
-  page?: number;
-  size?: number;
 }
 
 export interface ICategory {
   id?: string;
   name?: string;
-  code?: string;
   icon?: string;
 }
 
@@ -60,26 +78,33 @@ export interface IProject {
   type?: CrudType;
 }
 
-export interface IExpenseSearch {
+export interface IProjectData extends IAggregate {
+  data?: IProject[];
+}
+
+export interface IExpenseSearch extends IPaging {
   startDate?: string;
   endDate?: string;
   projectId?: string;
-  categoryCode?: string;
-  page?: number;
-  size?: number;
+  categoryId?: string;
 }
 
 export interface IExpense {
   id?: string;
   entryDate?: string;
   price?: number;
+  taxable?: boolean;
   notes?: string;
   projectId?: string;
   projectName?: string;
+  categoryId?: string;
   categoryName?: string;
-  categoryCode?: string;
   categoryIcon?: string;
   inactive?: boolean;
   lastUpdated?: string;
   type?: CrudType;
+}
+
+export interface IExpenseData extends IAggregate {
+  data?: IExpense[];
 }

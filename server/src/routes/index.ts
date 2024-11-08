@@ -16,6 +16,7 @@ apiRouter.post("/user", authelper.authorize([RoleType.Admin]), user.upsertUserAs
 apiRouter.delete("/users/:userid", authelper.authorize([RoleType.Admin]), user.deleteUserAsync);
 
 apiRouter.get("/pub/categories", authelper.authorize(), lookup.getPubCategoriesAsync);
+apiRouter.get("/pub/projects", authelper.authorize(), lookup.getPubProjectsAsync);
 
 apiRouter.get("/categories", authelper.authorize([RoleType.Admin]), category.getCategoriesAsync);
 // prettier-ignore
@@ -24,13 +25,13 @@ apiRouter.post("/category", authelper.authorize([RoleType.Admin]), category.upse
 // prettier-ignore
 apiRouter.delete("/categories/:categoryid", authelper.authorize([RoleType.Admin]), category.deleteCategoryAsync);
 
-apiRouter.get("/projects", authelper.authorize(), project.getProjectsAsync);
+apiRouter.post("/projects", authelper.authorize(), project.getProjectsAsync);
 apiRouter.get("/projects/:projectid", authelper.authorize(), project.getProjectAsync);
 apiRouter.post("/project", authelper.authorize(), project.upsertProjectAsync);
 apiRouter.delete("/projects/:projectid", authelper.authorize(), project.deleteProjectAsync);
 
-apiRouter.post("expenses", authelper.authorize(), expense.getExpensesAsync);
-apiRouter.get("expenses/:expenseid", authelper.authorize(), expense.getExpenseAsync);
+apiRouter.post("/expenses", authelper.authorize(), expense.getExpensesAsync);
+apiRouter.get("/expenses/:expenseid", authelper.authorize(), expense.getExpenseAsync);
 apiRouter.post("/expense", authelper.authorize(), expense.upsertExpenseAsync);
 apiRouter.delete("/expenses/:expenseid", authelper.authorize(), expense.deleteExpenseAsync);
 

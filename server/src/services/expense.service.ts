@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { helper, dbhelper } from "../util";
-import { IExpense, IExpenseSearch } from "../models";
+import { IExpense, IExpenseData, IExpenseSearch } from "../models";
 
 export const getExpensesAsync = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -20,10 +20,10 @@ export const getExpensesAsync = async (req: Request, res: Response, next: NextFu
       };
     }
     // category filter
-    if (expenseSearch.categoryCode) {
+    if (expenseSearch.categoryId) {
       whereCondition = {
         ...whereCondition,
-        categoryCode: { equals: expenseSearch.categoryCode, mode: "insensitive" }
+        categoryId: { equals: expenseSearch.categoryId, mode: "insensitive" }
       };
     }
     // date filter
@@ -37,7 +37,7 @@ export const getExpensesAsync = async (req: Request, res: Response, next: NextFu
       };
     }
     // get expenses
-    const dbExpenses = await dbhelper.getExpenses(
+    const [dbExpenses, count] = await dbhelper.getExpenses(
       whereCondition,
       expenseSearch.page,
       expenseSearch.size
@@ -45,15 +45,17 @@ export const getExpensesAsync = async (req: Request, res: Response, next: NextFu
     const expenses: IExpense[] = dbExpenses?.map(dbExpense => {
       return {
         id: dbExpense?.id,
-        projectId: dbExpense?.projectId,
-        categoryCode: dbExpense?.categoryCode || String.empty,
+        projectName: dbExpense?.project?.name,
+        categoryName: dbExpense?.category?.name,
         categoryIcon: dbExpense?.category?.icon,
         price: dbExpense?.price || 0,
+        taxable: dbExpense?.taxable || false,
         notes: dbExpense?.notes || String.empty,
         entryDate: dbExpense?.entryDate ? helper.formatDate(dbExpense?.entryDate) : String.empty
       };
     });
-    const resJson = helper.responseJson<IExpense[]>(true, helper.removeUndefined(expenses));
+    const expenseData: IExpenseData = { data: helper.removeUndefined(expenses), count };
+    const resJson = helper.responseJson<IExpenseData>(true, expenseData);
     res.json(resJson);
   } catch (error) {
     return next(error);
@@ -67,9 +69,10 @@ export const getExpenseAsync = async (req: Request, res: Response, next: NextFun
     const dbExpense = await dbhelper.getExpense(expenseId);
     const expense: IExpense = {
       id: dbExpense?.id,
-      projectId: dbExpense?.projectId,
-      categoryCode: dbExpense?.categoryCode || String.empty,
+      projectId: dbExpense?.projectId || String.empty,
+      categoryId: dbExpense?.categoryId || String.empty,
       price: dbExpense?.price || 0,
+      taxable: dbExpense?.taxable || false,
       notes: dbExpense?.notes || String.empty,
       entryDate: dbExpense?.entryDate ? helper.formatDate(dbExpense?.entryDate) : String.empty
     };

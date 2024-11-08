@@ -9,6 +9,10 @@ export const formatDate = (d: Date | string) => formatISO(new Date(d), { represe
 export const formatTime = (d: Date | string) => formatISO(new Date(d), { representation: "time" });
 export const formatddMMMyyyy = (d: Date | string) => format(d, "dd MMM yyyy");
 
+export const parseDate = (date: string | undefined): Date => {
+  return date ? new Date(formatDate(date)) : new Date(dateNow());
+};
+
 export const responseJson = <T>(success?: boolean, resource?: T) => {
   const response: IResponse<T> = { success, resource };
   return response;

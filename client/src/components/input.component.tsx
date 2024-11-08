@@ -53,18 +53,16 @@ export function InputComponent({
       error={touched && Boolean(errorMessage)}
       helperText={touched && errorMessage}
       disabled={disabled}
-      InputProps={
-        startAdor
-          ? {
-              startAdornment: (
-                <InputAdornment sx={{ fontSize: "1.25em" }} position="start">
-                  {startAdorText}
-                </InputAdornment>
-              )
-            }
-          : {}
-      }
-      InputLabelProps={{ shrink: true }}
+      slotProps={{
+        inputLabel: { shrink: true },
+        input: {
+          startAdornment: startAdor ? (
+            <InputAdornment sx={{ fontSize: "1.25em" }} position="start">
+              {startAdorText}
+            </InputAdornment>
+          ) : null
+        }
+      }}
       sx={{ input: { fontSize: "0.975em", letterSpacing: "0.075em" } }}
     />
   );

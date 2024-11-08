@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { IonButton, IonButtons, IonHeader, IonIcon, IonToolbar } from "@ionic/react";
 import {
+  cashOutline,
   gridOutline,
   libraryOutline,
   lockClosedOutline,
@@ -82,6 +83,16 @@ export function Header() {
                         aria-hidden="false"
                         onClick={() => handleMenuClick(`${NavType.Categories}${NavType.NotFound}`)}>
                         <IonIcon icon={gridOutline} className="mr-2" /> Categories
+                      </IonButton>
+                    )}
+                    {/* Expenses */}
+                    {user?.role === RoleType.User && (
+                      <IonButton
+                        id="id-expenses-menu"
+                        size="small"
+                        aria-hidden="false"
+                        onClick={() => handleMenuClick(`${NavType.Expenses}${NavType.NotFound}`)}>
+                        <IonIcon icon={cashOutline} className="mr-2" /> Expenses
                       </IonButton>
                     )}
                     {/* Projects */}

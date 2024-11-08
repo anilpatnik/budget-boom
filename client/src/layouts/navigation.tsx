@@ -13,7 +13,8 @@ import {
   ProfileHomePage,
   UsersHomePage,
   CategoriesHomePage,
-  ProjectsHomePage
+  ProjectsHomePage,
+  ExpensesHomePage
 } from "@/pages";
 import { Header } from "./header";
 import { Footer } from "./footer";
@@ -119,6 +120,19 @@ export const router = createBrowserRouter([
           {
             path: NavType.Profile,
             element: <ProfileHomePage />
+          }
+        ]
+      },
+      {
+        element: <PreRoute routerType={RouterType.User} roles={[RoleType.User]} />,
+        children: [
+          {
+            path: NavType.Expenses,
+            element: <ExpensesHomePage />
+          },
+          {
+            path: `${NavType.Expenses}${NavType.NotFound}`,
+            element: <Navigate to={NavType.Expenses} replace />
           }
         ]
       },

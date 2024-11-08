@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { helper, dbhelper, CrudType } from "../util";
-import { IProject } from "../models";
+import { IPaging, IProject, IProjectData } from "../models";
 
 export const getProjectsAsync = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req?.auth?.id || String.empty;
-    const dbProjects = await dbhelper.getProjects(userId);
+    const paging: IPaging = req.body;
+    const [dbProjects, count] = await dbhelper.getProjects(userId, paging.page, paging.size);
     const projects: IProject[] = dbProjects?.map(dbProject => {
       return {
         id: dbProject?.id,
@@ -16,7 +17,8 @@ export const getProjectsAsync = async (req: Request, res: Response, next: NextFu
         inactive: dbProject?.inactive
       };
     });
-    const resJson = helper.responseJson<IProject[]>(true, helper.removeUndefined(projects));
+    const projectData: IProjectData = { data: helper.removeUndefined(projects), count };
+    const resJson = helper.responseJson<IProjectData>(true, projectData);
     res.json(resJson);
   } catch (error) {
     return next(error);

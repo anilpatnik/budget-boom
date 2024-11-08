@@ -1,9 +1,11 @@
 import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from "@mui/material";
+import { Icon } from "./icon.component";
 
 type Payload = {
   id?: string;
   name?: string;
   code?: string;
+  icon?: string;
 };
 type ComponentProps = {
   name?: string;
@@ -49,7 +51,10 @@ export function SelectComponent({
         {optional && <MenuItem value="">{`Select ${label}`}</MenuItem>}
         {payload?.map((x, index) => (
           <MenuItem key={index} value={x.id}>
-            {x.code && x.code.length > 0 ? `${x.name}, ${x.code}` : x.name}
+            <div className="flex items-center">
+              {x.icon && x.icon.length > 0 && <Icon name={x.icon} css="mr-2" />}
+              {x.code && x.code.length > 0 ? `${x.name}, ${x.code}` : x.name}
+            </div>
           </MenuItem>
         ))}
       </Select>

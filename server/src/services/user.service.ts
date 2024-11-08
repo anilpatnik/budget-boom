@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { RoleType, SearchType, authelper, dbhelper, helper, fb } from "../util";
-import { IAdminUser, IAdminUserSearch } from "../models";
+import { IAdminUser, IAdminUserData, IAdminUserSearch } from "../models";
 
 export const getUsersAsync = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -40,7 +40,11 @@ export const getUsersAsync = async (req: Request, res: Response, next: NextFunct
       };
     }
     // get all users
-    const dbUsers = await dbhelper.getUsers(whereCondition, userSearch.page, userSearch.size);
+    const [dbUsers, count] = await dbhelper.getUsers(
+      whereCondition,
+      userSearch.page,
+      userSearch.size
+    );
     const users: IAdminUser[] = dbUsers?.map(dbUser => {
       const role = dbUser?.role ? dbhelper.getRoleType(dbUser.role) : RoleType.User;
       return {
@@ -51,7 +55,8 @@ export const getUsersAsync = async (req: Request, res: Response, next: NextFunct
         role
       };
     });
-    const resJson = helper.responseJson<IAdminUser[]>(true, users);
+    const userData: IAdminUserData = { data: users, count };
+    const resJson = helper.responseJson<IAdminUserData>(true, userData);
     res.json(resJson);
   } catch (error) {
     return next(error);

@@ -11,6 +11,8 @@ import {
 } from "@ionic/react";
 import { addCircleOutline, createOutline, trashOutline } from "ionicons/icons";
 import {
+  Box,
+  Checkbox,
   Paper,
   Table,
   TableBody,
@@ -20,39 +22,38 @@ import {
   TableRow
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { PageType, CrudType, formatddMMMyyyy } from "@/util";
-import { IPaging, IProject, Project } from "@/models";
-import { deleteProjectAsync, getProjectAsync, getProjectsAsync } from "@/services";
-import { PagingComponent } from "@/components";
+import { PageType, CrudType, formatddMMMyyyy, formatPrice } from "@/util";
+import { IExpense, Expense, IExpenseSearch, ExpenseSearch } from "@/models";
+import { getExpensesAsync, getExpenseAsync, deleteExpenseAsync } from "@/services";
+import { Icon, PagingComponent } from "@/components";
 
 type ComponentProps = {
-  handleClick: (pageType: PageType, project?: IProject) => void;
+  handleClick: (pageType: PageType, expense?: IExpense) => void;
 };
-export function ProjectsPage({ handleClick }: ComponentProps) {
-  const [payload, setPayload] = useState<IPaging>({ page: 0, size: 10 });
+export function ExpensesPage({ handleClick }: ComponentProps) {
+  const [payload, setPayload] = useState<IExpenseSearch>(ExpenseSearch);
   const [loading, setLoading] = useState(false);
   const [paging, setPaging] = useState(false);
   const [presentAlert] = useIonAlert();
   const [present] = useIonToast();
-
+  // fetch expenses
   const {
-    isFetching,
-    data: projects,
+    isFetching: loadExpenses,
+    data: expenses,
     refetch
   } = useQuery({
-    queryKey: ["user-projects"],
+    queryKey: ["user-expenses"],
     refetchOnMount: true,
     staleTime: 0,
-    queryFn: async () => await getProjectsAsync(payload)
+    queryFn: async () => await getExpensesAsync(payload)
   });
-
   const handleEdit = async (id: string) => {
     setLoading(true);
     try {
-      const project = await getProjectAsync(id);
-      if (project) {
-        const newProject = { ...project, type: CrudType.Update };
-        handleClick(PageType.Step1, newProject);
+      const expense = await getExpenseAsync(id);
+      if (expense) {
+        const newExpense = { ...expense, type: CrudType.Update };
+        handleClick(PageType.Step1, newExpense);
       }
     } finally {
       setTimeout(() => setLoading(false), 200);
@@ -60,7 +61,7 @@ export function ProjectsPage({ handleClick }: ComponentProps) {
   };
   const handleDelete = async (id: string) => {
     setLoading(true);
-    const res = await deleteProjectAsync(id);
+    const res = await deleteExpenseAsync(id);
     if (res && !res?.success) {
       present({
         message: res?.resource,
@@ -92,37 +93,33 @@ export function ProjectsPage({ handleClick }: ComponentProps) {
     }, 1000);
   };
 
-  if (isFetching)
+  if (loadExpenses)
     return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 
   return (
-    <IonGrid className="ion-margin">
+    <IonGrid className="ion-no-vertical">
       <IonRow>
         <IonCol>
           <TableContainer component={Paper}>
             <Table className="styled-table">
               <TableHead>
                 <TableRow>
-                  <TableCell align="left">Name</TableCell>
+                  <TableCell align="left">Date</TableCell>
+                  <TableCell align="left">Amount</TableCell>
+                  <TableCell align="left">Category</TableCell>
                   <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                    Budget
-                  </TableCell>
-                  <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                    Start Date
-                  </TableCell>
-                  <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                    End Date
+                    Taxable
                   </TableCell>
                   <TableCell align="left">
                     <IonButton
                       id="id-create-button"
-                      title="CREATE PROJECT"
+                      title="CREATE EXPENSE"
                       size="small"
                       aria-hidden="false"
                       buttonType="icon"
                       onClick={() => {
-                        const newProject = { ...Project, type: CrudType.Create };
-                        handleClick(PageType.Step1, newProject);
+                        const newExpense = { ...Expense, type: CrudType.Create };
+                        handleClick(PageType.Step1, newExpense);
                       }}>
                       <IonIcon icon={addCircleOutline}></IonIcon>
                     </IonButton>
@@ -133,22 +130,27 @@ export function ProjectsPage({ handleClick }: ComponentProps) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {projects?.data?.map((item, index) => (
+                {expenses?.data?.map((item, index) => (
                   <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                    <TableCell align="left">{item?.name}</TableCell>
-                    <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                      {item?.budget ? `$${item?.budget?.toFixed(2)}` : String.empty}
+                    <TableCell align="left" sx={{ minWidth: 150 }}>
+                      {item?.entryDate && formatddMMMyyyy(item.entryDate)}
+                    </TableCell>
+                    <TableCell align="left" sx={{ minWidth: 150 }}>
+                      {item?.price && `${formatPrice(item?.price)}`}
+                    </TableCell>
+                    <TableCell align="left">
+                      <Box className="flex items-center">
+                        {item?.categoryIcon && <Icon name={item.categoryIcon} css="mr-2" />}
+                        <Box sx={{ display: { xs: "none", sm: "block" } }}>{item.categoryName}</Box>
+                      </Box>
                     </TableCell>
                     <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                      {item?.startDate ? formatddMMMyyyy(item.startDate) : String.empty}
-                    </TableCell>
-                    <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                      {item?.endDate ? formatddMMMyyyy(item.endDate) : String.empty}
+                      <Checkbox checked={item.taxable} readOnly={true} color="info" />
                     </TableCell>
                     <TableCell align="left">
                       <IonButton
                         id="id-edit-button"
-                        title="EDIT PROJECT"
+                        title="EDIT EXPENSE"
                         size="small"
                         aria-hidden="false"
                         buttonType="icon"
@@ -159,7 +161,7 @@ export function ProjectsPage({ handleClick }: ComponentProps) {
                     <TableCell align="left">
                       <IonButton
                         id="id-delete-button"
-                        title="Delete"
+                        title="DELETE EXPENSE"
                         fill="clear"
                         aria-hidden="false"
                         onClick={() =>
@@ -192,7 +194,7 @@ export function ProjectsPage({ handleClick }: ComponentProps) {
         <IonCol className="ion-text-start"></IonCol>
         <IonCol className="ion-text-end">
           <PagingComponent
-            count={projects?.count ?? 0}
+            count={expenses?.count ?? 0}
             page={payload.page ?? 0}
             size={payload.size ?? 10}
             handlePaging={handlePaging}

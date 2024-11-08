@@ -79,7 +79,6 @@ export function CategoriesPage({ handleClick }: ComponentProps) {
           <TableHead>
             <TableRow>
               <TableCell align="left">Name</TableCell>
-              <TableCell align="left">Code</TableCell>
               <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                 Icon
               </TableCell>
@@ -106,7 +105,6 @@ export function CategoriesPage({ handleClick }: ComponentProps) {
             {categories?.map((item, index) => (
               <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 <TableCell align="left">{item?.name}</TableCell>
-                <TableCell align="left">{item?.code}</TableCell>
                 <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                   {item?.icon ? <Icon name={item.icon} /> : String.empty}
                 </TableCell>
