@@ -97,7 +97,7 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
     return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 
   return (
-    <IonGrid className="ion-no-vertical">
+    <IonGrid>
       <IonRow>
         <IonCol>
           <TableContainer component={Paper}>
@@ -145,7 +145,10 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
                       </Box>
                     </TableCell>
                     <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                      <Checkbox checked={item.taxable} readOnly={true} color="info" />
+                      <Icon
+                        name={item.taxable ? "checkmark-outline" : "close-outline"}
+                        color="teal"
+                      />
                     </TableCell>
                     <TableCell align="left">
                       <IonButton
@@ -188,11 +191,8 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
           </TableContainer>
         </IonCol>
       </IonRow>
-      <IonRow
-        className="ion-margin-top"
-        style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <IonCol className="ion-text-start"></IonCol>
-        <IonCol className="ion-text-end">
+      <IonRow>
+        <IonCol className="ion-margin-top ion-text-end">
           <PagingComponent
             count={expenses?.count ?? 0}
             page={payload.page ?? 0}

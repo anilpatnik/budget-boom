@@ -73,80 +73,78 @@ export function CategoriesPage({ handleClick }: ComponentProps) {
     return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 
   return (
-    <div className="ion-margin">
-      <TableContainer component={Paper}>
-        <Table className="styled-table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="left">Name</TableCell>
+    <TableContainer component={Paper}>
+      <Table className="styled-table">
+        <TableHead>
+          <TableRow>
+            <TableCell align="left">Name</TableCell>
+            <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+              Icon
+            </TableCell>
+            <TableCell align="left">
+              <IonButton
+                id="id-create-button"
+                title="CREATE CATEGORY"
+                size="small"
+                aria-hidden="false"
+                buttonType="icon"
+                onClick={() => {
+                  const newCategory = { ...Category, type: CrudType.Create };
+                  handleClick(PageType.Step1, newCategory);
+                }}>
+                <IonIcon icon={addCircleOutline}></IonIcon>
+              </IonButton>
+            </TableCell>
+            <TableCell align="left">
+              {loading && <IonSpinner name="lines-sharp-small"></IonSpinner>}
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {categories?.map((item, index) => (
+            <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+              <TableCell align="left">{item?.name}</TableCell>
               <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                Icon
+                {item?.icon ? <Icon name={item.icon} /> : String.empty}
               </TableCell>
               <TableCell align="left">
                 <IonButton
-                  id="id-create-button"
-                  title="CREATE CATEGORY"
+                  id="id-edit-button"
+                  title="EDIT CATEGORY"
                   size="small"
                   aria-hidden="false"
                   buttonType="icon"
-                  onClick={() => {
-                    const newCategory = { ...Category, type: CrudType.Create };
-                    handleClick(PageType.Step1, newCategory);
-                  }}>
-                  <IonIcon icon={addCircleOutline}></IonIcon>
+                  onClick={() => handleEdit(item.id || String.empty)}>
+                  <IonIcon icon={createOutline}></IonIcon>
                 </IonButton>
               </TableCell>
               <TableCell align="left">
-                {loading && <IonSpinner name="lines-sharp-small"></IonSpinner>}
+                <IonButton
+                  id="id-delete-button"
+                  title="Delete"
+                  fill="clear"
+                  aria-hidden="false"
+                  onClick={() =>
+                    presentAlert({
+                      header: "Are you sure?",
+                      buttons: [
+                        { text: "Cancel" },
+                        {
+                          text: "Confirm",
+                          handler: () => {
+                            handleDelete(item?.id || String.empty);
+                          }
+                        }
+                      ]
+                    })
+                  }>
+                  <IonIcon color="danger" icon={trashOutline}></IonIcon>
+                </IonButton>
               </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {categories?.map((item, index) => (
-              <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                <TableCell align="left">{item?.name}</TableCell>
-                <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  {item?.icon ? <Icon name={item.icon} /> : String.empty}
-                </TableCell>
-                <TableCell align="left">
-                  <IonButton
-                    id="id-edit-button"
-                    title="EDIT CATEGORY"
-                    size="small"
-                    aria-hidden="false"
-                    buttonType="icon"
-                    onClick={() => handleEdit(item.id || String.empty)}>
-                    <IonIcon icon={createOutline}></IonIcon>
-                  </IonButton>
-                </TableCell>
-                <TableCell align="left">
-                  <IonButton
-                    id="id-delete-button"
-                    title="Delete"
-                    fill="clear"
-                    aria-hidden="false"
-                    onClick={() =>
-                      presentAlert({
-                        header: "Are you sure?",
-                        buttons: [
-                          { text: "Cancel" },
-                          {
-                            text: "Confirm",
-                            handler: () => {
-                              handleDelete(item?.id || String.empty);
-                            }
-                          }
-                        ]
-                      })
-                    }>
-                    <IonIcon color="danger" icon={trashOutline}></IonIcon>
-                  </IonButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }

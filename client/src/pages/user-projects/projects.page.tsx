@@ -96,7 +96,7 @@ export function ProjectsPage({ handleClick }: ComponentProps) {
     return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 
   return (
-    <IonGrid className="ion-margin">
+    <IonGrid>
       <IonRow>
         <IonCol>
           <TableContainer component={Paper}>
@@ -186,11 +186,8 @@ export function ProjectsPage({ handleClick }: ComponentProps) {
           </TableContainer>
         </IonCol>
       </IonRow>
-      <IonRow
-        className="ion-margin-top"
-        style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <IonCol className="ion-text-start"></IonCol>
-        <IonCol className="ion-text-end">
+      <IonRow>
+        <IonCol className="ion-margin-top ion-text-end">
           <PagingComponent
             count={projects?.count ?? 0}
             page={payload.page ?? 0}

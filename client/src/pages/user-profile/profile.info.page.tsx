@@ -39,44 +39,42 @@ export function ProfileInfoPage() {
   };
 
   return (
-    <>
-      <form onSubmit={formik.handleSubmit}>
-        <div className="my-6">
-          <InputComponent
-            name="name"
-            label="Name"
-            type="text"
-            value={formik.values.name}
-            touched={formik.touched.name}
-            errorMessage={formik.errors.name}
-            handleChange={formik.handleChange}
-          />
-        </div>
-        <IonButton
-          id="id-submit-button"
-          size="small"
-          type="submit"
-          aria-hidden="false"
-          className="ion-margin-vertical"
-          disabled={loading}>
-          <button type="submit" hidden />
-          {loading ? (
-            <IonSpinner name="lines-sharp-small"></IonSpinner>
-          ) : (
-            <IonIcon slot="start" icon={caretForwardOutline} />
-          )}
-          SUBMIT
-        </IonButton>
-        <IonButton
-          className="ion-margin-horizontal"
-          size="small"
-          color="light"
-          aria-hidden="false"
-          onClick={formik.handleReset}>
-          <IonIcon icon={refreshOutline} slot="start" />
-          RESET
-        </IonButton>
-      </form>
-    </>
+    <form onSubmit={formik.handleSubmit}>
+      <div className="my-6">
+        <InputComponent
+          name="name"
+          label="Name"
+          type="text"
+          value={formik.values.name}
+          touched={formik.touched.name}
+          errorMessage={formik.errors.name}
+          handleChange={formik.handleChange}
+        />
+      </div>
+      <IonButton
+        id="id-submit-button"
+        size="small"
+        type="submit"
+        aria-hidden="false"
+        className="ion-margin-vertical"
+        disabled={loading}>
+        <button type="submit" hidden />
+        {loading ? (
+          <IonSpinner name="lines-sharp-small"></IonSpinner>
+        ) : (
+          <IonIcon slot="start" icon={caretForwardOutline} />
+        )}
+        SUBMIT
+      </IonButton>
+      <IonButton
+        className="ion-margin-horizontal"
+        size="small"
+        color="light"
+        aria-hidden="false"
+        onClick={formik.handleReset}>
+        <IonIcon icon={refreshOutline} slot="start" />
+        RESET
+      </IonButton>
+    </form>
   );
 }

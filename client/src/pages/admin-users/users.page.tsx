@@ -118,138 +118,129 @@ export function UsersPage({ handleClick, searchType, searchInput }: ComponentPro
   };
 
   return (
-    <>
-      <div className="ion-margin">
-        <Paper sx={{ p: "2px 4px", display: "flex", alignItems: "center" }} component="form">
-          <InputBase
-            sx={{
-              ml: 1,
-              flex: 1,
-              letterSpacing: "0.075em"
-            }}
-            id="searchInput"
-            name="searchInput"
-            value={payload.searchInput}
-            onChange={handleChange}
-            fullWidth
-            placeholder="Search with name or email"
-            inputProps={{ "aria-label": "Search with name or email" }}
+    <IonGrid>
+      <IonRow>
+        <IonCol>
+          <Paper sx={{ p: "2px 4px", display: "flex", alignItems: "center" }} component="form">
+            <InputBase
+              sx={{
+                ml: 1,
+                flex: 1,
+                letterSpacing: "0.075em"
+              }}
+              id="searchInput"
+              name="searchInput"
+              value={payload.searchInput}
+              onChange={handleChange}
+              fullWidth
+              placeholder="Search with name or email"
+              inputProps={{ "aria-label": "Search with name or email" }}
+            />
+            <IconButton aria-label="search" type="submit" onClick={handleSubmit}>
+              <IonIcon slot="start" icon={searchOutline} />
+            </IconButton>
+          </Paper>
+        </IonCol>
+      </IonRow>
+      <IonRow>
+        <IonCol>
+          <TableContainer component={Paper}>
+            <Table className="styled-table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left">Name</TableCell>
+                  <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                    Email
+                  </TableCell>
+                  <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                    Role
+                  </TableCell>
+                  <TableCell align="left">
+                    <IonButton
+                      id="id-create-button"
+                      title="CREATE USER"
+                      size="small"
+                      buttonType="icon"
+                      aria-hidden="false"
+                      onClick={() => {
+                        const password = newPassword();
+                        const newUser = { ...AdminUser, password, type: CrudType.Create };
+                        handleClick(
+                          PageType.Step1,
+                          payload.searchType,
+                          payload.searchInput,
+                          newUser
+                        );
+                      }}>
+                      <IonIcon icon={addCircleOutline}></IonIcon>
+                    </IonButton>
+                  </TableCell>
+                  <TableCell align="left">
+                    {loading && <IonSpinner name="lines-sharp-small"></IonSpinner>}
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {users?.data?.map((item, index) => (
+                  <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                    <TableCell align="left">{item?.name}</TableCell>
+                    <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                      {item?.email}
+                    </TableCell>
+                    <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                      {RoleType[item?.role || 10]?.replace(/([A-Z])/g, " $1")?.trim()}
+                    </TableCell>
+                    <TableCell align="left">
+                      <IonButton
+                        id="id-edit-button"
+                        title="EDIT USER"
+                        size="small"
+                        aria-hidden="false"
+                        buttonType="icon"
+                        onClick={() => handleEditClick(item.uid || String.empty)}>
+                        <IonIcon icon={createOutline}></IonIcon>
+                      </IonButton>
+                    </TableCell>
+                    <TableCell align="left">
+                      <IonButton
+                        id="id-delete-button"
+                        title="Delete"
+                        fill="clear"
+                        aria-hidden="false"
+                        onClick={() =>
+                          presentAlert({
+                            header: "Are you sure?",
+                            buttons: [
+                              { text: "Cancel" },
+                              {
+                                text: "Confirm",
+                                handler: () => {
+                                  handleUserDelete(item?.uid || String.empty);
+                                }
+                              }
+                            ]
+                          })
+                        }>
+                        <IonIcon color="danger" icon={trashOutline}></IonIcon>
+                      </IonButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </IonCol>
+      </IonRow>
+      <IonRow>
+        <IonCol className="ion-margin-top ion-text-end">
+          <PagingComponent
+            count={users?.count ?? 0}
+            page={payload.page ?? 0}
+            size={payload.size ?? 10}
+            handlePaging={handlePaging}
           />
-          <IconButton aria-label="search" type="submit" onClick={handleSubmit}>
-            <IonIcon slot="start" icon={searchOutline} />
-          </IconButton>
-        </Paper>
-      </div>
-      {isFetching ? (
-        <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>
-      ) : (
-        <IonGrid className="ion-margin">
-          <IonRow>
-            <IonCol>
-              <TableContainer component={Paper}>
-                <Table className="styled-table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell align="left">Name</TableCell>
-                      <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                        Email
-                      </TableCell>
-                      <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                        Role
-                      </TableCell>
-                      <TableCell align="left">
-                        <IonButton
-                          id="id-create-button"
-                          title="CREATE USER"
-                          size="small"
-                          buttonType="icon"
-                          aria-hidden="false"
-                          onClick={() => {
-                            const password = newPassword();
-                            const newUser = { ...AdminUser, password, type: CrudType.Create };
-                            handleClick(
-                              PageType.Step1,
-                              payload.searchType,
-                              payload.searchInput,
-                              newUser
-                            );
-                          }}>
-                          <IonIcon icon={addCircleOutline}></IonIcon>
-                        </IonButton>
-                      </TableCell>
-                      <TableCell align="left">
-                        {loading && <IonSpinner name="lines-sharp-small"></IonSpinner>}
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {users?.data?.map((item, index) => (
-                      <TableRow
-                        key={index}
-                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                        <TableCell align="left">{item?.name}</TableCell>
-                        <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                          {item?.email}
-                        </TableCell>
-                        <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                          {RoleType[item?.role || 10]?.replace(/([A-Z])/g, " $1")?.trim()}
-                        </TableCell>
-                        <TableCell align="left">
-                          <IonButton
-                            id="id-edit-button"
-                            title="EDIT USER"
-                            size="small"
-                            aria-hidden="false"
-                            buttonType="icon"
-                            onClick={() => handleEditClick(item.uid || String.empty)}>
-                            <IonIcon icon={createOutline}></IonIcon>
-                          </IonButton>
-                        </TableCell>
-                        <TableCell align="left">
-                          <IonButton
-                            id="id-delete-button"
-                            title="Delete"
-                            fill="clear"
-                            aria-hidden="false"
-                            onClick={() =>
-                              presentAlert({
-                                header: "Are you sure?",
-                                buttons: [
-                                  { text: "Cancel" },
-                                  {
-                                    text: "Confirm",
-                                    handler: () => {
-                                      handleUserDelete(item?.uid || String.empty);
-                                    }
-                                  }
-                                ]
-                              })
-                            }>
-                            <IonIcon color="danger" icon={trashOutline}></IonIcon>
-                          </IonButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </IonCol>
-          </IonRow>
-          <IonRow
-            className="ion-margin-top"
-            style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <IonCol className="ion-text-start"></IonCol>
-            <IonCol className="ion-text-end">
-              <PagingComponent
-                count={users?.count ?? 0}
-                page={payload.page ?? 0}
-                size={payload.size ?? 10}
-                handlePaging={handlePaging}
-              />
-            </IonCol>
-          </IonRow>
-        </IonGrid>
-      )}
-    </>
+        </IonCol>
+      </IonRow>
+    </IonGrid>
   );
 }
