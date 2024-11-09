@@ -45,7 +45,6 @@ export enum NavType {
   Root = "/",
   PrivacyPolicy = "/privacy-policy",
   TermsConditions = "/terms-conditions",
-  Disclaimer = "/disclaimer",
   SignIn = "/signin",
   SignUp = "/signup",
   VerifyEmail = "/verify-email",

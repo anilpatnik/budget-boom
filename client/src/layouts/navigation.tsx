@@ -18,7 +18,7 @@ import {
 import { Header } from "./header";
 import { Footer } from "./footer";
 import { TabMenu } from "./tab.menu";
-import { PrivacyPolicyPage, TermsConditionsPage, DisclaimerPage } from "@/legal";
+import { PrivacyPolicyPage, TermsConditionsPage } from "@/legal";
 
 export function PreRoute({
   children,
@@ -79,10 +79,6 @@ export const router = createBrowserRouter([
       {
         path: NavType.TermsConditions,
         element: <TermsConditionsPage />
-      },
-      {
-        path: NavType.Disclaimer,
-        element: <DisclaimerPage />
       },
       {
         element: <PreRoute routerType={RouterType.Auth} />,

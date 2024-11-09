@@ -6,7 +6,7 @@ export default function PrivacyPolicyPage() {
       <h5>PRIVACY POLICY</h5>
       <h6>Last updated: {formatddMMMyyyy(new Date())}</h6>
       <p>
-        At appdigital.com.au, we are committed to protecting your privacy as a customer and an
+        At app digital pty ltd, we are committed to protecting your privacy as a customer and an
         online visitor to our website. We use the information we collect about you to maximise the
         services that we provide to you. We respect the privacy and confidentiality of the
         information provided by you and adhere to the Australian Privacy Principles. Please read our
@@ -110,7 +110,7 @@ export default function PrivacyPolicyPage() {
         Personal Data, to comply with a legal requirement, such as a law, regulation, court order,
         subpoena, warrant, in the course of a legal proceeding or in response to a law enforcement
         agency request. Also, we may use your Personal Data to protect the rights, property or
-        safety of appdigital.com.au, our customers or third parties.
+        safety of app digital pty ltd, our customers or third parties.
       </p>
       <p>
         If there is a change of control in one of our businesses (whether by merger, sale, transfer

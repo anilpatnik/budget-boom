@@ -5,13 +5,13 @@ export default function TermsConditionsPage() {
       <p>
         Welcome to our website. If you continue to browse and use this website you are agreeing to
         comply with and be bound by the following terms and conditions of use, which together with
-        our privacy policy and website disclaimer, govern appdigital.com.au&apos;s relationship with
-        you in relation to your use of this website.
+        our privacy policy and website disclaimer, govern app digital pty ltd&apos;s relationship
+        with you in relation to your use of this website.
       </p>
       <p>
         By using this website, you signify your acceptance of these terms and conditions of use. For
         the purposes of these terms and conditions, &quot;Us&quot;, &quot;Our&quot; and
-        &quot;We&quot; refers to appdigital.com.au and &quot;You&quot; and &quot;Your&quot; refers
+        &quot;We&quot; refers to app digital pty ltd and &quot;You&quot; and &quot;Your&quot; refers
         to you, the client, visitor, website user or person using our website.
       </p>
       <h6>AMENDMENT OF TERMS</h6>
@@ -20,13 +20,13 @@ export default function TermsConditionsPage() {
         Please check these terms regularly prior to using our website to ensure you are aware of any
         changes. We will endeavour to highlight any significant or substantive changes to you where
         possible. If you choose to use our website then we will regard that use as conclusive
-        evidence of your agreement and acceptance that these terms govern your and
-        appdigital.com.au&apos;s rights and obligations to each other.
+        evidence of your agreement and acceptance that these terms govern your and app digital pty
+        ltd&apos;s rights and obligations to each other.
       </p>
       <h6>LIMITATION OF LIABILITY</h6>
       <p>
-        It is an essential precondition to you using our website that you agree and accept that
-        appdigital.com.au is not legally responsible for any loss or damage you might suffer related
+        It is an essential precondition to you using our website that you agree and accept that app
+        digital pty ltd is not legally responsible for any loss or damage you might suffer related
         to your use of the website, whether from errors or from omissions in our documents or
         information, any goods or services we may offer or from any other use of the website. This
         includes your use or reliance on any third party content, links, comments or advertisements.
@@ -49,8 +49,8 @@ export default function TermsConditionsPage() {
       <p>
         For the purposes of Schedule 2 of the Australian Consumer Law, in particular Sections 51 to
         53, 64 and 64A of Part 3-2, Division 1, Subdivision A of the Competition and Consumer Act
-        2010 (Cth), appdigital.com.au&apos;s liability for any breach of a term of this agreement is
-        limited to: the supplying of the goods or services to you again; the replacement of the
+        2010 (Cth), app digital pty ltd&apos;s liability for any breach of a term of this agreement
+        is limited to: the supplying of the goods or services to you again; the replacement of the
         goods; or the payment of the cost of having the goods or services supplied to you again.
       </p>
       <p>
@@ -63,7 +63,7 @@ export default function TermsConditionsPage() {
         and 14 days, depending on the delivery option. Damaged or lost orders should be resolved
         with Australia Post or the courier company directly and we are not responsible for goods
         that are damaged in transit or not received. Replacement of damaged or lost items is made at
-        the discretion of appdigital.com.au.
+        the discretion of app digital pty ltd.
       </p>
       <p>
         Digital goods are delivered immediately. Please be aware there are inherent risks associated
@@ -72,7 +72,7 @@ export default function TermsConditionsPage() {
       </p>
       <h6>RETURNS AND REFUNDS</h6>
       <p>
-        appdigital.com.au handles returns and processes refunds in accordance with the Australian
+        app digital pty ltd handles returns and processes refunds in accordance with the Australian
         Consumer Protection legislation.
       </p>
       <p>
@@ -80,30 +80,30 @@ export default function TermsConditionsPage() {
         valid reason for return. If we are unable to resolve your complaint or further assist you,
         we will process a refund upon timely receipt of the goods purchased. Unopened goods will be
         refunded in full. Refunds will be processed promptly and payment made by the same method
-        that you made payment. All refunds are made at the discretion of appdigital.com.au.
+        that you made payment. All refunds are made at the discretion of app digital pty ltd.
       </p>
       <h6>LINKS TO OTHER WEBSITES</h6>
       <p>
-        appdigital.com.au may from time to time provide on its website, links to other websites,
+        app digital pty ltd may from time to time provide on its website, links to other websites,
         advertisements and information on those websites for your convenience. This does not
-        necessarily imply sponsorship, endorsement, or approval or arrangement between
-        appdigital.com.au and the owners of those websites. appdigital.com.au takes no
-        responsibility for any of the content found on the linked websites.
+        necessarily imply sponsorship, endorsement, or approval or arrangement between app digital
+        pty ltd and the owners of those websites. app digital pty ltd takes no responsibility for
+        any of the content found on the linked websites.
       </p>
       <p>
-        appdigital.com.au&apos;s website may contain information or advertisements provided by third
-        parties for which appdigital.com.au accepts no responsibility whatsoever for any information
-        or advice provided to you directly by third parties. We are making a
+        app digital pty ltd&apos;s website may contain information or advertisements provided by
+        third parties for which app digital pty ltd accepts no responsibility whatsoever for any
+        information or advice provided to you directly by third parties. We are making a
         &quot;recommendation&quot; only and are not providing any advice nor do we take any
         responsibility for any advice received in this regard.
       </p>
       <h6>DISCLAIMER</h6>
       <p>
-        To the fullest extent permitted by law, appdigital.com.au absolutely disclaims all
+        To the fullest extent permitted by law, app digital pty ltd absolutely disclaims all
         warranties, expressed or implied, including, but not limited to, implied warranties of
-        merchantability and fitness for any particular purpose. appdigital.com.au gives no warranty
-        that the documents, goods or services will be free of errors, or that defects will be
-        corrected, or that our website or its server is free of viruses or any other harmful
+        merchantability and fitness for any particular purpose. app digital pty ltd gives no
+        warranty that the documents, goods or services will be free of errors, or that defects will
+        be corrected, or that our website or its server is free of viruses or any other harmful
         components.
       </p>
       <p>
@@ -113,7 +113,7 @@ export default function TermsConditionsPage() {
         website or as to their correctness, suitability, accuracy, reliability, or otherwise.
       </p>
       <p>
-        It is your sole responsibility and not the responsibility of appdigital.com.au to bear any
+        It is your sole responsibility and not the responsibility of app digital pty ltd to bear any
         and all costs of servicing, repairs, or correction. The applicable law in your state or
         territory may not permit these exclusions, particularly the exclusions of some implied
         warranties. Some of the above may not apply to you but you must ensure you are aware of any
@@ -121,23 +121,23 @@ export default function TermsConditionsPage() {
         through it. It is your responsibility to do so.
       </p>
       <p>
-        appdigital.com.au is not responsible for the guarantee of the deal or voucher, the quality
+        app digital pty ltd is not responsible for the guarantee of the deal or voucher, the quality
         of food or services provided, or any conflict that may arise between the Seller and the
         Customer. Any disputes or issues arising between the Seller and the Customer, including but
         not limited to the quality of food or services and the terms of the deal or voucher, shall
-        be resolved solely between the Seller and the Customer. appdigital.com.au shall not be held
-        liable for any such conflicts.
+        be resolved solely between the Seller and the Customer. app digital pty ltd shall not be
+        held liable for any such conflicts.
       </p>
       <h6>YOUR PRIVACY</h6>
       <p>
-        At appdigital.com.au, we are committed to protecting your privacy. We use the information we
-        collect about you to maximise the services that we provide to you. We respect the privacy
+        At app digital pty ltd, we are committed to protecting your privacy. We use the information
+        we collect about you to maximise the services that we provide to you. We respect the privacy
         and confidentiality of the information provided by you and adhere to the Australian Privacy
         Principles. Please read our separate Privacy Policy carefully.
       </p>
       <p>
         You may change your details at any time by advising us in writing via email. All information
-        we receive from our customers is protected by our secure servers. appdigital.com.au&apos;s
+        we receive from our customers is protected by our secure servers. app digital pty ltd&apos;s
         secure server software encrypts all customer information before it is sent to us.
         Furthermore, all customer data collected is secured against unauthorised use or access.
         Credit card information is not stored by us on our servers.
@@ -152,21 +152,21 @@ export default function TermsConditionsPage() {
       </p>
       <h6>DISCLOSURE OF INFORMATION</h6>
       <p>
-        appdigital.com.au may be required, in certain circumstances, to disclose information in good
-        faith and where appdigital.com.au is required to do so in the following circumstances: by
-        law or by any court; to enforce the terms of any of our customer agreements; or to protect
-        the rights, property or safety of our customers or third parties.
+        app digital pty ltd may be required, in certain circumstances, to disclose information in
+        good faith and where app digital pty ltd is required to do so in the following
+        circumstances: by law or by any court; to enforce the terms of any of our customer
+        agreements; or to protect the rights, property or safety of our customers or third parties.
       </p>
       <h6>EXCLUSION OF COMPETITORS</h6>
       <p>
         If you are in the business of creating similar documents, goods or services for the purpose
         of providing them for a fee to users, whether they be business users or domestic users, then
-        you are a competitor of appdigital.com.au. appdigital.com.au expressly excludes and does not
-        permit you to use or access our website, to download any documents or information from its
-        website or obtain any such documents or information through a third party. If you breach
-        this term then appdigital.com.au will hold you fully responsible for any loss that we may
+        you are a competitor of app digital pty ltd. app digital pty ltd expressly excludes and does
+        not permit you to use or access our website, to download any documents or information from
+        its website or obtain any such documents or information through a third party. If you breach
+        this term then app digital pty ltd will hold you fully responsible for any loss that we may
         sustain and further hold you accountable for all profits that you might make from such
-        unpermitted and improper use. appdigital.com.au reserves the right to exclude and deny any
+        unpermitted and improper use. app digital pty ltd reserves the right to exclude and deny any
         person access to our website, services or information in our sole discretion.
       </p>
       <h6>COPYRIGHT, TRADEMARK AND RESTRICTIONS OF USE</h6>
@@ -179,7 +179,7 @@ export default function TermsConditionsPage() {
         documents or products that may be available for download from time to time on this website.
       </p>
       <p>
-        appdigital.com.au expressly reserves all copyright and trademark in all documents,
+        app digital pty ltd expressly reserves all copyright and trademark in all documents,
         information and materials on our website and we reserve the right to take action against you
         if you breach any of these terms.
       </p>
@@ -197,8 +197,8 @@ export default function TermsConditionsPage() {
       </p>
       <h6>WHOLE AGREEMENT</h6>
       <p>
-        These terms and conditions represent the whole agreement between you and appdigital.com.au
-        concerning your use and access to appdigital.com.au&apos;s website and your use and access
+        These terms and conditions represent the whole agreement between you and app digital pty ltd
+        concerning your use and access to app digital pty ltd&apos;s website and your use and access
         to the documents and information on it. No other term is to be included in this agreement
         except where it is required to be included by any legislation of the Commonwealth or any
         State or Territory. All implied terms except those implied by statute and which cannot be
@@ -218,8 +218,8 @@ export default function TermsConditionsPage() {
       <h6>JURISDICTION</h6>
       <p>
         This agreement and this website are subject to the laws of VIC and Australia. If there is a
-        dispute between you and appdigital.com.au that results in litigation then you must submit to
-        the jurisdiction of the courts of VIC.
+        dispute between you and app digital pty ltd that results in litigation then you must submit
+        to the jurisdiction of the courts of VIC.
       </p>
     </div>
   );
