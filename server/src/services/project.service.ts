@@ -50,6 +50,7 @@ export const upsertProjectAsync = async (req: Request, res: Response, next: Next
   try {
     const userId = req?.auth?.id || String.empty;
     const project: IProject = req.body;
+    const key = `cache-projects-${userId}`;
     // check if project exists and active
     if (
       project.type === CrudType.Create ||
@@ -60,6 +61,7 @@ export const upsertProjectAsync = async (req: Request, res: Response, next: Next
     }
     // upsert project
     const dbProject = await dbhelper.upsertProject(userId, project);
+    helper.cache.del(key); // clear cache
     const resJson = helper.responseJson<IProject>(true, { id: dbProject.id });
     res.json(resJson);
   } catch (error) {
@@ -71,11 +73,13 @@ export const deleteProjectAsync = async (req: Request, res: Response, next: Next
   try {
     const userId = req?.auth?.id || String.empty;
     const projectId = req.params.projectid;
+    const key = `cache-projects-${userId}`;
     // check if expenses exists
     const count = await dbhelper.getExpenseCountByProjectId(userId, projectId);
     if (count > 0) throw new Error("Project has expenses!");
     // delete project
     await dbhelper.deleteProject(projectId);
+    helper.cache.del(key); // clear cache
     const resJson = helper.responseJson<string>(true, "Project has been deleted!");
     res.json(resJson);
   } catch (error) {

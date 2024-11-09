@@ -64,3 +64,8 @@ export const categories = [
     icon: "airplane-outline"
   }
 ];
+
+export const countries = [
+  { name: "Australia", code: "AUS", taxDate: new Date(2024, 6, 1) },
+  { name: "New Zealand", code: "NZ", taxDate: new Date(2024, 3, 1) }
+];

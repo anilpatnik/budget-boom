@@ -36,7 +36,7 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
   const [paging, setPaging] = useState(false);
   const [presentAlert] = useIonAlert();
   const [present] = useIonToast();
-  // fetch expenses
+
   const {
     isFetching: loadExpenses,
     data: expenses,
@@ -47,6 +47,7 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
     staleTime: 0,
     queryFn: async () => await getExpensesAsync(payload)
   });
+
   const handleEdit = async (id: string) => {
     setLoading(true);
     try {

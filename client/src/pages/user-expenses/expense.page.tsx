@@ -44,16 +44,16 @@ export function ExpensePage({ expense, handleClick }: ComponentProps) {
   });
   const formik = useFormik({
     initialValues: {
-      entryDate: expense?.entryDate ?? dateNow,
-      projectId: expense?.projectId ?? String.empty,
+      entryDate: expense?.entryDate || dateNow,
+      projectId: expense?.projectId || String.empty,
       categoryId:
-        expense?.categoryId ??
-        categories?.find(category => category.name?.toUpperCase() === "NONE")?.id ??
+        expense?.categoryId ||
+        categories?.find(category => category.name?.toUpperCase() === "NONE")?.id ||
         String.empty,
-      price: Math.abs(expense?.price ?? 0),
+      price: Math.abs(expense?.price || 0),
       expenditure: !(expense?.price && expense?.price > 0),
-      taxable: expense?.taxable ?? false,
-      notes: expense?.notes ?? String.empty
+      taxable: expense?.taxable || false,
+      notes: expense?.notes || String.empty
     },
     validateOnMount: false,
     validationSchema: Yup.object({
@@ -73,7 +73,7 @@ export function ExpensePage({ expense, handleClick }: ComponentProps) {
         const newExpense: IExpense = {
           id: crypto.randomUUID(),
           entryDate: values?.entryDate,
-          projectId: expense?.projectId,
+          projectId: values?.projectId,
           categoryId: values?.categoryId,
           price: parsePrice(values?.expenditure, values?.price),
           taxable: values?.taxable,
@@ -98,7 +98,7 @@ export function ExpensePage({ expense, handleClick }: ComponentProps) {
         const updateExpense: IExpense = {
           id: expense?.id,
           entryDate: values?.entryDate,
-          projectId: expense?.projectId,
+          projectId: values?.projectId,
           categoryId: values?.categoryId,
           price: parsePrice(values?.expenditure, values?.price),
           taxable: values?.taxable,

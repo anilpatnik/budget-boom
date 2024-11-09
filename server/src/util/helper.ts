@@ -1,3 +1,4 @@
+import NodeCache from "node-cache";
 import rateLimit from "express-rate-limit";
 import { format, formatISO } from "date-fns";
 import { IResponse } from "../models";
@@ -39,8 +40,10 @@ export const LogError = (message: string) => {
 };
 
 export const limiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute
+  windowMs: 30 * 1000 * 1, // 30 sec
   max: 100, // limit each IP to 100 requests per window
   message: "too many requests, please try again after 2 minutes",
   headers: true
 });
+
+export const cache = new NodeCache({ stdTTL: 100, checkperiod: 120 });

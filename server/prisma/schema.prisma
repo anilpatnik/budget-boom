@@ -14,6 +14,18 @@ enum RoleType {
   ADMIN
 }
 
+model Country {
+  id        String   @id @default(uuid())
+  name      String
+  code      String
+  taxDate   DateTime
+  inactive  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users User[]
+}
+
 model Category {
   id        String   @id @default(uuid())
   name      String
@@ -31,10 +43,12 @@ model User {
   email     String   @unique
   role      RoleType @default(USER)
   uid       String   @unique
+  countryId String?
   inactive  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  country  Country?  @relation(fields: [countryId], references: [id])
   projects Project[]
   expenses Expense[]
 }

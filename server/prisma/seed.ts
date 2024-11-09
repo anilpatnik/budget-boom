@@ -1,11 +1,14 @@
 import { PrismaClient } from "@prisma/client";
-import { categories } from "./db";
+import { categories, countries } from "./db";
 
 const prisma = new PrismaClient();
 
 async function main() {
   await prisma.category.deleteMany({});
   await prisma.category.createMany({ data: categories });
+
+  await prisma.country.deleteMany({});
+  await prisma.country.createMany({ data: countries });
 }
 
 main()
