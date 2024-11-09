@@ -24,7 +24,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { PageType, CrudType, formatddMMMyyyy, formatPrice } from "@/util";
 import { IExpense, Expense, IExpenseSearch, ExpenseSearch } from "@/models";
-import { getExpensesAsync, getExpenseAsync, deleteExpenseAsync } from "@/services";
+import { getExpensesAsync, getExpenseAsync, deleteExpenseAsync, getCategory } from "@/services";
 import { Icon, PagingComponent } from "@/components";
 
 type ComponentProps = {
@@ -140,15 +140,22 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
                       {item?.price && `${formatPrice(item?.price)}`}
                     </TableCell>
                     <TableCell align="left">
-                      <Box className="flex items-center">
-                        {item?.categoryIcon && <Icon name={item.categoryIcon} css="mr-2" />}
-                        <Box sx={{ display: { xs: "none", sm: "block" } }}>{item.categoryName}</Box>
-                      </Box>
+                      {item?.categoryId && (
+                        <Box className="flex items-center">
+                          <Icon
+                            name={getCategory(item.categoryId).icon}
+                            css="text-2xl text-black mr-2"
+                          />
+                          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+                            {getCategory(item.categoryId).name}
+                          </Box>
+                        </Box>
+                      )}
                     </TableCell>
                     <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                       <Icon
                         name={item.taxable ? "checkmark-outline" : "close-outline"}
-                        color="teal"
+                        css="text-2xl text-black"
                       />
                     </TableCell>
                     <TableCell align="left">

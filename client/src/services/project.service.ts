@@ -2,6 +2,17 @@ import { ServiceType } from "@/util";
 import { IPaging, IProject, IProjectData, Project } from "@/models";
 import { authApi } from "./index";
 
+export const getPubProjectsAsync = async (): Promise<IProject[]> => {
+  const url = `${ServiceType.Pub}${ServiceType.Projects}`;
+  const response = await authApi.get(url);
+  return response?.data?.resource?.map((item: any) => {
+    return {
+      id: item.id,
+      name: item.name
+    };
+  });
+};
+
 export const getProjectsAsync = async (payload: IPaging): Promise<IProjectData> => {
   const response = await authApi.post(ServiceType.Projects, payload);
   if (response?.data?.resource) return response?.data?.resource;

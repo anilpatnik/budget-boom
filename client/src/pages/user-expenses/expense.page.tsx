@@ -18,7 +18,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { CrudType, PageType, constants, convertoISO, dateNow, parsePrice } from "@/util";
 import { IExpense } from "@/models";
-import { getPubCategoriesAsync, getPubProjectsAsync, upsertExpenseAsync } from "@/services";
+import { categories, getCategory, getPubProjectsAsync, upsertExpenseAsync } from "@/services";
 import { InputComponent, DateComponent, SelectComponent, AutoSelectComponent } from "@/components";
 
 type ComponentProps = {
@@ -28,28 +28,19 @@ type ComponentProps = {
 export function ExpensePage({ expense, handleClick }: ComponentProps) {
   const [loading, setLoading] = useState(false);
   const [present] = useIonToast();
-  // fetch categories
-  const { isFetching: loadCategories, data: categories } = useQuery({
-    queryKey: ["pub-categories"],
-    refetchOnMount: true,
-    staleTime: 0,
-    queryFn: async () => await getPubCategoriesAsync()
-  });
-  // fetch projects
+
   const { isFetching: loadProjects, data: projects } = useQuery({
     queryKey: ["user-projects"],
     refetchOnMount: true,
     staleTime: 0,
     queryFn: async () => await getPubProjectsAsync()
   });
+
   const formik = useFormik({
     initialValues: {
       entryDate: expense?.entryDate || dateNow,
       projectId: expense?.projectId || String.empty,
-      categoryId:
-        expense?.categoryId ||
-        categories?.find(category => category.name?.toUpperCase() === "NONE")?.id ||
-        String.empty,
+      categoryId: expense?.categoryId || getCategory(String.empty).id,
       price: Math.abs(expense?.price || 0),
       expenditure: !(expense?.price && expense?.price > 0),
       taxable: expense?.taxable || false,
@@ -126,9 +117,6 @@ export function ExpensePage({ expense, handleClick }: ComponentProps) {
       }, 200);
     }
   });
-
-  if (loadCategories || loadProjects)
-    return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 
   return (
     <IonGrid>
@@ -207,16 +195,20 @@ export function ExpensePage({ expense, handleClick }: ComponentProps) {
                   </IonGrid>
                 </div>
                 <div className="my-6">
-                  <AutoSelectComponent
-                    name="projectId"
-                    label="Project"
-                    value={formik.values.projectId}
-                    optional={true}
-                    touched={formik.touched.projectId}
-                    errorMessage={formik.errors.projectId}
-                    handleChange={value => formik.setFieldValue("projectId", value)}
-                    payload={projects || []}
-                  />
+                  {loadProjects ? (
+                    <IonSpinner name="lines-sharp-small"></IonSpinner>
+                  ) : (
+                    <AutoSelectComponent
+                      name="projectId"
+                      label="Project"
+                      value={formik.values.projectId}
+                      optional={true}
+                      touched={formik.touched.projectId}
+                      errorMessage={formik.errors.projectId}
+                      handleChange={value => formik.setFieldValue("projectId", value)}
+                      payload={projects || []}
+                    />
+                  )}
                 </div>
                 <div className="my-6">
                   <InputComponent

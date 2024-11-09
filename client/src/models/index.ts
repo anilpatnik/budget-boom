@@ -9,25 +9,13 @@ export interface IAggregate {
   total?: number;
 }
 
-export interface ILookup {
-  id?: string;
-  name?: string;
-  code?: string;
-  icon?: string;
-}
-export const Lookup: ILookup = {
-  id: String.empty,
-  name: String.empty,
-  code: String.empty,
-  icon: String.empty
-};
-
 export interface IUser {
   name?: string;
   email?: string;
   photo?: string;
   role?: RoleType;
   token?: string;
+  countryId?: string;
   auth?: boolean;
   external?: boolean;
 }
@@ -37,6 +25,7 @@ export const User: IUser = {
   photo: String.empty,
   role: RoleType.User,
   token: String.empty,
+  countryId: String.empty,
   auth: false,
   external: false
 };
@@ -52,7 +41,6 @@ export interface IAdminUser {
   disabled?: boolean;
   providers?: AuthType[];
   role?: RoleType;
-  lastUpdated?: string;
   type?: CrudType;
 }
 export const AdminUser: IAdminUser = {
@@ -66,13 +54,11 @@ export const AdminUser: IAdminUser = {
   disabled: false,
   providers: [],
   role: RoleType.User,
-  lastUpdated: String.empty,
   type: CrudType.Read
 };
 export interface IAdminUserData extends IAggregate {
   data?: IAdminUser[];
 }
-
 export interface IAdminUserSearch {
   searchType?: SearchType;
   searchInput?: string;
@@ -90,19 +76,6 @@ export const AdminUserSearch: IAdminUserSearch = {
   size: 10
 };
 
-export interface ICategory {
-  id?: string;
-  name?: string;
-  icon?: string;
-  type?: CrudType;
-}
-export const Category: ICategory = {
-  id: String.empty,
-  name: String.empty,
-  icon: String.empty,
-  type: CrudType.Read
-};
-
 export interface IProject {
   id?: string;
   name?: string;
@@ -110,7 +83,6 @@ export interface IProject {
   budget?: number;
   startDate?: string;
   endDate?: string;
-  inactive?: boolean;
   type?: CrudType;
 }
 export const Project: IProject = {
@@ -120,7 +92,6 @@ export const Project: IProject = {
   budget: 0,
   startDate: String.empty,
   endDate: String.empty,
-  inactive: false,
   type: CrudType.Read
 };
 export interface IProjectData extends IAggregate {
@@ -130,33 +101,28 @@ export interface IProjectData extends IAggregate {
 export interface IExpenseSearch {
   startDate?: string;
   endDate?: string;
-  projectId?: string;
   categoryId?: string;
+  projectId?: string;
   page?: number;
   size?: number;
 }
 export const ExpenseSearch: IExpenseSearch = {
   startDate: String.empty,
   endDate: String.empty,
-  projectId: String.empty,
   categoryId: String.empty,
+  projectId: String.empty,
   page: 0,
   size: 10
 };
-
 export interface IExpense {
   id?: string;
   entryDate?: string;
   price?: number;
   taxable?: boolean;
   notes?: string;
+  categoryId?: string;
   projectId?: string;
   projectName?: string;
-  categoryId?: string;
-  categoryName?: string;
-  categoryIcon?: string;
-  inactive?: boolean;
-  lastUpdated?: string;
   type?: CrudType;
 }
 export const Expense: IExpense = {
@@ -165,13 +131,9 @@ export const Expense: IExpense = {
   price: 0,
   taxable: false,
   notes: String.empty,
+  categoryId: String.empty,
   projectId: String.empty,
   projectName: String.empty,
-  categoryId: String.empty,
-  categoryName: String.empty,
-  categoryIcon: String.empty,
-  inactive: false,
-  lastUpdated: String.empty,
   type: CrudType.Read
 };
 export interface IExpenseData extends IAggregate {

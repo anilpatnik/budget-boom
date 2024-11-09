@@ -14,29 +14,6 @@ enum RoleType {
   ADMIN
 }
 
-model Country {
-  id        String   @id @default(uuid())
-  name      String
-  code      String
-  taxDate   DateTime
-  inactive  Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  users User[]
-}
-
-model Category {
-  id        String   @id @default(uuid())
-  name      String
-  icon      String
-  inactive  Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  expenses Expense[]
-}
-
 model User {
   id        String   @id @default(uuid())
   name      String?
@@ -48,18 +25,17 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  country  Country?  @relation(fields: [countryId], references: [id])
   projects Project[]
   expenses Expense[]
 }
 
 model Project {
   id        String    @id @default(uuid())
+  userId    String
   name      String
   budget    Float?
   startDate DateTime?
   endDate   DateTime?
-  userId    String
   inactive  Boolean   @default(false)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -70,18 +46,17 @@ model Project {
 
 model Expense {
   id         String   @id @default(uuid())
-  projectId  String?
-  categoryId String?
+  userId     String
   entryDate  DateTime
   price      Float
   taxable    Boolean  @default(false)
   notes      String?
-  userId     String
+  categoryId String?
+  projectId  String?
   inactive   Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  user     User      @relation(fields: [userId], references: [id])
-  project  Project?  @relation(fields: [projectId], references: [id])
-  category Category? @relation(fields: [categoryId], references: [id])
+  user    User     @relation(fields: [userId], references: [id])
+  project Project? @relation(fields: [projectId], references: [id])
 }

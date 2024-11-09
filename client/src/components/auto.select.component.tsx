@@ -4,7 +4,6 @@ import { Autocomplete, TextField } from "@mui/material";
 type Payload = {
   id?: string;
   name?: string;
-  code?: string;
   icon?: string;
 };
 type ComponentProps = {
@@ -34,11 +33,7 @@ export function AutoSelectComponent({
     <Autocomplete
       id={`id-${name}`}
       options={payload}
-      getOptionLabel={option =>
-        option.code && option.code.length > 0
-          ? `${option.name}, ${option.code}`
-          : option.name || String.empty
-      }
+      getOptionLabel={option => option.name || String.empty}
       defaultValue={selectedValue}
       onChange={(e, value) => handleChange(value?.id || String.empty)}
       disabled={disabled}

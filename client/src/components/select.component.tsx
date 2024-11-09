@@ -4,7 +4,6 @@ import { Icon } from "./icon.component";
 type Payload = {
   id?: string;
   name?: string;
-  code?: string;
   icon?: string;
 };
 type ComponentProps = {
@@ -52,8 +51,8 @@ export function SelectComponent({
         {payload?.map((x, index) => (
           <MenuItem key={index} value={x.id}>
             <div className="flex items-center">
-              {x.icon && x.icon.length > 0 && <Icon name={x.icon} css="mr-2" />}
-              {x.code && x.code.length > 0 ? `${x.name}, ${x.code}` : x.name}
+              {x.icon && x.icon.length > 0 && <Icon name={x.icon} css="text-lg text-black mr-2" />}
+              {x.name}
             </div>
           </MenuItem>
         ))}

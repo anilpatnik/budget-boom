@@ -120,9 +120,9 @@ export const updateProfilePic = async (photoURL: string) => {
   }
 };
 
-export const updateProfileInfo = async (name: string) => {
+export const updateProfileInfo = async (name: string, countryId?: string) => {
   try {
-    const response = await authApi.post(ServiceType.Profile, { name });
+    const response = await authApi.post(ServiceType.Profile, { name, countryId });
     const { success, resource } = response.data;
     return { success, resource };
   } catch (error) {

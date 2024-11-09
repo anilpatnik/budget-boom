@@ -11,6 +11,5 @@ export { VerifyEmailPage } from "./user-auth/verify.email.page";
 export { ProfileHomePage } from "./user-profile/home.page";
 export { UsersHomePage } from "./admin-users/home.page";
 
-export { CategoriesHomePage } from "./admin-categories/home.page";
 export { ProjectsHomePage } from "./user-projects/home.page";
 export { ExpensesHomePage } from "./user-expenses/home.page";

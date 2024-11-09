@@ -45,9 +45,8 @@ export const getExpensesAsync = async (req: Request, res: Response, next: NextFu
     const expenses: IExpense[] = dbExpenses?.map(dbExpense => {
       return {
         id: dbExpense?.id,
-        projectName: dbExpense?.project?.name,
-        categoryName: dbExpense?.category?.name,
-        categoryIcon: dbExpense?.category?.icon,
+        projectName: dbExpense?.project?.name || String.empty,
+        categoryId: dbExpense?.categoryId || String.empty,
         price: dbExpense?.price || 0,
         taxable: dbExpense?.taxable || false,
         notes: dbExpense?.notes || String.empty,

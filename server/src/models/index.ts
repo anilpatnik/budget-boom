@@ -15,13 +15,6 @@ export interface IAggregate {
   total?: number;
 }
 
-export interface ILookup {
-  id?: string;
-  name?: string;
-  code?: string;
-  icon?: string;
-}
-
 export interface IToken {
   id?: string;
   uid?: string;
@@ -34,6 +27,7 @@ export interface IUser {
   photo?: string;
   role?: RoleType;
   token?: string;
+  countryId?: string;
 }
 
 export interface IAdminUser {
@@ -47,7 +41,6 @@ export interface IAdminUser {
   disabled?: boolean;
   providers?: AuthType[];
   role?: RoleType;
-  lastUpdated?: string;
 }
 
 export interface IAdminUserData extends IAggregate {
@@ -61,12 +54,6 @@ export interface IAdminUserSearch extends IPaging {
   active?: boolean;
 }
 
-export interface ICategory {
-  id?: string;
-  name?: string;
-  icon?: string;
-}
-
 export interface IProject {
   id?: string;
   name?: string;
@@ -74,7 +61,6 @@ export interface IProject {
   budget?: number;
   startDate?: string;
   endDate?: string;
-  inactive?: boolean;
   type?: CrudType;
 }
 
@@ -85,8 +71,8 @@ export interface IProjectData extends IAggregate {
 export interface IExpenseSearch extends IPaging {
   startDate?: string;
   endDate?: string;
-  projectId?: string;
   categoryId?: string;
+  projectId?: string;
 }
 
 export interface IExpense {
@@ -95,13 +81,9 @@ export interface IExpense {
   price?: number;
   taxable?: boolean;
   notes?: string;
+  categoryId?: string;
   projectId?: string;
   projectName?: string;
-  categoryId?: string;
-  categoryName?: string;
-  categoryIcon?: string;
-  inactive?: boolean;
-  lastUpdated?: string;
   type?: CrudType;
 }
 

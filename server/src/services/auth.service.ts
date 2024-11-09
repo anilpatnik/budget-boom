@@ -37,7 +37,8 @@ export const signInAsync = async (req: Request, res: Response, next: NextFunctio
       email: authUser?.email,
       photo: authUser?.photoURL,
       role,
-      token
+      token,
+      countryId: dbUser?.countryId || String.empty
     };
     const resJson = helper.responseJson<IUser>(true, helper.removeUndefined(userModel));
     res.json(resJson);
@@ -49,12 +50,12 @@ export const signInAsync = async (req: Request, res: Response, next: NextFunctio
 export const updateProfileAsync = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const uid = req?.auth?.uid || String.empty;
-    const { name } = req.body;
+    const { name, countryId } = req.body;
     // auth user
     const updateRequest: fb.UpdateRequest = { displayName: name };
     await authelper.updateAuthUser(uid, updateRequest);
     // db user
-    await dbhelper.updateProfile(uid, name);
+    await dbhelper.updateProfile(uid, name, countryId);
     const resJson = helper.responseJson<string>(true, "Profile has been updated!");
     res.json(resJson);
   } catch (error) {

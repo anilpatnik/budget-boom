@@ -2,7 +2,7 @@ import { RoleType as dbRoleType } from "@prisma/client";
 import { parseDate } from "./helper";
 import prisma from "./db.client";
 import { RoleType } from "./enums";
-import { ICategory, IExpense, IProject } from "../models";
+import { IExpense, IProject } from "../models";
 
 //#region enum mapping
 export const getRoleType = (type: dbRoleType): RoleType =>
@@ -16,10 +16,10 @@ export const getUser = async (uid: string) =>
   await prisma.user.findFirst({
     where: { uid }
   });
-export const updateProfile = async (uid: string, name?: string) =>
+export const updateProfile = async (uid: string, name?: string, countryId?: string) =>
   await prisma.user.update({
     where: { uid },
-    data: { name }
+    data: { name, countryId }
   });
 //#endregion
 
@@ -44,36 +44,12 @@ export const updateUser = async (uid: string, name?: string, role?: dbRoleType) 
 export const deleteUser = async (id: string) => await prisma.user.delete({ where: { id } });
 //#endregion
 
-//#region lookup management
-export const getPubCategories = async () =>
-  await prisma.category.findMany({ where: { inactive: false } });
-export const getPubProjects = async (userId: string) =>
+//#region project management
+export const getAllProjects = async (userId: string) =>
   await prisma.project.findMany({
     where: { inactive: false, userId },
     orderBy: { updatedAt: "desc" }
   });
-//#endregion
-
-//#region category management
-export const getCategories = async () =>
-  await prisma.category.findMany({ orderBy: { name: "asc" } });
-export const getCategory = async (id: string) =>
-  await prisma.category.findUnique({ where: { id } });
-export const upsertCategory = async (category: ICategory) => {
-  const data = {
-    name: category.name || String.empty,
-    icon: category.icon || String.empty
-  };
-  return await prisma.category.upsert({
-    where: { id: category.id },
-    update: data,
-    create: data
-  });
-};
-export const deleteCategory = async (id: string) => await prisma.category.delete({ where: { id } });
-//#endregion
-
-//#region project management
 export const getProjects = async (userId: string, page: number = 0, size: number = 10) =>
   await prisma.$transaction([
     prisma.project.findMany({
@@ -112,7 +88,7 @@ export const deleteProjects = async (userId: string) =>
 export const getExpenses = async (where: object = {}, page: number = 0, size: number = 10) =>
   await prisma.$transaction([
     prisma.expense.findMany({
-      include: { category: true, project: true },
+      include: { project: true },
       skip: page * size,
       take: size,
       where,
@@ -121,8 +97,6 @@ export const getExpenses = async (where: object = {}, page: number = 0, size: nu
     prisma.expense.count({ where })
   ]);
 export const getExpense = async (id: string) => await prisma.expense.findUnique({ where: { id } });
-export const getExpenseCountByCategoryId = async (categoryId: string) =>
-  await prisma.expense.count({ where: { categoryId } });
 export const getExpenseCountByProjectId = async (userId: string, projectId: string) =>
   await prisma.expense.count({ where: { userId, projectId } });
 export const upsertExpense = async (userId: string, expense: IExpense) => {

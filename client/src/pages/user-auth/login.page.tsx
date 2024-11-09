@@ -85,7 +85,8 @@ export function SignInPage() {
           email: res?.resource?.email,
           role: res?.resource?.role,
           photo: res?.resource?.photo,
-          token: res?.resource?.token
+          token: res?.resource?.token,
+          countryId: res?.resource?.countryId
         }));
       } else {
         if (res?.resource)

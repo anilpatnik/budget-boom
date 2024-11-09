@@ -12,7 +12,6 @@ import {
   ResetPasswordPage,
   ProfileHomePage,
   UsersHomePage,
-  CategoriesHomePage,
   ProjectsHomePage,
   ExpensesHomePage
 } from "@/pages";
@@ -146,19 +145,6 @@ export const router = createBrowserRouter([
           {
             path: `${NavType.Projects}${NavType.NotFound}`,
             element: <Navigate to={NavType.Projects} replace />
-          }
-        ]
-      },
-      {
-        element: <PreRoute routerType={RouterType.Role} roles={[RoleType.Admin]} />,
-        children: [
-          {
-            path: NavType.Categories,
-            element: <CategoriesHomePage />
-          },
-          {
-            path: `${NavType.Categories}${NavType.NotFound}`,
-            element: <Navigate to={NavType.Categories} replace />
           }
         ]
       },
