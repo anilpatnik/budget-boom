@@ -23,16 +23,23 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { PageType, CrudType, formatddMMMyyyy, constants } from "@/util";
 import { IProject, Project } from "@/models";
-import { deleteProjectAsync, getProjectAsync, getProjectsAsync } from "@/services";
+import { deleteProjectAsync, getProjectsAsync } from "@/services";
 import { useStore } from "@/contexts";
 
 type ComponentProps = {
-  handleClick: (pageType: PageType, project?: IProject) => void;
+  handleClick: (
+    pageType: PageType,
+    pageNum?: number,
+    project?: IProject,
+    navBack?: boolean
+  ) => void;
+  pageNum?: number;
+  navBack?: boolean;
 };
-export function ProjectsPage({ handleClick }: ComponentProps) {
+export function ProjectsPage({ handleClick, pageNum = 0, navBack = false }: ComponentProps) {
   const [loading, setLoading] = useState(false);
   const { setProjects } = useStore();
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(pageNum);
   const [presentAlert] = useIonAlert();
   const [present] = useIonToast();
 
@@ -42,11 +49,12 @@ export function ProjectsPage({ handleClick }: ComponentProps) {
     refetch
   } = useQuery({
     queryKey: ["user-projects"],
-    refetchOnMount: true,
+    refetchOnMount: !navBack,
     staleTime: 0,
     queryFn: async () => {
       const projects = await getProjectsAsync();
       setProjects(projects);
+      setPage(page);
       return projects;
     }
   });
@@ -55,7 +63,7 @@ export function ProjectsPage({ handleClick }: ComponentProps) {
     setLoading(true);
     try {
       const newProject = { ...project, type: CrudType.Update };
-      handleClick(PageType.Step1, newProject);
+      handleClick(PageType.Step1, page, newProject);
     } finally {
       setTimeout(() => setLoading(false), 200);
     }
@@ -66,13 +74,13 @@ export function ProjectsPage({ handleClick }: ComponentProps) {
     if (res && !res?.success) {
       present({
         message: res?.resource,
-        color: "danger",
+        color: constants.DANGER,
         duration: 5000
       });
     } else {
       present({
         message: "Deleted Successfully",
-        color: "success",
+        color: constants.SUCCESS,
         duration: 3000
       });
     }
@@ -107,18 +115,20 @@ export function ProjectsPage({ handleClick }: ComponentProps) {
                     End Date
                   </TableCell>
                   <TableCell align="left">
-                    <IonButton
-                      id="id-create-button"
-                      title="CREATE PROJECT"
-                      size="small"
-                      aria-hidden="false"
-                      buttonType="icon"
-                      onClick={() => {
-                        const newProject = { ...Project, type: CrudType.Create };
-                        handleClick(PageType.Step1, newProject);
-                      }}>
-                      <IonIcon icon={addCircleOutline}></IonIcon>
-                    </IonButton>
+                    {projects && projects.length < constants.PROJECTS_MAX && (
+                      <IonButton
+                        id="id-create-button"
+                        title="CREATE PROJECT"
+                        size="small"
+                        aria-hidden="false"
+                        buttonType="icon"
+                        onClick={() => {
+                          const newProject = { ...Project, type: CrudType.Create };
+                          handleClick(PageType.Step1, page, newProject);
+                        }}>
+                        <IonIcon icon={addCircleOutline}></IonIcon>
+                      </IonButton>
+                    )}
                   </TableCell>
                   <TableCell align="left">
                     {loading && <IonSpinner name="lines-sharp-small"></IonSpinner>}

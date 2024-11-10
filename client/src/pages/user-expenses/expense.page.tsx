@@ -70,7 +70,7 @@ export function ExpensePage({ expense, handleClick }: ComponentProps) {
         if (res && !res?.success) {
           present({
             message: res?.resource,
-            color: "danger",
+            color: constants.DANGER,
             duration: 5000
           });
           setLoading(false);
@@ -78,7 +78,7 @@ export function ExpensePage({ expense, handleClick }: ComponentProps) {
         } else {
           present({
             message: "Created Successfully",
-            color: "success",
+            color: constants.SUCCESS,
             duration: 3000
           });
         }
@@ -97,7 +97,7 @@ export function ExpensePage({ expense, handleClick }: ComponentProps) {
         if (res && !res?.success) {
           present({
             message: res?.resource,
-            color: "danger",
+            color: constants.DANGER,
             duration: 5000
           });
           setLoading(false);
@@ -105,7 +105,7 @@ export function ExpensePage({ expense, handleClick }: ComponentProps) {
         } else {
           present({
             message: "Updated Successfully",
-            color: "success",
+            color: constants.SUCCESS,
             duration: 3000
           });
         }

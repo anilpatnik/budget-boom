@@ -22,7 +22,7 @@ import {
   TableRow
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { PageType, CrudType, RoleType, newPassword } from "@/util";
+import { PageType, CrudType, RoleType, newPassword, constants } from "@/util";
 import { AdminUser, IAdminUser, AdminUserSearch, IAdminUserSearch } from "@/models";
 import { deleteUserAsync, getUserAsync, getUsersAsync } from "@/services";
 import { PagingComponent } from "@/components";
@@ -89,13 +89,13 @@ export function UsersPage({ handleClick, searchType, searchInput }: ComponentPro
     if (res && !res?.success) {
       present({
         message: res?.resource,
-        color: "danger",
+        color: constants.DANGER,
         duration: 5000
       });
     } else {
       present({
         message: "Deleted Successfully",
-        color: "success",
+        color: constants.SUCCESS,
         duration: 3000
       });
     }
@@ -236,7 +236,7 @@ export function UsersPage({ handleClick, searchType, searchInput }: ComponentPro
           <PagingComponent
             count={users?.count ?? 0}
             page={payload.page ?? 0}
-            size={payload.size ?? 10}
+            size={payload.size ?? constants.PAGE_SIZE}
             handlePaging={handlePaging}
           />
         </IonCol>

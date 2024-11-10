@@ -20,9 +20,15 @@ import { InputComponent, DateComponent } from "@/components";
 
 type ComponentProps = {
   project?: IProject;
-  handleClick: (pageType: PageType, project?: IProject) => void;
+  handleClick: (
+    pageType: PageType,
+    pageNum?: number,
+    project?: IProject,
+    navBack?: boolean
+  ) => void;
+  pageNum?: number;
 };
-export function ProjectPage({ project, handleClick }: ComponentProps) {
+export function ProjectPage({ project, handleClick, pageNum = 0 }: ComponentProps) {
   const [loading, setLoading] = useState(false);
   const [present] = useIonToast();
 
@@ -64,7 +70,7 @@ export function ProjectPage({ project, handleClick }: ComponentProps) {
         if (res && !res?.success) {
           present({
             message: res?.resource,
-            color: "danger",
+            color: constants.DANGER,
             duration: 5000
           });
           setLoading(false);
@@ -72,7 +78,7 @@ export function ProjectPage({ project, handleClick }: ComponentProps) {
         } else {
           present({
             message: "Created Successfully",
-            color: "success",
+            color: constants.SUCCESS,
             duration: 3000
           });
         }
@@ -90,7 +96,7 @@ export function ProjectPage({ project, handleClick }: ComponentProps) {
         if (res && !res?.success) {
           present({
             message: res?.resource,
-            color: "danger",
+            color: constants.DANGER,
             duration: 5000
           });
           setLoading(false);
@@ -98,7 +104,7 @@ export function ProjectPage({ project, handleClick }: ComponentProps) {
         } else {
           present({
             message: "Updated Successfully",
-            color: "success",
+            color: constants.SUCCESS,
             duration: 3000
           });
         }
@@ -209,7 +215,7 @@ export function ProjectPage({ project, handleClick }: ComponentProps) {
                         size="small"
                         color="medium"
                         aria-hidden="false"
-                        onClick={(e: any) => handleClick(PageType.Default)}>
+                        onClick={(e: any) => handleClick(PageType.Default, pageNum, project, true)}>
                         <IonIcon icon={caretBackOutline} slot="start" />
                         BACK
                       </IonButton>

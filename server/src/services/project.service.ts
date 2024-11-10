@@ -1,10 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { helper, dbhelper, CrudType } from "../util";
 import { IProject, IProjectData } from "../models";
+// import { mockProjects } from "./mock.service";
 
 export const getProjectsAsync = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req?.auth?.id || String.empty;
+    // const dbProjects = await mockProjects(100);
     const dbProjects = await dbhelper.getProjects(userId);
     const projects: IProject[] = dbProjects?.map(dbProject => {
       return {

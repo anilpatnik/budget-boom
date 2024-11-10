@@ -48,7 +48,7 @@ export const ProfilePicturePage = () => {
             if (res && !res?.success) {
               present({
                 message: res?.resource,
-                color: "danger",
+                color: constants.DANGER,
                 duration: 5000
               });
             } else {
@@ -68,13 +68,13 @@ export const ProfilePicturePage = () => {
       if (res && !res?.success) {
         present({
           message: res?.resource,
-          color: "danger",
+          color: constants.DANGER,
           duration: 5000
         });
       } else {
         present({
           message: "Thank you for being with us 🙏 We're sad to see you go 😢",
-          color: "success",
+          color: constants.SUCCESS,
           duration: 3000
         });
         await handleLogout();

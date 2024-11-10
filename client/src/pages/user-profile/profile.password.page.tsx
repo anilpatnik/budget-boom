@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { PasswordComponent, PasswordStrength } from "@/components";
 import { updateProfilePassword } from "@/services";
+import { constants } from "@/util";
 
 export function ProfilePasswordPage() {
   const [loading, setLoading] = useState(false);
@@ -38,13 +39,13 @@ export function ProfilePasswordPage() {
     if (res && !res?.success) {
       present({
         message: res?.resource,
-        color: "danger",
+        color: constants.DANGER,
         duration: 5000
       });
     } else {
       present({
         message: "You have successfully changed your password",
-        color: "success",
+        color: constants.SUCCESS,
         duration: 3000
       });
     }

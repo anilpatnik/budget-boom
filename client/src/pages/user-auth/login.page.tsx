@@ -58,7 +58,7 @@ export function SignInPage() {
           if (!captchaValue) {
             present({
               message: "Please verify reCAPTCHA!",
-              color: "danger",
+              color: constants.DANGER,
               duration: 3000
             });
             return;
@@ -92,7 +92,7 @@ export function SignInPage() {
         if (res?.resource)
           present({
             message: res?.resource,
-            color: "danger",
+            color: constants.DANGER,
             duration: 5000
           });
       }

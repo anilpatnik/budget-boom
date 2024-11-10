@@ -1,4 +1,4 @@
-import { AuthType, CrudType, RoleType, SearchType } from "@/util";
+import { AuthType, CrudType, RoleType, SearchType, constants } from "@/util";
 
 export interface IAggregate {
   count?: number;
@@ -69,7 +69,7 @@ export const AdminUserSearch: IAdminUserSearch = {
   role: RoleType.User,
   active: false,
   page: 0,
-  size: 10
+  size: constants.PAGE_SIZE
 };
 
 export interface IProject {
@@ -105,7 +105,7 @@ export const ExpenseSearch: IExpenseSearch = {
   categoryId: String.empty,
   projectId: String.empty,
   page: 0,
-  size: 10
+  size: constants.PAGE_SIZE
 };
 export interface IExpense {
   id?: string;

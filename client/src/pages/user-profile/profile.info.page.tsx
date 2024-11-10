@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { useStore } from "@/contexts";
 import { countries, updateProfileInfo } from "@/services";
 import { InputComponent, SelectComponent } from "@/components";
+import { constants } from "@/util";
 
 export function ProfileInfoPage() {
   const { user, setAuth } = useStore();
@@ -30,7 +31,7 @@ export function ProfileInfoPage() {
     if (res && !res?.success) {
       present({
         message: res?.resource,
-        color: "danger",
+        color: constants.DANGER,
         duration: 5000
       });
     } else {

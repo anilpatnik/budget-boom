@@ -49,7 +49,7 @@ export function ForgotPasswordPage() {
         if (!captchaValue) {
           present({
             message: "Please verify reCAPTCHA!",
-            color: "danger",
+            color: constants.DANGER,
             duration: 3000
           });
           return;
@@ -68,7 +68,7 @@ export function ForgotPasswordPage() {
       } else {
         present({
           message: "Email Not Found",
-          color: "danger",
+          color: constants.DANGER,
           duration: 5000
         });
       }

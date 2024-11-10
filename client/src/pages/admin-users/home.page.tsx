@@ -10,15 +10,19 @@ import { UsersPage } from "./users.page";
 
 type userState = {
   pageType: PageType;
+  pageNum?: number;
   searchType?: number;
   searchInput?: string;
   user?: IAdminUser;
+  navBack?: boolean;
 };
 const userStateInit: userState = {
   pageType: PageType.Default,
+  pageNum: 0,
   searchType: 10,
   searchInput: String.empty,
-  user: AdminUser
+  user: AdminUser,
+  navBack: false
 };
 export function UsersHomePage() {
   const [userState, setUserState] = useState(userStateInit);

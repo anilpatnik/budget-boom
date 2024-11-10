@@ -22,7 +22,7 @@ import {
   TableRow
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { PageType, CrudType, formatddMMMyyyy, formatPrice } from "@/util";
+import { PageType, CrudType, formatddMMMyyyy, formatPrice, constants } from "@/util";
 import { IExpense, Expense, IExpenseSearch, ExpenseSearch } from "@/models";
 import { getExpensesAsync, getExpenseAsync, deleteExpenseAsync, getCategory } from "@/services";
 import { Icon, PagingComponent } from "@/components";
@@ -63,13 +63,13 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
     if (res && !res?.success) {
       present({
         message: res?.resource,
-        color: "danger",
+        color: constants.DANGER,
         duration: 5000
       });
     } else {
       present({
         message: "Deleted Successfully",
-        color: "success",
+        color: constants.SUCCESS,
         duration: 3000
       });
     }
@@ -201,7 +201,7 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
           <PagingComponent
             count={expenses?.count ?? 0}
             page={payload.page ?? 0}
-            size={payload.size ?? 10}
+            size={payload.size ?? constants.PAGE_SIZE}
             handlePaging={handlePaging}
           />
         </IonCol>

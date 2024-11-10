@@ -10,20 +10,29 @@ import { ProjectsPage } from "./projects.page";
 
 type projectState = {
   pageType: PageType;
+  pageNum?: number;
   project?: IProject;
+  navBack?: boolean;
 };
 const projectStateInit: projectState = {
   pageType: PageType.Default,
-  project: Project
+  pageNum: 0,
+  project: Project,
+  navBack: false
 };
 export function ProjectsHomePage() {
   const [projectState, setProjectState] = useState(projectStateInit);
   const navigate = useNavigate();
-  const handleClick = (pageType: PageType, project?: IProject) => {
+  const handleClick = (
+    pageType: PageType,
+    pageNum?: number,
+    project?: IProject,
+    navBack?: boolean
+  ) => {
     if (pageType === PageType.Default) {
-      setProjectState(prev => ({ ...prev, pageType, project: Project }));
+      setProjectState(prev => ({ ...prev, pageType, pageNum, project: Project, navBack }));
     } else {
-      setProjectState(prev => ({ ...prev, pageType, project }));
+      setProjectState(prev => ({ ...prev, pageType, pageNum, project, navBack }));
     }
   };
   return (
@@ -47,10 +56,20 @@ export function ProjectsHomePage() {
       </IonBreadcrumbs>
       {projectState.pageType === PageType.Step1 && (
         <LazyLoading>
-          <ProjectPage project={projectState.project} handleClick={handleClick} />
+          <ProjectPage
+            project={projectState.project}
+            handleClick={handleClick}
+            pageNum={projectState.pageNum}
+          />
         </LazyLoading>
       )}
-      {projectState.pageType === PageType.Default && <ProjectsPage handleClick={handleClick} />}
+      {projectState.pageType === PageType.Default && (
+        <ProjectsPage
+          handleClick={handleClick}
+          pageNum={projectState.pageNum}
+          navBack={projectState.navBack}
+        />
+      )}
     </>
   );
 }

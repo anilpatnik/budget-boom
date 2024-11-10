@@ -1,4 +1,5 @@
 import { Pagination } from "@mui/material";
+import { PAGE_SIZE } from "@/util/constants";
 
 type ComponentProps = {
   count?: number;
@@ -9,7 +10,7 @@ type ComponentProps = {
 export const PagingComponent = ({
   count = 0,
   page = 0,
-  size = 10,
+  size = PAGE_SIZE,
   handlePaging
 }: ComponentProps) => {
   return (

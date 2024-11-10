@@ -74,13 +74,13 @@ export function UserProfilePage({ user, handleClick, searchType, searchInput }: 
         if (res && !res?.success) {
           present({
             message: res?.resource,
-            color: "danger",
+            color: constants.DANGER,
             duration: 5000
           });
         } else {
           present({
             message: "Created Successfully",
-            color: "success",
+            color: constants.SUCCESS,
             duration: 3000
           });
         }
@@ -96,13 +96,13 @@ export function UserProfilePage({ user, handleClick, searchType, searchInput }: 
         if (res && !res?.success) {
           present({
             message: res?.resource,
-            color: "danger",
+            color: constants.DANGER,
             duration: 5000
           });
         } else {
           present({
             message: "Updated Successfully",
-            color: "success",
+            color: constants.SUCCESS,
             duration: 3000
           });
         }
