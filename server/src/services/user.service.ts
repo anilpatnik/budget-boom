@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { RoleType, SearchType, authelper, dbhelper, helper, fb } from "../util";
 import { IAdminUser, IAdminUserData, IAdminUserSearch } from "../models";
+import { mockUsers } from "./mock.service";
 
 export const getUsersAsync = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -39,7 +40,9 @@ export const getUsersAsync = async (req: Request, res: Response, next: NextFunct
         role: { equals: dbrole }
       };
     }
+    //
     // get all users
+    // const [dbUsers, count] = await mockUsers(50);
     const [dbUsers, count] = await dbhelper.getUsers(
       whereCondition,
       userSearch.page,

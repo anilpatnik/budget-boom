@@ -29,14 +29,32 @@ export function UsersHomePage() {
   const navigate = useNavigate();
   const handleClick = (
     pageType: PageType,
+    pageNum?: number,
     searchType?: number,
     searchInput?: string,
-    user?: IAdminUser
+    user?: IAdminUser,
+    navBack?: boolean
   ) => {
     if (pageType === PageType.Default) {
-      setUserState(prev => ({ ...prev, pageType, searchType, searchInput, user: AdminUser }));
+      setUserState(prev => ({
+        ...prev,
+        pageType,
+        pageNum,
+        searchType,
+        searchInput,
+        user: AdminUser,
+        navBack
+      }));
     } else {
-      setUserState(prev => ({ ...prev, pageType, searchType, searchInput, user }));
+      setUserState(prev => ({
+        ...prev,
+        pageType,
+        pageNum,
+        searchType,
+        searchInput,
+        user,
+        navBack
+      }));
     }
   };
   return (
@@ -65,6 +83,7 @@ export function UsersHomePage() {
             searchType={userState.searchType}
             searchInput={userState.searchInput}
             handleClick={handleClick}
+            pageNum={userState.pageNum}
           />
         </LazyLoading>
       )}
@@ -73,6 +92,8 @@ export function UsersHomePage() {
           searchType={userState.searchType}
           searchInput={userState.searchInput}
           handleClick={handleClick}
+          pageNum={userState.pageNum}
+          navBack={userState.navBack}
         />
       )}
     </>

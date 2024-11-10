@@ -33,14 +33,23 @@ type ComponentProps = {
   user?: IAdminUser;
   handleClick: (
     pageType: PageType,
+    pageNum?: number,
     searchType?: number,
     searchInput?: string,
-    user?: IAdminUser
+    user?: IAdminUser,
+    navBack?: boolean
   ) => void;
+  pageNum?: number;
   searchType?: number;
   searchInput?: string;
 };
-export function UserProfilePage({ user, handleClick, searchType, searchInput }: ComponentProps) {
+export function UserProfilePage({
+  user,
+  handleClick,
+  pageNum = 0,
+  searchType,
+  searchInput
+}: ComponentProps) {
   const [loading, setLoading] = useState(false);
   const [present] = useIonToast();
 
@@ -109,7 +118,7 @@ export function UserProfilePage({ user, handleClick, searchType, searchInput }: 
       }
       setTimeout(() => {
         setLoading(false);
-        handleClick(PageType.Default, searchType, searchInput);
+        handleClick(PageType.Default, pageNum, searchType, searchInput);
       }, 200);
     }
   });
@@ -253,7 +262,14 @@ export function UserProfilePage({ user, handleClick, searchType, searchInput }: 
                         color="medium"
                         aria-hidden="false"
                         onClick={(e: any) =>
-                          handleClick(PageType.Default, searchType, searchInput)
+                          handleClick(
+                            PageType.Default,
+                            pageNum,
+                            searchType,
+                            searchInput,
+                            undefined,
+                            true
+                          )
                         }>
                         <IonIcon icon={caretBackOutline} slot="start" />
                         BACK

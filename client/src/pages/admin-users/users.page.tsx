@@ -30,18 +30,29 @@ import { PagingComponent } from "@/components";
 type ComponentProps = {
   handleClick: (
     pageType: PageType,
+    pageNum?: number,
     searchType?: number,
     searchInput?: string,
-    user?: IAdminUser
+    user?: IAdminUser,
+    navBack?: boolean
   ) => void;
   searchType?: number;
   searchInput?: string;
+  pageNum?: number;
+  navBack?: boolean;
 };
-export function UsersPage({ handleClick, searchType, searchInput }: ComponentProps) {
+export function UsersPage({
+  handleClick,
+  searchType,
+  searchInput,
+  pageNum = 0,
+  navBack = false
+}: ComponentProps) {
   const [payload, setPayload] = useState<IAdminUserSearch>({
     ...AdminUserSearch,
     searchType,
-    searchInput
+    searchInput,
+    page: pageNum
   });
   const [loading, setLoading] = useState(false);
   const [paging, setPaging] = useState(false);
@@ -54,7 +65,7 @@ export function UsersPage({ handleClick, searchType, searchInput }: ComponentPro
     refetch
   } = useQuery({
     queryKey: ["admin-users"],
-    refetchOnMount: true,
+    refetchOnMount: !navBack,
     staleTime: 0,
     queryFn: async () => await getUsersAsync(payload)
   });
@@ -66,7 +77,7 @@ export function UsersPage({ handleClick, searchType, searchInput }: ComponentPro
       if (user) {
         const password = newPassword();
         const newUser = { ...user, password, type: CrudType.Update };
-        handleClick(PageType.Step1, payload.searchType, payload.searchInput, newUser);
+        handleClick(PageType.Step1, payload.page, payload.searchType, payload.searchInput, newUser);
       }
     } finally {
       setTimeout(() => setLoading(false), 200);
@@ -81,6 +92,7 @@ export function UsersPage({ handleClick, searchType, searchInput }: ComponentPro
   };
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    setPayload(prev => ({ ...prev, page: 0 }));
     refetch();
   };
   const handleUserDelete = async (id: string) => {
@@ -106,16 +118,15 @@ export function UsersPage({ handleClick, searchType, searchInput }: ComponentPro
   };
   const handlePaging = (e: any, value: number) => {
     setPaging(true);
-    setPayload(prev => ({
-      ...prev,
-      page: value - 1,
-      skipPaging: false
-    }));
+    setPayload(prev => ({ ...prev, page: value - 1 }));
     setTimeout(async () => {
       await refetch();
       setPaging(false);
     }, 1000);
   };
+
+  if (isFetching)
+    return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 
   return (
     <IonGrid>
@@ -167,6 +178,7 @@ export function UsersPage({ handleClick, searchType, searchInput }: ComponentPro
                         const newUser = { ...AdminUser, password, type: CrudType.Create };
                         handleClick(
                           PageType.Step1,
+                          payload.page,
                           payload.searchType,
                           payload.searchInput,
                           newUser
