@@ -15,12 +15,13 @@ import { useStore } from "@/contexts";
 import { User } from "@/models";
 
 export function Header() {
-  const { user, setAuth } = useStore();
+  const { user, setAuth, setProjects } = useStore();
   const navigate = useNavigate();
   const handleLogout = async () => {
     sessionStorage.clear();
     localStorage.clear();
     setAuth({ ...User });
+    setProjects([]);
     await fb.fSignOut();
     navigate(NavType.Root);
   };

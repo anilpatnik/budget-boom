@@ -67,6 +67,8 @@ export function ProjectPage({ project, handleClick }: ComponentProps) {
             color: "danger",
             duration: 5000
           });
+          setLoading(false);
+          return;
         } else {
           present({
             message: "Created Successfully",
@@ -91,6 +93,8 @@ export function ProjectPage({ project, handleClick }: ComponentProps) {
             color: "danger",
             duration: 5000
           });
+          setLoading(false);
+          return;
         } else {
           present({
             message: "Updated Successfully",

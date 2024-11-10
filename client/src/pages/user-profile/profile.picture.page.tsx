@@ -15,7 +15,7 @@ import { deleteProfileAsync, updateProfilePic } from "@/services";
 import { User } from "@/models";
 
 export const ProfilePicturePage = () => {
-  const { user, setAuth } = useStore();
+  const { user, setAuth, setProjects } = useStore();
   const [file, setFile] = useState<File>();
   const [preview, setPreview] = useState(String.empty);
   const [loading, setLoading] = useState(false);
@@ -90,6 +90,7 @@ export const ProfilePicturePage = () => {
     sessionStorage.clear();
     localStorage.clear();
     setAuth({ ...User });
+    setProjects([]);
     await fb.fSignOut();
     navigate(NavType.Root);
   };

@@ -45,21 +45,11 @@ export const deleteUser = async (id: string) => await prisma.user.delete({ where
 //#endregion
 
 //#region project management
-export const getAllProjects = async (userId: string) =>
+export const getProjects = async (userId: string) =>
   await prisma.project.findMany({
     where: { inactive: false, userId },
     orderBy: { updatedAt: "desc" }
   });
-export const getProjects = async (userId: string, page: number = 0, size: number = 10) =>
-  await prisma.$transaction([
-    prisma.project.findMany({
-      skip: page * size,
-      take: size,
-      where: { inactive: false, userId },
-      orderBy: { updatedAt: "desc" }
-    }),
-    prisma.project.count({ where: { inactive: false, userId } })
-  ]);
 export const getProject = async (id: string) => await prisma.project.findUnique({ where: { id } });
 export const getProjectCountByName = async (userId: string, name: string) =>
   await prisma.project.count({

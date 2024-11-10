@@ -15,8 +15,7 @@ apiRouter.get("/users/:userid", authelper.authorize([RoleType.Admin]), user.getU
 apiRouter.post("/user", authelper.authorize([RoleType.Admin]), user.upsertUserAsync);
 apiRouter.delete("/users/:userid", authelper.authorize([RoleType.Admin]), user.deleteUserAsync);
 
-apiRouter.get("/pub/projects", authelper.authorize(), project.getPubProjectsAsync);
-apiRouter.post("/projects", authelper.authorize(), project.getProjectsAsync);
+apiRouter.get("/projects", authelper.authorize(), project.getProjectsAsync);
 apiRouter.get("/projects/:projectid", authelper.authorize(), project.getProjectAsync);
 apiRouter.post("/project", authelper.authorize(), project.upsertProjectAsync);
 apiRouter.delete("/projects/:projectid", authelper.authorize(), project.deleteProjectAsync);

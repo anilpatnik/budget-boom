@@ -18,8 +18,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { CrudType, PageType, constants, convertoISO, dateNow, parsePrice } from "@/util";
 import { IExpense } from "@/models";
-import { categories, getCategory, getPubProjectsAsync, upsertExpenseAsync } from "@/services";
+import { categories, getCategory, upsertExpenseAsync } from "@/services";
 import { InputComponent, DateComponent, SelectComponent, AutoSelectComponent } from "@/components";
+import { useStore } from "@/contexts";
 
 type ComponentProps = {
   expense?: IExpense;
@@ -27,14 +28,8 @@ type ComponentProps = {
 };
 export function ExpensePage({ expense, handleClick }: ComponentProps) {
   const [loading, setLoading] = useState(false);
+  const { projects } = useStore();
   const [present] = useIonToast();
-
-  const { isFetching: loadProjects, data: projects } = useQuery({
-    queryKey: ["user-projects"],
-    refetchOnMount: true,
-    staleTime: 0,
-    queryFn: async () => await getPubProjectsAsync()
-  });
 
   const formik = useFormik({
     initialValues: {
@@ -78,6 +73,8 @@ export function ExpensePage({ expense, handleClick }: ComponentProps) {
             color: "danger",
             duration: 5000
           });
+          setLoading(false);
+          return;
         } else {
           present({
             message: "Created Successfully",
@@ -103,6 +100,8 @@ export function ExpensePage({ expense, handleClick }: ComponentProps) {
             color: "danger",
             duration: 5000
           });
+          setLoading(false);
+          return;
         } else {
           present({
             message: "Updated Successfully",
@@ -195,20 +194,16 @@ export function ExpensePage({ expense, handleClick }: ComponentProps) {
                   </IonGrid>
                 </div>
                 <div className="my-6">
-                  {loadProjects ? (
-                    <IonSpinner name="lines-sharp-small"></IonSpinner>
-                  ) : (
-                    <AutoSelectComponent
-                      name="projectId"
-                      label="Project"
-                      value={formik.values.projectId}
-                      optional={true}
-                      touched={formik.touched.projectId}
-                      errorMessage={formik.errors.projectId}
-                      handleChange={value => formik.setFieldValue("projectId", value)}
-                      payload={projects || []}
-                    />
-                  )}
+                  <AutoSelectComponent
+                    name="projectId"
+                    label="Project"
+                    value={formik.values.projectId}
+                    optional={true}
+                    touched={formik.touched.projectId}
+                    errorMessage={formik.errors.projectId}
+                    handleChange={value => formik.setFieldValue("projectId", value)}
+                    payload={projects || []}
+                  />
                 </div>
                 <div className="my-6">
                   <InputComponent

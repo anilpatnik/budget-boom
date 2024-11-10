@@ -48,14 +48,11 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
     queryFn: async () => await getExpensesAsync(payload)
   });
 
-  const handleEdit = async (id: string) => {
+  const handleEdit = async (expense: IExpense) => {
     setLoading(true);
     try {
-      const expense = await getExpenseAsync(id);
-      if (expense) {
-        const newExpense = { ...expense, type: CrudType.Update };
-        handleClick(PageType.Step1, newExpense);
-      }
+      const newExpense = { ...expense, type: CrudType.Update };
+      handleClick(PageType.Step1, newExpense);
     } finally {
       setTimeout(() => setLoading(false), 200);
     }
@@ -165,7 +162,7 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
                         size="small"
                         aria-hidden="false"
                         buttonType="icon"
-                        onClick={() => handleEdit(item.id || String.empty)}>
+                        onClick={() => handleEdit(item)}>
                         <IonIcon icon={createOutline}></IonIcon>
                       </IonButton>
                     </TableCell>

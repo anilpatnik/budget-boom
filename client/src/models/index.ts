@@ -1,9 +1,5 @@
 import { AuthType, CrudType, RoleType, SearchType } from "@/util";
 
-export interface IPaging {
-  page?: number;
-  size?: number;
-}
 export interface IAggregate {
   count?: number;
   total?: number;
@@ -94,9 +90,6 @@ export const Project: IProject = {
   endDate: String.empty,
   type: CrudType.Read
 };
-export interface IProjectData extends IAggregate {
-  data?: IProject[];
-}
 
 export interface IExpenseSearch {
   startDate?: string;
