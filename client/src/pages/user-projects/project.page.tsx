@@ -81,6 +81,10 @@ export function ProjectPage({ project, handleClick, pageNum = 0 }: ComponentProp
             color: constants.SUCCESS,
             duration: 3000
           });
+          setTimeout(() => {
+            setLoading(false);
+            handleClick(PageType.Default);
+          }, 200);
         }
       } else {
         const updateProject: IProject = {
@@ -107,12 +111,12 @@ export function ProjectPage({ project, handleClick, pageNum = 0 }: ComponentProp
             color: constants.SUCCESS,
             duration: 3000
           });
+          setTimeout(() => {
+            setLoading(false);
+            handleClick(PageType.Default, pageNum);
+          }, 200);
         }
       }
-      setTimeout(() => {
-        setLoading(false);
-        handleClick(PageType.Default);
-      }, 200);
     }
   });
 
@@ -215,7 +219,9 @@ export function ProjectPage({ project, handleClick, pageNum = 0 }: ComponentProp
                         size="small"
                         color="medium"
                         aria-hidden="false"
-                        onClick={(e: any) => handleClick(PageType.Default, pageNum, project, true)}>
+                        onClick={(e: any) =>
+                          handleClick(PageType.Default, pageNum, undefined, true)
+                        }>
                         <IonIcon icon={caretBackOutline} slot="start" />
                         BACK
                       </IonButton>

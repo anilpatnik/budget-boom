@@ -104,17 +104,19 @@ export function UsersPage({
         color: constants.DANGER,
         duration: 5000
       });
+      setLoading(false);
+      return;
     } else {
       present({
         message: "Deleted Successfully",
         color: constants.SUCCESS,
         duration: 3000
       });
+      setTimeout(() => {
+        setLoading(false);
+        refetch();
+      }, 200);
     }
-    setTimeout(() => {
-      setLoading(false);
-      refetch();
-    }, 200);
   };
   const handlePaging = (e: any, value: number) => {
     setPaging(true);

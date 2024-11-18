@@ -54,7 +54,6 @@ export function ProjectsPage({ handleClick, pageNum = 0, navBack = false }: Comp
     queryFn: async () => {
       const projects = await getProjectsAsync();
       setProjects(projects);
-      setPage(page);
       return projects;
     }
   });
@@ -77,17 +76,20 @@ export function ProjectsPage({ handleClick, pageNum = 0, navBack = false }: Comp
         color: constants.DANGER,
         duration: 5000
       });
+      setLoading(false);
+      return;
     } else {
       present({
         message: "Deleted Successfully",
         color: constants.SUCCESS,
         duration: 3000
       });
+      setTimeout(() => {
+        setPage(0);
+        setLoading(false);
+        refetch();
+      }, 200);
     }
-    setTimeout(() => {
-      setLoading(false);
-      refetch();
-    }, 200);
   };
   const handlePaging = (e: any, newPage: number) => {
     setPage(newPage);
@@ -196,23 +198,25 @@ export function ProjectsPage({ handleClick, pageNum = 0, navBack = false }: Comp
           </TableContainer>
         </IonCol>
       </IonRow>
-      <IonRow>
-        <IonCol className="ion-margin-top ion-text-end">
-          <TablePagination
-            component="div"
-            count={projects?.length || 0}
-            page={page}
-            labelDisplayedRows={({ count, page }) =>
-              projects && projects.length > 0
-                ? `Page ${page + 1} of ${Math.ceil(count / constants.PAGE_SIZE)}`
-                : String.empty
-            }
-            onPageChange={handlePaging}
-            rowsPerPage={constants.PAGE_SIZE}
-            rowsPerPageOptions={[constants.PAGE_SIZE]}
-          />
-        </IonCol>
-      </IonRow>
+      {(projects?.length || 0) > constants.PAGE_SIZE && (
+        <IonRow>
+          <IonCol className="ion-margin-top ion-text-end">
+            <TablePagination
+              component="div"
+              count={projects?.length || 0}
+              page={page}
+              labelDisplayedRows={({ count, page }) =>
+                projects && projects.length > 0
+                  ? `Page ${page + 1} of ${Math.ceil(count / constants.PAGE_SIZE)}`
+                  : String.empty
+              }
+              onPageChange={handlePaging}
+              rowsPerPage={constants.PAGE_SIZE}
+              rowsPerPageOptions={[constants.PAGE_SIZE]}
+            />
+          </IonCol>
+        </IonRow>
+      )}
     </IonGrid>
   );
 }

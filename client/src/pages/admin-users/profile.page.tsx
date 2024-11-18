@@ -86,12 +86,18 @@ export function UserProfilePage({
             color: constants.DANGER,
             duration: 5000
           });
+          setLoading(false);
+          return;
         } else {
           present({
             message: "Created Successfully",
             color: constants.SUCCESS,
             duration: 3000
           });
+          setTimeout(() => {
+            setLoading(false);
+            handleClick(PageType.Default, pageNum, searchType, searchInput);
+          }, 200);
         }
       } else {
         const updateUser: IAdminUser = {
@@ -108,18 +114,20 @@ export function UserProfilePage({
             color: constants.DANGER,
             duration: 5000
           });
+          setLoading(false);
+          return;
         } else {
           present({
             message: "Updated Successfully",
             color: constants.SUCCESS,
             duration: 3000
           });
+          setTimeout(() => {
+            setLoading(false);
+            handleClick(PageType.Default, pageNum, searchType, searchInput);
+          }, 200);
         }
       }
-      setTimeout(() => {
-        setLoading(false);
-        handleClick(PageType.Default, pageNum, searchType, searchInput);
-      }, 200);
     }
   });
 

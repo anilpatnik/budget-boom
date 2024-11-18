@@ -48,7 +48,7 @@ export const deleteUser = async (id: string) => await prisma.user.delete({ where
 export const getProjects = async (userId: string) =>
   await prisma.project.findMany({
     where: { inactive: false, userId },
-    orderBy: { updatedAt: "desc" }
+    orderBy: { name: "asc" }
   });
 export const getProject = async (id: string) => await prisma.project.findUnique({ where: { id } });
 export const getProjectCountByName = async (userId: string, name: string) =>
@@ -82,7 +82,7 @@ export const getExpenses = async (where: object = {}, page: number = 0, size: nu
       skip: page * size,
       take: size,
       where,
-      orderBy: { updatedAt: "desc" }
+      orderBy: { entryDate: "desc" }
     }),
     prisma.expense.count({ where })
   ]);

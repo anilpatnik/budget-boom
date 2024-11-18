@@ -12,7 +12,6 @@ import {
 import { addCircleOutline, createOutline, trashOutline } from "ionicons/icons";
 import {
   Box,
-  Checkbox,
   Paper,
   Table,
   TableBody,
@@ -24,7 +23,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { PageType, CrudType, formatddMMMyyyy, formatPrice, constants } from "@/util";
 import { IExpense, Expense, IExpenseSearch, ExpenseSearch } from "@/models";
-import { getExpensesAsync, getExpenseAsync, deleteExpenseAsync, getCategory } from "@/services";
+import { getExpensesAsync, deleteExpenseAsync, getCategory } from "@/services";
 import { Icon, PagingComponent } from "@/components";
 
 type ComponentProps = {
@@ -66,6 +65,8 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
         color: constants.DANGER,
         duration: 5000
       });
+      setLoading(false);
+      return;
     } else {
       present({
         message: "Deleted Successfully",
@@ -82,8 +83,7 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
     setPaging(true);
     setPayload(prev => ({
       ...prev,
-      page: value - 1,
-      skipPaging: false
+      page: value - 1
     }));
     setTimeout(async () => {
       await refetch();
@@ -137,17 +137,37 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
                       {item?.price && `${formatPrice(item?.price)}`}
                     </TableCell>
                     <TableCell align="left">
-                      {item?.categoryId && (
-                        <Box className="flex items-center">
-                          <Icon
-                            name={getCategory(item.categoryId).icon}
-                            css="text-2xl text-black mr-2"
-                          />
-                          <Box sx={{ display: { xs: "none", sm: "block" } }}>
-                            {getCategory(item.categoryId).name}
+                      <Box className="flex items-center">
+                        {item?.categoryId && (
+                          <Box className="flex items-center">
+                            <Icon
+                              name={getCategory(item.categoryId).icon}
+                              css="text-2xl text-black mr-2"
+                            />
+                            <Box sx={{ display: { xs: "none", sm: "block" } }}>
+                              {getCategory(item.categoryId).name}
+                            </Box>
                           </Box>
+                        )}
+                        <Box>
+                          {item?.notes && (
+                            <IonButton
+                              buttonType="icon"
+                              onClick={() =>
+                                present({
+                                  message: item.notes,
+                                  color: "dark",
+                                  duration: 3000
+                                })
+                              }>
+                              <Icon
+                                name="information-circle-outline"
+                                css="text-2xl text-blue-700"
+                              />
+                            </IonButton>
+                          )}
                         </Box>
-                      )}
+                      </Box>
                     </TableCell>
                     <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                       <Icon

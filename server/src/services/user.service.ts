@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { RoleType, SearchType, authelper, dbhelper, helper, fb } from "../util";
 import { IAdminUser, IAdminUserData, IAdminUserSearch } from "../models";
-import { mockUsers } from "./mock.service";
+// import { mockUsers } from "./mock.service";
 
 export const getUsersAsync = async (req: Request, res: Response, next: NextFunction) => {
   try {

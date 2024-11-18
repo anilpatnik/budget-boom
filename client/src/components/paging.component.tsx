@@ -13,14 +13,17 @@ export const PagingComponent = ({
   size = PAGE_SIZE,
   handlePaging
 }: ComponentProps) => {
-  return (
-    <Pagination
-      className="ion-float-right"
-      count={Math.ceil(count / size)}
-      page={page + 1}
-      variant="outlined"
-      shape="rounded"
-      onChange={handlePaging}
-    />
-  );
+  if (count > PAGE_SIZE) {
+    return (
+      <Pagination
+        className="ion-float-right"
+        count={Math.ceil(count / size)}
+        page={page + 1}
+        variant="outlined"
+        shape="rounded"
+        onChange={handlePaging}
+      />
+    );
+  }
+  return null;
 };
