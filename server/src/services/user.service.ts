@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { RoleType, SearchType, authelper, dbhelper, helper, fb } from "../util";
 import { IAdminUser, IAdminUserData, IAdminUserSearch } from "../models";
-// import { mockUsers } from "./mock.service";
 
 export const getUsersAsync = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -40,9 +39,7 @@ export const getUsersAsync = async (req: Request, res: Response, next: NextFunct
         role: { equals: dbrole }
       };
     }
-    //
     // get all users
-    // const [dbUsers, count] = await mockUsers(50);
     const [dbUsers, count] = await dbhelper.getUsers(
       whereCondition,
       userSearch.page,
@@ -99,10 +96,16 @@ export const getUserAsync = async (req: Request, res: Response, next: NextFuncti
 export const upsertUserAsync = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const request: IAdminUser = req.body;
+    let uid: string = String.empty;
     if (!request?.uid) {
-      await createUserRecordAsync(request?.name, request?.email, request?.password, request?.role);
+      uid = await createUserRecordAsync(
+        request?.name,
+        request?.email,
+        request?.password,
+        request?.role
+      );
     } else {
-      await updateUserRecordAsync(
+      uid = await updateUserRecordAsync(
         request?.uid,
         request?.name,
         request?.emailVerified,
@@ -110,10 +113,7 @@ export const upsertUserAsync = async (req: Request, res: Response, next: NextFun
         request?.role
       );
     }
-    const resJson = helper.responseJson<string>(
-      true,
-      !request?.uid ? "User created!" : "User info has been updated!"
-    );
+    const resJson = helper.responseJson<string>(true, uid);
     res.json(resJson);
   } catch (error) {
     return next(error);
@@ -162,7 +162,7 @@ const createUserRecordAsync = async (
     name || String.empty,
     dbrole
   );
-  return dbUser.id;
+  return authUser.uid;
 };
 
 const updateUserRecordAsync = async (
@@ -182,5 +182,5 @@ const updateUserRecordAsync = async (
   // db user
   const dbrole = dbhelper.getdbRoleType(role || RoleType.User);
   const dbUser = await dbhelper.updateUser(uid, name || String.empty, dbrole);
-  return dbUser.id;
+  return authUser.uid;
 };

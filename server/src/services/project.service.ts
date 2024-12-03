@@ -1,13 +1,26 @@
 import { NextFunction, Request, Response } from "express";
 import { helper, dbhelper, CrudType } from "../util";
 import { IProject, IProjectData } from "../models";
-// import { mockProjects } from "./mock.service";
+
+export const getAllProjectsAsync = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req?.auth?.id || String.empty;
+    const dbProjects = await dbhelper.getAllProjects(userId);
+    const projects: IProject[] = dbProjects?.map(dbProject => {
+      return { id: dbProject?.id, name: dbProject?.name };
+    });
+    const resJson = helper.responseJson<IProjectData>(true, helper.removeUndefined(projects));
+    res.json(resJson);
+  } catch (error) {
+    return next(error);
+  }
+};
 
 export const getProjectsAsync = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req?.auth?.id || String.empty;
-    // const dbProjects = await mockProjects(100);
-    const dbProjects = await dbhelper.getProjects(userId);
+    const { page, size } = req.body;
+    const [dbProjects, count] = await dbhelper.getProjects(userId, page, size);
     const projects: IProject[] = dbProjects?.map(dbProject => {
       return {
         id: dbProject?.id,
@@ -18,7 +31,8 @@ export const getProjectsAsync = async (req: Request, res: Response, next: NextFu
         endDate: dbProject?.endDate ? helper.formatDate(dbProject?.endDate) : String.empty
       };
     });
-    const resJson = helper.responseJson<IProjectData>(true, helper.removeUndefined(projects));
+    const projectData: IProjectData = { data: helper.removeUndefined(projects), count };
+    const resJson = helper.responseJson<IProjectData>(true, projectData);
     res.json(resJson);
   } catch (error) {
     return next(error);

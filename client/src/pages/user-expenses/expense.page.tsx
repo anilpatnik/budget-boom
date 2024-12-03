@@ -1,34 +1,49 @@
 import { useState } from "react";
 import {
   IonButton,
-  IonCard,
-  IonCardContent,
+  IonButtons,
   IonCol,
+  IonContent,
   IonGrid,
+  IonHeader,
   IonIcon,
   IonLabel,
+  IonPage,
   IonRow,
   IonSpinner,
+  IonToolbar,
   useIonToast
 } from "@ionic/react";
-import { caretBackOutline, caretForwardOutline, refreshOutline } from "ionicons/icons";
+import { caretForwardOutline, refreshOutline } from "ionicons/icons";
 import { Switch } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { CrudType, PageType, constants, convertoISO, dateNow, parsePrice } from "@/util";
-import { IExpense } from "@/models";
+import { CrudType, constants, convertoISO, dateNow, parsePrice } from "@/util";
+import { IExpense, IProject } from "@/models";
 import { categories, getCategory, upsertExpenseAsync } from "@/services";
-import { InputComponent, DateComponent, SelectComponent, AutoSelectComponent } from "@/components";
-import { useStore } from "@/contexts";
+import {
+  InputComponent,
+  DateComponent,
+  SelectComponent,
+  AutoSelectComponent,
+  Icon
+} from "@/components";
 
 type ComponentProps = {
+  projects?: IProject[];
   expense?: IExpense;
-  handleClick: (pageType: PageType, expense?: IExpense) => void;
+  handleClose: () => void;
+  handleNew: (item?: any) => void;
+  handleEdit: (item?: any) => void;
 };
-export function ExpensePage({ expense, handleClick }: ComponentProps) {
+export function ExpensePage({
+  projects,
+  expense,
+  handleClose,
+  handleNew,
+  handleEdit
+}: ComponentProps) {
   const [loading, setLoading] = useState(false);
-  const { projects } = useStore();
   const [present] = useIonToast();
 
   const formik = useFormik({
@@ -81,6 +96,11 @@ export function ExpensePage({ expense, handleClick }: ComponentProps) {
             color: constants.SUCCESS,
             duration: 3000
           });
+          setTimeout(() => {
+            const updateExpense = { ...newExpense, id: res?.resource?.id };
+            handleNew(updateExpense);
+            setLoading(false);
+          }, 200);
         }
       } else {
         const updateExpense: IExpense = {
@@ -108,162 +128,149 @@ export function ExpensePage({ expense, handleClick }: ComponentProps) {
             color: constants.SUCCESS,
             duration: 3000
           });
+          setTimeout(() => {
+            handleEdit(updateExpense);
+            setLoading(false);
+          }, 200);
         }
       }
-      setTimeout(() => {
-        setLoading(false);
-        handleClick(PageType.Default);
-      }, 200);
     }
   });
 
   return (
-    <IonGrid>
-      <IonRow>
-        <IonCol></IonCol>
-        <IonCol size="12" size-md="6">
-          <IonCard className="ion-padding-bottom">
-            <IonCardContent>
-              <form onSubmit={formik.handleSubmit}>
-                <div className="my-6">
-                  <DateComponent
-                    name="entryDate"
-                    label="Date"
-                    value={convertoISO(formik.values.entryDate)}
-                    touched={formik.touched.entryDate}
-                    errorMessage={formik.errors.entryDate}
-                    handleChange={e => formik.setFieldValue("entryDate", e.target.value || dateNow)}
-                  />
-                </div>
-                <div className="my-6">
-                  <IonGrid className="p-0 m-0">
-                    <IonRow>
-                      <IonCol className="p-0 m-0" size="12" size-md="6">
-                        <InputComponent
-                          name="price"
-                          label="Amount"
-                          type="number"
-                          startAdor={true}
-                          startAdorText="$"
-                          value={formik.values.price.toString()}
-                          touched={formik.touched.price}
-                          errorMessage={formik.errors.price}
-                          handleChange={formik.handleChange}
-                        />
-                      </IonCol>
-                      <IonCol className="text-right" size="12" size-md="6">
-                        <IonLabel>
-                          Money {formik.values.expenditure ? "Spent" : "Received"}
-                        </IonLabel>
-                        <Switch
-                          id="expenditure"
-                          name="expenditure"
-                          checked={formik.values.expenditure}
-                          onChange={formik.handleChange}
-                        />
-                      </IonCol>
-                    </IonRow>
-                  </IonGrid>
-                </div>
-                <div className="my-6">
-                  <IonGrid className="p-0 m-0">
-                    <IonRow>
-                      <IonCol className="p-0 m-0" size="12" size-md="6">
-                        <SelectComponent
-                          name="categoryId"
-                          label="Category"
-                          value={formik.values.categoryId}
-                          touched={formik.touched.categoryId}
-                          errorMessage={formik.errors.categoryId}
-                          handleChange={formik.handleChange}
-                          payload={categories || []}
-                        />
-                      </IonCol>
-                      <IonCol className="text-right" size="12" size-md="6">
-                        <IonLabel>
-                          {formik.values.taxable ? "Included" : "Include"} in Tax Calculation
-                        </IonLabel>
-                        <Switch
-                          id="taxable"
-                          name="taxable"
-                          checked={formik.values.taxable}
-                          onChange={formik.handleChange}
-                        />
-                      </IonCol>
-                    </IonRow>
-                  </IonGrid>
-                </div>
-                <div className="my-6">
-                  <AutoSelectComponent
-                    name="projectId"
-                    label="Project"
-                    value={formik.values.projectId}
-                    optional={true}
-                    touched={formik.touched.projectId}
-                    errorMessage={formik.errors.projectId}
-                    handleChange={value => formik.setFieldValue("projectId", value)}
-                    payload={projects || []}
-                  />
-                </div>
-                <div className="my-6">
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonButtons slot="start">
+            <IonButton
+              id="id-back-button"
+              onClick={() => handleClose()}
+              onDoubleClick={() => handleClose()}>
+              <Icon name="caret-back-outline" />
+              BACK
+            </IonButton>
+          </IonButtons>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent className="ion-padding">
+        <form>
+          <div className="my-6">
+            <DateComponent
+              name="entryDate"
+              label="Date"
+              value={convertoISO(formik.values.entryDate)}
+              touched={formik.touched.entryDate}
+              errorMessage={formik.errors.entryDate}
+              handleChange={e => formik.setFieldValue("entryDate", e.target.value || dateNow)}
+            />
+          </div>
+          <div className="my-6">
+            <IonGrid className="p-0 m-0">
+              <IonRow>
+                <IonCol className="p-0 m-0" size="12" size-md="6">
                   <InputComponent
-                    name="notes"
-                    label="Notes"
-                    type="text"
-                    optional={true}
-                    value={formik.values.notes}
-                    touched={formik.touched.notes}
-                    errorMessage={formik.errors.notes}
+                    name="price"
+                    label="Amount"
+                    type="number"
+                    startAdor={true}
+                    startAdorText="$"
+                    value={formik.values.price.toString()}
+                    touched={formik.touched.price}
+                    errorMessage={formik.errors.price}
                     handleChange={formik.handleChange}
                   />
-                </div>
-                <IonGrid>
-                  <IonRow>
-                    <IonCol size-md="3" size-sm="4">
-                      <IonButton
-                        id="id-submit-button"
-                        size="small"
-                        type="submit"
-                        aria-hidden="false"
-                        disabled={loading}>
-                        <button type="submit" hidden />
-                        {loading ? (
-                          <IonSpinner name="lines-sharp-small"></IonSpinner>
-                        ) : (
-                          <IonIcon slot="start" icon={caretForwardOutline} />
-                        )}
-                        SUBMIT
-                      </IonButton>
-                    </IonCol>
-                    <IonCol size-md="3" size-sm="4">
-                      <IonButton
-                        size="small"
-                        color="light"
-                        aria-hidden="false"
-                        onClick={formik.handleReset}>
-                        <IonIcon icon={refreshOutline} slot="start" />
-                        RESET
-                      </IonButton>
-                    </IonCol>
-                    <IonCol size-md="3" size-sm="4">
-                      <IonButton
-                        id="id-back-button"
-                        size="small"
-                        color="medium"
-                        aria-hidden="false"
-                        onClick={(e: any) => handleClick(PageType.Default)}>
-                        <IonIcon icon={caretBackOutline} slot="start" />
-                        BACK
-                      </IonButton>
-                    </IonCol>
-                  </IonRow>
-                </IonGrid>
-              </form>
-            </IonCardContent>
-          </IonCard>
-        </IonCol>
-        <IonCol></IonCol>
-      </IonRow>
-    </IonGrid>
+                </IonCol>
+                <IonCol className="text-right" size="12" size-md="6">
+                  <IonLabel>Money {formik.values.expenditure ? "Spent" : "Received"}</IonLabel>
+                  <Switch
+                    id="expenditure"
+                    name="expenditure"
+                    checked={formik.values.expenditure}
+                    onChange={formik.handleChange}
+                  />
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          </div>
+          <div className="my-6">
+            <IonGrid className="p-0 m-0">
+              <IonRow>
+                <IonCol className="p-0 m-0" size="12" size-md="6">
+                  <SelectComponent
+                    name="categoryId"
+                    label="Category"
+                    value={formik.values.categoryId}
+                    touched={formik.touched.categoryId}
+                    errorMessage={formik.errors.categoryId}
+                    handleChange={formik.handleChange}
+                    payload={categories || []}
+                  />
+                </IonCol>
+                <IonCol className="text-right" size="12" size-md="6">
+                  <IonLabel>
+                    {formik.values.taxable ? "Included" : "Include"} in Tax Calculation
+                  </IonLabel>
+                  <Switch
+                    id="taxable"
+                    name="taxable"
+                    checked={formik.values.taxable}
+                    onChange={formik.handleChange}
+                  />
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          </div>
+          <div className="my-6">
+            <AutoSelectComponent
+              name="projectId"
+              label="Project"
+              value={formik.values.projectId}
+              optional={true}
+              touched={formik.touched.projectId}
+              errorMessage={formik.errors.projectId}
+              handleChange={value => formik.setFieldValue("projectId", value)}
+              payload={projects || []}
+            />
+          </div>
+          <div className="my-6">
+            <InputComponent
+              name="notes"
+              label="Notes"
+              type="text"
+              optional={true}
+              value={formik.values.notes}
+              touched={formik.touched.notes}
+              errorMessage={formik.errors.notes}
+              handleChange={formik.handleChange}
+            />
+          </div>
+          <div className="my-6">
+            <IonButton
+              id="id-submit-button"
+              size="small"
+              color="secondary"
+              onClick={() => formik.handleSubmit()}
+              onDoubleClick={() => handleClose()}
+              disabled={loading}>
+              {loading ? (
+                <IonSpinner name="lines-sharp-small"></IonSpinner>
+              ) : (
+                <IonIcon slot="start" icon={caretForwardOutline} />
+              )}
+              SUBMIT
+            </IonButton>
+            <IonButton
+              size="small"
+              color="light"
+              className="ml-5"
+              onClick={formik.handleReset}
+              onDoubleClick={() => handleClose()}>
+              <IonIcon slot="start" icon={refreshOutline} />
+              RESET
+            </IonButton>
+          </div>
+        </form>
+      </IonContent>
+    </IonPage>
   );
 }

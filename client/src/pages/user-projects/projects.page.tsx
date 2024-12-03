@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   IonButton,
   IonCol,
@@ -7,6 +7,7 @@ import {
   IonRow,
   IonSpinner,
   useIonAlert,
+  useIonModal,
   useIonToast
 } from "@ionic/react";
 import { addCircleOutline, createOutline, trashOutline } from "ionicons/icons";
@@ -17,55 +18,91 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TablePagination,
   TableRow
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import { PageType, CrudType, formatddMMMyyyy, constants } from "@/util";
+import { CrudType, formatddMMMyyyy, constants } from "@/util";
 import { IProject, Project } from "@/models";
 import { deleteProjectAsync, getProjectsAsync } from "@/services";
-import { useStore } from "@/contexts";
+import { ProjectPage } from "./project.page";
 
-type ComponentProps = {
-  handleClick: (
-    pageType: PageType,
-    pageNum?: number,
-    project?: IProject,
-    navBack?: boolean
-  ) => void;
-  pageNum?: number;
-  navBack?: boolean;
-};
-export function ProjectsPage({ handleClick, pageNum = 0, navBack = false }: ComponentProps) {
-  const [loading, setLoading] = useState(false);
-  const { setProjects } = useStore();
-  const [page, setPage] = useState(pageNum);
+export function ProjectsPage() {
+  const hasMounted = useRef(false);
+  const [records, setRecords] = useState<IProject[]>([]);
+  const [record, setRecord] = useState<IProject>(Project);
+  const [total, setTotal] = useState<number>(0);
+  const [page, setPage] = useState<number>(0);
+  const [initLoading, setInitLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
   const [presentAlert] = useIonAlert();
   const [present] = useIonToast();
 
-  const {
-    isFetching,
-    data: projects,
-    refetch
-  } = useQuery({
-    queryKey: ["user-projects"],
-    refetchOnMount: !navBack,
-    staleTime: 0,
-    queryFn: async () => {
-      const projects = await getProjectsAsync();
-      setProjects(projects);
-      return projects;
+  const fetchData = async (page: number) => {
+    if (loading) return;
+    if (page === 0) setInitLoading(true);
+    else setLoading(true);
+    try {
+      const response = await getProjectsAsync(page, constants.PAGE_SIZE);
+      setRecords(prev => [...prev, ...(response?.data ?? [])]);
+      setTotal(response?.count ?? 0);
+    } catch (error) {
+      console.error("error fetching data:", error);
+    } finally {
+      if (page === 0) setInitLoading(false);
+      else setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (hasMounted.current) return;
+    hasMounted.current = true;
+    fetchData(page);
+  }, []);
+
+  const loadMore = () => {
+    if (page * constants.PAGE_SIZE < total) {
+      const newPage = page + 1;
+      setPage(newPage);
+      setTimeout(() => fetchData(newPage), 200);
+    }
+  };
+
+  const addRecord = (item: IProject) => {
+    setRecords(prev => [item, ...prev]);
+    setTotal(prev => prev + 1);
+  };
+  const deleteRecord = (id: string) => {
+    setRecords(prev => prev.filter(x => x?.id !== id));
+    setTotal(prev => prev - 1);
+  };
+  const editRecord = (item: IProject) => {
+    setRecords(prev => prev.map(x => (x.id === item.id ? item : x)));
+  };
+
+  const [presentModal, dismissModal] = useIonModal(ProjectPage, {
+    project: record,
+    handleClose: () => dismissModal(),
+    handleNew: (item?: any) => {
+      addRecord(item);
+      setTimeout(dismissModal, 200);
+    },
+    handleEdit: (item?: any) => {
+      editRecord(item);
+      setTimeout(dismissModal, 200);
     }
   });
-
-  const handleEdit = async (project: IProject) => {
+  const handleOpen = (project?: IProject) => {
     setLoading(true);
-    try {
-      const newProject = { ...project, type: CrudType.Update };
-      handleClick(PageType.Step1, page, newProject);
-    } finally {
-      setTimeout(() => setLoading(false), 200);
-    }
+    const newProject = { ...project, type: project?.id ? CrudType.Update : CrudType.Create };
+    setRecord(newProject);
+    setTimeout(() => {
+      presentModal({
+        backdropDismiss: false,
+        keyboardClose: false
+        // cssClass: "desktop-modal-class"
+      });
+      setLoading(false);
+    }, 200);
   };
   const handleDelete = async (id: string) => {
     setLoading(true);
@@ -85,17 +122,13 @@ export function ProjectsPage({ handleClick, pageNum = 0, navBack = false }: Comp
         duration: 3000
       });
       setTimeout(() => {
-        setPage(0);
+        deleteRecord(id);
         setLoading(false);
-        refetch();
       }, 200);
     }
   };
-  const handlePaging = (e: any, newPage: number) => {
-    setPage(newPage);
-  };
 
-  if (isFetching)
+  if (initLoading)
     return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 
   return (
@@ -117,17 +150,13 @@ export function ProjectsPage({ handleClick, pageNum = 0, navBack = false }: Comp
                     End Date
                   </TableCell>
                   <TableCell align="left">
-                    {projects && projects.length < constants.PROJECTS_MAX && (
+                    {constants.PROJECTS_MAX > records?.length && (
                       <IonButton
                         id="id-create-button"
-                        title="CREATE PROJECT"
+                        title="ADD PROJECT"
                         size="small"
-                        aria-hidden="false"
                         buttonType="icon"
-                        onClick={() => {
-                          const newProject = { ...Project, type: CrudType.Create };
-                          handleClick(PageType.Step1, page, newProject);
-                        }}>
+                        onClick={() => handleOpen(Project)}>
                         <IonIcon icon={addCircleOutline}></IonIcon>
                       </IonButton>
                     )}
@@ -138,82 +167,63 @@ export function ProjectsPage({ handleClick, pageNum = 0, navBack = false }: Comp
                 </TableRow>
               </TableHead>
               <TableBody>
-                {projects
-                  ?.slice(
-                    page * constants.PAGE_SIZE,
-                    page * constants.PAGE_SIZE + constants.PAGE_SIZE
-                  )
-                  ?.map((item, index) => (
-                    <TableRow
-                      key={index}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                      <TableCell align="left">{item?.name}</TableCell>
-                      <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                        {item?.budget ? `$${item?.budget?.toFixed(2)}` : String.empty}
-                      </TableCell>
-                      <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                        {item?.startDate ? formatddMMMyyyy(item.startDate) : String.empty}
-                      </TableCell>
-                      <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                        {item?.endDate ? formatddMMMyyyy(item.endDate) : String.empty}
-                      </TableCell>
-                      <TableCell align="left">
-                        <IonButton
-                          id="id-edit-button"
-                          title="EDIT PROJECT"
-                          size="small"
-                          aria-hidden="false"
-                          buttonType="icon"
-                          onClick={() => handleEdit(item)}>
-                          <IonIcon icon={createOutline}></IonIcon>
-                        </IonButton>
-                      </TableCell>
-                      <TableCell align="left">
-                        <IonButton
-                          id="id-delete-button"
-                          title="Delete"
-                          fill="clear"
-                          aria-hidden="false"
-                          onClick={() =>
-                            presentAlert({
-                              header: "Are you sure?",
-                              buttons: [
-                                { text: "Cancel" },
-                                {
-                                  text: "Confirm",
-                                  handler: () => {
-                                    handleDelete(item?.id || String.empty);
-                                  }
+                {records?.map((item, index) => (
+                  <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                    <TableCell align="left">{item?.name}</TableCell>
+                    <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                      {item?.budget ? `$${item?.budget?.toFixed(2)}` : String.empty}
+                    </TableCell>
+                    <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                      {item?.startDate ? formatddMMMyyyy(item.startDate) : String.empty}
+                    </TableCell>
+                    <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                      {item?.endDate ? formatddMMMyyyy(item.endDate) : String.empty}
+                    </TableCell>
+                    <TableCell align="left">
+                      <IonButton
+                        id="id-edit-button"
+                        title="EDIT PROJECT"
+                        size="small"
+                        buttonType="icon"
+                        onClick={() => handleOpen(item)}>
+                        <IonIcon icon={createOutline}></IonIcon>
+                      </IonButton>
+                    </TableCell>
+                    <TableCell align="left">
+                      <IonButton
+                        id="id-delete-button"
+                        title="DELETE PROJECT"
+                        fill="clear"
+                        onClick={() =>
+                          presentAlert({
+                            header: "Are you sure?",
+                            buttons: [
+                              { text: "Cancel" },
+                              {
+                                text: "Confirm",
+                                handler: () => {
+                                  handleDelete(item?.id || String.empty);
                                 }
-                              ]
-                            })
-                          }>
-                          <IonIcon color="danger" icon={trashOutline}></IonIcon>
-                        </IonButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                              }
+                            ]
+                          })
+                        }>
+                        <IonIcon color="danger" icon={trashOutline}></IonIcon>
+                      </IonButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>
         </IonCol>
       </IonRow>
-      {(projects?.length || 0) > constants.PAGE_SIZE && (
+      {constants.PROJECTS_MAX > records?.length && (
         <IonRow>
-          <IonCol className="ion-margin-top ion-text-end">
-            <TablePagination
-              component="div"
-              count={projects?.length || 0}
-              page={page}
-              labelDisplayedRows={({ count, page }) =>
-                projects && projects.length > 0
-                  ? `Page ${page + 1} of ${Math.ceil(count / constants.PAGE_SIZE)}`
-                  : String.empty
-              }
-              onPageChange={handlePaging}
-              rowsPerPage={constants.PAGE_SIZE}
-              rowsPerPageOptions={[constants.PAGE_SIZE]}
-            />
+          <IonCol className="flex items-center justify-center my-2">
+            <IonButton size="small" disabled={loading} onClick={loadMore}>
+              {loading ? "Loading..." : "Load More"}
+            </IonButton>
           </IonCol>
         </IonRow>
       )}

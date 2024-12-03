@@ -119,7 +119,6 @@ export function SignInPage() {
                 <IonButton
                   type="button"
                   className="google-button"
-                  aria-hidden="false"
                   onClick={() => handleLogin(true, String.empty, String.empty)}>
                   <IonIcon slot="start" icon={logoGoogle} />
                   Sign In with Google
@@ -163,7 +162,6 @@ export function SignInPage() {
                   id="id-submit-button"
                   size="small"
                   type="submit"
-                  aria-hidden="false"
                   className="ion-margin-vertical">
                   <button type="submit" hidden />
                   <IonIcon slot="start" icon={caretForwardOutline} />

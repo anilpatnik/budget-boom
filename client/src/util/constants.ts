@@ -9,7 +9,7 @@ export const TWO_DECIMAL_PATTERN = /^\d+(\.\d{0,2})?$/;
 export const TWENTY_FOUR_HOURS_IN_MS = 1000 * 60 * 60 * 24;
 export const TOKEN_LENGTH = 10;
 export const PAGE_SIZE = 10;
-export const PROJECTS_MAX = 250;
+export const PROJECTS_MAX = 100;
 // strings
 export const ACTION_CODE = "actionCode";
 export const AUTH = "auth";

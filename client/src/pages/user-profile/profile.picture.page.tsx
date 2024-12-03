@@ -12,10 +12,9 @@ import { caretForwardOutline, refreshOutline, trashOutline } from "ionicons/icon
 import { NavType, RoleType, ServiceType, constants, downloadFile, fb, uploadFile } from "@/util";
 import { useStore } from "@/contexts";
 import { deleteProfileAsync, updateProfilePic } from "@/services";
-import { User } from "@/models";
 
 export const ProfilePicturePage = () => {
-  const { user, setAuth, setProjects } = useStore();
+  const { user, setAuth } = useStore();
   const [file, setFile] = useState<File>();
   const [preview, setPreview] = useState(String.empty);
   const [loading, setLoading] = useState(false);
@@ -89,8 +88,6 @@ export const ProfilePicturePage = () => {
   const handleLogout = async () => {
     sessionStorage.clear();
     localStorage.clear();
-    setAuth({ ...User });
-    setProjects([]);
     await fb.fSignOut();
     navigate(NavType.Root);
   };
@@ -103,7 +100,6 @@ export const ProfilePicturePage = () => {
             id="id-delete-button"
             type="submit"
             color="danger"
-            aria-hidden="false"
             onClick={() =>
               presentAlert({
                 header: "Are you sure, you want to leave us?",
@@ -156,7 +152,6 @@ export const ProfilePicturePage = () => {
             id="id-upload-button"
             size="small"
             type="submit"
-            aria-hidden="false"
             disabled={loading}
             onClick={handleSubmit}>
             {loading ? (
@@ -170,7 +165,6 @@ export const ProfilePicturePage = () => {
             className="ion-margin-horizontal"
             size="small"
             color="light"
-            aria-hidden="false"
             onClick={handleReset}>
             <IonIcon icon={refreshOutline} slot="start" />
             RESET

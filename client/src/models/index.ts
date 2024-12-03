@@ -90,6 +90,9 @@ export const Project: IProject = {
   endDate: String.empty,
   type: CrudType.Read
 };
+export interface IProjectData extends IAggregate {
+  data?: IProject[];
+}
 
 export interface IExpenseSearch {
   startDate?: string;

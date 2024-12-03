@@ -73,3 +73,10 @@ export enum ServiceType {
   Expenses = "/expenses",
   Expense = "/expense"
 }
+
+export enum QueryType {
+  AllUserProjects = "all-user-projects",
+  UserProjects = "user-projects",
+  UserExpenses = "user-expenses",
+  AdminUsers = "admin-users"
+}

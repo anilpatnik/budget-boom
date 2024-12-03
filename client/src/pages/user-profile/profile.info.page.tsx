@@ -68,7 +68,6 @@ export function ProfileInfoPage() {
         id="id-submit-button"
         size="small"
         type="submit"
-        aria-hidden="false"
         className="ion-margin-vertical"
         disabled={loading}>
         <button type="submit" hidden />
@@ -83,7 +82,6 @@ export function ProfileInfoPage() {
         className="ion-margin-horizontal"
         size="small"
         color="light"
-        aria-hidden="false"
         onClick={formik.handleReset}>
         <IonIcon icon={refreshOutline} slot="start" />
         RESET

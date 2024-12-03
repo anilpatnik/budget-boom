@@ -1,11 +1,12 @@
 import { PrismaClient } from "@prisma/client";
-import { categories } from "./db";
+import { mockProjects } from "./db";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.category.deleteMany({});
-  await prisma.category.createMany({ data: categories });
+  const projects = await mockProjects(400);
+  await prisma.project.deleteMany({});
+  await prisma.project.createMany({ data: projects });
 }
 
 main()

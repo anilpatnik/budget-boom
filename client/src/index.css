@@ -53,6 +53,12 @@ ion-button {
 ion-item:last-child {
   --border-width: 0;
 }
+/* Ionic Modal */
+@media (min-width: 768px) {
+  .desktop-modal-class {
+    --width: 768px;
+  }
+}
 /* Toolbar */
 .no-boder-shadow {
   border: 0;

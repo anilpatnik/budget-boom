@@ -10,16 +10,13 @@ import {
 } from "ionicons/icons";
 import { NavType, RoleType, fb } from "@/util";
 import { useStore } from "@/contexts";
-import { User } from "@/models";
 
 export function TabMenu({ children }: { children: any }) {
-  const { user, setAuth, setProjects } = useStore();
+  const { user } = useStore();
   const navigate = useNavigate();
   const handleLogout = async () => {
     sessionStorage.clear();
     localStorage.clear();
-    setAuth({ ...User });
-    setProjects([]);
     await fb.fSignOut();
     navigate(NavType.Root);
   };

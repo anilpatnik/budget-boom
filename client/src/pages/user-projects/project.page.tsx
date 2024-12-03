@@ -1,34 +1,33 @@
 import { useState } from "react";
 import {
   IonButton,
-  IonCard,
-  IonCardContent,
+  IonButtons,
   IonCol,
+  IonContent,
   IonGrid,
+  IonHeader,
   IonIcon,
+  IonPage,
   IonRow,
   IonSpinner,
+  IonToolbar,
   useIonToast
 } from "@ionic/react";
-import { caretBackOutline, caretForwardOutline, refreshOutline } from "ionicons/icons";
+import { caretForwardOutline, refreshOutline } from "ionicons/icons";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { CrudType, PageType, constants, convertoISO, projectEnd, projectStart } from "@/util";
+import { CrudType, constants, convertoISO, projectEnd, projectStart } from "@/util";
 import { IProject } from "@/models";
 import { upsertProjectAsync } from "@/services";
-import { InputComponent, DateComponent } from "@/components";
+import { InputComponent, DateComponent, Icon } from "@/components";
 
 type ComponentProps = {
   project?: IProject;
-  handleClick: (
-    pageType: PageType,
-    pageNum?: number,
-    project?: IProject,
-    navBack?: boolean
-  ) => void;
-  pageNum?: number;
+  handleClose: () => void;
+  handleNew: (item?: any) => void;
+  handleEdit: (item?: any) => void;
 };
-export function ProjectPage({ project, handleClick, pageNum = 0 }: ComponentProps) {
+export function ProjectPage({ project, handleClose, handleNew, handleEdit }: ComponentProps) {
   const [loading, setLoading] = useState(false);
   const [present] = useIonToast();
 
@@ -82,15 +81,16 @@ export function ProjectPage({ project, handleClick, pageNum = 0 }: ComponentProp
             duration: 3000
           });
           setTimeout(() => {
+            const updateProject = { ...newProject, id: res?.resource?.id };
+            handleNew(updateProject);
             setLoading(false);
-            handleClick(PageType.Default);
           }, 200);
         }
       } else {
         const updateProject: IProject = {
           id: project?.id,
           name: values?.name,
-          prevName: project?.prevName,
+          prevName: project?.name,
           budget: values?.budget,
           startDate: values?.startDate,
           endDate: values?.endDate,
@@ -112,8 +112,8 @@ export function ProjectPage({ project, handleClick, pageNum = 0 }: ComponentProp
             duration: 3000
           });
           setTimeout(() => {
+            handleEdit(updateProject);
             setLoading(false);
-            handleClick(PageType.Default, pageNum);
           }, 200);
         }
       }
@@ -121,119 +121,106 @@ export function ProjectPage({ project, handleClick, pageNum = 0 }: ComponentProp
   });
 
   return (
-    <IonGrid>
-      <IonRow>
-        <IonCol></IonCol>
-        <IonCol size="12" size-md="6">
-          <IonCard className="ion-padding-bottom">
-            <IonCardContent>
-              <form onSubmit={formik.handleSubmit}>
-                <div className="my-6">
-                  <InputComponent
-                    name="name"
-                    label="Name"
-                    type="text"
-                    value={formik.values.name}
-                    touched={formik.touched.name}
-                    errorMessage={formik.errors.name}
-                    handleChange={formik.handleChange}
-                  />
-                </div>
-                <div className="my-6">
-                  <InputComponent
-                    name="budget"
-                    label="Budget"
-                    type="number"
-                    startAdor={true}
-                    startAdorText="$"
-                    value={formik.values.budget.toString()}
-                    touched={formik.touched.budget}
-                    errorMessage={formik.errors.budget}
-                    handleChange={formik.handleChange}
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonButtons slot="start">
+            <IonButton
+              id="id-back-button"
+              onClick={() => handleClose()}
+              onDoubleClick={() => handleClose()}>
+              <Icon name="caret-back-outline" />
+              BACK
+            </IonButton>
+          </IonButtons>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent className="ion-padding">
+        <form>
+          <div className="my-6">
+            <InputComponent
+              name="name"
+              label="Name"
+              type="text"
+              value={formik.values.name}
+              touched={formik.touched.name}
+              errorMessage={formik.errors.name}
+              handleChange={formik.handleChange}
+            />
+          </div>
+          <div className="my-6">
+            <InputComponent
+              name="budget"
+              label="Budget"
+              type="number"
+              startAdor={true}
+              startAdorText="$"
+              value={formik.values.budget.toString()}
+              touched={formik.touched.budget}
+              errorMessage={formik.errors.budget}
+              handleChange={formik.handleChange}
+              optional={true}
+            />
+          </div>
+          <div className="my-6">
+            <IonGrid>
+              <IonRow>
+                <IonCol>
+                  <DateComponent
+                    name="startDate"
+                    label="Start Date"
+                    value={convertoISO(formik.values.startDate)}
                     optional={true}
+                    touched={formik.touched.startDate}
+                    errorMessage={formik.errors.startDate}
+                    handleChange={e =>
+                      formik.setFieldValue("startDate", e.target.value || projectStart)
+                    }
                   />
-                </div>
-                <div className="my-6">
-                  <IonGrid>
-                    <IonRow>
-                      <IonCol>
-                        <DateComponent
-                          name="startDate"
-                          label="Start Date"
-                          value={convertoISO(formik.values.startDate)}
-                          optional={true}
-                          touched={formik.touched.startDate}
-                          errorMessage={formik.errors.startDate}
-                          handleChange={e =>
-                            formik.setFieldValue("startDate", e.target.value || projectStart)
-                          }
-                        />
-                      </IonCol>
-                      <IonCol>
-                        <DateComponent
-                          name="endDate"
-                          label="End Date"
-                          value={convertoISO(formik.values.endDate)}
-                          optional={true}
-                          touched={formik.touched.endDate}
-                          errorMessage={formik.errors.endDate}
-                          handleChange={e =>
-                            formik.setFieldValue("endDate", e.target.value || projectEnd)
-                          }
-                        />
-                      </IonCol>
-                    </IonRow>
-                  </IonGrid>
-                </div>
-                <IonGrid>
-                  <IonRow>
-                    <IonCol size-md="3" size-sm="4">
-                      <IonButton
-                        id="id-submit-button"
-                        size="small"
-                        type="submit"
-                        aria-hidden="false"
-                        disabled={loading}>
-                        <button type="submit" hidden />
-                        {loading ? (
-                          <IonSpinner name="lines-sharp-small"></IonSpinner>
-                        ) : (
-                          <IonIcon slot="start" icon={caretForwardOutline} />
-                        )}
-                        SUBMIT
-                      </IonButton>
-                    </IonCol>
-                    <IonCol size-md="3" size-sm="4">
-                      <IonButton
-                        size="small"
-                        color="light"
-                        aria-hidden="false"
-                        onClick={formik.handleReset}>
-                        <IonIcon icon={refreshOutline} slot="start" />
-                        RESET
-                      </IonButton>
-                    </IonCol>
-                    <IonCol size-md="3" size-sm="4">
-                      <IonButton
-                        id="id-back-button"
-                        size="small"
-                        color="medium"
-                        aria-hidden="false"
-                        onClick={(e: any) =>
-                          handleClick(PageType.Default, pageNum, undefined, true)
-                        }>
-                        <IonIcon icon={caretBackOutline} slot="start" />
-                        BACK
-                      </IonButton>
-                    </IonCol>
-                  </IonRow>
-                </IonGrid>
-              </form>
-            </IonCardContent>
-          </IonCard>
-        </IonCol>
-        <IonCol></IonCol>
-      </IonRow>
-    </IonGrid>
+                </IonCol>
+                <IonCol>
+                  <DateComponent
+                    name="endDate"
+                    label="End Date"
+                    value={convertoISO(formik.values.endDate)}
+                    optional={true}
+                    touched={formik.touched.endDate}
+                    errorMessage={formik.errors.endDate}
+                    handleChange={e =>
+                      formik.setFieldValue("endDate", e.target.value || projectEnd)
+                    }
+                  />
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          </div>
+          <div className="my-6">
+            <IonButton
+              id="id-submit-button"
+              size="small"
+              color="secondary"
+              onClick={() => formik.handleSubmit()}
+              onDoubleClick={() => handleClose()}
+              disabled={loading}>
+              {loading ? (
+                <IonSpinner name="lines-sharp-small"></IonSpinner>
+              ) : (
+                <IonIcon slot="start" icon={caretForwardOutline} />
+              )}
+              SUBMIT
+            </IonButton>
+            <IonButton
+              size="small"
+              color="light"
+              className="ml-5"
+              onClick={formik.handleReset}
+              onDoubleClick={() => handleClose()}>
+              <IonIcon slot="start" icon={refreshOutline} />
+              RESET
+            </IonButton>
+          </div>
+        </form>
+      </IonContent>
+    </IonPage>
   );
 }

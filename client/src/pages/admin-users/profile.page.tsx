@@ -2,19 +2,17 @@ import { useState } from "react";
 import {
   IonAvatar,
   IonButton,
-  IonCard,
-  IonCardContent,
-  IonCol,
-  IonGrid,
+  IonButtons,
+  IonContent,
+  IonHeader,
   IonIcon,
   IonLabel,
-  IonRow,
+  IonPage,
   IonSpinner,
+  IonToolbar,
   useIonToast
 } from "@ionic/react";
 import {
-  callOutline,
-  caretBackOutline,
   caretForwardOutline,
   logoFacebook,
   logoGoogle,
@@ -24,32 +22,18 @@ import {
 import { FormControl, InputLabel, MenuItem, Select, Switch } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { AuthType, PageType, RoleType, constants, externaLogin } from "@/util";
+import { AuthType, RoleType, constants, externaLogin } from "@/util";
 import { IAdminUser } from "@/models";
 import { updateUserAsync } from "@/services";
-import { InputComponent, PasswordComponent } from "@/components";
+import { InputComponent, PasswordComponent, Icon } from "@/components";
 
 type ComponentProps = {
   user?: IAdminUser;
-  handleClick: (
-    pageType: PageType,
-    pageNum?: number,
-    searchType?: number,
-    searchInput?: string,
-    user?: IAdminUser,
-    navBack?: boolean
-  ) => void;
-  pageNum?: number;
-  searchType?: number;
-  searchInput?: string;
+  handleClose: () => void;
+  handleNew: (item?: any) => void;
+  handleEdit: (item?: any) => void;
 };
-export function UserProfilePage({
-  user,
-  handleClick,
-  pageNum = 0,
-  searchType,
-  searchInput
-}: ComponentProps) {
+export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: ComponentProps) {
   const [loading, setLoading] = useState(false);
   const [present] = useIonToast();
 
@@ -95,8 +79,9 @@ export function UserProfilePage({
             duration: 3000
           });
           setTimeout(() => {
+            const updateUser = { ...newUser, uid: res?.resource };
+            handleNew(updateUser);
             setLoading(false);
-            handleClick(PageType.Default, pageNum, searchType, searchInput);
           }, 200);
         }
       } else {
@@ -123,8 +108,9 @@ export function UserProfilePage({
             duration: 3000
           });
           setTimeout(() => {
+            const newUser = { ...updateUser, email: user?.email, uid: res?.resource };
+            handleEdit(newUser);
             setLoading(false);
-            handleClick(PageType.Default, pageNum, searchType, searchInput);
           }, 200);
         }
       }
@@ -132,165 +118,145 @@ export function UserProfilePage({
   });
 
   return (
-    <IonGrid>
-      <IonRow>
-        <IonCol></IonCol>
-        <IonCol size="12" size-md="6">
-          <IonCard className="ion-padding-bottom">
-            <IonCardContent>
-              <form onSubmit={formik.handleSubmit}>
-                <IonAvatar className="profile-pic-center">
-                  <img alt={formik.values.name} src={formik.values.photo} loading="lazy" />
-                </IonAvatar>
-                <div className="my-6">
-                  <InputComponent
-                    name="name"
-                    label="Name"
-                    type="text"
-                    value={formik.values.name}
-                    touched={formik.touched.name}
-                    errorMessage={formik.errors.name}
-                    handleChange={formik.handleChange}
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonButtons slot="start">
+            <IonButton
+              id="id-back-button"
+              onClick={() => handleClose()}
+              onDoubleClick={() => handleClose()}>
+              <Icon name="caret-back-outline" />
+              BACK
+            </IonButton>
+          </IonButtons>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent className="ion-padding">
+        <form>
+          <IonAvatar className="profile-pic-center">
+            <img alt={formik.values.name} src={formik.values.photo} loading="lazy" />
+          </IonAvatar>
+          <div className="my-6">
+            <InputComponent
+              name="name"
+              label="Name"
+              type="text"
+              value={formik.values.name}
+              touched={formik.touched.name}
+              errorMessage={formik.errors.name}
+              handleChange={formik.handleChange}
+            />
+          </div>
+          {user?.uid?.length === 0 && (
+            <>
+              <div className="my-6">
+                <InputComponent
+                  name="email"
+                  label="Email"
+                  type="email"
+                  value={formik.values.email}
+                  touched={formik.touched.email}
+                  errorMessage={formik.errors.email}
+                  handleChange={formik.handleChange}
+                />
+              </div>
+              <div className="my-6">
+                <PasswordComponent
+                  name="password"
+                  label="Password"
+                  value={formik.values.password}
+                  touched={formik.touched.password}
+                  errorMessage={formik.errors.password}
+                  handleChange={formik.handleChange}
+                />
+              </div>
+            </>
+          )}
+          <div className="my-6">
+            <FormControl fullWidth>
+              <InputLabel shrink={true} variant="standard" id="role-label">
+                Role
+              </InputLabel>
+              <Select
+                sx={{
+                  fontSize: "0.975em",
+                  letterSpacing: "0.075em"
+                }}
+                id="role"
+                name="role"
+                value={formik.values.role}
+                labelId="role-label"
+                onChange={formik.handleChange}
+                variant="standard">
+                <MenuItem value={RoleType.User}>User</MenuItem>
+                <MenuItem value={RoleType.Admin}>Admin</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          {user?.uid?.length !== 0 && (
+            <>
+              {!externaLogin(formik.values.providers) && (
+                <div className="ion-margin-vertical">
+                  <IonLabel>Email Verified</IonLabel>
+                  <Switch
+                    id="emailVerified"
+                    name="emailVerified"
+                    checked={formik.values.emailVerified}
+                    onChange={formik.handleChange}
                   />
                 </div>
-                {user?.uid?.length === 0 && (
-                  <>
-                    <div className="my-6">
-                      <InputComponent
-                        name="email"
-                        label="Email"
-                        type="email"
-                        value={formik.values.email}
-                        touched={formik.touched.email}
-                        errorMessage={formik.errors.email}
-                        handleChange={formik.handleChange}
-                      />
-                    </div>
-                    <div className="my-6">
-                      <PasswordComponent
-                        name="password"
-                        label="Password"
-                        value={formik.values.password}
-                        touched={formik.touched.password}
-                        errorMessage={formik.errors.password}
-                        handleChange={formik.handleChange}
-                      />
-                    </div>
-                  </>
-                )}
-                <div className="my-6">
-                  <FormControl fullWidth>
-                    <InputLabel shrink={true} variant="standard" id="role-label">
-                      Role
-                    </InputLabel>
-                    <Select
-                      sx={{
-                        fontSize: "0.975em",
-                        letterSpacing: "0.075em"
-                      }}
-                      id="role"
-                      name="role"
-                      value={formik.values.role}
-                      labelId="role-label"
-                      onChange={formik.handleChange}
-                      variant="standard">
-                      <MenuItem value={RoleType.User}>User</MenuItem>
-                      <MenuItem value={RoleType.Admin}>Admin</MenuItem>
-                    </Select>
-                  </FormControl>
+              )}
+              <div className="ion-margin-vertical">
+                <IonLabel>Active</IonLabel>
+                <Switch
+                  id="disabled"
+                  name="disabled"
+                  checked={formik.values.disabled}
+                  onChange={formik.handleChange}
+                />
+              </div>
+              {formik.values.providers?.length !== 0 && (
+                <div className="ion-margin-vertical">
+                  <IonLabel>Login With</IonLabel>
+                  {formik.values.providers?.map((x: AuthType, index: number) => (
+                    <span key={index} className="ion-padding-start">
+                      {x === AuthType.Email && <IonIcon icon={mailOutline} />}
+                      {x === AuthType.Google && <IonIcon icon={logoGoogle} />}
+                      {x === AuthType.Facebook && <IonIcon icon={logoFacebook} />}
+                    </span>
+                  ))}
                 </div>
-                {user?.uid?.length !== 0 && (
-                  <>
-                    {!externaLogin(formik.values.providers) && (
-                      <div className="ion-margin-vertical">
-                        <IonLabel>Email Verified</IonLabel>
-                        <Switch
-                          id="emailVerified"
-                          name="emailVerified"
-                          checked={formik.values.emailVerified}
-                          onChange={formik.handleChange}
-                        />
-                      </div>
-                    )}
-                    <div className="ion-margin-vertical">
-                      <IonLabel>Active</IonLabel>
-                      <Switch
-                        id="disabled"
-                        name="disabled"
-                        checked={formik.values.disabled}
-                        onChange={formik.handleChange}
-                      />
-                    </div>
-                    {formik.values.providers?.length !== 0 && (
-                      <div className="ion-margin-vertical">
-                        <IonLabel>Login With</IonLabel>
-                        {formik.values.providers?.map((x: AuthType, index: number) => (
-                          <span key={index} className="ion-padding-start">
-                            {x === AuthType.Email && <IonIcon icon={mailOutline} />}
-                            {x === AuthType.Google && <IonIcon icon={logoGoogle} />}
-                            {x === AuthType.Facebook && <IonIcon icon={logoFacebook} />}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </>
-                )}
-                <IonGrid>
-                  <IonRow>
-                    <IonCol size-md="3" size-sm="4">
-                      <IonButton
-                        id="id-submit-button"
-                        size="small"
-                        type="submit"
-                        aria-hidden="false"
-                        disabled={loading}>
-                        <button type="submit" hidden />
-                        {loading ? (
-                          <IonSpinner name="lines-sharp-small"></IonSpinner>
-                        ) : (
-                          <IonIcon slot="start" icon={caretForwardOutline} />
-                        )}
-                        SUBMIT
-                      </IonButton>
-                    </IonCol>
-                    <IonCol size-md="3" size-sm="4">
-                      <IonButton
-                        size="small"
-                        color="light"
-                        aria-hidden="false"
-                        onClick={formik.handleReset}>
-                        <IonIcon icon={refreshOutline} slot="start" />
-                        RESET
-                      </IonButton>
-                    </IonCol>
-                    <IonCol size-md="3" size-sm="4">
-                      <IonButton
-                        id="id-back-button"
-                        size="small"
-                        color="medium"
-                        aria-hidden="false"
-                        onClick={(e: any) =>
-                          handleClick(
-                            PageType.Default,
-                            pageNum,
-                            searchType,
-                            searchInput,
-                            undefined,
-                            true
-                          )
-                        }>
-                        <IonIcon icon={caretBackOutline} slot="start" />
-                        BACK
-                      </IonButton>
-                    </IonCol>
-                  </IonRow>
-                </IonGrid>
-              </form>
-            </IonCardContent>
-          </IonCard>
-        </IonCol>
-        <IonCol></IonCol>
-      </IonRow>
-    </IonGrid>
+              )}
+            </>
+          )}
+          <div className="my-6">
+            <IonButton
+              id="id-submit-button"
+              size="small"
+              color="secondary"
+              onClick={() => formik.handleSubmit()}
+              onDoubleClick={() => handleClose()}
+              disabled={loading}>
+              {loading ? (
+                <IonSpinner name="lines-sharp-small"></IonSpinner>
+              ) : (
+                <IonIcon slot="start" icon={caretForwardOutline} />
+              )}
+              SUBMIT
+            </IonButton>
+            <IonButton
+              size="small"
+              color="light"
+              className="ml-5"
+              onClick={formik.handleReset}
+              onDoubleClick={() => handleClose()}>
+              <IonIcon slot="start" icon={refreshOutline} />
+              RESET
+            </IonButton>
+          </div>
+        </form>
+      </IonContent>
+    </IonPage>
   );
 }

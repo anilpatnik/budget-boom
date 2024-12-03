@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   IonButton,
   IonCol,
@@ -7,6 +7,7 @@ import {
   IonRow,
   IonSpinner,
   useIonAlert,
+  useIonModal,
   useIonToast
 } from "@ionic/react";
 import { addCircleOutline, createOutline, trashOutline } from "ionicons/icons";
@@ -21,40 +22,102 @@ import {
   TableRow
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { PageType, CrudType, formatddMMMyyyy, formatPrice, constants } from "@/util";
+import { CrudType, formatddMMMyyyy, formatPrice, constants, QueryType } from "@/util";
 import { IExpense, Expense, IExpenseSearch, ExpenseSearch } from "@/models";
-import { getExpensesAsync, deleteExpenseAsync, getCategory } from "@/services";
-import { Icon, PagingComponent } from "@/components";
+import { getExpensesAsync, deleteExpenseAsync, getCategory, getAllProjectsAsync } from "@/services";
+import { Icon } from "@/components";
+import { ExpensePage } from "./expense.page";
 
-type ComponentProps = {
-  handleClick: (pageType: PageType, expense?: IExpense) => void;
-};
-export function ExpensesPage({ handleClick }: ComponentProps) {
-  const [payload, setPayload] = useState<IExpenseSearch>(ExpenseSearch);
-  const [loading, setLoading] = useState(false);
-  const [paging, setPaging] = useState(false);
+export function ExpensesPage() {
+  const hasMounted = useRef(false);
+  const [records, setRecords] = useState<IExpense[]>([]);
+  const [record, setRecord] = useState<IExpense>(Expense);
+  const [total, setTotal] = useState<number>(0);
+  const [page, setPage] = useState<number>(0);
+  const [initLoading, setInitLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
   const [presentAlert] = useIonAlert();
   const [present] = useIonToast();
 
-  const {
-    isFetching: loadExpenses,
-    data: expenses,
-    refetch
-  } = useQuery({
-    queryKey: ["user-expenses"],
+  const { isLoading: loadProjects, data: projects } = useQuery({
+    queryKey: [QueryType.AllUserProjects],
     refetchOnMount: true,
-    staleTime: 0,
-    queryFn: async () => await getExpensesAsync(payload)
+    queryFn: async () => await getAllProjectsAsync()
   });
 
-  const handleEdit = async (expense: IExpense) => {
-    setLoading(true);
+  const fetchData = async (page: number) => {
+    if (loading) return;
+    if (page === 0) setInitLoading(true);
+    else setLoading(true);
     try {
-      const newExpense = { ...expense, type: CrudType.Update };
-      handleClick(PageType.Step1, newExpense);
+      const newPayload: IExpenseSearch = {
+        ...ExpenseSearch,
+        page,
+        size: constants.PAGE_SIZE
+      };
+      const response = await getExpensesAsync(newPayload);
+      setRecords(prev => [...prev, ...(response?.data ?? [])]);
+      setTotal(response?.count ?? 0);
+    } catch (error) {
+      console.error("error fetching data:", error);
     } finally {
-      setTimeout(() => setLoading(false), 200);
+      if (page === 0) setInitLoading(false);
+      else setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    if (hasMounted.current) return;
+    hasMounted.current = true;
+    fetchData(page);
+  }, []);
+
+  const loadMore = () => {
+    if (page * constants.PAGE_SIZE < total) {
+      const newPage = page + 1;
+      setPage(newPage);
+      setTimeout(() => fetchData(newPage), 200);
+    }
+  };
+
+  const addRecord = (item: IExpense) => {
+    setRecords(prev => [item, ...prev]);
+    setTotal(prev => prev + 1);
+  };
+  const deleteRecord = (id: string) => {
+    setRecords(prev => prev.filter(x => x?.id !== id));
+    setTotal(prev => prev - 1);
+  };
+  const editRecord = (item: IExpense) => {
+    setRecords(prev => prev.map(x => (x.id === item.id ? item : x)));
+  };
+
+  const [presentModal, dismissModal] = useIonModal(ExpensePage, {
+    projects,
+    expense: record,
+    handleClose: () => dismissModal(),
+    handleNew: (item?: any) => {
+      addRecord(item);
+      setTimeout(dismissModal, 200);
+    },
+    handleEdit: (item?: any) => {
+      editRecord(item);
+      setTimeout(dismissModal, 200);
+    }
+  });
+  const handleOpen = (expense?: IExpense) => {
+    setLoading(true);
+    const newExpense = { ...expense, type: expense?.id ? CrudType.Update : CrudType.Create };
+    setRecord(newExpense);
+    setTimeout(() => {
+      presentModal({
+        backdropDismiss: false,
+        keyboardClose: false
+        // cssClass: "desktop-modal-class"
+      });
+      setLoading(false);
+    }, 200);
   };
   const handleDelete = async (id: string) => {
     setLoading(true);
@@ -73,25 +136,14 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
         color: constants.SUCCESS,
         duration: 3000
       });
+      setTimeout(() => {
+        deleteRecord(id);
+        setLoading(false);
+      }, 200);
     }
-    setTimeout(() => {
-      setLoading(false);
-      refetch();
-    }, 200);
-  };
-  const handlePaging = (e: any, value: number) => {
-    setPaging(true);
-    setPayload(prev => ({
-      ...prev,
-      page: value - 1
-    }));
-    setTimeout(async () => {
-      await refetch();
-      setPaging(false);
-    }, 1000);
   };
 
-  if (loadExpenses)
+  if (loadProjects || initLoading)
     return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 
   return (
@@ -103,22 +155,22 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
               <TableHead>
                 <TableRow>
                   <TableCell align="left">Date</TableCell>
-                  <TableCell align="left">Amount</TableCell>
-                  <TableCell align="left">Category</TableCell>
+                  <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                    Amount
+                  </TableCell>
+                  <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                    Category
+                  </TableCell>
                   <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                     Taxable
                   </TableCell>
                   <TableCell align="left">
                     <IonButton
                       id="id-create-button"
-                      title="CREATE EXPENSE"
+                      title="ADD EXPENSE"
                       size="small"
-                      aria-hidden="false"
                       buttonType="icon"
-                      onClick={() => {
-                        const newExpense = { ...Expense, type: CrudType.Create };
-                        handleClick(PageType.Step1, newExpense);
-                      }}>
+                      onClick={() => handleOpen(Expense)}>
                       <IonIcon icon={addCircleOutline}></IonIcon>
                     </IonButton>
                   </TableCell>
@@ -128,15 +180,34 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {expenses?.data?.map((item, index) => (
+                {records?.map((item, index) => (
                   <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell align="left" sx={{ minWidth: 150 }}>
-                      {item?.entryDate && formatddMMMyyyy(item.entryDate)}
+                      <Box>{item?.entryDate && formatddMMMyyyy(item.entryDate)}</Box>
+                      <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
+                        <IonGrid className="p-0 mt-3">
+                          <IonRow>
+                            <IonCol className="p-0">
+                              {item?.categoryId && (
+                                <Icon
+                                  name={getCategory(item.categoryId).icon}
+                                  css="text-2xl text-black mr-3"
+                                />
+                              )}
+                            </IonCol>
+                            <IonCol className="p-0">
+                              {item?.price && `${formatPrice(item?.price)}`}
+                            </IonCol>
+                          </IonRow>
+                        </IonGrid>
+                      </Box>
                     </TableCell>
-                    <TableCell align="left" sx={{ minWidth: 150 }}>
+                    <TableCell
+                      sx={{ display: { xs: "none", sm: "table-cell", minWidth: 150 } }}
+                      align="left">
                       {item?.price && `${formatPrice(item?.price)}`}
                     </TableCell>
-                    <TableCell align="left">
+                    <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }} align="left">
                       <Box className="flex items-center">
                         {item?.categoryId && (
                           <Box className="flex items-center">
@@ -180,9 +251,8 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
                         id="id-edit-button"
                         title="EDIT EXPENSE"
                         size="small"
-                        aria-hidden="false"
                         buttonType="icon"
-                        onClick={() => handleEdit(item)}>
+                        onClick={() => handleOpen(item)}>
                         <IonIcon icon={createOutline}></IonIcon>
                       </IonButton>
                     </TableCell>
@@ -191,7 +261,6 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
                         id="id-delete-button"
                         title="DELETE EXPENSE"
                         fill="clear"
-                        aria-hidden="false"
                         onClick={() =>
                           presentAlert({
                             header: "Are you sure?",
@@ -216,16 +285,15 @@ export function ExpensesPage({ handleClick }: ComponentProps) {
           </TableContainer>
         </IonCol>
       </IonRow>
-      <IonRow>
-        <IonCol className="ion-margin-top ion-text-end">
-          <PagingComponent
-            count={expenses?.count ?? 0}
-            page={payload.page ?? 0}
-            size={payload.size ?? constants.PAGE_SIZE}
-            handlePaging={handlePaging}
-          />
-        </IonCol>
-      </IonRow>
+      {total > records?.length && (
+        <IonRow>
+          <IonCol className="flex items-center justify-center my-2">
+            <IonButton size="small" disabled={loading} onClick={loadMore}>
+              {loading ? "Loading..." : "Load More"}
+            </IonButton>
+          </IonCol>
+        </IonRow>
+      )}
     </IonGrid>
   );
 }

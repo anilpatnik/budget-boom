@@ -1,11 +1,21 @@
-import { ServiceType } from "@/util";
-import { IProject, Project } from "@/models";
+import { ServiceType, constants } from "@/util";
+import { IProject, IProjectData, Project } from "@/models";
 import { authApi } from "./index";
 
-export const getProjectsAsync = async (): Promise<IProject[]> => {
-  const response = await authApi.get(ServiceType.Projects);
+export const getAllProjectsAsync = async (): Promise<IProject[]> => {
+  const url = `${ServiceType.Projects}/all`;
+  const response = await authApi.get(url);
   if (response?.data?.resource) return response?.data?.resource;
   return [{ ...Project }];
+};
+
+export const getProjectsAsync = async (
+  page: number = 0,
+  size: number = constants.PAGE_SIZE
+): Promise<IProjectData> => {
+  const response = await authApi.post(ServiceType.Projects, { page, size });
+  if (response?.data?.resource) return response?.data?.resource;
+  return { data: [{ ...Project }], count: 0 };
 };
 
 export const getProjectAsync = async (id: string): Promise<IProject> => {

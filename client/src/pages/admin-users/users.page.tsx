@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   IonButton,
   IonCol,
@@ -7,6 +7,7 @@ import {
   IonRow,
   IonSpinner,
   useIonAlert,
+  useIonModal,
   useIonToast
 } from "@ionic/react";
 import { addCircleOutline, createOutline, searchOutline, trashOutline } from "ionicons/icons";
@@ -21,81 +22,102 @@ import {
   TableHead,
   TableRow
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import { PageType, CrudType, RoleType, newPassword, constants } from "@/util";
+import { CrudType, RoleType, newPassword, constants } from "@/util";
 import { AdminUser, IAdminUser, AdminUserSearch, IAdminUserSearch } from "@/models";
 import { deleteUserAsync, getUserAsync, getUsersAsync } from "@/services";
-import { PagingComponent } from "@/components";
+import { UserProfilePage } from "./profile.page";
 
-type ComponentProps = {
-  handleClick: (
-    pageType: PageType,
-    pageNum?: number,
-    searchType?: number,
-    searchInput?: string,
-    user?: IAdminUser,
-    navBack?: boolean
-  ) => void;
-  searchType?: number;
-  searchInput?: string;
-  pageNum?: number;
-  navBack?: boolean;
-};
-export function UsersPage({
-  handleClick,
-  searchType,
-  searchInput,
-  pageNum = 0,
-  navBack = false
-}: ComponentProps) {
+export function UsersPage() {
+  const hasMounted = useRef(false);
+  const [records, setRecords] = useState<IAdminUser[]>([]);
+  const [record, setRecord] = useState<IAdminUser>(AdminUser);
   const [payload, setPayload] = useState<IAdminUserSearch>({
     ...AdminUserSearch,
-    searchType,
-    searchInput,
-    page: pageNum
+    page: 0,
+    size: constants.PAGE_SIZE
   });
-  const [loading, setLoading] = useState(false);
-  const [paging, setPaging] = useState(false);
+  const [total, setTotal] = useState<number>(0);
+  const [initLoading, setInitLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
   const [presentAlert] = useIonAlert();
   const [present] = useIonToast();
 
-  const {
-    isFetching,
-    data: users,
-    refetch
-  } = useQuery({
-    queryKey: ["admin-users"],
-    refetchOnMount: !navBack,
-    staleTime: 0,
-    queryFn: async () => await getUsersAsync(payload)
-  });
-
-  const handleEditClick = async (id: string) => {
-    setLoading(true);
+  const fetchData = async () => {
+    if (loading) return;
+    if (payload.page === 0) setInitLoading(true);
+    else setLoading(true);
     try {
-      const user = await getUserAsync(id);
-      if (user) {
-        const password = newPassword();
-        const newUser = { ...user, password, type: CrudType.Update };
-        handleClick(PageType.Step1, payload.page, payload.searchType, payload.searchInput, newUser);
-      }
+      const response = await getUsersAsync(payload);
+      setRecords(prev => [...prev, ...(response?.data ?? [])]);
+      setTotal(response?.count ?? 0);
+    } catch (error) {
+      console.error("error fetching data:", error);
     } finally {
-      setTimeout(() => setLoading(false), 200);
+      if (payload.page === 0) setInitLoading(false);
+      else setLoading(false);
     }
   };
-  const handleChange = (e: any) => {
-    const input = e.target.value;
-    setPayload(prev => ({ ...prev, searchInput: input }));
-    // set name or email
-    if (input.includes("@")) setPayload(prev => ({ ...prev, searchType: 20 }));
-    else setPayload(prev => ({ ...prev, searchType: 10 }));
+
+  useEffect(() => {
+    if (hasMounted.current) return;
+    hasMounted.current = true;
+    fetchData();
+  }, []);
+
+  const loadMore = () => {
+    if ((payload?.page ?? 0) * constants.PAGE_SIZE < total) {
+      const newPage = (payload?.page ?? 0) + 1;
+      setPayload(prev => ({ ...prev, page: newPage }));
+      setTimeout(() => fetchData(), 200);
+    }
   };
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    setPayload(prev => ({ ...prev, page: 0 }));
-    refetch();
+
+  const addRecord = (item: IAdminUser) => {
+    setRecords(prev => [item, ...prev]);
+    setTotal(prev => prev + 1);
   };
-  const handleUserDelete = async (id: string) => {
+  const deleteRecord = (uid: string) => {
+    setRecords(prev => prev.filter(x => x?.uid !== uid));
+    setTotal(prev => prev - 1);
+  };
+  const editRecord = (item: IAdminUser) => {
+    setRecords(prev => prev.map(x => (x.uid === item.uid ? item : x)));
+  };
+
+  const [presentModal, dismissModal] = useIonModal(UserProfilePage, {
+    user: record,
+    handleClose: () => dismissModal(),
+    handleNew: (item?: any) => {
+      addRecord(item);
+      setTimeout(dismissModal, 200);
+    },
+    handleEdit: (item?: any) => {
+      editRecord(item);
+      setTimeout(dismissModal, 200);
+    }
+  });
+  const handleOpen = async (user?: IAdminUser) => {
+    setLoading(true);
+    const dbUser = await getUserAsync(user?.uid || String.empty);
+    const password = newPassword();
+    if (dbUser) {
+      const newUser = { ...dbUser, password, type: CrudType.Update };
+      setRecord(newUser);
+    } else {
+      const newUser = { ...user, password, type: CrudType.Create };
+      setRecord(newUser);
+    }
+    setTimeout(() => {
+      presentModal({
+        backdropDismiss: false,
+        keyboardClose: false
+        // cssClass: "desktop-modal-class"
+      });
+      setLoading(false);
+    }, 200);
+  };
+  const handleDelete = async (id: string) => {
     setLoading(true);
     const res = await deleteUserAsync(id);
     if (res && !res?.success) {
@@ -113,21 +135,25 @@ export function UsersPage({
         duration: 3000
       });
       setTimeout(() => {
+        deleteRecord(id);
         setLoading(false);
-        refetch();
       }, 200);
     }
   };
-  const handlePaging = (e: any, value: number) => {
-    setPaging(true);
-    setPayload(prev => ({ ...prev, page: value - 1 }));
-    setTimeout(async () => {
-      await refetch();
-      setPaging(false);
-    }, 1000);
+  const handleChange = (e: any) => {
+    const input = e.target.value;
+    setPayload(prev => ({ ...prev, searchInput: input }));
+    // set name or email
+    if (input.includes("@")) setPayload(prev => ({ ...prev, searchType: 20 }));
+    else setPayload(prev => ({ ...prev, searchType: 10 }));
+  };
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    setPayload(prev => ({ ...prev, page: 0 }));
+    setTimeout(() => fetchData(), 200);
   };
 
-  if (isFetching)
+  if (initLoading)
     return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 
   return (
@@ -171,21 +197,10 @@ export function UsersPage({
                   <TableCell align="left">
                     <IonButton
                       id="id-create-button"
-                      title="CREATE USER"
+                      title="ADD USER"
                       size="small"
                       buttonType="icon"
-                      aria-hidden="false"
-                      onClick={() => {
-                        const password = newPassword();
-                        const newUser = { ...AdminUser, password, type: CrudType.Create };
-                        handleClick(
-                          PageType.Step1,
-                          payload.page,
-                          payload.searchType,
-                          payload.searchInput,
-                          newUser
-                        );
-                      }}>
+                      onClick={() => handleOpen(AdminUser)}>
                       <IonIcon icon={addCircleOutline}></IonIcon>
                     </IonButton>
                   </TableCell>
@@ -195,7 +210,7 @@ export function UsersPage({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {users?.data?.map((item, index) => (
+                {records?.map((item, index) => (
                   <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell align="left">{item?.name}</TableCell>
                     <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
@@ -209,18 +224,16 @@ export function UsersPage({
                         id="id-edit-button"
                         title="EDIT USER"
                         size="small"
-                        aria-hidden="false"
                         buttonType="icon"
-                        onClick={() => handleEditClick(item.uid || String.empty)}>
+                        onClick={() => handleOpen(item)}>
                         <IonIcon icon={createOutline}></IonIcon>
                       </IonButton>
                     </TableCell>
                     <TableCell align="left">
                       <IonButton
                         id="id-delete-button"
-                        title="Delete"
+                        title="DELETE USER"
                         fill="clear"
-                        aria-hidden="false"
                         onClick={() =>
                           presentAlert({
                             header: "Are you sure?",
@@ -229,7 +242,7 @@ export function UsersPage({
                               {
                                 text: "Confirm",
                                 handler: () => {
-                                  handleUserDelete(item?.uid || String.empty);
+                                  handleDelete(item?.uid || String.empty);
                                 }
                               }
                             ]
@@ -245,16 +258,15 @@ export function UsersPage({
           </TableContainer>
         </IonCol>
       </IonRow>
-      <IonRow>
-        <IonCol className="ion-margin-top ion-text-end">
-          <PagingComponent
-            count={users?.count ?? 0}
-            page={payload.page ?? 0}
-            size={payload.size ?? constants.PAGE_SIZE}
-            handlePaging={handlePaging}
-          />
-        </IonCol>
-      </IonRow>
+      {total > records?.length && (
+        <IonRow>
+          <IonCol className="flex items-center justify-center my-2">
+            <IonButton size="small" disabled={loading} onClick={loadMore}>
+              {loading ? "Loading..." : "Load More"}
+            </IonButton>
+          </IonCol>
+        </IonRow>
+      )}
     </IonGrid>
   );
 }

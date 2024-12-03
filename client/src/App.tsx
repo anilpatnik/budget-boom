@@ -2,7 +2,6 @@ import { RouterProvider } from "react-router-dom";
 import { IonApp, IonSpinner } from "@ionic/react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { constants } from "./util";
 import { router } from "./layouts/navigation";
 
 const queryClient = new QueryClient({
@@ -12,7 +11,7 @@ const queryClient = new QueryClient({
       refetchOnMount: false,
       refetchOnReconnect: false,
       retry: false,
-      staleTime: constants.TWENTY_FOUR_HOURS_IN_MS
+      staleTime: 0
     }
   }
 });
