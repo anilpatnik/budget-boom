@@ -79,8 +79,8 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
             duration: 3000
           });
           setTimeout(() => {
-            const updateUser = { ...newUser, uid: res?.resource };
-            handleNew(updateUser);
+            const xUser = { ...newUser, uid: res?.resource };
+            handleNew(xUser);
             setLoading(false);
           }, 200);
         }
@@ -108,8 +108,8 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
             duration: 3000
           });
           setTimeout(() => {
-            const newUser = { ...updateUser, email: user?.email, uid: res?.resource };
-            handleEdit(newUser);
+            const xUser = { ...updateUser, email: user?.email, uid: res?.resource };
+            handleEdit(xUser);
             setLoading(false);
           }, 200);
         }

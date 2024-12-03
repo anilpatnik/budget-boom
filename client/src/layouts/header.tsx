@@ -10,18 +10,12 @@ import {
 } from "ionicons/icons";
 import { Box, Toolbar, Avatar, AppBar } from "@mui/material";
 import logo from "@/assets/logo.png";
-import { NavType, RoleType, constants, fb } from "@/util";
+import { NavType, RoleType, constants } from "@/util";
 import { useStore } from "@/contexts";
 
 export function Header() {
   const { user } = useStore();
   const navigate = useNavigate();
-  const handleLogout = async () => {
-    sessionStorage.clear();
-    localStorage.clear();
-    await fb.fSignOut();
-    navigate(NavType.Root);
-  };
   const handleMenuClick = (url: string) => navigate(url);
   return (
     <IonHeader className="no-boder-shadow ion-padding">
@@ -39,7 +33,7 @@ export function Header() {
               <img
                 alt={String.empty}
                 src={logo}
-                height="37px"
+                height="57px"
                 loading="lazy"
                 className="cursor-pointer"
                 onClick={() => handleMenuClick(NavType.Root)}
@@ -49,7 +43,7 @@ export function Header() {
               <img
                 alt={String.empty}
                 src={logo}
-                height="37px"
+                height="57px"
                 loading="lazy"
                 className="cursor-pointer"
                 onClick={() => handleMenuClick(NavType.Root)}
@@ -67,7 +61,7 @@ export function Header() {
                       <IonButton
                         id="id-users-menu"
                         size="small"
-                        onClick={() => handleMenuClick(`${NavType.Users}${NavType.NotFound}`)}>
+                        onClick={() => handleMenuClick(NavType.Users)}>
                         <IonIcon icon={peopleOutline} className="mr-2" /> Users
                       </IonButton>
                     )}
@@ -76,7 +70,7 @@ export function Header() {
                       <IonButton
                         id="id-expenses-menu"
                         size="small"
-                        onClick={() => handleMenuClick(`${NavType.Expenses}${NavType.NotFound}`)}>
+                        onClick={() => handleMenuClick(NavType.Expenses)}>
                         <IonIcon icon={cashOutline} className="mr-2" /> Expenses
                       </IonButton>
                     )}
@@ -85,7 +79,7 @@ export function Header() {
                       <IonButton
                         id="id-projects-menu"
                         size="small"
-                        onClick={() => handleMenuClick(`${NavType.Projects}${NavType.NotFound}`)}>
+                        onClick={() => handleMenuClick(NavType.Projects)}>
                         <IonIcon icon={libraryOutline} className="mr-2" /> Projects
                       </IonButton>
                     )}
@@ -96,7 +90,10 @@ export function Header() {
                       onClick={() => handleMenuClick(NavType.Profile)}>
                       <IonIcon icon={personOutline} className="mr-2" /> My Profile
                     </IonButton>
-                    <IonButton id="id-logoff-menu" size="small" onClick={handleLogout}>
+                    <IonButton
+                      id="id-logoff-menu"
+                      size="small"
+                      onClick={() => handleMenuClick(NavType.SignOut)}>
                       <IonIcon icon={lockClosedOutline} className="mr-2" /> Logout
                     </IonButton>
                   </>

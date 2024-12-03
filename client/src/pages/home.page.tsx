@@ -8,12 +8,10 @@ export function RootPage() {
   const { user } = useStore();
   // const isFetching = useRef(false);
   const navigate = useNavigate();
-
   useEffect(() => {
     if (user.auth) navigate(NavType.Profile); // fetchData();
     else navigate(NavType.SignIn);
   }, []);
-
   /*
   const fetchData = async () => {
     try {
@@ -35,6 +33,5 @@ export function RootPage() {
     }
   };
   */
-
   return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 }

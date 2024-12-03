@@ -120,14 +120,6 @@ export default function TermsConditionsPage() {
         risk you may be taking by using this website or any products or services that may be offered
         through it. It is your responsibility to do so.
       </p>
-      <p>
-        app digital pty ltd is not responsible for the guarantee of the deal or voucher, the quality
-        of food or services provided, or any conflict that may arise between the Seller and the
-        Customer. Any disputes or issues arising between the Seller and the Customer, including but
-        not limited to the quality of food or services and the terms of the deal or voucher, shall
-        be resolved solely between the Seller and the Customer. app digital pty ltd shall not be
-        held liable for any such conflicts.
-      </p>
       <h6>YOUR PRIVACY</h6>
       <p>
         At app digital pty ltd, we are committed to protecting your privacy. We use the information

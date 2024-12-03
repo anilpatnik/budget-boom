@@ -97,8 +97,8 @@ export function ExpensePage({
             duration: 3000
           });
           setTimeout(() => {
-            const updateExpense = { ...newExpense, id: res?.resource?.id };
-            handleNew(updateExpense);
+            const xExpense = { ...newExpense, id: res?.resource?.id };
+            handleNew(xExpense);
             setLoading(false);
           }, 200);
         }

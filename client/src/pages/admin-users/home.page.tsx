@@ -13,9 +13,7 @@ export function UsersHomePage() {
           <IonIcon slot="separator" icon={caretForwardOutline} />
           Home
         </IonBreadcrumb>
-        <IonBreadcrumb
-          onClick={() => navigate(`${NavType.Users}${NavType.NotFound}`)}
-          className="cursor-pointer">
+        <IonBreadcrumb onClick={() => navigate(NavType.Users)} className="cursor-pointer">
           <IonIcon slot="separator" icon={caretForwardOutline} />
           Users
         </IonBreadcrumb>

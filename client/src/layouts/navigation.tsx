@@ -6,6 +6,7 @@ import {
   RootPage,
   CallbackPage,
   SignInPage,
+  SignOutPage,
   SignUpPage,
   ForgotPasswordPage,
   VerifyEmailPage,
@@ -115,6 +116,10 @@ export const router = createBrowserRouter([
           {
             path: NavType.Profile,
             element: <ProfileHomePage />
+          },
+          {
+            path: NavType.SignOut,
+            element: <SignOutPage />
           }
         ]
       },
@@ -124,10 +129,6 @@ export const router = createBrowserRouter([
           {
             path: NavType.Expenses,
             element: <ExpensesHomePage />
-          },
-          {
-            path: `${NavType.Expenses}${NavType.NotFound}`,
-            element: <Navigate to={NavType.Expenses} replace />
           }
         ]
       },
@@ -137,10 +138,6 @@ export const router = createBrowserRouter([
           {
             path: NavType.Projects,
             element: <ProjectsHomePage />
-          },
-          {
-            path: `${NavType.Projects}${NavType.NotFound}`,
-            element: <Navigate to={NavType.Projects} replace />
           }
         ]
       },
@@ -150,10 +147,6 @@ export const router = createBrowserRouter([
           {
             path: NavType.Users,
             element: <UsersHomePage />
-          },
-          {
-            path: `${NavType.Users}${NavType.NotFound}`,
-            element: <Navigate to={NavType.Users} replace />
           }
         ]
       },

@@ -34,6 +34,11 @@ export function AutoSelectComponent({
       id={`id-${name}`}
       options={payload}
       getOptionLabel={option => option.name || String.empty}
+      renderOption={(props, option) => (
+        <li {...props} key={option.id}>
+          {option.name}
+        </li>
+      )}
       defaultValue={selectedValue}
       onChange={(e, value) => handleChange(value?.id || String.empty)}
       disabled={disabled}

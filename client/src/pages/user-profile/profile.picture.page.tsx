@@ -76,20 +76,13 @@ export const ProfilePicturePage = () => {
           color: constants.SUCCESS,
           duration: 3000
         });
-        await handleLogout();
+        navigate(NavType.SignOut);
       }
     } finally {
       setTimeout(() => {
         setLoading(false);
       }, 200);
     }
-  };
-
-  const handleLogout = async () => {
-    sessionStorage.clear();
-    localStorage.clear();
-    await fb.fSignOut();
-    navigate(NavType.Root);
   };
 
   return (

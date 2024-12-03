@@ -81,8 +81,8 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
             duration: 3000
           });
           setTimeout(() => {
-            const updateProject = { ...newProject, id: res?.resource?.id };
-            handleNew(updateProject);
+            const xProject = { ...newProject, id: res?.resource?.id };
+            handleNew(xProject);
             setLoading(false);
           }, 200);
         }

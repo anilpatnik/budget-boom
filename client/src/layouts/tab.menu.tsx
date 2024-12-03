@@ -8,18 +8,12 @@ import {
   peopleOutline,
   personOutline
 } from "ionicons/icons";
-import { NavType, RoleType, fb } from "@/util";
+import { NavType, RoleType } from "@/util";
 import { useStore } from "@/contexts";
 
 export function TabMenu({ children }: { children: any }) {
   const { user } = useStore();
   const navigate = useNavigate();
-  const handleLogout = async () => {
-    sessionStorage.clear();
-    localStorage.clear();
-    await fb.fSignOut();
-    navigate(NavType.Root);
-  };
   return (
     <IonTabs>
       {children}
@@ -60,7 +54,7 @@ export function TabMenu({ children }: { children: any }) {
           </IonTabButton>
         )}
         {user.auth && (
-          <IonTabButton tab="logout" onClick={handleLogout}>
+          <IonTabButton tab="logout" onClick={() => navigate(NavType.SignOut)}>
             <IonIcon icon={lockClosedOutline} />
             <IonLabel>Logout</IonLabel>
           </IonTabButton>

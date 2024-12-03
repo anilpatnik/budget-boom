@@ -12,15 +12,15 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
       manifest: {
-        name: "Deal On",
-        short_name: "Deal On",
-        description: "Marketplace Deals and Beyond",
+        name: "Personal Expense Manager",
+        short_name: "PEM",
+        description: "track, analyze, and manage your income and expenses",
         start_url: "/",
         display: "standalone",
         orientation: "portrait",
         background_color: "#ffffff",
         theme_color: "#2d89ef",
-        icons: [{ src: "android-chrome.png", sizes: "144x144", type: "image/png" }]
+        icons: [{ src: "android-chrome.png", sizes: "196x196", type: "image/png" }]
       }
     })
   ],

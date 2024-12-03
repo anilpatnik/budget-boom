@@ -4,7 +4,6 @@ export default function PrivacyPolicyPage() {
   return (
     <div className="ion-padding-horizontal statement">
       <h5>PRIVACY POLICY</h5>
-      <h6>Last updated: {formatddMMMyyyy(new Date())}</h6>
       <p>
         At app digital pty ltd, we are committed to protecting your privacy as a customer and an
         online visitor to our website. We use the information we collect about you to maximise the

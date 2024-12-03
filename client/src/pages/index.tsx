@@ -2,6 +2,7 @@ export { RootPage } from "./home.page";
 export { NotFoundPage } from "./404.page";
 
 export { SignInPage } from "./user-auth/login.page";
+export { SignOutPage } from "./user-auth/logout.page";
 export { SignUpPage } from "./user-auth/register.page";
 export { ForgotPasswordPage } from "./user-auth/forgot.password.page";
 export { CallbackPage } from "./user-auth/callback.page";
