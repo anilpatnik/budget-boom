@@ -37,18 +37,18 @@ export function ProjectsPage() {
   const [presentAlert] = useIonAlert();
   const [present] = useIonToast();
 
-  const fetchData = async (page: number) => {
+  const fetchData = async (pageNum: number = 0) => {
     if (loading) return;
-    if (page === 0) setInitLoading(true);
+    if (pageNum === 0) setInitLoading(true);
     else setLoading(true);
     try {
-      const response = await getProjectsAsync(page, constants.PAGE_SIZE);
+      const response = await getProjectsAsync(pageNum, constants.PAGE_SIZE);
       setRecords(prev => [...prev, ...(response?.data ?? [])]);
       setTotal(response?.count ?? 0);
     } catch (error) {
       console.error("error fetching data:", error);
     } finally {
-      if (page === 0) setInitLoading(false);
+      if (pageNum === 0) setInitLoading(false);
       else setLoading(false);
     }
   };
@@ -56,11 +56,11 @@ export function ProjectsPage() {
   useEffect(() => {
     if (hasMounted.current) return;
     hasMounted.current = true;
-    fetchData(page);
+    fetchData();
   }, []);
 
   const loadMore = () => {
-    if (page * constants.PAGE_SIZE < total) {
+    if (records?.length < total) {
       const newPage = page + 1;
       setPage(newPage);
       setTimeout(() => fetchData(newPage), 200);
@@ -218,7 +218,7 @@ export function ProjectsPage() {
           </TableContainer>
         </IonCol>
       </IonRow>
-      {constants.PROJECTS_MAX > records?.length && (
+      {records?.length < constants.PROJECTS_MAX && records?.length < total && (
         <IonRow>
           <IonCol className="flex items-center justify-center my-2">
             <IonButton size="small" disabled={loading} onClick={loadMore}>

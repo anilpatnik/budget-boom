@@ -32,8 +32,12 @@ export function ExpensesPage() {
   const hasMounted = useRef(false);
   const [records, setRecords] = useState<IExpense[]>([]);
   const [record, setRecord] = useState<IExpense>(Expense);
+  const [payload, setPayload] = useState<IExpenseSearch>({
+    ...ExpenseSearch,
+    page: 0,
+    size: constants.PAGE_SIZE
+  });
   const [total, setTotal] = useState<number>(0);
-  const [page, setPage] = useState<number>(0);
   const [initLoading, setInitLoading] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -46,23 +50,19 @@ export function ExpensesPage() {
     queryFn: async () => await getAllProjectsAsync()
   });
 
-  const fetchData = async (page: number) => {
+  const fetchData = async (pageNum: number = 0) => {
     if (loading) return;
-    if (page === 0) setInitLoading(true);
+    if (pageNum === 0) setInitLoading(true);
     else setLoading(true);
     try {
-      const newPayload: IExpenseSearch = {
-        ...ExpenseSearch,
-        page,
-        size: constants.PAGE_SIZE
-      };
+      const newPayload: IExpenseSearch = { ...payload, page: pageNum };
       const response = await getExpensesAsync(newPayload);
       setRecords(prev => [...prev, ...(response?.data ?? [])]);
       setTotal(response?.count ?? 0);
     } catch (error) {
       console.error("error fetching data:", error);
     } finally {
-      if (page === 0) setInitLoading(false);
+      if (pageNum === 0) setInitLoading(false);
       else setLoading(false);
     }
   };
@@ -70,13 +70,13 @@ export function ExpensesPage() {
   useEffect(() => {
     if (hasMounted.current) return;
     hasMounted.current = true;
-    fetchData(page);
+    fetchData();
   }, []);
 
   const loadMore = () => {
-    if (page * constants.PAGE_SIZE < total) {
-      const newPage = page + 1;
-      setPage(newPage);
+    if (records?.length < total) {
+      const newPage = (payload?.page ?? 0) + 1;
+      setPayload(prev => ({ ...prev, page: newPage }));
       setTimeout(() => fetchData(newPage), 200);
     }
   };
@@ -141,6 +141,20 @@ export function ExpensesPage() {
         setLoading(false);
       }, 200);
     }
+  };
+  const handleChange = (e: any) => {
+    const input = e.target.value;
+    setPayload(prev => ({ ...prev, searchInput: input }));
+    if (input.includes("@")) setPayload(prev => ({ ...prev, searchType: 20 }));
+    else setPayload(prev => ({ ...prev, searchType: 10 }));
+  };
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    setPayload(prev => ({ ...prev, page: 0 }));
+    setTimeout(() => {
+      setRecords([]);
+      fetchData();
+    }, 200);
   };
 
   if (loadProjects || initLoading)
@@ -285,7 +299,7 @@ export function ExpensesPage() {
           </TableContainer>
         </IonCol>
       </IonRow>
-      {total > records?.length && (
+      {records?.length < total && (
         <IonRow>
           <IonCol className="flex items-center justify-center my-2">
             <IonButton size="small" disabled={loading} onClick={loadMore}>

@@ -43,18 +43,19 @@ export function UsersPage() {
   const [presentAlert] = useIonAlert();
   const [present] = useIonToast();
 
-  const fetchData = async () => {
+  const fetchData = async (pageNum: number = 0) => {
     if (loading) return;
-    if (payload.page === 0) setInitLoading(true);
+    if (pageNum === 0) setInitLoading(true);
     else setLoading(true);
     try {
-      const response = await getUsersAsync(payload);
+      const newPayload: IAdminUserSearch = { ...payload, page: pageNum };
+      const response = await getUsersAsync(newPayload);
       setRecords(prev => [...prev, ...(response?.data ?? [])]);
       setTotal(response?.count ?? 0);
     } catch (error) {
       console.error("error fetching data:", error);
     } finally {
-      if (payload.page === 0) setInitLoading(false);
+      if (pageNum === 0) setInitLoading(false);
       else setLoading(false);
     }
   };
@@ -66,10 +67,10 @@ export function UsersPage() {
   }, []);
 
   const loadMore = () => {
-    if ((payload?.page ?? 0) * constants.PAGE_SIZE < total) {
+    if (records?.length < total) {
       const newPage = (payload?.page ?? 0) + 1;
       setPayload(prev => ({ ...prev, page: newPage }));
-      setTimeout(() => fetchData(), 200);
+      setTimeout(() => fetchData(newPage), 200);
     }
   };
 
@@ -150,11 +151,11 @@ export function UsersPage() {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setPayload(prev => ({ ...prev, page: 0 }));
-    setTimeout(() => fetchData(), 200);
+    setTimeout(() => {
+      setRecords([]);
+      fetchData();
+    }, 200);
   };
-
-  if (initLoading)
-    return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 
   return (
     <IonGrid>
@@ -181,91 +182,98 @@ export function UsersPage() {
           </Paper>
         </IonCol>
       </IonRow>
-      <IonRow>
-        <IonCol>
-          <TableContainer component={Paper}>
-            <Table className="styled-table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="left">Name</TableCell>
-                  <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                    Email
-                  </TableCell>
-                  <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                    Role
-                  </TableCell>
-                  <TableCell align="left">
-                    <IonButton
-                      id="id-create-button"
-                      title="ADD USER"
-                      size="small"
-                      buttonType="icon"
-                      onClick={() => handleOpen(AdminUser)}>
-                      <IonIcon icon={addCircleOutline}></IonIcon>
-                    </IonButton>
-                  </TableCell>
-                  <TableCell align="left">
-                    {loading && <IonSpinner name="lines-sharp-small"></IonSpinner>}
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {records?.map((item, index) => (
-                  <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                    <TableCell align="left">{item?.name}</TableCell>
-                    <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                      {item?.email}
-                    </TableCell>
-                    <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                      {RoleType[item?.role || 10]?.replace(/([A-Z])/g, " $1")?.trim()}
-                    </TableCell>
-                    <TableCell align="left">
-                      <IonButton
-                        id="id-edit-button"
-                        title="EDIT USER"
-                        size="small"
-                        buttonType="icon"
-                        onClick={() => handleOpen(item)}>
-                        <IonIcon icon={createOutline}></IonIcon>
-                      </IonButton>
-                    </TableCell>
-                    <TableCell align="left">
-                      <IonButton
-                        id="id-delete-button"
-                        title="DELETE USER"
-                        fill="clear"
-                        onClick={() =>
-                          presentAlert({
-                            header: "Are you sure?",
-                            buttons: [
-                              { text: "Cancel" },
-                              {
-                                text: "Confirm",
-                                handler: () => {
-                                  handleDelete(item?.uid || String.empty);
-                                }
-                              }
-                            ]
-                          })
-                        }>
-                        <IonIcon color="danger" icon={trashOutline}></IonIcon>
-                      </IonButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </IonCol>
-      </IonRow>
-      {total > records?.length && (
-        <IonRow>
-          <IonCol className="flex items-center justify-center my-2">
-            <IonButton size="small" disabled={loading} onClick={loadMore}>
-              {loading ? "Loading..." : "Load More"}
-            </IonButton>
-          </IonCol>
-        </IonRow>
+      {initLoading && <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>}
+      {!initLoading && (
+        <>
+          <IonRow>
+            <IonCol>
+              <TableContainer component={Paper}>
+                <Table className="styled-table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="left">Name</TableCell>
+                      <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                        Email
+                      </TableCell>
+                      <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                        Role
+                      </TableCell>
+                      <TableCell align="left">
+                        <IonButton
+                          id="id-create-button"
+                          title="ADD USER"
+                          size="small"
+                          buttonType="icon"
+                          onClick={() => handleOpen(AdminUser)}>
+                          <IonIcon icon={addCircleOutline}></IonIcon>
+                        </IonButton>
+                      </TableCell>
+                      <TableCell align="left">
+                        {loading && <IonSpinner name="lines-sharp-small"></IonSpinner>}
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {records?.map((item, index) => (
+                      <TableRow
+                        key={index}
+                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                        <TableCell align="left">{item?.name}</TableCell>
+                        <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                          {item?.email}
+                        </TableCell>
+                        <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                          {RoleType[item?.role || 10]?.replace(/([A-Z])/g, " $1")?.trim()}
+                        </TableCell>
+                        <TableCell align="left">
+                          <IonButton
+                            id="id-edit-button"
+                            title="EDIT USER"
+                            size="small"
+                            buttonType="icon"
+                            onClick={() => handleOpen(item)}>
+                            <IonIcon icon={createOutline}></IonIcon>
+                          </IonButton>
+                        </TableCell>
+                        <TableCell align="left">
+                          <IonButton
+                            id="id-delete-button"
+                            title="DELETE USER"
+                            fill="clear"
+                            onClick={() =>
+                              presentAlert({
+                                header: "Are you sure?",
+                                buttons: [
+                                  { text: "Cancel" },
+                                  {
+                                    text: "Confirm",
+                                    handler: () => {
+                                      handleDelete(item?.uid || String.empty);
+                                    }
+                                  }
+                                ]
+                              })
+                            }>
+                            <IonIcon color="danger" icon={trashOutline}></IonIcon>
+                          </IonButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </IonCol>
+          </IonRow>
+          {records?.length < total && (
+            <IonRow>
+              <IonCol className="flex items-center justify-center my-2">
+                <IonButton size="small" disabled={loading} onClick={loadMore}>
+                  {loading ? "Loading..." : "Load More"}
+                </IonButton>
+              </IonCol>
+            </IonRow>
+          )}
+        </>
       )}
     </IonGrid>
   );
