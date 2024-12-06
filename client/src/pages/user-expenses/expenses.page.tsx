@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import {
   IonButton,
   IonCol,
+  IonFabButton,
   IonGrid,
   IonIcon,
   IonRow,
@@ -10,7 +11,7 @@ import {
   useIonModal,
   useIonToast
 } from "@ionic/react";
-import { addCircleOutline, createOutline, trashOutline } from "ionicons/icons";
+import { add, createOutline, trashOutline } from "ionicons/icons";
 import {
   Box,
   Paper,
@@ -179,14 +180,13 @@ export function ExpensesPage() {
                     Taxable
                   </TableCell>
                   <TableCell align="left">
-                    <IonButton
+                    <IonFabButton
                       id="id-create-button"
                       title="ADD EXPENSE"
                       size="small"
-                      buttonType="icon"
                       onClick={() => handleOpen(Expense)}>
-                      <IonIcon icon={addCircleOutline}></IonIcon>
-                    </IonButton>
+                      <IonIcon icon={add} />
+                    </IonFabButton>
                   </TableCell>
                   <TableCell align="left">
                     {loading && <IonSpinner name="lines-sharp-small"></IonSpinner>}

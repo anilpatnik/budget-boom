@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import {
   IonButton,
   IonCol,
+  IonFabButton,
   IonGrid,
   IonIcon,
   IonRow,
@@ -10,7 +11,7 @@ import {
   useIonModal,
   useIonToast
 } from "@ionic/react";
-import { addCircleOutline, createOutline, searchOutline, trashOutline } from "ionicons/icons";
+import { add, createOutline, searchOutline, trashOutline } from "ionicons/icons";
 import {
   IconButton,
   InputBase,
@@ -199,14 +200,13 @@ export function UsersPage() {
                         Role
                       </TableCell>
                       <TableCell align="left">
-                        <IonButton
+                        <IonFabButton
                           id="id-create-button"
                           title="ADD USER"
                           size="small"
-                          buttonType="icon"
                           onClick={() => handleOpen(AdminUser)}>
-                          <IonIcon icon={addCircleOutline}></IonIcon>
-                        </IonButton>
+                          <IonIcon icon={add} />
+                        </IonFabButton>
                       </TableCell>
                       <TableCell align="left">
                         {loading && <IonSpinner name="lines-sharp-small"></IonSpinner>}

@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import {
   IonButton,
   IonCol,
+  IonFabButton,
   IonGrid,
   IonIcon,
   IonRow,
@@ -10,7 +11,7 @@ import {
   useIonModal,
   useIonToast
 } from "@ionic/react";
-import { addCircleOutline, createOutline, trashOutline } from "ionicons/icons";
+import { add, createOutline, trashOutline } from "ionicons/icons";
 import {
   Paper,
   Table,
@@ -151,14 +152,13 @@ export function ProjectsPage() {
                   </TableCell>
                   <TableCell align="left">
                     {constants.PROJECTS_MAX > records?.length && (
-                      <IonButton
+                      <IonFabButton
                         id="id-create-button"
                         title="ADD PROJECT"
                         size="small"
-                        buttonType="icon"
                         onClick={() => handleOpen(Project)}>
-                        <IonIcon icon={addCircleOutline}></IonIcon>
-                      </IonButton>
+                        <IonIcon icon={add} />
+                      </IonFabButton>
                     )}
                   </TableCell>
                   <TableCell align="left">
