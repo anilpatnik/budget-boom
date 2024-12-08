@@ -4,15 +4,14 @@ import {
   IonCol,
   IonFabButton,
   IonGrid,
-  IonIcon,
   IonRow,
   IonSpinner,
   useIonAlert,
   useIonModal,
   useIonToast
 } from "@ionic/react";
-import { add, createOutline, trashOutline } from "ionicons/icons";
 import {
+  Box,
   Paper,
   Table,
   TableBody,
@@ -25,6 +24,7 @@ import { CrudType, formatddMMMyyyy, constants } from "@/util";
 import { IProject, Project } from "@/models";
 import { deleteProjectAsync, getProjectsAsync } from "@/services";
 import { ProjectPage } from "./project.page";
+import { Icon } from "@/components";
 
 export function ProjectsPage() {
   const hasMounted = useRef(false);
@@ -136,8 +136,11 @@ export function ProjectsPage() {
     <IonGrid>
       <IonRow>
         <IonCol>
-          <TableContainer component={Paper}>
-            <Table className="styled-table">
+          <TableContainer
+            component={Paper}
+            sx={{ maxHeight: { xs: 650, sm: 600 } }}
+            className="tableContainer">
+            <Table className="styled-table" stickyHeader>
               <TableHead>
                 <TableRow>
                   <TableCell align="left">Name</TableCell>
@@ -151,24 +154,26 @@ export function ProjectsPage() {
                     End Date
                   </TableCell>
                   <TableCell align="left">
-                    {constants.PROJECTS_MAX > records?.length && (
-                      <IonFabButton
-                        id="id-create-button"
-                        title="ADD PROJECT"
-                        size="small"
-                        onClick={() => handleOpen(Project)}>
-                        <IonIcon icon={add} />
-                      </IonFabButton>
-                    )}
-                  </TableCell>
-                  <TableCell align="left">
-                    {loading && <IonSpinner name="lines-sharp-small"></IonSpinner>}
+                    <Box className="flex items-center">
+                      {constants.PROJECTS_MAX > records?.length && (
+                        <IonFabButton
+                          id="id-create-button"
+                          title="ADD PROJECT"
+                          size="small"
+                          onClick={() => handleOpen(Project)}>
+                          <Icon name="add" />
+                        </IonFabButton>
+                      )}
+                      {loading && (
+                        <IonSpinner name="lines-sharp-small" className="ml-2"></IonSpinner>
+                      )}
+                    </Box>
                   </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {records?.map((item, index) => (
-                  <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                  <TableRow key={index}>
                     <TableCell align="left">{item?.name}</TableCell>
                     <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                       {item?.budget ? `$${item?.budget?.toFixed(2)}` : String.empty}
@@ -180,53 +185,57 @@ export function ProjectsPage() {
                       {item?.endDate ? formatddMMMyyyy(item.endDate) : String.empty}
                     </TableCell>
                     <TableCell align="left">
-                      <IonButton
-                        id="id-edit-button"
-                        title="EDIT PROJECT"
-                        size="small"
-                        buttonType="icon"
-                        onClick={() => handleOpen(item)}>
-                        <IonIcon icon={createOutline}></IonIcon>
-                      </IonButton>
-                    </TableCell>
-                    <TableCell align="left">
-                      <IonButton
-                        id="id-delete-button"
-                        title="DELETE PROJECT"
-                        fill="clear"
-                        onClick={() =>
-                          presentAlert({
-                            header: "Are you sure?",
-                            buttons: [
-                              { text: "Cancel" },
-                              {
-                                text: "Confirm",
-                                handler: () => {
-                                  handleDelete(item?.id || String.empty);
+                      <Box className="flex items-center">
+                        <IonButton
+                          id="id-edit-button"
+                          title="EDIT PROJECT"
+                          size="small"
+                          buttonType="icon"
+                          onClick={() => handleOpen(item)}>
+                          <Icon name="card-sharp" css="text-xl text-blue-500" />
+                        </IonButton>
+                        <IonButton
+                          id="id-delete-button"
+                          title="DELETE PROJECT"
+                          fill="clear"
+                          onClick={() =>
+                            presentAlert({
+                              header: "Are you sure?",
+                              buttons: [
+                                { text: "Cancel" },
+                                {
+                                  text: "Confirm",
+                                  handler: () => {
+                                    handleDelete(item?.id || String.empty);
+                                  }
                                 }
-                              }
-                            ]
-                          })
-                        }>
-                        <IonIcon color="danger" icon={trashOutline}></IonIcon>
-                      </IonButton>
+                              ]
+                            })
+                          }>
+                          <Icon name="trash-bin-sharp" css="text-xl text-red-500" />
+                        </IonButton>
+                      </Box>
                     </TableCell>
                   </TableRow>
                 ))}
+                {records?.length < constants.PROJECTS_MAX && records?.length < total && (
+                  <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                    <TableCell colSpan={5}>
+                      <IonButton
+                        size="small"
+                        disabled={loading}
+                        onClick={loadMore}
+                        className="my-3">
+                        {loading ? "Loading..." : "Load More"}
+                      </IonButton>
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>
         </IonCol>
       </IonRow>
-      {records?.length < constants.PROJECTS_MAX && records?.length < total && (
-        <IonRow>
-          <IonCol className="flex items-center justify-center my-2">
-            <IonButton size="small" disabled={loading} onClick={loadMore}>
-              {loading ? "Loading..." : "Load More"}
-            </IonButton>
-          </IonCol>
-        </IonRow>
-      )}
     </IonGrid>
   );
 }

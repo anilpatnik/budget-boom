@@ -4,14 +4,12 @@ import {
   IonCol,
   IonFabButton,
   IonGrid,
-  IonIcon,
   IonRow,
   IonSpinner,
   useIonAlert,
   useIonModal,
   useIonToast
 } from "@ionic/react";
-import { add, createOutline, trashOutline } from "ionicons/icons";
 import {
   Box,
   Paper,
@@ -165,8 +163,11 @@ export function ExpensesPage() {
     <IonGrid>
       <IonRow>
         <IonCol>
-          <TableContainer component={Paper}>
-            <Table className="styled-table">
+          <TableContainer
+            component={Paper}
+            sx={{ maxHeight: { xs: 650, sm: 600 } }}
+            className="tableContainer">
+            <Table className="styled-table" stickyHeader>
               <TableHead>
                 <TableRow>
                   <TableCell align="left">Date</TableCell>
@@ -180,22 +181,24 @@ export function ExpensesPage() {
                     Taxable
                   </TableCell>
                   <TableCell align="left">
-                    <IonFabButton
-                      id="id-create-button"
-                      title="ADD EXPENSE"
-                      size="small"
-                      onClick={() => handleOpen(Expense)}>
-                      <IonIcon icon={add} />
-                    </IonFabButton>
-                  </TableCell>
-                  <TableCell align="left">
-                    {loading && <IonSpinner name="lines-sharp-small"></IonSpinner>}
+                    <Box className="flex items-center">
+                      <IonFabButton
+                        id="id-create-button"
+                        title="ADD EXPENSE"
+                        size="small"
+                        onClick={() => handleOpen(Expense)}>
+                        <Icon name="add" />
+                      </IonFabButton>
+                      {loading && (
+                        <IonSpinner name="lines-sharp-small" className="ml-2"></IonSpinner>
+                      )}
+                    </Box>
                   </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {records?.map((item, index) => (
-                  <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                  <TableRow key={index}>
                     <TableCell align="left" sx={{ minWidth: 150 }}>
                       <Box>{item?.entryDate && formatddMMMyyyy(item.entryDate)}</Box>
                       <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
@@ -256,58 +259,62 @@ export function ExpensesPage() {
                     </TableCell>
                     <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                       <Icon
-                        name={item.taxable ? "checkmark-outline" : "close-outline"}
-                        css="text-2xl text-black"
+                        name={item.taxable ? "checkmark-circle-sharp" : "remove-sharp"}
+                        css={`text-2xl ${item.taxable ? "text-green-500" : "text-black"}`}
                       />
                     </TableCell>
                     <TableCell align="left">
-                      <IonButton
-                        id="id-edit-button"
-                        title="EDIT EXPENSE"
-                        size="small"
-                        buttonType="icon"
-                        onClick={() => handleOpen(item)}>
-                        <IonIcon icon={createOutline}></IonIcon>
-                      </IonButton>
-                    </TableCell>
-                    <TableCell align="left">
-                      <IonButton
-                        id="id-delete-button"
-                        title="DELETE EXPENSE"
-                        fill="clear"
-                        onClick={() =>
-                          presentAlert({
-                            header: "Are you sure?",
-                            buttons: [
-                              { text: "Cancel" },
-                              {
-                                text: "Confirm",
-                                handler: () => {
-                                  handleDelete(item?.id || String.empty);
+                      <Box className="flex items-center">
+                        <IonButton
+                          id="id-edit-button"
+                          title="EDIT EXPENSE"
+                          size="small"
+                          buttonType="icon"
+                          onClick={() => handleOpen(item)}>
+                          <Icon name="card-sharp" css="text-xl text-blue-500" />
+                        </IonButton>
+                        <IonButton
+                          id="id-delete-button"
+                          title="DELETE EXPENSE"
+                          fill="clear"
+                          onClick={() =>
+                            presentAlert({
+                              header: "Are you sure?",
+                              buttons: [
+                                { text: "Cancel" },
+                                {
+                                  text: "Confirm",
+                                  handler: () => {
+                                    handleDelete(item?.id || String.empty);
+                                  }
                                 }
-                              }
-                            ]
-                          })
-                        }>
-                        <IonIcon color="danger" icon={trashOutline}></IonIcon>
-                      </IonButton>
+                              ]
+                            })
+                          }>
+                          <Icon name="trash-bin-sharp" css="text-xl text-red-500" />
+                        </IonButton>
+                      </Box>
                     </TableCell>
                   </TableRow>
                 ))}
+                {records?.length < total && (
+                  <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                    <TableCell colSpan={5}>
+                      <IonButton
+                        size="small"
+                        disabled={loading}
+                        onClick={loadMore}
+                        className="my-3">
+                        {loading ? "Loading..." : "Load More"}
+                      </IonButton>
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>
         </IonCol>
       </IonRow>
-      {records?.length < total && (
-        <IonRow>
-          <IonCol className="flex items-center justify-center my-2">
-            <IonButton size="small" disabled={loading} onClick={loadMore}>
-              {loading ? "Loading..." : "Load More"}
-            </IonButton>
-          </IonCol>
-        </IonRow>
-      )}
     </IonGrid>
   );
 }

@@ -4,15 +4,14 @@ import {
   IonCol,
   IonFabButton,
   IonGrid,
-  IonIcon,
   IonRow,
   IonSpinner,
   useIonAlert,
   useIonModal,
   useIonToast
 } from "@ionic/react";
-import { add, createOutline, searchOutline, trashOutline } from "ionicons/icons";
 import {
+  Box,
   IconButton,
   InputBase,
   Paper,
@@ -27,6 +26,7 @@ import { CrudType, RoleType, newPassword, constants } from "@/util";
 import { AdminUser, IAdminUser, AdminUserSearch, IAdminUserSearch } from "@/models";
 import { deleteUserAsync, getUserAsync, getUsersAsync } from "@/services";
 import { UserProfilePage } from "./profile.page";
+import { Icon } from "@/components";
 
 export function UsersPage() {
   const hasMounted = useRef(false);
@@ -178,64 +178,65 @@ export function UsersPage() {
               inputProps={{ "aria-label": "Search with name or email" }}
             />
             <IconButton aria-label="search" type="submit" onClick={handleSubmit}>
-              <IonIcon slot="start" icon={searchOutline} />
+              <Icon name="search-circle-sharp" css="text-3xl" />
             </IconButton>
           </Paper>
         </IonCol>
       </IonRow>
       {initLoading && <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>}
       {!initLoading && (
-        <>
-          <IonRow>
-            <IonCol>
-              <TableContainer component={Paper}>
-                <Table className="styled-table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell align="left">Name</TableCell>
-                      <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                        Email
-                      </TableCell>
-                      <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                        Role
-                      </TableCell>
-                      <TableCell align="left">
+        <IonRow>
+          <IonCol>
+            <TableContainer
+              component={Paper}
+              sx={{ maxHeight: { xs: 650, sm: 600 } }}
+              className="tableContainer">
+              <Table className="styled-table" stickyHeader>
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="left">Name</TableCell>
+                    <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                      Email
+                    </TableCell>
+                    <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                      Role
+                    </TableCell>
+                    <TableCell align="left">
+                      <Box className="flex items-center">
                         <IonFabButton
                           id="id-create-button"
                           title="ADD USER"
                           size="small"
                           onClick={() => handleOpen(AdminUser)}>
-                          <IonIcon icon={add} />
+                          <Icon name="add" />
                         </IonFabButton>
+                        {loading && (
+                          <IonSpinner name="lines-sharp-small" className="ml-2"></IonSpinner>
+                        )}
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {records?.map((item, index) => (
+                    <TableRow key={index}>
+                      <TableCell align="left">{item?.name}</TableCell>
+                      <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                        {item?.email}
+                      </TableCell>
+                      <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                        {RoleType[item?.role || 10]?.replace(/([A-Z])/g, " $1")?.trim()}
                       </TableCell>
                       <TableCell align="left">
-                        {loading && <IonSpinner name="lines-sharp-small"></IonSpinner>}
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {records?.map((item, index) => (
-                      <TableRow
-                        key={index}
-                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                        <TableCell align="left">{item?.name}</TableCell>
-                        <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                          {item?.email}
-                        </TableCell>
-                        <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                          {RoleType[item?.role || 10]?.replace(/([A-Z])/g, " $1")?.trim()}
-                        </TableCell>
-                        <TableCell align="left">
+                        <Box className="flex items-center">
                           <IonButton
                             id="id-edit-button"
                             title="EDIT USER"
                             size="small"
                             buttonType="icon"
                             onClick={() => handleOpen(item)}>
-                            <IonIcon icon={createOutline}></IonIcon>
+                            <Icon name="card-sharp" css="text-xl text-blue-500" />
                           </IonButton>
-                        </TableCell>
-                        <TableCell align="left">
                           <IonButton
                             id="id-delete-button"
                             title="DELETE USER"
@@ -254,26 +255,30 @@ export function UsersPage() {
                                 ]
                               })
                             }>
-                            <IonIcon color="danger" icon={trashOutline}></IonIcon>
+                            <Icon name="trash-bin-sharp" css="text-xl text-red-500" />
                           </IonButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </IonCol>
-          </IonRow>
-          {records?.length < total && (
-            <IonRow>
-              <IonCol className="flex items-center justify-center my-2">
-                <IonButton size="small" disabled={loading} onClick={loadMore}>
-                  {loading ? "Loading..." : "Load More"}
-                </IonButton>
-              </IonCol>
-            </IonRow>
-          )}
-        </>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {records?.length < total && (
+                    <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                      <TableCell colSpan={4}>
+                        <IonButton
+                          size="small"
+                          disabled={loading}
+                          onClick={loadMore}
+                          className="my-3">
+                          {loading ? "Loading..." : "Load More"}
+                        </IonButton>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </IonCol>
+        </IonRow>
       )}
     </IonGrid>
   );

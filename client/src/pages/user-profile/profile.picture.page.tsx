@@ -107,11 +107,7 @@ export const ProfilePicturePage = () => {
                 ]
               })
             }>
-            {loading ? (
-              <IonSpinner name="lines-sharp-small"></IonSpinner>
-            ) : (
-              <IonIcon slot="start" icon={trashOutline} />
-            )}
+            {loading && <IonSpinner name="lines-sharp-small"></IonSpinner>}
             DELETE YOUR ACCOUNT
           </IonButton>
         </div>

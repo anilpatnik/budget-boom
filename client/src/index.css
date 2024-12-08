@@ -109,9 +109,25 @@ ion-item:last-child {
 .styled-table tr > td,
 .styled-table tr > th {
   letter-spacing: 0.045em;
+  padding: 6px 16px;
 }
-.styled-table > thead {
-  background-color: #eee;
+.styled-table > thead > tr > th {
+  background-color: #f4f6f8;
+  color: #637381;
+  font-weight: 700;
+}
+/* Hide scrollbar for Webkit browsers (e.g., Chrome, Safari) */
+.tableContainer::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for all modern browsers */
+.tableContainer {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+/* Ensure overflow functionality remains */
+.tableContainer {
+  overflow: auto;
 }
 /* Footer */
 .footer {
