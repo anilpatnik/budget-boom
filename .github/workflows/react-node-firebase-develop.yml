@@ -1,8 +1,8 @@
-name: Build and Deploy Product
+name: Build and Deploy Develop
 
 on:
   push:
-    branches: [product]
+    branches: [develop]
 
 jobs:
   changes:
@@ -38,15 +38,15 @@ jobs:
       - run: |
           touch .env          
           echo ENVIRONMENT=production >> .env
-          echo TOKEN_SECRET=${{ secrets.PROD_TOKEN_SECRET }} >> .env           
-          echo CAPTCHA_SECRET=${{ secrets.PROD_CAPTCHA_SECRET }} >> .env        
-          echo DATABASE_URL=${{ secrets.PROD_DATABASE_URL }} >> .env
+          echo TOKEN_SECRET=${{ secrets.TEST_TOKEN_SECRET }} >> .env           
+          echo CAPTCHA_SECRET=${{ secrets.TEST_CAPTCHA_SECRET }} >> .env        
+          echo DATABASE_URL=${{ secrets.TEST_DATABASE_URL }} >> .env
           cat .env
         name: Create .env File
         working-directory: ./server
       - run: npm install -g firebase-tools
         name: Install Dependencies
-      - run: firebase use --token ${{ secrets.FIREBASE_TOKEN }} product
+      - run: firebase use --token ${{ secrets.FIREBASE_TOKEN }} develop
         name: Set Project
       - run: firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
         name: Deploy
@@ -65,14 +65,14 @@ jobs:
         name: Build
         working-directory: ./client
         env:
-          VITE_FIREBASE_API_KEY: ${{ secrets.PROD_FIREBASE_API_KEY }}
-          VITE_FIREBASE_PROJECT_ID: ${{ secrets.PROD_FIREBASE_PROJECT_ID }}
-          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.PROD_FIREBASE_MESSAGING_SENDER_ID }}
-          VITE_FIREBASE_APP_ID: ${{ secrets.PROD_FIREBASE_APP_ID }}
-          VITE_CAPTCHA_SITE: ${{ secrets.PROD_CAPTCHA_SITE }}
+          VITE_FIREBASE_API_KEY: ${{ secrets.TEST_FIREBASE_API_KEY }}
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.TEST_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.TEST_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ secrets.TEST_FIREBASE_APP_ID }}
+          VITE_CAPTCHA_SITE: ${{ secrets.TEST_CAPTCHA_SITE }}
       - run: npm install -g firebase-tools
         name: Install Dependencies
-      - run: firebase use --token ${{ secrets.FIREBASE_TOKEN }} product
+      - run: firebase use --token ${{ secrets.FIREBASE_TOKEN }} develop
         name: Set Project
       - run: firebase deploy --only hosting --token ${{ secrets.FIREBASE_TOKEN }}
         name: Deploy

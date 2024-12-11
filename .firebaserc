@@ -1,5 +1,6 @@
 {
   "projects": {
-    "product": "budget-boom-prod"
+    "product": "budget-boom-prod",
+    "develop": "budget-boom-test"
   }
 }
