@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { IonBreadcrumb, IonBreadcrumbs, IonIcon } from "@ionic/react";
-import { caretForwardOutline } from "ionicons/icons";
+import { IonBreadcrumb, IonBreadcrumbs } from "@ionic/react";
 import { NavType } from "@/util";
 import { ExpensesPage } from "./expenses.page";
+import { Icon } from "@/components";
 
 export function ExpensesHomePage() {
   const navigate = useNavigate();
@@ -10,11 +10,11 @@ export function ExpensesHomePage() {
     <>
       <IonBreadcrumbs className="ion-margin-vertical">
         <IonBreadcrumb onClick={() => navigate(NavType.Root)} className="cursor-pointer">
-          <IonIcon slot="separator" icon={caretForwardOutline} />
+          <Icon name="caret-forward-outline" slot="separator" />
           Home
         </IonBreadcrumb>
         <IonBreadcrumb onClick={() => navigate(NavType.Expenses)} className="cursor-pointer">
-          <IonIcon slot="separator" icon={caretForwardOutline} />
+          <Icon name="caret-forward-outline" slot="separator" />
           Expenses
         </IonBreadcrumb>
       </IonBreadcrumbs>

@@ -10,16 +10,13 @@ import {
   IonCardTitle,
   IonCol,
   IonGrid,
-  IonIcon,
   IonRow,
-  IonSpinner,
   useIonToast
 } from "@ionic/react";
-import { caretForwardOutline } from "ionicons/icons";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ReCAPTCHA from "react-google-recaptcha";
-import { InputComponent } from "@/components";
+import { Icon, InputComponent } from "@/components";
 import { NavType, constants } from "@/util";
 import { captchaVerify, sendForgotPasswordUrl } from "@/services";
 
@@ -133,9 +130,9 @@ export function ForgotPasswordPage() {
                     disabled={loading}>
                     <button type="submit" hidden />
                     {loading ? (
-                      <IonSpinner name="lines-sharp-small"></IonSpinner>
+                      <Icon name="sync-sharp" css="icon-spinner" slot="start" />
                     ) : (
-                      <IonIcon slot="start" icon={caretForwardOutline} />
+                      <Icon name="caret-forward-sharp" slot="start" />
                     )}
                     SUBMIT
                   </IonButton>

@@ -6,15 +6,12 @@ import {
   IonContent,
   IonGrid,
   IonHeader,
-  IonIcon,
   IonLabel,
   IonPage,
   IonRow,
-  IonSpinner,
   IonToolbar,
   useIonToast
 } from "@ionic/react";
-import { caretForwardOutline, refreshOutline } from "ionicons/icons";
 import { Switch } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -253,9 +250,9 @@ export function ExpensePage({
               onDoubleClick={() => handleClose()}
               disabled={loading}>
               {loading ? (
-                <IonSpinner name="lines-sharp-small"></IonSpinner>
+                <Icon name="sync-sharp" css="icon-spinner" slot="start" />
               ) : (
-                <IonIcon slot="start" icon={caretForwardOutline} />
+                <Icon name="caret-forward-sharp" slot="start" />
               )}
               SUBMIT
             </IonButton>
@@ -265,7 +262,7 @@ export function ExpensePage({
               className="ml-5"
               onClick={formik.handleReset}
               onDoubleClick={() => handleClose()}>
-              <IonIcon slot="start" icon={refreshOutline} />
+              <Icon name="refresh-sharp" slot="start" />
               RESET
             </IonButton>
           </div>

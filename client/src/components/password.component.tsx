@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { IonIcon } from "@ionic/react";
-import { eyeOffOutline, eyeOutline } from "ionicons/icons";
 import { IconButton, InputAdornment, TextField } from "@mui/material";
+import { Icon } from "./icon.component";
 
 type ComponentProps = {
   name?: string;
@@ -49,9 +48,9 @@ export function PasswordComponent({
             <InputAdornment position="end">
               <IconButton onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
                 {showPassword ? (
-                  <IonIcon slot="start" icon={eyeOffOutline} />
+                  <Icon name="eye-off-outline" slot="start" />
                 ) : (
-                  <IonIcon slot="start" icon={eyeOutline} />
+                  <Icon name="eye-outline" slot="start" />
                 )}
               </IconButton>
             </InputAdornment>

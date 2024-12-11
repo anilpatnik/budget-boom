@@ -8,82 +8,82 @@ export const categories = [
   {
     id: "NONE",
     name: "None",
-    icon: "sparkles-outline"
+    icon: "sparkles-sharp"
   },
   {
     id: "HOME",
     name: "Home",
-    icon: "home-outline"
+    icon: "home-sharp"
   },
   {
     id: "INTEREST",
     name: "Interest",
-    icon: "card-outline"
+    icon: "card-sharp"
   },
   {
     id: "FOOD",
     name: "Food",
-    icon: "restaurant-outline"
+    icon: "restaurant-sharp"
   },
   {
     id: "GROCERIES",
     name: "Groceries",
-    icon: "cart-outline"
+    icon: "cart-sharp"
   },
   {
     id: "CAR",
     name: "Car",
-    icon: "car-outline"
+    icon: "car-sharp"
   },
   {
     id: "SHOPPING",
     name: "Shopping",
-    icon: "bag-handle-outline"
+    icon: "bag-handle-sharp"
   },
   {
     id: "UTILITIES",
     name: "Utilities",
-    icon: "receipt-outline"
+    icon: "receipt-sharp"
   },
   {
     id: "EARNINGS",
     name: "Earnings",
-    icon: "cash-outline"
+    icon: "cash-sharp"
   },
   {
     id: "BUSINESS",
     name: "Business",
-    icon: "briefcase-outline"
+    icon: "briefcase-sharp"
   },
   {
     id: "DONATION",
     name: "Donation",
-    icon: "gift-outline"
+    icon: "gift-sharp"
   },
   {
     id: "EDUCATION",
     name: "Education",
-    icon: "school-outline"
+    icon: "school-sharp"
   },
   {
     id: "ENTERTAINMENT",
     name: "Entertainment",
-    icon: "ticket-outline"
+    icon: "ticket-sharp"
   },
   {
     id: "HEALTH",
     name: "Health",
-    icon: "heart-outline"
+    icon: "heart-sharp"
   },
   {
     id: "HOTEL",
     name: "Hotel",
-    icon: "bed-outline"
+    icon: "bed-sharp"
   },
   {
     id: "TRAVEL",
     name: "Travel",
-    icon: "airplane-outline"
+    icon: "airplane-sharp"
   }
 ];
 export const countries = [

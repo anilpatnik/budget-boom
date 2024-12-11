@@ -10,16 +10,13 @@ import {
   IonCardTitle,
   IonCol,
   IonGrid,
-  IonIcon,
   IonRow,
-  IonSpinner,
   useIonToast
 } from "@ionic/react";
-import { caretForwardOutline, refreshOutline } from "ionicons/icons";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ReCAPTCHA from "react-google-recaptcha";
-import { InputComponent, PasswordComponent, PasswordStrength } from "@/components";
+import { Icon, InputComponent, PasswordComponent, PasswordStrength } from "@/components";
 import { NavType, constants } from "@/util";
 import { captchaVerify, createUserWithEmail } from "@/services";
 
@@ -180,9 +177,9 @@ export function SignUpPage() {
                     disabled={loading}>
                     <button type="submit" hidden />
                     {loading ? (
-                      <IonSpinner name="lines-sharp-small"></IonSpinner>
+                      <Icon name="sync-sharp" css="icon-spinner" slot="start" />
                     ) : (
-                      <IonIcon slot="start" icon={caretForwardOutline} />
+                      <Icon name="caret-forward-sharp" slot="start" />
                     )}
                     SIGN UP
                   </IonButton>
@@ -191,7 +188,7 @@ export function SignUpPage() {
                     size="small"
                     color="light"
                     onClick={formik.handleReset}>
-                    <IonIcon icon={refreshOutline} slot="start" />
+                    <Icon name="refresh-sharp" slot="start" />
                     RESET
                   </IonButton>
                 </form>

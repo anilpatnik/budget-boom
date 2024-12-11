@@ -1,10 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import {
   IonButton,
-  IonCol,
   IonFabButton,
-  IonGrid,
-  IonRow,
   IonSpinner,
   useIonAlert,
   useIonModal,
@@ -26,6 +23,7 @@ import { IExpense, Expense, IExpenseSearch, ExpenseSearch } from "@/models";
 import { getExpensesAsync, deleteExpenseAsync, getCategory, getAllProjectsAsync } from "@/services";
 import { Icon } from "@/components";
 import { ExpensePage } from "./expense.page";
+import { ExpenseSearchPage } from "./search.page";
 
 export function ExpensesPage() {
   const hasMounted = useRef(false);
@@ -37,13 +35,15 @@ export function ExpensesPage() {
     size: constants.PAGE_SIZE
   });
   const [total, setTotal] = useState<number>(0);
-  const [initLoading, setInitLoading] = useState<boolean>(false);
+
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingInit, setLoadingInit] = useState<boolean>(false);
+  const [loadingCol, setLoadingCol] = useState<string>(String.empty);
 
   const [presentAlert] = useIonAlert();
   const [present] = useIonToast();
 
-  const { isLoading: loadProjects, data: projects } = useQuery({
+  const { isLoading: loadingProjects, data: projects } = useQuery({
     queryKey: [QueryType.AllUserProjects],
     refetchOnMount: true,
     queryFn: async () => await getAllProjectsAsync()
@@ -51,7 +51,7 @@ export function ExpensesPage() {
 
   const fetchData = async (pageNum: number = 0) => {
     if (loading) return;
-    if (pageNum === 0) setInitLoading(true);
+    if (pageNum === 0) setLoadingInit(true);
     else setLoading(true);
     try {
       const newPayload: IExpenseSearch = { ...payload, page: pageNum };
@@ -61,7 +61,7 @@ export function ExpensesPage() {
     } catch (error) {
       console.error("error fetching data:", error);
     } finally {
-      if (pageNum === 0) setInitLoading(false);
+      if (pageNum === 0) setLoadingInit(false);
       else setLoading(false);
     }
   };
@@ -105,8 +105,9 @@ export function ExpensesPage() {
       setTimeout(dismissModal, 200);
     }
   });
-  const handleOpen = (expense?: IExpense) => {
-    setLoading(true);
+  const handleOpen = (expense?: IExpense, col?: string) => {
+    const colId = `${expense?.id}-${col}`;
+    setLoadingCol(colId);
     const newExpense = { ...expense, type: expense?.id ? CrudType.Update : CrudType.Create };
     setRecord(newExpense);
     setTimeout(() => {
@@ -115,11 +116,12 @@ export function ExpensesPage() {
         keyboardClose: false
         // cssClass: "desktop-modal-class"
       });
-      setLoading(false);
+      setLoadingCol(String.empty);
     }, 200);
   };
-  const handleDelete = async (id: string) => {
-    setLoading(true);
+  const handleDelete = async (id: string, col?: string) => {
+    const colId = `${id}-${col}`;
+    setLoadingCol(colId);
     const res = await deleteExpenseAsync(id);
     if (res && !res?.success) {
       present({
@@ -127,7 +129,7 @@ export function ExpensesPage() {
         color: constants.DANGER,
         duration: 5000
       });
-      setLoading(false);
+      setLoadingCol(String.empty);
       return;
     } else {
       present({
@@ -137,184 +139,197 @@ export function ExpensesPage() {
       });
       setTimeout(() => {
         deleteRecord(id);
-        setLoading(false);
+        setLoadingCol(String.empty);
       }, 200);
     }
   };
-  const handleChange = (e: any) => {
-    const input = e.target.value;
-    setPayload(prev => ({ ...prev, searchInput: input }));
-    if (input.includes("@")) setPayload(prev => ({ ...prev, searchType: 20 }));
-    else setPayload(prev => ({ ...prev, searchType: 10 }));
+
+  const [presentSearchModal, dismissSearchModal] = useIonModal(ExpenseSearchPage, {
+    projects,
+    handleClose: () => dismissSearchModal(),
+    handleSearch: (item?: any) => {
+      handleSearch(item);
+      setTimeout(dismissSearchModal, 200);
+    }
+  });
+  const handleSearchOpen = () => {
+    setTimeout(() => {
+      presentSearchModal({
+        backdropDismiss: false,
+        keyboardClose: false
+        // cssClass: "desktop-modal-class"
+      });
+    }, 200);
   };
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    setPayload(prev => ({ ...prev, page: 0 }));
+  const handleSearch = (item: IExpenseSearch) => {
+    setPayload(prev => ({
+      ...prev,
+      page: 0,
+      projectId: item?.projectId,
+      categoryId: item?.categoryId,
+      startDate: item?.startDate,
+      endDate: item?.endDate
+    }));
     setTimeout(() => {
       setRecords([]);
       fetchData();
     }, 200);
   };
 
-  if (loadProjects || initLoading)
+  if (loadingProjects || loadingInit)
     return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 
   return (
-    <IonGrid>
-      <IonRow>
-        <IonCol>
-          <TableContainer
-            component={Paper}
-            sx={{ maxHeight: { xs: 650, sm: 600 } }}
-            className="tableContainer">
-            <Table className="styled-table" stickyHeader>
-              <TableHead>
-                <TableRow>
-                  <TableCell align="left">Date</TableCell>
-                  <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                    Amount
-                  </TableCell>
-                  <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                    Category
-                  </TableCell>
-                  <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                    Taxable
-                  </TableCell>
-                  <TableCell align="left">
-                    <Box className="flex items-center">
-                      <IonFabButton
-                        id="id-create-button"
-                        title="ADD EXPENSE"
-                        size="small"
-                        onClick={() => handleOpen(Expense)}>
-                        <Icon name="add" />
-                      </IonFabButton>
-                      {loading && (
-                        <IonSpinner name="lines-sharp-small" className="ml-2"></IonSpinner>
+    <Box className="px-2">
+      <TableContainer
+        component={Paper}
+        sx={{ maxHeight: { xs: 700, sm: 650 } }}
+        className="tableContainer">
+        <Table className="styled-table" stickyHeader>
+          <TableHead>
+            <TableRow>
+              <TableCell align="left">Date</TableCell>
+              <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                Amount
+              </TableCell>
+              <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                Category
+              </TableCell>
+              <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                Taxable
+              </TableCell>
+              <TableCell align="left">
+                <Box className="flex items-center">
+                  <IonFabButton
+                    id="id-create-button"
+                    title="ADD EXPENSE"
+                    size="small"
+                    onClick={() => handleOpen(Expense)}>
+                    <Icon name="add" />
+                  </IonFabButton>
+                  <IonFabButton
+                    id="id-search-button"
+                    title="SEARCH EXPENSES"
+                    color="warning"
+                    size="small"
+                    onClick={() => handleSearchOpen()}>
+                    <Icon name="options-sharp" />
+                  </IonFabButton>
+                </Box>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {records?.map((item, index) => (
+              <TableRow key={index}>
+                <TableCell align="left" sx={{ minWidth: 150 }}>
+                  <Box>{item?.entryDate && formatddMMMyyyy(item.entryDate)}</Box>
+                  <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
+                    <Box className="mt-2 flex items-center">
+                      {item?.categoryId && (
+                        <Icon
+                          name={getCategory(item.categoryId).icon}
+                          css="text-2xl text-black mr-3"
+                        />
                       )}
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {records?.map((item, index) => (
-                  <TableRow key={index}>
-                    <TableCell align="left" sx={{ minWidth: 150 }}>
-                      <Box>{item?.entryDate && formatddMMMyyyy(item.entryDate)}</Box>
-                      <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
-                        <IonGrid className="p-0 mt-3">
-                          <IonRow>
-                            <IonCol className="p-0">
-                              {item?.categoryId && (
-                                <Icon
-                                  name={getCategory(item.categoryId).icon}
-                                  css="text-2xl text-black mr-3"
-                                />
-                              )}
-                            </IonCol>
-                            <IonCol className="p-0">
-                              {item?.price && `${formatPrice(item?.price)}`}
-                            </IonCol>
-                          </IonRow>
-                        </IonGrid>
-                      </Box>
-                    </TableCell>
-                    <TableCell
-                      sx={{ display: { xs: "none", sm: "table-cell", minWidth: 150 } }}
-                      align="left">
                       {item?.price && `${formatPrice(item?.price)}`}
-                    </TableCell>
-                    <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }} align="left">
+                    </Box>
+                  </Box>
+                </TableCell>
+                <TableCell
+                  sx={{ display: { xs: "none", sm: "table-cell", minWidth: 150 } }}
+                  align="left">
+                  {item?.price && `${formatPrice(item?.price)}`}
+                </TableCell>
+                <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }} align="left">
+                  <Box className="flex items-center">
+                    {item?.categoryId && (
                       <Box className="flex items-center">
-                        {item?.categoryId && (
-                          <Box className="flex items-center">
-                            <Icon
-                              name={getCategory(item.categoryId).icon}
-                              css="text-2xl text-black mr-2"
-                            />
-                            <Box sx={{ display: { xs: "none", sm: "block" } }}>
-                              {getCategory(item.categoryId).name}
-                            </Box>
-                          </Box>
-                        )}
-                        <Box>
-                          {item?.notes && (
-                            <IonButton
-                              buttonType="icon"
-                              onClick={() =>
-                                present({
-                                  message: item.notes,
-                                  color: "dark",
-                                  duration: 3000
-                                })
-                              }>
-                              <Icon
-                                name="information-circle-outline"
-                                css="text-2xl text-blue-700"
-                              />
-                            </IonButton>
-                          )}
+                        <Icon
+                          name={getCategory(item.categoryId).icon}
+                          css="text-2xl text-black mr-2"
+                        />
+                        <Box sx={{ display: { xs: "none", sm: "block" } }}>
+                          {getCategory(item.categoryId).name}
                         </Box>
                       </Box>
-                    </TableCell>
-                    <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                      <Icon
-                        name={item.taxable ? "checkmark-circle-sharp" : "remove-sharp"}
-                        css={`text-2xl ${item.taxable ? "text-green-500" : "text-black"}`}
-                      />
-                    </TableCell>
-                    <TableCell align="left">
-                      <Box className="flex items-center">
+                    )}
+                    <Box>
+                      {item?.notes && (
                         <IonButton
-                          id="id-edit-button"
-                          title="EDIT EXPENSE"
-                          size="small"
                           buttonType="icon"
-                          onClick={() => handleOpen(item)}>
-                          <Icon name="card-sharp" css="text-xl text-blue-500" />
-                        </IonButton>
-                        <IonButton
-                          id="id-delete-button"
-                          title="DELETE EXPENSE"
-                          fill="clear"
                           onClick={() =>
-                            presentAlert({
-                              header: "Are you sure?",
-                              buttons: [
-                                { text: "Cancel" },
-                                {
-                                  text: "Confirm",
-                                  handler: () => {
-                                    handleDelete(item?.id || String.empty);
-                                  }
-                                }
-                              ]
+                            present({
+                              message: item.notes,
+                              color: "dark",
+                              duration: 3000
                             })
                           }>
-                          <Icon name="trash-bin-sharp" css="text-xl text-red-500" />
+                          <Icon name="information-circle-sharp" css="text-2xl text-cyan-500" />
                         </IonButton>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {records?.length < total && (
-                  <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                    <TableCell colSpan={5}>
-                      <IonButton
-                        size="small"
-                        disabled={loading}
-                        onClick={loadMore}
-                        className="my-3">
-                        {loading ? "Loading..." : "Load More"}
-                      </IonButton>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </IonCol>
-      </IonRow>
-    </IonGrid>
+                      )}
+                    </Box>
+                  </Box>
+                </TableCell>
+                <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                  {item.taxable && (
+                    <Icon name="checkmark-circle-sharp" css="text-2xl text-green-500" />
+                  )}
+                </TableCell>
+                <TableCell align="left">
+                  <Box className="flex items-center">
+                    <IonButton
+                      id="id-edit-button"
+                      title="EDIT EXPENSE"
+                      size="small"
+                      buttonType="icon"
+                      onClick={() => handleOpen(item, "EDIT")}>
+                      {loadingCol === `${item?.id}-EDIT` ? (
+                        <Icon name="sync-sharp" css="text-xl text-blue-500 icon-spinner" />
+                      ) : (
+                        <Icon name="card-sharp" css="text-xl text-blue-500" />
+                      )}
+                    </IonButton>
+                    <IonButton
+                      id="id-delete-button"
+                      title="DELETE EXPENSE"
+                      fill="clear"
+                      onClick={() =>
+                        presentAlert({
+                          header: "Are you sure?",
+                          buttons: [
+                            { text: "Cancel" },
+                            {
+                              text: "Confirm",
+                              handler: () => {
+                                handleDelete(item?.id || String.empty, "DELETE");
+                              }
+                            }
+                          ]
+                        })
+                      }>
+                      {loadingCol === `${item?.id}-DELETE` ? (
+                        <Icon name="sync-sharp" css="text-xl text-red-500 icon-spinner" />
+                      ) : (
+                        <Icon name="trash-bin-sharp" css="text-xl text-red-500" />
+                      )}
+                    </IonButton>
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ))}
+            {records?.length < total && (
+              <TableRow>
+                <TableCell colSpan={5}>
+                  <IonButton size="small" disabled={loading} onClick={loadMore} className="my-3">
+                    {loading ? "Loading..." : "Load More"}
+                  </IonButton>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }

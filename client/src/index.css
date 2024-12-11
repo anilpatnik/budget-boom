@@ -78,6 +78,14 @@ ion-item:last-child {
   bottom: 0;
   right: 0;
 }
+.icon-spinner {
+  animation: spin 1s linear infinite;
+}
+/* prettier-ignore */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 /* MUI Styles */
 .card-content-md p {
   font-size: 0.864em;
@@ -185,6 +193,17 @@ ion-item:last-child {
   display: inline;
   margin-left: 5px;
   background-color: chocolate;
+}
+.filter-button {
+  position: absolute;
+  z-index: 100;
+  top: 95px;
+  right: 20px;
+}
+@media (min-width: 768px) {
+  .filter-button {
+    right: 30px;
+  }
 }
 /* Profile Pic */
 .profile-pic-img {

@@ -10,14 +10,12 @@ import {
   IonCardTitle,
   IonCol,
   IonGrid,
-  IonIcon,
   IonRow,
   IonSpinner
 } from "@ionic/react";
-import { caretForwardOutline } from "ionicons/icons";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { InputComponent, PasswordComponent, PasswordStrength } from "@/components";
+import { Icon, InputComponent, PasswordComponent, PasswordStrength } from "@/components";
 import { NavType } from "@/util";
 import { updateForgotPassword, verifyForgotPasswordUrl } from "@/services";
 
@@ -158,9 +156,9 @@ export function ResetPasswordPage() {
                   disabled={loading}>
                   <button type="submit" hidden />
                   {loading ? (
-                    <IonSpinner name="lines-sharp-small"></IonSpinner>
+                    <Icon name="sync-sharp" css="icon-spinner" slot="start" />
                   ) : (
-                    <IonIcon slot="start" icon={caretForwardOutline} />
+                    <Icon name="caret-forward-sharp" slot="start" />
                   )}
                   SUBMIT
                 </IonButton>

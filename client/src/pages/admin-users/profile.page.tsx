@@ -5,20 +5,11 @@ import {
   IonButtons,
   IonContent,
   IonHeader,
-  IonIcon,
   IonLabel,
   IonPage,
-  IonSpinner,
   IonToolbar,
   useIonToast
 } from "@ionic/react";
-import {
-  caretForwardOutline,
-  logoFacebook,
-  logoGoogle,
-  mailOutline,
-  refreshOutline
-} from "ionicons/icons";
 import { FormControl, InputLabel, MenuItem, Select, Switch } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -221,9 +212,9 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
                   <IonLabel>Login With</IonLabel>
                   {formik.values.providers?.map((x: AuthType, index: number) => (
                     <span key={index} className="ion-padding-start">
-                      {x === AuthType.Email && <IonIcon icon={mailOutline} />}
-                      {x === AuthType.Google && <IonIcon icon={logoGoogle} />}
-                      {x === AuthType.Facebook && <IonIcon icon={logoFacebook} />}
+                      {x === AuthType.Email && <Icon name="mail-outline" />}
+                      {x === AuthType.Google && <Icon name="logo-google" />}
+                      {x === AuthType.Facebook && <Icon name="logo-facebook" />}
                     </span>
                   ))}
                 </div>
@@ -239,9 +230,9 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
               onDoubleClick={() => handleClose()}
               disabled={loading}>
               {loading ? (
-                <IonSpinner name="lines-sharp-small"></IonSpinner>
+                <Icon name="sync-sharp" css="icon-spinner" slot="start" />
               ) : (
-                <IonIcon slot="start" icon={caretForwardOutline} />
+                <Icon name="caret-forward-sharp" slot="start" />
               )}
               SUBMIT
             </IonButton>
@@ -251,7 +242,7 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
               className="ml-5"
               onClick={formik.handleReset}
               onDoubleClick={() => handleClose()}>
-              <IonIcon slot="start" icon={refreshOutline} />
+              <Icon name="refresh-sharp" slot="start" />
               RESET
             </IonButton>
           </div>

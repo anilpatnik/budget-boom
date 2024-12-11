@@ -7,16 +7,14 @@ import {
   IonCardContent,
   IonCol,
   IonGrid,
-  IonIcon,
   IonLoading,
   IonRow,
   useIonToast
 } from "@ionic/react";
-import { caretForwardOutline, logoGoogle } from "ionicons/icons";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ReCAPTCHA from "react-google-recaptcha";
-import { InputComponent, PasswordComponent } from "@/components";
+import { Icon, InputComponent, PasswordComponent } from "@/components";
 import { NavType, RoleType, constants } from "@/util";
 import { useStore } from "@/contexts";
 import { captchaVerify, signInWithEmail, signInWithGoogle } from "@/services";
@@ -120,7 +118,7 @@ export function SignInPage() {
                   type="button"
                   className="google-button"
                   onClick={() => handleLogin(true, String.empty, String.empty)}>
-                  <IonIcon slot="start" icon={logoGoogle} />
+                  <Icon name="logo-google" slot="start" />
                   Sign In with Google
                 </IonButton>
               </IonCol>
@@ -164,7 +162,7 @@ export function SignInPage() {
                   type="submit"
                   className="ion-margin-vertical">
                   <button type="submit" hidden />
-                  <IonIcon slot="start" icon={caretForwardOutline} />
+                  <Icon name="caret-forward-sharp" slot="start" />
                   SIGN IN
                 </IonButton>
               </form>

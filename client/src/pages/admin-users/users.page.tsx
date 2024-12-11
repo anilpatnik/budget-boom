@@ -38,15 +38,16 @@ export function UsersPage() {
     size: constants.PAGE_SIZE
   });
   const [total, setTotal] = useState<number>(0);
-  const [initLoading, setInitLoading] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingInit, setLoadingInit] = useState<boolean>(false);
+  const [loadingCol, setLoadingCol] = useState<string>(String.empty);
 
   const [presentAlert] = useIonAlert();
   const [present] = useIonToast();
 
   const fetchData = async (pageNum: number = 0) => {
     if (loading) return;
-    if (pageNum === 0) setInitLoading(true);
+    if (pageNum === 0) setLoadingInit(true);
     else setLoading(true);
     try {
       const newPayload: IAdminUserSearch = { ...payload, page: pageNum };
@@ -56,7 +57,7 @@ export function UsersPage() {
     } catch (error) {
       console.error("error fetching data:", error);
     } finally {
-      if (pageNum === 0) setInitLoading(false);
+      if (pageNum === 0) setLoadingInit(false);
       else setLoading(false);
     }
   };
@@ -99,8 +100,9 @@ export function UsersPage() {
       setTimeout(dismissModal, 200);
     }
   });
-  const handleOpen = async (user?: IAdminUser) => {
-    setLoading(true);
+  const handleOpen = async (user?: IAdminUser, col?: string) => {
+    const colId = `${user?.uid}-${col}`;
+    setLoadingCol(colId);
     const dbUser = await getUserAsync(user?.uid || String.empty);
     const password = newPassword();
     if (dbUser) {
@@ -116,11 +118,12 @@ export function UsersPage() {
         keyboardClose: false
         // cssClass: "desktop-modal-class"
       });
-      setLoading(false);
+      setLoadingCol(String.empty);
     }, 200);
   };
-  const handleDelete = async (id: string) => {
-    setLoading(true);
+  const handleDelete = async (id: string, col?: string) => {
+    const colId = `${id}-${col}`;
+    setLoadingCol(colId);
     const res = await deleteUserAsync(id);
     if (res && !res?.success) {
       present({
@@ -128,7 +131,7 @@ export function UsersPage() {
         color: constants.DANGER,
         duration: 5000
       });
-      setLoading(false);
+      setLoadingCol(String.empty);
       return;
     } else {
       present({
@@ -138,7 +141,7 @@ export function UsersPage() {
       });
       setTimeout(() => {
         deleteRecord(id);
-        setLoading(false);
+        setLoadingCol(String.empty);
       }, 200);
     }
   };
@@ -183,8 +186,8 @@ export function UsersPage() {
           </Paper>
         </IonCol>
       </IonRow>
-      {initLoading && <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>}
-      {!initLoading && (
+      {loadingInit && <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>}
+      {!loadingInit && (
         <IonRow>
           <IonCol>
             <TableContainer
@@ -210,9 +213,6 @@ export function UsersPage() {
                           onClick={() => handleOpen(AdminUser)}>
                           <Icon name="add" />
                         </IonFabButton>
-                        {loading && (
-                          <IonSpinner name="lines-sharp-small" className="ml-2"></IonSpinner>
-                        )}
                       </Box>
                     </TableCell>
                   </TableRow>
@@ -234,8 +234,12 @@ export function UsersPage() {
                             title="EDIT USER"
                             size="small"
                             buttonType="icon"
-                            onClick={() => handleOpen(item)}>
-                            <Icon name="card-sharp" css="text-xl text-blue-500" />
+                            onClick={() => handleOpen(item, "EDIT")}>
+                            {loadingCol === `${item?.uid}-EDIT` ? (
+                              <Icon name="sync-sharp" css="text-xl text-blue-500 icon-spinner" />
+                            ) : (
+                              <Icon name="card-sharp" css="text-xl text-blue-500" />
+                            )}
                           </IonButton>
                           <IonButton
                             id="id-delete-button"
@@ -249,13 +253,17 @@ export function UsersPage() {
                                   {
                                     text: "Confirm",
                                     handler: () => {
-                                      handleDelete(item?.uid || String.empty);
+                                      handleDelete(item?.uid || String.empty, "DELETE");
                                     }
                                   }
                                 ]
                               })
                             }>
-                            <Icon name="trash-bin-sharp" css="text-xl text-red-500" />
+                            {loadingCol === `${item?.uid}-DELETE` ? (
+                              <Icon name="sync-sharp" css="text-xl text-red-500 icon-spinner" />
+                            ) : (
+                              <Icon name="trash-bin-sharp" css="text-xl text-red-500" />
+                            )}
                           </IonButton>
                         </Box>
                       </TableCell>

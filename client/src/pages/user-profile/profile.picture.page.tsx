@@ -1,17 +1,10 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  IonButton,
-  IonIcon,
-  IonSpinner,
-  IonThumbnail,
-  useIonAlert,
-  useIonToast
-} from "@ionic/react";
-import { caretForwardOutline, refreshOutline, trashOutline } from "ionicons/icons";
+import { IonButton, IonThumbnail, useIonAlert, useIonToast } from "@ionic/react";
 import { NavType, RoleType, ServiceType, constants, downloadFile, fb, uploadFile } from "@/util";
 import { useStore } from "@/contexts";
 import { deleteProfileAsync, updateProfilePic } from "@/services";
+import { Icon } from "@/components";
 
 export const ProfilePicturePage = () => {
   const { user, setAuth } = useStore();
@@ -107,7 +100,11 @@ export const ProfilePicturePage = () => {
                 ]
               })
             }>
-            {loading && <IonSpinner name="lines-sharp-small"></IonSpinner>}
+            {loading ? (
+              <Icon name="sync-sharp" css="icon-spinner" slot="start" />
+            ) : (
+              <Icon name="trash-bin-sharp" slot="start" />
+            )}
             DELETE YOUR ACCOUNT
           </IonButton>
         </div>
@@ -144,9 +141,9 @@ export const ProfilePicturePage = () => {
             disabled={loading}
             onClick={handleSubmit}>
             {loading ? (
-              <IonSpinner name="lines-sharp-small"></IonSpinner>
+              <Icon name="sync-sharp" css="icon-spinner" slot="start" />
             ) : (
-              <IonIcon slot="start" icon={caretForwardOutline} />
+              <Icon name="caret-forward-sharp" slot="start" />
             )}
             UPLOAD
           </IonButton>
@@ -155,7 +152,7 @@ export const ProfilePicturePage = () => {
             size="small"
             color="light"
             onClick={handleReset}>
-            <IonIcon icon={refreshOutline} slot="start" />
+            <Icon name="refresh-sharp" slot="start" />
             RESET
           </IonButton>
         </div>

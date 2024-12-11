@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { IonButton, IonIcon, IonSpinner, useIonToast } from "@ionic/react";
-import { caretForwardOutline } from "ionicons/icons";
+import { IonButton, useIonToast } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { PasswordComponent, PasswordStrength } from "@/components";
+import { Icon, PasswordComponent, PasswordStrength } from "@/components";
 import { updateProfilePassword } from "@/services";
 import { constants } from "@/util";
 
@@ -86,9 +85,9 @@ export function ProfilePasswordPage() {
         disabled={loading}>
         <button type="submit" hidden />
         {loading ? (
-          <IonSpinner name="lines-sharp-small"></IonSpinner>
+          <Icon name="sync-sharp" css="icon-spinner" slot="start" />
         ) : (
-          <IonIcon slot="start" icon={caretForwardOutline} />
+          <Icon name="caret-forward-sharp" slot="start" />
         )}
         SUBMIT
       </IonButton>

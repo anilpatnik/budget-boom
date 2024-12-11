@@ -6,16 +6,15 @@ import {
   IonAccordionGroup,
   IonBreadcrumb,
   IonBreadcrumbs,
-  IonIcon,
   IonItem
 } from "@ionic/react";
-import { caretForwardOutline } from "ionicons/icons";
 import { LazyLoading } from "@/components";
 import { AccordionType, NavType } from "@/util";
 import { useStore } from "@/contexts";
 import { ProfileInfoPage } from "./profile.info.page";
 import { ProfilePasswordPage } from "./profile.password.page";
 import { ProfilePicturePage } from "./profile.picture.page";
+import { Icon } from "@/components";
 
 export function ProfileHomePage() {
   const navigate = useNavigate();
@@ -31,11 +30,10 @@ export function ProfileHomePage() {
     <>
       <IonBreadcrumbs className="ion-margin-vertical">
         <IonBreadcrumb onClick={() => navigate(NavType.Root)} className="cursor-pointer">
-          <IonIcon slot="separator" icon={caretForwardOutline} />
-          Home
+          <Icon name="caret-forward-outline" slot="separator" /> Home
         </IonBreadcrumb>
         <IonBreadcrumb>
-          <IonIcon slot="separator" /> Profile
+          <Icon name="caret-forward-outline" slot="separator" /> Profile
         </IonBreadcrumb>
       </IonBreadcrumbs>
       <IonAccordionGroup

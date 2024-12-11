@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { IonButton, IonIcon, IonSpinner, useIonToast } from "@ionic/react";
-import { caretForwardOutline, refreshOutline } from "ionicons/icons";
+import { IonButton, useIonToast } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useStore } from "@/contexts";
 import { countries, updateProfileInfo } from "@/services";
-import { InputComponent, SelectComponent } from "@/components";
+import { Icon, InputComponent, SelectComponent } from "@/components";
 import { constants } from "@/util";
 
 export function ProfileInfoPage() {
@@ -72,9 +71,9 @@ export function ProfileInfoPage() {
         disabled={loading}>
         <button type="submit" hidden />
         {loading ? (
-          <IonSpinner name="lines-sharp-small"></IonSpinner>
+          <Icon name="sync-sharp" css="icon-spinner" slot="start" />
         ) : (
-          <IonIcon slot="start" icon={caretForwardOutline} />
+          <Icon name="caret-forward-sharp" slot="start" />
         )}
         SUBMIT
       </IonButton>
@@ -83,7 +82,7 @@ export function ProfileInfoPage() {
         size="small"
         color="light"
         onClick={formik.handleReset}>
-        <IonIcon icon={refreshOutline} slot="start" />
+        <Icon name="refresh-sharp" slot="start" />
         RESET
       </IonButton>
     </form>
