@@ -5,6 +5,7 @@ web-build
 api-build
 android
 ios
+migrations
 
 .DS_Store
 .vscode
