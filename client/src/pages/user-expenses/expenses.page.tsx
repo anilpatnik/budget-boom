@@ -18,7 +18,7 @@ import {
   TableRow
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { CrudType, dateFormat, formatPrice, constants, QueryType } from "@/util";
+import { CrudType, dateFormat, formatPrice, totalPrice, constants } from "@/util";
 import { IExpense, Expense, IExpenseSearch, ExpenseSearch } from "@/models";
 import { getExpensesAsync, deleteExpenseAsync, getCategory, getAllProjectsAsync } from "@/services";
 import { Icon } from "@/components";
@@ -43,7 +43,7 @@ export function ExpensesPage() {
   const [present] = useIonToast();
 
   const { isLoading: loadingProjects, data: projects } = useQuery({
-    queryKey: [QueryType.AllUserProjects],
+    queryKey: ["all-user-projects"],
     refetchOnMount: true,
     queryFn: async () => await getAllProjectsAsync()
   });
@@ -191,9 +191,16 @@ export function ExpensesPage() {
         <Table className="styled-table" stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell align="left">Date</TableCell>
+              <TableCell align="left">
+                <Box sx={{ display: { xs: "none", sm: "table-cell" } }}>Date</Box>
+                <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
+                  <Box>Total</Box>
+                  <Box>{totalPrice(records)}</Box>
+                </Box>
+              </TableCell>
               <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                Amount
+                <Box>Total</Box>
+                <Box sx={{ display: { xs: "none", sm: "table-cell" } }}>{totalPrice(records)}</Box>
               </TableCell>
               <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                 Category

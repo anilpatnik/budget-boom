@@ -80,6 +80,7 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
             <SelectComponent
               name="categoryId"
               label="Category"
+              optional={true}
               value={formik.values.categoryId}
               touched={formik.touched.categoryId}
               errorMessage={formik.errors.categoryId}
@@ -91,6 +92,7 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
             <AutoSelectComponent
               name="projectId"
               label="Project"
+              optional={true}
               value={formik.values.projectId}
               touched={formik.touched.projectId}
               errorMessage={formik.errors.projectId}

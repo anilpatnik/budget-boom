@@ -1,3 +1,5 @@
+import { IExpense } from "@/models";
+
 export const parsePrice = (expense: boolean, price: number) => (expense ? -price : price);
 export const formatPrice = (price: number) => {
   const formattedPrice = new Intl.NumberFormat("en-AU", {
@@ -6,4 +8,9 @@ export const formatPrice = (price: number) => {
   }).format(price);
   if (price < 0) return `-${formattedPrice.slice(1)}`;
   return formattedPrice;
+};
+
+export const totalPrice = (items: IExpense[]) => {
+  const total = items?.map(x => x.price || 0).reduce((sum, i) => sum + i, 0);
+  return formatPrice(total);
 };
