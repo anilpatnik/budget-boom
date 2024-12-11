@@ -18,7 +18,7 @@ import {
   TableRow
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { CrudType, formatddMMMyyyy, formatPrice, constants, QueryType } from "@/util";
+import { CrudType, dateFormat, formatPrice, constants, QueryType } from "@/util";
 import { IExpense, Expense, IExpenseSearch, ExpenseSearch } from "@/models";
 import { getExpensesAsync, deleteExpenseAsync, getCategory, getAllProjectsAsync } from "@/services";
 import { Icon } from "@/components";
@@ -29,17 +29,16 @@ export function ExpensesPage() {
   const hasMounted = useRef(false);
   const [records, setRecords] = useState<IExpense[]>([]);
   const [record, setRecord] = useState<IExpense>(Expense);
+  const [total, setTotal] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingInit, setLoadingInit] = useState<boolean>(false);
+  const [loadingCol, setLoadingCol] = useState<string>(String.empty);
   const [payload, setPayload] = useState<IExpenseSearch>({
     ...ExpenseSearch,
     page: 0,
     size: constants.PAGE_SIZE
   });
-  const [total, setTotal] = useState<number>(0);
-
-  const [loading, setLoading] = useState<boolean>(false);
-  const [loadingInit, setLoadingInit] = useState<boolean>(false);
-  const [loadingCol, setLoadingCol] = useState<string>(String.empty);
-
+  const queryRef = useRef(payload);
   const [presentAlert] = useIonAlert();
   const [present] = useIonToast();
 
@@ -49,19 +48,18 @@ export function ExpensesPage() {
     queryFn: async () => await getAllProjectsAsync()
   });
 
-  const fetchData = async (pageNum: number = 0) => {
+  const fetchData = async () => {
     if (loading) return;
-    if (pageNum === 0) setLoadingInit(true);
+    if (queryRef.current.page === 0) setLoadingInit(true);
     else setLoading(true);
     try {
-      const newPayload: IExpenseSearch = { ...payload, page: pageNum };
-      const response = await getExpensesAsync(newPayload);
+      const response = await getExpensesAsync(queryRef.current);
       setRecords(prev => [...prev, ...(response?.data ?? [])]);
       setTotal(response?.count ?? 0);
     } catch (error) {
       console.error("error fetching data:", error);
     } finally {
-      if (pageNum === 0) setLoadingInit(false);
+      if (queryRef.current.page === 0) setLoadingInit(false);
       else setLoading(false);
     }
   };
@@ -72,11 +70,15 @@ export function ExpensesPage() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    queryRef.current = payload;
+  }, [payload]);
+
   const loadMore = () => {
     if (records?.length < total) {
       const newPage = (payload?.page ?? 0) + 1;
       setPayload(prev => ({ ...prev, page: newPage }));
-      setTimeout(() => fetchData(newPage), 200);
+      setTimeout(() => fetchData(), 200);
     }
   };
 
@@ -145,6 +147,7 @@ export function ExpensesPage() {
   };
 
   const [presentSearchModal, dismissSearchModal] = useIonModal(ExpenseSearchPage, {
+    search: payload,
     projects,
     handleClose: () => dismissSearchModal(),
     handleSearch: (item?: any) => {
@@ -223,7 +226,7 @@ export function ExpensesPage() {
             {records?.map((item, index) => (
               <TableRow key={index}>
                 <TableCell align="left" sx={{ minWidth: 150 }}>
-                  <Box>{item?.entryDate && formatddMMMyyyy(item.entryDate)}</Box>
+                  <Box>{item?.entryDate && dateFormat(item.entryDate)}</Box>
                   <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
                     <Box className="mt-2 flex items-center">
                       {item?.categoryId && (

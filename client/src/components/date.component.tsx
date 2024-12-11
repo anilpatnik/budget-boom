@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import { maxDate, minDate } from "@/util";
+import { dateY90, dateT90 } from "@/util";
 
 type ComponentProps = {
   name?: string;
@@ -24,8 +24,8 @@ export function DateComponent({
   handleChange,
   handleBlur,
   disabled = false,
-  min = minDate,
-  max = maxDate
+  min = dateY90,
+  max = dateT90
 }: ComponentProps) {
   return (
     <TextField

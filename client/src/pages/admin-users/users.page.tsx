@@ -32,32 +32,31 @@ export function UsersPage() {
   const hasMounted = useRef(false);
   const [records, setRecords] = useState<IAdminUser[]>([]);
   const [record, setRecord] = useState<IAdminUser>(AdminUser);
+  const [total, setTotal] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingInit, setLoadingInit] = useState<boolean>(false);
+  const [loadingCol, setLoadingCol] = useState<string>(String.empty);
   const [payload, setPayload] = useState<IAdminUserSearch>({
     ...AdminUserSearch,
     page: 0,
     size: constants.PAGE_SIZE
   });
-  const [total, setTotal] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [loadingInit, setLoadingInit] = useState<boolean>(false);
-  const [loadingCol, setLoadingCol] = useState<string>(String.empty);
-
+  const queryRef = useRef(payload);
   const [presentAlert] = useIonAlert();
   const [present] = useIonToast();
 
-  const fetchData = async (pageNum: number = 0) => {
+  const fetchData = async () => {
     if (loading) return;
-    if (pageNum === 0) setLoadingInit(true);
+    if (queryRef.current.page === 0) setLoadingInit(true);
     else setLoading(true);
     try {
-      const newPayload: IAdminUserSearch = { ...payload, page: pageNum };
-      const response = await getUsersAsync(newPayload);
+      const response = await getUsersAsync(queryRef.current);
       setRecords(prev => [...prev, ...(response?.data ?? [])]);
       setTotal(response?.count ?? 0);
     } catch (error) {
       console.error("error fetching data:", error);
     } finally {
-      if (pageNum === 0) setLoadingInit(false);
+      if (queryRef.current.page === 0) setLoadingInit(false);
       else setLoading(false);
     }
   };
@@ -68,11 +67,15 @@ export function UsersPage() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    queryRef.current = payload;
+  }, [payload]);
+
   const loadMore = () => {
     if (records?.length < total) {
       const newPage = (payload?.page ?? 0) + 1;
       setPayload(prev => ({ ...prev, page: newPage }));
-      setTimeout(() => fetchData(newPage), 200);
+      setTimeout(() => fetchData(), 200);
     }
   };
 

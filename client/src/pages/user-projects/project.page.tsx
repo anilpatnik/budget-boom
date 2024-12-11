@@ -13,7 +13,7 @@ import {
 } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { CrudType, constants, convertoISO, projectEnd, projectStart } from "@/util";
+import { CrudType, constants, convertoISO, dateT1, dateT30 } from "@/util";
 import { IProject } from "@/models";
 import { upsertProjectAsync } from "@/services";
 import { InputComponent, DateComponent, Icon } from "@/components";
@@ -32,8 +32,8 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
     initialValues: {
       name: project?.name || String.empty,
       budget: project?.budget || 0,
-      startDate: project?.startDate || projectStart,
-      endDate: project?.endDate || projectEnd
+      startDate: project?.startDate || dateT1,
+      endDate: project?.endDate || dateT30
     },
     validateOnMount: false,
     validationSchema: Yup.object({
@@ -170,9 +170,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
                     optional={true}
                     touched={formik.touched.startDate}
                     errorMessage={formik.errors.startDate}
-                    handleChange={e =>
-                      formik.setFieldValue("startDate", e.target.value || projectStart)
-                    }
+                    handleChange={e => formik.setFieldValue("startDate", e.target.value || dateT1)}
                   />
                 </IonCol>
                 <IonCol>
@@ -183,9 +181,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
                     optional={true}
                     touched={formik.touched.endDate}
                     errorMessage={formik.errors.endDate}
-                    handleChange={e =>
-                      formik.setFieldValue("endDate", e.target.value || projectEnd)
-                    }
+                    handleChange={e => formik.setFieldValue("endDate", e.target.value || dateT30)}
                   />
                 </IonCol>
               </IonRow>

@@ -17,7 +17,7 @@ import {
   TableHead,
   TableRow
 } from "@mui/material";
-import { CrudType, formatddMMMyyyy, constants } from "@/util";
+import { CrudType, dateFormat, constants } from "@/util";
 import { IProject, Project } from "@/models";
 import { deleteProjectAsync, getProjectsAsync } from "@/services";
 import { ProjectPage } from "./project.page";
@@ -29,11 +29,9 @@ export function ProjectsPage() {
   const [record, setRecord] = useState<IProject>(Project);
   const [total, setTotal] = useState<number>(0);
   const [page, setPage] = useState<number>(0);
-
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingInit, setLoadingInit] = useState<boolean>(false);
   const [loadingCol, setLoadingCol] = useState<string>(String.empty);
-
   const [presentAlert] = useIonAlert();
   const [present] = useIonToast();
 
@@ -175,10 +173,10 @@ export function ProjectsPage() {
                   {item?.budget ? `$${item?.budget?.toFixed(2)}` : String.empty}
                 </TableCell>
                 <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  {item?.startDate ? formatddMMMyyyy(item.startDate) : String.empty}
+                  {item?.startDate ? dateFormat(item.startDate) : String.empty}
                 </TableCell>
                 <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  {item?.endDate ? formatddMMMyyyy(item.endDate) : String.empty}
+                  {item?.endDate ? dateFormat(item.endDate) : String.empty}
                 </TableCell>
                 <TableCell align="left">
                   <Box className="flex items-center">

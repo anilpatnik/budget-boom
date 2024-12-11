@@ -1,5 +1,3 @@
-import { formatddMMMyyyy } from "@/util";
-
 export default function PrivacyPolicyPage() {
   return (
     <div className="ion-padding-horizontal statement">

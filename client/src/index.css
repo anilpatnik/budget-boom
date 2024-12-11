@@ -114,8 +114,8 @@ ion-item:last-child {
   text-transform: uppercase;
 }
 /* Table */
-.styled-table tr > td,
-.styled-table tr > th {
+.styled-table > tbody > tr > td,
+.styled-table > thead > tr > th {
   letter-spacing: 0.045em;
   padding: 6px 16px;
 }

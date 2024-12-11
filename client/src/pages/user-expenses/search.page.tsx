@@ -1,23 +1,24 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonPage, IonToolbar } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { convertoISO, dateNow } from "@/util";
+import { convertoISO, dateY90, dateT90 } from "@/util";
 import { IExpenseSearch, IProject } from "@/models";
 import { categories } from "@/services";
 import { DateComponent, SelectComponent, AutoSelectComponent, Icon } from "@/components";
 
 type ComponentProps = {
+  search?: IExpenseSearch;
   projects?: IProject[];
   handleClose: () => void;
   handleSearch: (item?: any) => void;
 };
-export function ExpenseSearchPage({ projects, handleClose, handleSearch }: ComponentProps) {
+export function ExpenseSearchPage({ search, projects, handleClose, handleSearch }: ComponentProps) {
   const formik = useFormik({
     initialValues: {
-      startDate: dateNow,
-      endDate: dateNow,
-      projectId: String.empty,
-      categoryId: String.empty
+      startDate: search?.startDate || dateY90,
+      endDate: search?.endDate || dateT90,
+      projectId: search?.projectId || String.empty,
+      categoryId: search?.categoryId || String.empty
     },
     validateOnMount: false,
     validationSchema: Yup.object({
@@ -61,7 +62,7 @@ export function ExpenseSearchPage({ projects, handleClose, handleSearch }: Compo
                 value={convertoISO(formik.values.startDate)}
                 touched={formik.touched.startDate}
                 errorMessage={formik.errors.startDate}
-                handleChange={e => formik.setFieldValue("startDate", e.target.value || dateNow)}
+                handleChange={e => formik.setFieldValue("startDate", e.target.value || dateY90)}
               />
             </div>
             <div className="ml-5">
@@ -71,7 +72,7 @@ export function ExpenseSearchPage({ projects, handleClose, handleSearch }: Compo
                 value={convertoISO(formik.values.endDate)}
                 touched={formik.touched.endDate}
                 errorMessage={formik.errors.endDate}
-                handleChange={e => formik.setFieldValue("endDate", e.target.value || dateNow)}
+                handleChange={e => formik.setFieldValue("endDate", e.target.value || dateT90)}
               />
             </div>
           </div>
