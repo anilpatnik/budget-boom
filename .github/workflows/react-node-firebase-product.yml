@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [product]
   workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch"
+        required: true
+        default: "product"
 
 jobs:
   changes:
