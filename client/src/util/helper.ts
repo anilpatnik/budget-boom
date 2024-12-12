@@ -9,7 +9,7 @@ export const formatPrice = (price: number) => {
   if (price < 0) return `-${formattedPrice.slice(1)}`;
   return formattedPrice;
 };
-
+// total calc
 export const totalPrice = (items: IExpense[]) => {
   const total = items?.map(x => x.price || 0).reduce((sum, i) => sum + i, 0);
   return formatPrice(total);
