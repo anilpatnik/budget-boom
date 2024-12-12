@@ -39,19 +39,19 @@ export function ProfilePasswordPage() {
       present({
         message: res?.resource,
         color: constants.DANGER,
-        duration: 5000
+        duration: constants.FAILURE_DELAY
       });
     } else {
       present({
         message: "You have successfully changed your password",
         color: constants.SUCCESS,
-        duration: 3000
+        duration: constants.SUCCESS_DELAY
       });
     }
     setTimeout(() => {
       formik.resetForm();
       setLoading(false);
-    }, 200);
+    }, constants.DELAY);
   };
 
   return (

@@ -1,16 +1,25 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { IonSpinner } from "@ionic/react";
-import { NavType } from "@/util";
+import { constants, NavType, RoleType } from "@/util";
 import { useStore } from "@/contexts";
 
 export function RootPage() {
+  const hasMounted = useRef(false);
   const { user } = useStore();
   // const isFetching = useRef(false);
   const navigate = useNavigate();
   useEffect(() => {
-    if (user.auth) navigate(NavType.Profile); // fetchData();
-    else navigate(NavType.SignIn);
+    if (hasMounted.current) return;
+    hasMounted.current = true;
+    // fetchData();
+    if (user.auth && user.role === RoleType.Admin) {
+      setTimeout(() => navigate(NavType.Profile), constants.DELAY);
+    } else if (user.auth) {
+      setTimeout(() => navigate(NavType.Expenses), constants.DELAY);
+    } else {
+      setTimeout(() => navigate(NavType.SignIn), constants.DELAY);
+    }
   }, []);
   /*
   const fetchData = async () => {
@@ -29,7 +38,7 @@ export function RootPage() {
         // reset to allow new request
         isFetching.current = false;
         navigate(NavType.Profile);
-      }, 200);
+      }, constants.DELAY);
     }
   };
   */

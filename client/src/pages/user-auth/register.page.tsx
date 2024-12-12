@@ -61,7 +61,7 @@ export function SignUpPage() {
           present({
             message: "Please verify reCAPTCHA!",
             color: constants.DANGER,
-            duration: 3000
+            duration: constants.SUCCESS_DELAY
           });
           return;
         }
@@ -80,14 +80,14 @@ export function SignUpPage() {
         present({
           message: res?.resource,
           color: constants.DANGER,
-          duration: 5000
+          duration: constants.FAILURE_DELAY
         });
       }
     } finally {
       setTimeout(() => {
         recaptchaRef.current?.reset();
         setLoading(false);
-      }, 200);
+      }, constants.DELAY);
     }
   };
 

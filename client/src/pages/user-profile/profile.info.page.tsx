@@ -31,12 +31,12 @@ export function ProfileInfoPage() {
       present({
         message: res?.resource,
         color: constants.DANGER,
-        duration: 5000
+        duration: constants.FAILURE_DELAY
       });
     } else {
       setAuth(prev => ({ ...prev, name, countryId }));
     }
-    setTimeout(() => setLoading(false), 200);
+    setTimeout(() => setLoading(false), constants.DELAY);
   };
 
   return (

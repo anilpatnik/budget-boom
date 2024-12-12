@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   IonBadge,
@@ -16,18 +16,22 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Icon, InputComponent, PasswordComponent, PasswordStrength } from "@/components";
-import { NavType } from "@/util";
+import { constants, NavType } from "@/util";
 import { updateForgotPassword, verifyForgotPasswordUrl } from "@/services";
 
 export function ResetPasswordPage() {
+  const hasMounted = useRef(false);
   const [preLoading, setPreLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [email, setEmail] = useState(String.empty);
   const params = useParams();
 
-  // prettier-ignore
-  useEffect(() => { verifyForgotPassword(); }, []);
+  useEffect(() => {
+    if (hasMounted.current) return;
+    hasMounted.current = true;
+    verifyForgotPassword();
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -56,7 +60,7 @@ export function ResetPasswordPage() {
       const res = await verifyForgotPasswordUrl(params.actionCode);
       if (res?.success) setEmail(res?.resource ?? String.empty);
     }
-    setTimeout(() => setPreLoading(false), 200);
+    setTimeout(() => setPreLoading(false), constants.DELAY);
   };
 
   const handleSubmit = async (password: string) => {
@@ -64,7 +68,7 @@ export function ResetPasswordPage() {
       setLoading(true);
       const res = await updateForgotPassword(params.actionCode, password);
       setSuccess(res);
-      setTimeout(() => setLoading(false), 200);
+      setTimeout(() => setLoading(false), constants.DELAY);
     }
   };
 

@@ -4,7 +4,7 @@ import { mockExpenses, mockProjects } from "./db";
 const prisma = new PrismaClient();
 
 async function main() {
-  //const projects = await mockProjects(10);
+  //const projects = await mockProjects(15);
   //await prisma.project.deleteMany({});
   //await prisma.project.createMany({ data: projects });
   //const expenses = await mockExpenses(2000);

@@ -83,7 +83,7 @@ export function ExpensePage({
           present({
             message: res?.resource,
             color: constants.DANGER,
-            duration: 5000
+            duration: constants.FAILURE_DELAY
           });
           setLoading(false);
           return;
@@ -91,13 +91,13 @@ export function ExpensePage({
           present({
             message: "Created Successfully",
             color: constants.SUCCESS,
-            duration: 3000
+            duration: constants.SUCCESS_DELAY
           });
           setTimeout(() => {
             const xExpense = { ...newExpense, id: res?.resource?.id };
             handleNew(xExpense);
             setLoading(false);
-          }, 200);
+          }, constants.DELAY);
         }
       } else {
         const updateExpense: IExpense = {
@@ -115,7 +115,7 @@ export function ExpensePage({
           present({
             message: res?.resource,
             color: constants.DANGER,
-            duration: 5000
+            duration: constants.FAILURE_DELAY
           });
           setLoading(false);
           return;
@@ -123,12 +123,12 @@ export function ExpensePage({
           present({
             message: "Updated Successfully",
             color: constants.SUCCESS,
-            duration: 3000
+            duration: constants.SUCCESS_DELAY
           });
           setTimeout(() => {
             handleEdit(updateExpense);
             setLoading(false);
-          }, 200);
+          }, constants.DELAY);
         }
       }
     }

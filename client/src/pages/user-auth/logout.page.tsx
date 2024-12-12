@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { IonSpinner } from "@ionic/react";
 import { NavType, fb } from "@/util";
@@ -6,9 +6,12 @@ import { useStore } from "@/contexts";
 import { User } from "@/models";
 
 export function SignOutPage() {
+  const hasMounted = useRef(false);
   const navigate = useNavigate();
   const { setAuth } = useStore();
   useEffect(() => {
+    if (hasMounted.current) return;
+    hasMounted.current = true;
     handleLogout();
   }, []);
   const handleLogout = async () => {

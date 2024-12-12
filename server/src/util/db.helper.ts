@@ -27,7 +27,7 @@ export const updateProfile = async (uid: string, name?: string, countryId?: stri
 export const getUsers = async (where: object = {}, page: number = 0, size: number = 10) =>
   await prisma.$transaction([
     prisma.user.findMany({
-      skip: page * size,
+      skip: page, // page * size,
       take: size,
       where,
       orderBy: { updatedAt: "desc" }
@@ -53,7 +53,7 @@ export const getAllProjects = async (userId: string) =>
 export const getProjects = async (userId: string, page: number = 0, size: number = 10) =>
   await prisma.$transaction([
     prisma.project.findMany({
-      skip: page * size,
+      skip: page, // page * size,
       take: size,
       where: { inactive: false, userId },
       orderBy: { name: "asc" }
@@ -89,7 +89,7 @@ export const getExpenses = async (where: object = {}, page: number = 0, size: nu
   await prisma.$transaction([
     prisma.expense.findMany({
       include: { project: true },
-      skip: page * size,
+      skip: page, // page * size,
       take: size,
       where,
       orderBy: { entryDate: "desc" }

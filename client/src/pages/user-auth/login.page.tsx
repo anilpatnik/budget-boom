@@ -57,7 +57,7 @@ export function SignInPage() {
             present({
               message: "Please verify reCAPTCHA!",
               color: constants.DANGER,
-              duration: 3000
+              duration: constants.SUCCESS_DELAY
             });
             return;
           }
@@ -91,7 +91,7 @@ export function SignInPage() {
           present({
             message: res?.resource,
             color: constants.DANGER,
-            duration: 5000
+            duration: constants.FAILURE_DELAY
           });
       }
     } finally {
@@ -102,7 +102,7 @@ export function SignInPage() {
           else navigate(NavType.Root);
         }
         setLoading(false);
-      }, 200);
+      }, constants.DELAY);
     }
   };
 

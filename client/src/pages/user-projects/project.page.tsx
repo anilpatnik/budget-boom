@@ -67,7 +67,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
           present({
             message: res?.resource,
             color: constants.DANGER,
-            duration: 5000
+            duration: constants.FAILURE_DELAY
           });
           setLoading(false);
           return;
@@ -75,13 +75,13 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
           present({
             message: "Created Successfully",
             color: constants.SUCCESS,
-            duration: 3000
+            duration: constants.SUCCESS_DELAY
           });
           setTimeout(() => {
             const xProject = { ...newProject, id: res?.resource?.id };
             handleNew(xProject);
             setLoading(false);
-          }, 200);
+          }, constants.DELAY);
         }
       } else {
         const updateProject: IProject = {
@@ -98,7 +98,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
           present({
             message: res?.resource,
             color: constants.DANGER,
-            duration: 5000
+            duration: constants.FAILURE_DELAY
           });
           setLoading(false);
           return;
@@ -106,12 +106,12 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
           present({
             message: "Updated Successfully",
             color: constants.SUCCESS,
-            duration: 3000
+            duration: constants.SUCCESS_DELAY
           });
           setTimeout(() => {
             handleEdit(updateProject);
             setLoading(false);
-          }, 200);
+          }, constants.DELAY);
         }
       }
     }

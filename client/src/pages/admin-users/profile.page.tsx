@@ -59,7 +59,7 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
           present({
             message: res?.resource,
             color: constants.DANGER,
-            duration: 5000
+            duration: constants.FAILURE_DELAY
           });
           setLoading(false);
           return;
@@ -67,13 +67,13 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
           present({
             message: "Created Successfully",
             color: constants.SUCCESS,
-            duration: 3000
+            duration: constants.SUCCESS_DELAY
           });
           setTimeout(() => {
             const xUser = { ...newUser, uid: res?.resource };
             handleNew(xUser);
             setLoading(false);
-          }, 200);
+          }, constants.DELAY);
         }
       } else {
         const updateUser: IAdminUser = {
@@ -88,7 +88,7 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
           present({
             message: res?.resource,
             color: constants.DANGER,
-            duration: 5000
+            duration: constants.FAILURE_DELAY
           });
           setLoading(false);
           return;
@@ -96,13 +96,13 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
           present({
             message: "Updated Successfully",
             color: constants.SUCCESS,
-            duration: 3000
+            duration: constants.SUCCESS_DELAY
           });
           setTimeout(() => {
             const xUser = { ...updateUser, email: user?.email, uid: res?.resource };
             handleEdit(xUser);
             setLoading(false);
-          }, 200);
+          }, constants.DELAY);
         }
       }
     }

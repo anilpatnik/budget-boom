@@ -28,25 +28,24 @@ export function ProjectsPage() {
   const [records, setRecords] = useState<IProject[]>([]);
   const [record, setRecord] = useState<IProject>(Project);
   const [total, setTotal] = useState<number>(0);
-  const [page, setPage] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingInit, setLoadingInit] = useState<boolean>(false);
   const [loadingCol, setLoadingCol] = useState<string>(String.empty);
   const [presentAlert] = useIonAlert();
   const [present] = useIonToast();
 
-  const fetchData = async (pageNum: number = 0) => {
+  const fetchData = async (page: number = 0) => {
     if (loading) return;
-    if (pageNum === 0) setLoadingInit(true);
+    if (page === 0) setLoadingInit(true);
     else setLoading(true);
     try {
-      const response = await getProjectsAsync(pageNum, constants.PAGE_SIZE);
+      const response = await getProjectsAsync(page, constants.PAGE_SIZE);
       setRecords(prev => [...prev, ...(response?.data ?? [])]);
       setTotal(response?.count ?? 0);
     } catch (error) {
       console.error("error fetching data:", error);
     } finally {
-      if (pageNum === 0) setLoadingInit(false);
+      if (page === 0) setLoadingInit(false);
       else setLoading(false);
     }
   };
@@ -58,10 +57,8 @@ export function ProjectsPage() {
   }, []);
 
   const loadMore = () => {
-    if (records?.length < total) {
-      const newPage = page + 1;
-      setPage(newPage);
-      setTimeout(() => fetchData(newPage), 200);
+    if (records.length < total) {
+      setTimeout(() => fetchData(records.length), constants.DELAY);
     }
   };
 
@@ -82,11 +79,11 @@ export function ProjectsPage() {
     handleClose: () => dismissModal(),
     handleNew: (item?: any) => {
       addRecord(item);
-      setTimeout(dismissModal, 200);
+      setTimeout(dismissModal, constants.DELAY);
     },
     handleEdit: (item?: any) => {
       editRecord(item);
-      setTimeout(dismissModal, 200);
+      setTimeout(dismissModal, constants.DELAY);
     }
   });
   const handleOpen = (project?: IProject, col?: string) => {
@@ -101,7 +98,7 @@ export function ProjectsPage() {
         // cssClass: "desktop-modal-class"
       });
       setLoadingCol(String.empty);
-    }, 200);
+    }, constants.DELAY);
   };
   const handleDelete = async (id: string, col?: string) => {
     const colId = `${id}-${col}`;
@@ -111,7 +108,7 @@ export function ProjectsPage() {
       present({
         message: res?.resource,
         color: constants.DANGER,
-        duration: 5000
+        duration: constants.FAILURE_DELAY
       });
       setLoadingCol(String.empty);
       return;
@@ -119,12 +116,12 @@ export function ProjectsPage() {
       present({
         message: "Deleted Successfully",
         color: constants.SUCCESS,
-        duration: 3000
+        duration: constants.SUCCESS_DELAY
       });
       setTimeout(() => {
         deleteRecord(id);
         setLoadingCol(String.empty);
-      }, 200);
+      }, constants.DELAY);
     }
   };
 
@@ -152,7 +149,7 @@ export function ProjectsPage() {
               </TableCell>
               <TableCell align="left">
                 <Box className="flex items-center">
-                  {constants.PROJECTS_MAX > records?.length && (
+                  {constants.PROJECTS_MAX > records.length && (
                     <IonFabButton
                       id="id-create-button"
                       title="ADD PROJECT"
@@ -220,8 +217,8 @@ export function ProjectsPage() {
                 </TableCell>
               </TableRow>
             ))}
-            {records?.length < constants.PROJECTS_MAX && records?.length < total && (
-              <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+            {records.length < total && constants.PAGE_SIZE < total && (
+              <TableRow>
                 <TableCell colSpan={5}>
                   <IonButton size="small" disabled={loading} onClick={loadMore} className="my-3">
                     {loading ? "Loading..." : "Load More"}

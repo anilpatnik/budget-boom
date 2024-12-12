@@ -75,10 +75,9 @@ export function ExpensesPage() {
   }, [payload]);
 
   const loadMore = () => {
-    if (records?.length < total) {
-      const newPage = (payload?.page ?? 0) + 1;
-      setPayload(prev => ({ ...prev, page: newPage }));
-      setTimeout(() => fetchData(), 200);
+    if (records.length < total) {
+      setPayload(prev => ({ ...prev, page: records.length }));
+      setTimeout(() => fetchData(), constants.DELAY);
     }
   };
 
@@ -100,11 +99,11 @@ export function ExpensesPage() {
     handleClose: () => dismissModal(),
     handleNew: (item?: any) => {
       addRecord(item);
-      setTimeout(dismissModal, 200);
+      setTimeout(dismissModal, constants.DELAY);
     },
     handleEdit: (item?: any) => {
       editRecord(item);
-      setTimeout(dismissModal, 200);
+      setTimeout(dismissModal, constants.DELAY);
     }
   });
   const handleOpen = (expense?: IExpense, col?: string) => {
@@ -119,7 +118,7 @@ export function ExpensesPage() {
         // cssClass: "desktop-modal-class"
       });
       setLoadingCol(String.empty);
-    }, 200);
+    }, constants.DELAY);
   };
   const handleDelete = async (id: string, col?: string) => {
     const colId = `${id}-${col}`;
@@ -129,7 +128,7 @@ export function ExpensesPage() {
       present({
         message: res?.resource,
         color: constants.DANGER,
-        duration: 5000
+        duration: constants.FAILURE_DELAY
       });
       setLoadingCol(String.empty);
       return;
@@ -137,12 +136,12 @@ export function ExpensesPage() {
       present({
         message: "Deleted Successfully",
         color: constants.SUCCESS,
-        duration: 3000
+        duration: constants.SUCCESS_DELAY
       });
       setTimeout(() => {
         deleteRecord(id);
         setLoadingCol(String.empty);
-      }, 200);
+      }, constants.DELAY);
     }
   };
 
@@ -152,7 +151,7 @@ export function ExpensesPage() {
     handleClose: () => dismissSearchModal(),
     handleSearch: (item?: any) => {
       handleSearch(item);
-      setTimeout(dismissSearchModal, 200);
+      setTimeout(dismissSearchModal, constants.DELAY);
     }
   });
   const handleSearchOpen = () => {
@@ -162,7 +161,7 @@ export function ExpensesPage() {
         keyboardClose: false
         // cssClass: "desktop-modal-class"
       });
-    }, 200);
+    }, constants.DELAY);
   };
   const handleSearch = (item: IExpenseSearch) => {
     setPayload(prev => ({
@@ -176,7 +175,7 @@ export function ExpensesPage() {
     setTimeout(() => {
       setRecords([]);
       fetchData();
-    }, 200);
+    }, constants.DELAY);
   };
 
   if (loadingProjects || loadingInit)
@@ -272,7 +271,7 @@ export function ExpensesPage() {
                             present({
                               message: item.notes,
                               color: "dark",
-                              duration: 3000
+                              duration: constants.SUCCESS_DELAY
                             })
                           }>
                           <Icon name="information-circle-sharp" css="text-2xl text-cyan-500" />
@@ -328,7 +327,7 @@ export function ExpensesPage() {
                 </TableCell>
               </TableRow>
             ))}
-            {records?.length < total && (
+            {records.length < total && constants.PAGE_SIZE < total && (
               <TableRow>
                 <TableCell colSpan={5}>
                   <IonButton size="small" disabled={loading} onClick={loadMore} className="my-3">

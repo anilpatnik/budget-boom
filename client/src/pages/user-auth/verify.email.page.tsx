@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   IonBadge,
@@ -9,24 +9,28 @@ import {
   IonCardSubtitle,
   IonSpinner
 } from "@ionic/react";
-import { NavType } from "@/util";
+import { constants, NavType } from "@/util";
 import { resendVerifySignInEmail, verifySignInEmail } from "@/services";
 
 export function VerifyEmailPage() {
+  const hasMounted = useRef(false);
   const [preLoading, setPreLoading] = useState(true);
   const [success, setSuccess] = useState(false);
   const params = useParams();
   const navigate = useNavigate();
 
-  // prettier-ignore
-  useEffect(() => { verifyEmail(); }, []);
+  useEffect(() => {
+    if (hasMounted.current) return;
+    hasMounted.current = true;
+    verifyEmail();
+  }, []);
 
   const verifyEmail = async () => {
     if (params.actionCode) {
       const res = await verifySignInEmail(params.actionCode);
       setSuccess(res);
     }
-    setTimeout(() => setPreLoading(false), 200);
+    setTimeout(() => setPreLoading(false), constants.DELAY);
   };
 
   const resendVerificationEmail = async () => {

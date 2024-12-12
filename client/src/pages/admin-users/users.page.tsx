@@ -72,10 +72,9 @@ export function UsersPage() {
   }, [payload]);
 
   const loadMore = () => {
-    if (records?.length < total) {
-      const newPage = (payload?.page ?? 0) + 1;
-      setPayload(prev => ({ ...prev, page: newPage }));
-      setTimeout(() => fetchData(), 200);
+    if (records.length < total) {
+      setPayload(prev => ({ ...prev, page: records.length }));
+      setTimeout(() => fetchData(), constants.DELAY);
     }
   };
 
@@ -96,11 +95,11 @@ export function UsersPage() {
     handleClose: () => dismissModal(),
     handleNew: (item?: any) => {
       addRecord(item);
-      setTimeout(dismissModal, 200);
+      setTimeout(dismissModal, constants.DELAY);
     },
     handleEdit: (item?: any) => {
       editRecord(item);
-      setTimeout(dismissModal, 200);
+      setTimeout(dismissModal, constants.DELAY);
     }
   });
   const handleOpen = async (user?: IAdminUser, col?: string) => {
@@ -122,7 +121,7 @@ export function UsersPage() {
         // cssClass: "desktop-modal-class"
       });
       setLoadingCol(String.empty);
-    }, 200);
+    }, constants.DELAY);
   };
   const handleDelete = async (id: string, col?: string) => {
     const colId = `${id}-${col}`;
@@ -132,7 +131,7 @@ export function UsersPage() {
       present({
         message: res?.resource,
         color: constants.DANGER,
-        duration: 5000
+        duration: constants.FAILURE_DELAY
       });
       setLoadingCol(String.empty);
       return;
@@ -140,12 +139,12 @@ export function UsersPage() {
       present({
         message: "Deleted Successfully",
         color: constants.SUCCESS,
-        duration: 3000
+        duration: constants.SUCCESS_DELAY
       });
       setTimeout(() => {
         deleteRecord(id);
         setLoadingCol(String.empty);
-      }, 200);
+      }, constants.DELAY);
     }
   };
   const handleChange = (e: any) => {
@@ -161,7 +160,7 @@ export function UsersPage() {
     setTimeout(() => {
       setRecords([]);
       fetchData();
-    }, 200);
+    }, constants.DELAY);
   };
 
   return (
@@ -272,8 +271,8 @@ export function UsersPage() {
                       </TableCell>
                     </TableRow>
                   ))}
-                  {records?.length < total && (
-                    <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                  {records.length < total && constants.PAGE_SIZE < total && (
+                    <TableRow>
                       <TableCell colSpan={4}>
                         <IonButton
                           size="small"

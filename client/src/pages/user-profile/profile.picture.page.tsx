@@ -41,7 +41,7 @@ export const ProfilePicturePage = () => {
               present({
                 message: res?.resource,
                 color: constants.DANGER,
-                duration: 5000
+                duration: constants.FAILURE_DELAY
               });
             } else {
               setAuth(prev => ({ ...prev, photo: imgUrl }));
@@ -49,7 +49,7 @@ export const ProfilePicturePage = () => {
           });
         }
       }
-      setTimeout(() => setLoading(false), 200);
+      setTimeout(() => setLoading(false), constants.DELAY);
     }
   };
 
@@ -61,20 +61,20 @@ export const ProfilePicturePage = () => {
         present({
           message: res?.resource,
           color: constants.DANGER,
-          duration: 5000
+          duration: constants.FAILURE_DELAY
         });
       } else {
         present({
           message: "Thank you for being with us 🙏 We're sad to see you go 😢",
           color: constants.SUCCESS,
-          duration: 3000
+          duration: constants.SUCCESS_DELAY
         });
         navigate(NavType.SignOut);
       }
     } finally {
       setTimeout(() => {
         setLoading(false);
-      }, 200);
+      }, constants.DELAY);
     }
   };
 
