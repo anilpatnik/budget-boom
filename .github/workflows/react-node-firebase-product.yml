@@ -5,10 +5,27 @@ on:
     branches: [product]
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    name: Paths Changes Filter
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'server/**'
+            frontend:
+              - 'client/**'
+
   build-deploy-backend:
     name: Backend
-    needs: changes
-    if: ${{ needs.changes.outputs.backend == 'true' }}
+    # needs: changes
+    # if: ${{ needs.changes.outputs.backend == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,8 +53,8 @@ jobs:
 
   build-deploy-frontend:
     name: Frontend
-    needs: changes
-    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    # needs: changes
+    # if: ${{ needs.changes.outputs.frontend == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
