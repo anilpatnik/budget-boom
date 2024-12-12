@@ -6,11 +6,6 @@ on:
   pull_request:
     branches: [develop]
   workflow_dispatch:
-    inputs:
-      force-run:
-        description: "Force run the job"
-        required: false
-        default: "false"
 
 jobs:
   changes:

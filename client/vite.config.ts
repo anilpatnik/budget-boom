@@ -21,6 +21,11 @@ export default defineConfig({
         background_color: "#ffffff",
         theme_color: "#2d89ef",
         icons: [{ src: "android-chrome.png", sizes: "196x196", type: "image/png" }]
+      },
+      workbox: {
+        skipWaiting: true,
+        clientsClaim: true,
+        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024 // Allow 10MB
       }
     })
   ],
