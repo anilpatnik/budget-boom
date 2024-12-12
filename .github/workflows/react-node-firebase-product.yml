@@ -7,10 +7,10 @@ on:
     branches: [product]
   workflow_dispatch:
     inputs:
-      branch:
-        description: "Branch"
-        required: true
-        default: "product"
+      force-run:
+        description: "Force Run"
+        required: false
+        default: "false"
 
 jobs:
   changes:
