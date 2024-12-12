@@ -45,5 +45,5 @@ export const limiter = rateLimit({
   message: "too many requests, please try again after 2 minutes",
   headers: true
 });
-
+// cache
 export const cache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
