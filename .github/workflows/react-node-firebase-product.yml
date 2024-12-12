@@ -3,8 +3,6 @@ name: Build and Deploy Product
 on:
   push:
     branches: [product]
-  pull_request:
-    branches: [product]
   workflow_dispatch:
     inputs:
       force-run:
