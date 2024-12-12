@@ -3,6 +3,7 @@ name: Build and Deploy Product
 on:
   push:
     branches: [product]
+  workflow_dispatch:
 
 jobs:
   changes:
