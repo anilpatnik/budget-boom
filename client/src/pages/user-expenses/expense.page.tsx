@@ -58,9 +58,9 @@ export function ExpensePage({
       entryDate: Yup.date().required("required"),
       categoryId: Yup.string().required("required"),
       price: Yup.number()
-        .typeError("price must be a number")
-        .positive("price should be greater than zero")
-        .test("is-decimal", "price should be two decimals", (val: any) => {
+        .typeError("amount must be a number")
+        .positive("amount should be greater than zero")
+        .test("is-decimal", "amount should be two decimals", (val: any) => {
           if (val) return constants.TWO_DECIMAL_PATTERN.test(val);
           return true;
         })

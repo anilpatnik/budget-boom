@@ -59,15 +59,6 @@ ion-item:last-child {
     --width: 768px;
   }
 }
-/* Toolbar */
-.no-boder-shadow {
-  border: 0;
-  box-shadow: none;
-}
-.no-boder-shadow-imp {
-  border: 0 !important;
-  box-shadow: none !important;
-}
 /* Spinner  */
 .spinner-center {
   position: fixed;
@@ -93,8 +84,14 @@ ion-item:last-child {
 .MuiInputAdornment-root p {
   margin-top: 0;
 }
+.MuiInputLabel-root {
+  font-size: 1.2em !important;
+}
 .Mui-error:first-letter {
   text-transform: uppercase;
+}
+.MuiAppBar-root {
+  box-shadow: none !important;
 }
 /* Table */
 .styled-table > tbody > tr > td,

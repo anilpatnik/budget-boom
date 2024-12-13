@@ -10,7 +10,7 @@ import {
 } from "ionicons/icons";
 import { Box, Toolbar, Avatar, AppBar } from "@mui/material";
 import logo from "@/assets/logo.png";
-import { NavType, RoleType, constants } from "@/util";
+import { NavType, RoleType, constants, isIOS } from "@/util";
 import { useStore } from "@/contexts";
 
 export function Header() {
@@ -18,9 +18,12 @@ export function Header() {
   const navigate = useNavigate();
   const handleMenuClick = (url: string) => navigate(url);
   return (
-    <IonHeader className="no-boder-shadow ion-padding">
+    <IonHeader className={isIOS() ? "border-0 shadow-none" : "p-5 border-0 shadow-none"}>
       <IonToolbar>
-        <AppBar position="static" color="inherit" className="no-boder-shadow-imp">
+        <AppBar
+          position="static"
+          color="inherit"
+          className={isIOS() ? "p-2 border-0 shadow-none" : "border-0 shadow-none"}>
           <Toolbar>
             {/* Logo */}
             <Box

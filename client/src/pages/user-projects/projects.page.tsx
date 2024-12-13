@@ -129,106 +129,104 @@ export function ProjectsPage() {
     return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 
   return (
-    <Box className="px-2">
-      <TableContainer
-        component={Paper}
-        sx={{ maxHeight: { xs: 650, sm: 600 } }}
-        className="tableContainer">
-        <Table className="styled-table" stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell align="left">Name</TableCell>
+    <TableContainer
+      component={Paper}
+      sx={{ maxHeight: { xs: window.innerHeight - 200, sm: 600 } }}
+      className="tableContainer">
+      <Table className="styled-table" stickyHeader>
+        <TableHead>
+          <TableRow>
+            <TableCell align="left">Name</TableCell>
+            <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+              Budget
+            </TableCell>
+            <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+              Start Date
+            </TableCell>
+            <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+              End Date
+            </TableCell>
+            <TableCell align="left">
+              <Box className="flex items-center">
+                {constants.PROJECTS_MAX > records.length && (
+                  <IonFabButton
+                    id="id-create-button"
+                    title="ADD PROJECT"
+                    size="small"
+                    onClick={() => handleOpen(Project)}>
+                    <Icon name="add" />
+                  </IonFabButton>
+                )}
+              </Box>
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {records?.map((item, index) => (
+            <TableRow key={index}>
+              <TableCell align="left">{item?.name}</TableCell>
               <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                Budget
+                {item?.budget ? `$${item?.budget?.toFixed(2)}` : String.empty}
               </TableCell>
               <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                Start Date
+                {item?.startDate ? dateFormat(item.startDate) : String.empty}
               </TableCell>
               <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                End Date
+                {item?.endDate ? dateFormat(item.endDate) : String.empty}
               </TableCell>
               <TableCell align="left">
                 <Box className="flex items-center">
-                  {constants.PROJECTS_MAX > records.length && (
-                    <IonFabButton
-                      id="id-create-button"
-                      title="ADD PROJECT"
-                      size="small"
-                      onClick={() => handleOpen(Project)}>
-                      <Icon name="add" />
-                    </IonFabButton>
-                  )}
+                  <IonButton
+                    id="id-edit-button"
+                    title="EDIT PROJECT"
+                    size="small"
+                    buttonType="icon"
+                    onClick={() => handleOpen(item, "EDIT")}>
+                    {loadingCol === `${item?.id}-EDIT` ? (
+                      <Icon name="sync-sharp" css="text-xl text-blue-500 icon-spinner" />
+                    ) : (
+                      <Icon name="card-sharp" css="text-xl text-blue-500" />
+                    )}
+                  </IonButton>
+                  <IonButton
+                    id="id-delete-button"
+                    title="DELETE PROJECT"
+                    fill="clear"
+                    onClick={() =>
+                      presentAlert({
+                        header: "Are you sure?",
+                        buttons: [
+                          { text: "Cancel" },
+                          {
+                            text: "Confirm",
+                            handler: () => {
+                              handleDelete(item?.id || String.empty, "DELETE");
+                            }
+                          }
+                        ]
+                      })
+                    }>
+                    {loadingCol === `${item?.id}-DELETE` ? (
+                      <Icon name="sync-sharp" css="text-xl text-red-500 icon-spinner" />
+                    ) : (
+                      <Icon name="trash-bin-sharp" css="text-xl text-red-500" />
+                    )}
+                  </IonButton>
                 </Box>
               </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {records?.map((item, index) => (
-              <TableRow key={index}>
-                <TableCell align="left">{item?.name}</TableCell>
-                <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  {item?.budget ? `$${item?.budget?.toFixed(2)}` : String.empty}
-                </TableCell>
-                <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  {item?.startDate ? dateFormat(item.startDate) : String.empty}
-                </TableCell>
-                <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  {item?.endDate ? dateFormat(item.endDate) : String.empty}
-                </TableCell>
-                <TableCell align="left">
-                  <Box className="flex items-center">
-                    <IonButton
-                      id="id-edit-button"
-                      title="EDIT PROJECT"
-                      size="small"
-                      buttonType="icon"
-                      onClick={() => handleOpen(item, "EDIT")}>
-                      {loadingCol === `${item?.id}-EDIT` ? (
-                        <Icon name="sync-sharp" css="text-xl text-blue-500 icon-spinner" />
-                      ) : (
-                        <Icon name="card-sharp" css="text-xl text-blue-500" />
-                      )}
-                    </IonButton>
-                    <IonButton
-                      id="id-delete-button"
-                      title="DELETE PROJECT"
-                      fill="clear"
-                      onClick={() =>
-                        presentAlert({
-                          header: "Are you sure?",
-                          buttons: [
-                            { text: "Cancel" },
-                            {
-                              text: "Confirm",
-                              handler: () => {
-                                handleDelete(item?.id || String.empty, "DELETE");
-                              }
-                            }
-                          ]
-                        })
-                      }>
-                      {loadingCol === `${item?.id}-DELETE` ? (
-                        <Icon name="sync-sharp" css="text-xl text-red-500 icon-spinner" />
-                      ) : (
-                        <Icon name="trash-bin-sharp" css="text-xl text-red-500" />
-                      )}
-                    </IonButton>
-                  </Box>
-                </TableCell>
-              </TableRow>
-            ))}
-            {records.length < total && constants.PAGE_SIZE < total && (
-              <TableRow>
-                <TableCell colSpan={5}>
-                  <IonButton size="small" disabled={loading} onClick={loadMore} className="my-3">
-                    {loading ? "Loading..." : "Load More"}
-                  </IonButton>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
+          ))}
+          {records.length < total && constants.PAGE_SIZE < total && (
+            <TableRow>
+              <TableCell colSpan={5}>
+                <IonButton size="small" disabled={loading} onClick={loadMore} className="my-3">
+                  {loading ? "Loading..." : "Load More"}
+                </IonButton>
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }

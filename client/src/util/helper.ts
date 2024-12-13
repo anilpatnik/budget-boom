@@ -14,3 +14,12 @@ export const totalPrice = (items: IExpense[]) => {
   const total = items?.map(x => x.price || 0).reduce((sum, i) => sum + i, 0);
   return formatPrice(total);
 };
+
+export const isIOS = () => {
+  const userAgent = navigator.userAgent.toLowerCase();
+  return userAgent.includes("iphone");
+};
+export const isAndroid = () => {
+  const userAgent = navigator.userAgent.toLowerCase();
+  return userAgent.includes("android");
+};
