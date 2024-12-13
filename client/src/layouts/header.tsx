@@ -35,60 +35,73 @@ export function Header() {
               <img
                 alt={String.empty}
                 src={logo}
-                height="57px"
+                height="64px"
                 loading="lazy"
                 className="cursor-pointer"
                 onClick={() => handleMenuClick(NavType.Root)}
               />
             </Box>
-            {/* Left Nav Menu */}
-            <Box sx={{ flexGrow: 1 }} className="ion-hide-md-down"></Box>
-            {/* Right Nav Menu */}
             {user?.auth && (
-              <Box sx={{ flexGrow: 0 }} className="ion-hide-md-down">
-                <IonButtons className="ion-margin-end">
-                  {/* Users */}
-                  {user?.role === RoleType.Admin && (
+              <>
+                {/* Logo */}
+                <Box sx={{ flexGrow: 0 }} className="ion-hide-md-down">
+                  <img
+                    alt={String.empty}
+                    src={logo}
+                    height="64px"
+                    loading="lazy"
+                    className="cursor-pointer"
+                    onClick={() => handleMenuClick(NavType.Root)}
+                  />
+                </Box>
+                {/* Left Nav Menu */}
+                <Box sx={{ flexGrow: 1 }} className="ion-hide-md-down"></Box>
+                {/* Right Nav Menu */}
+                <Box sx={{ flexGrow: 0 }} className="ion-hide-md-down">
+                  <IonButtons className="ion-margin-end">
+                    {/* Users */}
+                    {user?.role === RoleType.Admin && (
+                      <IonButton
+                        id="id-users-menu"
+                        size="small"
+                        onClick={() => handleMenuClick(NavType.Users)}>
+                        <IonIcon icon={peopleOutline} className="mr-2" /> Users
+                      </IonButton>
+                    )}
+                    {/* Expenses */}
+                    {user?.role === RoleType.User && (
+                      <IonButton
+                        id="id-expenses-menu"
+                        size="small"
+                        onClick={() => handleMenuClick(NavType.Expenses)}>
+                        <IonIcon icon={cashOutline} className="mr-2" /> Expenses
+                      </IonButton>
+                    )}
+                    {/* Projects */}
+                    {user?.role === RoleType.User && (
+                      <IonButton
+                        id="id-projects-menu"
+                        size="small"
+                        onClick={() => handleMenuClick(NavType.Projects)}>
+                        <IonIcon icon={libraryOutline} className="mr-2" /> Projects
+                      </IonButton>
+                    )}
+                    {/* Profile */}
                     <IonButton
-                      id="id-users-menu"
+                      id="id-my-profile-menu"
                       size="small"
-                      onClick={() => handleMenuClick(NavType.Users)}>
-                      <IonIcon icon={peopleOutline} className="mr-2" /> Users
+                      onClick={() => handleMenuClick(NavType.Profile)}>
+                      <IonIcon icon={personOutline} className="mr-2" /> My Profile
                     </IonButton>
-                  )}
-                  {/* Expenses */}
-                  {user?.role === RoleType.User && (
                     <IonButton
-                      id="id-expenses-menu"
+                      id="id-logoff-menu"
                       size="small"
-                      onClick={() => handleMenuClick(NavType.Expenses)}>
-                      <IonIcon icon={cashOutline} className="mr-2" /> Expenses
+                      onClick={() => handleMenuClick(NavType.SignOut)}>
+                      <IonIcon icon={lockClosedOutline} className="mr-2" /> Logout
                     </IonButton>
-                  )}
-                  {/* Projects */}
-                  {user?.role === RoleType.User && (
-                    <IonButton
-                      id="id-projects-menu"
-                      size="small"
-                      onClick={() => handleMenuClick(NavType.Projects)}>
-                      <IonIcon icon={libraryOutline} className="mr-2" /> Projects
-                    </IonButton>
-                  )}
-                  {/* Profile */}
-                  <IonButton
-                    id="id-my-profile-menu"
-                    size="small"
-                    onClick={() => handleMenuClick(NavType.Profile)}>
-                    <IonIcon icon={personOutline} className="mr-2" /> My Profile
-                  </IonButton>
-                  <IonButton
-                    id="id-logoff-menu"
-                    size="small"
-                    onClick={() => handleMenuClick(NavType.SignOut)}>
-                    <IonIcon icon={lockClosedOutline} className="mr-2" /> Logout
-                  </IonButton>
-                </IonButtons>
-              </Box>
+                  </IonButtons>
+                </Box>
+              </>
             )}
             {/* Avatar */}
             {user?.auth && (

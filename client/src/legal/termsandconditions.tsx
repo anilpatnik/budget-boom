@@ -10,6 +10,7 @@ export default function TermsConditionsPage() {
         <img
           alt={String.empty}
           src={logo}
+          height="64px"
           loading="lazy"
           className="cursor-pointer"
           onClick={() => navigate(NavType.Root)}

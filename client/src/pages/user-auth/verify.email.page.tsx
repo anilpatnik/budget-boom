@@ -14,7 +14,6 @@ import {
 } from "@ionic/react";
 import { constants, NavType } from "@/util";
 import { resendVerifySignInEmail, verifySignInEmail } from "@/services";
-import logo from "@/assets/logo.png";
 import banner from "@/assets/banner.png";
 
 export function VerifyEmailPage() {

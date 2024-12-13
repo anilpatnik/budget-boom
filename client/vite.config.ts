@@ -12,8 +12,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
       manifest: {
-        name: "Personal Expense Manager",
-        short_name: "PEM",
+        name: "budgetezy.me",
+        short_name: "budgetezy.me",
         description: "track, analyze, and manage your income and expenses",
         start_url: "/",
         display: "standalone",

@@ -123,6 +123,7 @@ export function SignInPage() {
                   alt={String.empty}
                   src={logo}
                   loading="lazy"
+                  height="64px"
                   className="cursor-pointer"
                   onClick={() => navigate(NavType.Root)}
                 />

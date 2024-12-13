@@ -12,7 +12,7 @@ export function NotFoundPage() {
         position: "fixed",
         p: theme => ({ xs: theme.spacing(3, 3, 0), sm: theme.spacing(5, 5, 0) })
       }}>
-      <img alt="website.com" src="src/assets/logo.png" height="37px" loading="lazy" />
+      <img alt="budgetezy.me" src="src/assets/logo.png" height="64px" loading="lazy" />
     </Box>
   );
   return (
