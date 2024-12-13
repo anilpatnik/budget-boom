@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   IonBadge,
   IonButton,
@@ -18,6 +18,8 @@ import * as Yup from "yup";
 import { Icon, InputComponent, PasswordComponent, PasswordStrength } from "@/components";
 import { constants, NavType } from "@/util";
 import { updateForgotPassword, verifyForgotPasswordUrl } from "@/services";
+import logo from "@/assets/logo.png";
+import banner from "@/assets/banner.png";
 
 export function ResetPasswordPage() {
   const hasMounted = useRef(false);
@@ -25,6 +27,7 @@ export function ResetPasswordPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [email, setEmail] = useState(String.empty);
+  const navigate = useNavigate();
   const params = useParams();
 
   useEffect(() => {
@@ -77,109 +80,151 @@ export function ResetPasswordPage() {
 
   if (email?.length === 0) {
     return (
-      <IonCard className="ion-padding-vertical">
-        <IonCardHeader>
-          <IonCardSubtitle>Sorry!</IonCardSubtitle>
-        </IonCardHeader>
-        <IonCardContent>
-          Reset password link is invalid or expired.
-          <div className="ion-margin-top">
-            <Link className="sign-label" to={NavType.SignIn}>
-              Return to
-              <IonBadge color="secondary" className="badge">
-                SIGN IN
-              </IonBadge>
-            </Link>
-          </div>
-        </IonCardContent>
-      </IonCard>
+      <IonGrid>
+        <IonRow>
+          <IonCol className="ion-hide-md-down">
+            <img alt={String.empty} src={banner} loading="lazy" />
+          </IonCol>
+          <IonCol sizeXs="12" sizeMd="5" sizeLg="4">
+            <IonCard className="ion-padding-vertical">
+              <IonCardHeader>
+                <IonCardSubtitle>Sorry!</IonCardSubtitle>
+              </IonCardHeader>
+              <IonCardContent>
+                Reset password link is invalid or expired.
+                <div className="ion-margin-top">
+                  <Link className="sign-label" to={NavType.SignIn}>
+                    Return to
+                    <IonBadge color="secondary" className="badge">
+                      SIGN IN
+                    </IonBadge>
+                  </Link>
+                </div>
+              </IonCardContent>
+            </IonCard>
+          </IonCol>
+        </IonRow>
+      </IonGrid>
     );
   }
 
   if (success) {
     return (
-      <IonCard className="ion-padding-vertical">
-        <IonCardHeader>
-          <IonCardSubtitle>Password reset successful!</IonCardSubtitle>
-        </IonCardHeader>
-        <IonCardContent>
-          You have successfully changed your password.
-          <div className="ion-margin-top">
-            <Link className="sign-label" to={NavType.SignIn}>
-              Return to
-              <IonBadge color="secondary" className="badge">
-                SIGN IN
-              </IonBadge>
-            </Link>
-          </div>
-        </IonCardContent>
-      </IonCard>
+      <IonGrid>
+        <IonRow>
+          <IonCol className="ion-hide-md-down">
+            <img alt={String.empty} src={banner} loading="lazy" />
+          </IonCol>
+          <IonCol sizeXs="12" sizeMd="5" sizeLg="4">
+            <IonCard className="ion-padding-vertical">
+              <IonCardHeader>
+                <IonCardSubtitle>Password reset successful!</IonCardSubtitle>
+              </IonCardHeader>
+              <IonCardContent>
+                You have successfully changed your password.
+                <div className="ion-margin-top">
+                  <Link className="sign-label" to={NavType.SignIn}>
+                    Return to
+                    <IonBadge color="secondary" className="badge">
+                      SIGN IN
+                    </IonBadge>
+                  </Link>
+                </div>
+              </IonCardContent>
+            </IonCard>
+          </IonCol>
+        </IonRow>
+      </IonGrid>
     );
   }
 
   return (
     <IonGrid>
       <IonRow>
-        <IonCol></IonCol>
-        <IonCol size="12" size-lg="4" size-md="6">
-          <IonCard className="ion-padding-bottom">
-            <IonCardHeader>
-              <IonCardTitle>Reset your Password</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <form onSubmit={formik.handleSubmit}>
-                <div className="my-6">
-                  <InputComponent name="email" label="Email" type="email" value={email} disabled />
-                </div>
-                <div className="my-6">
-                  <PasswordComponent
-                    name="password"
-                    label="Password"
-                    value={formik.values.password}
-                    touched={formik.touched.password}
-                    errorMessage={formik.errors.password}
-                    handleChange={formik.handleChange}
-                  />
-                  <PasswordStrength password={formik.values.password} />
-                </div>
-                <div className="my-6">
-                  <PasswordComponent
-                    name="confirmpassword"
-                    label="Confirm Password"
-                    value={formik.values.confirmpassword}
-                    touched={formik.touched.confirmpassword}
-                    errorMessage={formik.errors.confirmpassword}
-                    handleChange={formik.handleChange}
-                  />
-                </div>
-                <IonButton
-                  id="id-submit-button"
-                  size="small"
-                  type="submit"
-                  className="ion-margin-vertical"
-                  disabled={loading}>
-                  <button type="submit" hidden />
-                  {loading ? (
-                    <Icon name="sync-sharp" css="icon-spinner" slot="start" />
-                  ) : (
-                    <Icon name="caret-forward-sharp" slot="start" />
-                  )}
-                  SUBMIT
-                </IonButton>
-              </form>
-            </IonCardContent>
-          </IonCard>
+        <IonCol className="ion-hide-md-down">
+          <img alt={String.empty} src={banner} loading="lazy" />
         </IonCol>
-        <IonCol></IonCol>
-      </IonRow>
-      <IonRow className="ion-margin-vertical">
-        <IonCol className="ion-text-center">
-          <Link className="sign-label" to={NavType.SignIn}>
-            Return to
-            <IonBadge color="secondary" className="badge">
-              SIGN IN
-            </IonBadge>
-          </Link>
+        <IonCol sizeXs="12" sizeMd="5" sizeLg="4">
+          <IonGrid>
+            <IonRow className="ion-hide-md-down text-center">
+              <IonCol>
+                <img
+                  alt={String.empty}
+                  src={logo}
+                  loading="lazy"
+                  className="cursor-pointer"
+                  onClick={() => navigate(NavType.Root)}
+                />
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>
+                <IonCard className="ion-padding-bottom">
+                  <IonCardHeader>
+                    <IonCardTitle>Reset your Password</IonCardTitle>
+                  </IonCardHeader>
+                  <IonCardContent>
+                    <form onSubmit={formik.handleSubmit}>
+                      <div className="my-6">
+                        <InputComponent
+                          name="email"
+                          label="Email"
+                          type="email"
+                          value={email}
+                          disabled
+                        />
+                      </div>
+                      <div className="my-6">
+                        <PasswordComponent
+                          name="password"
+                          label="Password"
+                          value={formik.values.password}
+                          touched={formik.touched.password}
+                          errorMessage={formik.errors.password}
+                          handleChange={formik.handleChange}
+                        />
+                        <PasswordStrength password={formik.values.password} />
+                      </div>
+                      <div className="my-6">
+                        <PasswordComponent
+                          name="confirmpassword"
+                          label="Confirm Password"
+                          value={formik.values.confirmpassword}
+                          touched={formik.touched.confirmpassword}
+                          errorMessage={formik.errors.confirmpassword}
+                          handleChange={formik.handleChange}
+                        />
+                      </div>
+                      <IonButton
+                        id="id-submit-button"
+                        size="small"
+                        type="submit"
+                        className="ion-margin-vertical"
+                        disabled={loading}>
+                        <button type="submit" hidden />
+                        {loading ? (
+                          <Icon name="sync-sharp" css="icon-spinner" slot="start" />
+                        ) : (
+                          <Icon name="caret-forward-sharp" slot="start" />
+                        )}
+                        SUBMIT
+                      </IonButton>
+                    </form>
+                  </IonCardContent>
+                </IonCard>
+              </IonCol>
+            </IonRow>
+            <IonRow className="ion-margin-vertical">
+              <IonCol className="ion-text-center">
+                <Link className="sign-label" to={NavType.SignIn}>
+                  Return to
+                  <IonBadge color="secondary" className="badge">
+                    SIGN IN
+                  </IonBadge>
+                </Link>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
         </IonCol>
       </IonRow>
     </IonGrid>

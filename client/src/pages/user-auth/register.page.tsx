@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   IonBadge,
   IonButton,
@@ -19,11 +19,14 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { Icon, InputComponent, PasswordComponent, PasswordStrength } from "@/components";
 import { NavType, constants } from "@/util";
 import { captchaVerify, createUserWithEmail } from "@/services";
+import logo from "@/assets/logo.png";
+import banner from "@/assets/banner.png";
 
 export function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const navigate = useNavigate();
   const [present] = useIonToast();
 
   const formik = useFormik({
@@ -91,128 +94,149 @@ export function SignUpPage() {
     }
   };
 
-  if (success) {
-    return (
-      <IonCard className="ion-padding-vertical">
-        <IonCardHeader>
-          <IonCardSubtitle>Thank you for signing up!</IonCardSubtitle>
-        </IonCardHeader>
-        <IonCardContent>
-          An email message has been sent containing a link to <strong>Activate</strong> your
-          account.
-          <div className="ion-margin-top">
-            <Link className="sign-label" to={NavType.SignIn}>
-              Return to
-              <IonBadge color="secondary" className="badge">
-                SIGN IN
-              </IonBadge>
-            </Link>
-          </div>
-        </IonCardContent>
-      </IonCard>
-    );
-  } else {
-    return (
-      <IonGrid>
-        <IonRow>
-          <IonCol></IonCol>
-          <IonCol size="12" size-lg="4" size-md="6">
-            <IonCard className="ion-padding-bottom">
+  return (
+    <IonGrid>
+      <IonRow>
+        <IonCol className="ion-hide-md-down">
+          <img alt={String.empty} src={banner} loading="lazy" />
+        </IonCol>
+        <IonCol sizeXs="12" sizeMd="5" sizeLg="4">
+          {success && (
+            <IonCard className="ion-padding-vertical">
               <IonCardHeader>
-                <IonCardTitle>Sign Up</IonCardTitle>
+                <IonCardSubtitle>Thank you for signing up!</IonCardSubtitle>
               </IonCardHeader>
               <IonCardContent>
-                <form onSubmit={formik.handleSubmit}>
-                  <div className="my-6">
-                    <InputComponent
-                      name="name"
-                      label="Name"
-                      type="text"
-                      value={formik.values.name}
-                      touched={formik.touched.name}
-                      errorMessage={formik.errors.name}
-                      handleChange={formik.handleChange}
-                    />
-                  </div>
-                  <div className="my-6">
-                    <InputComponent
-                      name="email"
-                      label="Email"
-                      type="email"
-                      value={formik.values.email}
-                      touched={formik.touched.email}
-                      errorMessage={formik.errors.email}
-                      handleChange={formik.handleChange}
-                    />
-                  </div>
-                  <div className="my-6">
-                    <PasswordComponent
-                      name="password"
-                      label="Password"
-                      value={formik.values.password}
-                      touched={formik.touched.password}
-                      errorMessage={formik.errors.password}
-                      handleChange={formik.handleChange}
-                    />
-                    <PasswordStrength password={formik.values.password} />
-                  </div>
-                  <div className="my-6">
-                    <PasswordComponent
-                      name="confirmpassword"
-                      label="Confirm Password"
-                      value={formik.values.confirmpassword}
-                      touched={formik.touched.confirmpassword}
-                      errorMessage={formik.errors.confirmpassword}
-                      handleChange={formik.handleChange}
-                    />
-                  </div>
-                  <div className="ion-margin-vertical">
-                    <ReCAPTCHA id="id-recaptcha" ref={recaptchaRef} sitekey={constants.CAPTCHA} />
-                  </div>
-                  <IonButton
-                    id="id-submit-button"
-                    size="small"
-                    type="submit"
-                    className="ion-margin-vertical"
-                    disabled={loading}>
-                    <button type="submit" hidden />
-                    {loading ? (
-                      <Icon name="sync-sharp" css="icon-spinner" slot="start" />
-                    ) : (
-                      <Icon name="caret-forward-sharp" slot="start" />
-                    )}
-                    SIGN UP
-                  </IonButton>
-                  <IonButton
-                    className="ion-margin-horizontal"
-                    size="small"
-                    color="light"
-                    onClick={formik.handleReset}>
-                    <Icon name="refresh-sharp" slot="start" />
-                    RESET
-                  </IonButton>
-                </form>
-                <div className="ion-margin-top privacy">
-                  By clicking on Sign Up, I agree to the website
-                  <Link to={NavType.TermsConditions}> Terms and Conditions</Link> and
-                  <Link to={NavType.PrivacyPolicy}> Privacy Policy</Link>
+                An email message has been sent containing a link to <strong>Activate</strong> your
+                account.
+                <div className="ion-margin-top">
+                  <Link className="sign-label" to={NavType.SignIn}>
+                    Return to
+                    <IonBadge color="secondary" className="badge">
+                      SIGN IN
+                    </IonBadge>
+                  </Link>
                 </div>
               </IonCardContent>
             </IonCard>
-          </IonCol>
-          <IonCol></IonCol>
-        </IonRow>
-        <IonRow>
-          <IonCol className="ion-text-center">
-            <Link className="sign-label" to={NavType.SignIn}>
-              Already have an account?
-              <IonBadge color="secondary" className="badge">
-                SIGN IN
-              </IonBadge>
-            </Link>
-          </IonCol>
-        </IonRow>
-      </IonGrid>
-    );
-  }
+          )}
+          {!success && (
+            <IonGrid>
+              <IonRow className="ion-hide-md-down text-center">
+                <IonCol>
+                  <img
+                    alt={String.empty}
+                    src={logo}
+                    loading="lazy"
+                    className="cursor-pointer"
+                    onClick={() => navigate(NavType.Root)}
+                  />
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <IonCard className="ion-padding-bottom">
+                    <IonCardHeader>
+                      <IonCardTitle>Sign Up</IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      <form onSubmit={formik.handleSubmit}>
+                        <div className="my-6">
+                          <InputComponent
+                            name="name"
+                            label="Name"
+                            type="text"
+                            value={formik.values.name}
+                            touched={formik.touched.name}
+                            errorMessage={formik.errors.name}
+                            handleChange={formik.handleChange}
+                          />
+                        </div>
+                        <div className="my-6">
+                          <InputComponent
+                            name="email"
+                            label="Email"
+                            type="email"
+                            value={formik.values.email}
+                            touched={formik.touched.email}
+                            errorMessage={formik.errors.email}
+                            handleChange={formik.handleChange}
+                          />
+                        </div>
+                        <div className="my-6">
+                          <PasswordComponent
+                            name="password"
+                            label="Password"
+                            value={formik.values.password}
+                            touched={formik.touched.password}
+                            errorMessage={formik.errors.password}
+                            handleChange={formik.handleChange}
+                          />
+                          <PasswordStrength password={formik.values.password} />
+                        </div>
+                        <div className="my-6">
+                          <PasswordComponent
+                            name="confirmpassword"
+                            label="Confirm Password"
+                            value={formik.values.confirmpassword}
+                            touched={formik.touched.confirmpassword}
+                            errorMessage={formik.errors.confirmpassword}
+                            handleChange={formik.handleChange}
+                          />
+                        </div>
+                        <div className="ion-margin-vertical">
+                          <ReCAPTCHA
+                            id="id-recaptcha"
+                            ref={recaptchaRef}
+                            sitekey={constants.CAPTCHA}
+                          />
+                        </div>
+                        <IonButton
+                          id="id-submit-button"
+                          size="small"
+                          type="submit"
+                          className="ion-margin-vertical"
+                          disabled={loading}>
+                          <button type="submit" hidden />
+                          {loading ? (
+                            <Icon name="sync-sharp" css="icon-spinner" slot="start" />
+                          ) : (
+                            <Icon name="caret-forward-sharp" slot="start" />
+                          )}
+                          SIGN UP
+                        </IonButton>
+                        <IonButton
+                          className="ion-margin-horizontal"
+                          size="small"
+                          color="light"
+                          onClick={formik.handleReset}>
+                          <Icon name="refresh-sharp" slot="start" />
+                          RESET
+                        </IonButton>
+                      </form>
+                      <div className="ion-margin-top privacy">
+                        By clicking on Sign Up, I agree to the website
+                        <Link to={NavType.TermsConditions}> Terms and Conditions</Link> and
+                        <Link to={NavType.PrivacyPolicy}> Privacy Policy</Link>
+                      </div>
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol className="ion-text-center">
+                  <Link className="sign-label" to={NavType.SignIn}>
+                    Already have an account?
+                    <IonBadge color="secondary" className="badge">
+                      SIGN IN
+                    </IonBadge>
+                  </Link>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          )}
+        </IonCol>
+      </IonRow>
+    </IonGrid>
+  );
 }
