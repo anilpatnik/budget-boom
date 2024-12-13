@@ -88,27 +88,10 @@ ion-item:last-child {
 }
 /* MUI Styles */
 .card-content-md p {
-  font-size: 0.864em;
   margin-top: 0.564em;
 }
 .MuiInputAdornment-root p {
   margin-top: 0;
-}
-@media (max-width: 768px) {
-  .MuiStepLabel-label {
-    font-size: 0.75em;
-  }
-  .MuiFormHelperText-root {
-    font-size: 0.75em;
-  }
-}
-@media (min-width: 768px) {
-  .MuiInputLabel-root {
-    font-size: 1.15em;
-  }
-  .MuiFormHelperText-root {
-    font-size: 1.15em;
-  }
 }
 .Mui-error:first-letter {
   text-transform: uppercase;

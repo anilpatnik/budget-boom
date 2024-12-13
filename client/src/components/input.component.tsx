@@ -57,13 +57,10 @@ export function InputComponent({
         inputLabel: { shrink: true },
         input: {
           startAdornment: startAdor ? (
-            <InputAdornment sx={{ fontSize: "1.25em" }} position="start">
-              {startAdorText}
-            </InputAdornment>
+            <InputAdornment position="start">{startAdorText}</InputAdornment>
           ) : null
         }
       }}
-      sx={{ input: { fontSize: "0.975em", letterSpacing: "0.075em" } }}
     />
   );
 }

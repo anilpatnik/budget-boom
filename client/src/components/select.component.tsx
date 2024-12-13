@@ -36,7 +36,6 @@ export function SelectComponent({
         {`${label} ${optional ? "(Optional)" : ""}`}
       </InputLabel>
       <Select
-        sx={{ fontSize: "0.975em", letterSpacing: "0.075em" }}
         MenuProps={{ disableEnforceFocus: true }}
         id={`id-${name}`}
         name={name}

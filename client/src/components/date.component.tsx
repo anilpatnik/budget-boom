@@ -42,7 +42,6 @@ export function DateComponent({
       error={touched && Boolean(errorMessage)}
       helperText={touched && errorMessage}
       disabled={disabled}
-      sx={{ input: { fontSize: "0.975em", letterSpacing: "0.075em" } }}
     />
   );
 }

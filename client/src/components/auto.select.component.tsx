@@ -52,7 +52,6 @@ export function AutoSelectComponent({
           error={touched && Boolean(errorMessage)}
           helperText={touched && errorMessage}
           slotProps={{ inputLabel: { shrink: true } }}
-          sx={{ input: { fontSize: "0.975em", letterSpacing: "0.075em" } }}
         />
       )}
     />

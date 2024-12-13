@@ -20,7 +20,10 @@ export default defineConfig({
         orientation: "portrait",
         background_color: "#ffffff",
         theme_color: "#2d89ef",
-        icons: [{ src: "android-chrome.png", sizes: "196x196", type: "image/png" }]
+        icons: [
+          { src: "web-app-manifest-192x192.png", sizes: "196x196", type: "image/png" },
+          { src: "web-app-manifest-512x512.png", sizes: "512x512", type: "image/png" }
+        ]
       },
       workbox: {
         skipWaiting: true,

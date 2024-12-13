@@ -58,6 +58,7 @@ export function ExpensePage({
       entryDate: Yup.date().required("required"),
       categoryId: Yup.string().required("required"),
       price: Yup.number()
+        .typeError("price must be a number")
         .positive("price should be greater than zero")
         .test("is-decimal", "price should be two decimals", (val: any) => {
           if (val) return constants.TWO_DECIMAL_PATTERN.test(val);
@@ -168,7 +169,6 @@ export function ExpensePage({
                   <InputComponent
                     name="price"
                     label="Amount"
-                    type="number"
                     startAdor={true}
                     startAdorText="$"
                     value={formik.values.price.toString()}

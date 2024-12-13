@@ -170,10 +170,6 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
                 Role
               </InputLabel>
               <Select
-                sx={{
-                  fontSize: "0.975em",
-                  letterSpacing: "0.075em"
-                }}
                 id="role"
                 name="role"
                 value={formik.values.role}
