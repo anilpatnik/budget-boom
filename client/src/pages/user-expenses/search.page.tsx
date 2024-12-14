@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { convertoISO, dateY90, dateT90 } from "@/util";
 import { IExpenseSearch, IProject } from "@/models";
-import { categories } from "@/services";
+import { getCategories } from "@/services";
 import { DateComponent, SelectComponent, AutoSelectComponent, Icon } from "@/components";
 
 type ComponentProps = {
@@ -85,7 +85,7 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
               touched={formik.touched.categoryId}
               errorMessage={formik.errors.categoryId}
               handleChange={formik.handleChange}
-              payload={categories || []}
+              payload={getCategories() || []}
             />
           </div>
           <div className="my-6">

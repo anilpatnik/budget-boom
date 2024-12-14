@@ -17,7 +17,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { CrudType, constants, convertoISO, dateNow, parsePrice } from "@/util";
 import { IExpense, IProject } from "@/models";
-import { categories, getCategory, upsertExpenseAsync } from "@/services";
+import { getCategories, getCategory, upsertExpenseAsync } from "@/services";
 import {
   InputComponent,
   DateComponent,
@@ -200,7 +200,7 @@ export function ExpensePage({
                     touched={formik.touched.categoryId}
                     errorMessage={formik.errors.categoryId}
                     handleChange={formik.handleChange}
-                    payload={categories || []}
+                    payload={getCategories() || []}
                   />
                 </IonCol>
                 <IonCol className="text-right" size="12" size-md="6">
