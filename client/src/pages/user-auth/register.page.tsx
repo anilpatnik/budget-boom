@@ -127,7 +127,7 @@ export function SignUpPage() {
                   <img
                     alt={String.empty}
                     src={logo}
-                    height="64px"
+                    height={constants.LOGO_H}
                     loading="lazy"
                     className="cursor-pointer"
                     onClick={() => navigate(NavType.Root)}

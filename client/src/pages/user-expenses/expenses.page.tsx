@@ -184,7 +184,7 @@ export function ExpensesPage() {
   return (
     <TableContainer
       component={Paper}
-      sx={{ maxHeight: { xs: window.innerHeight - 200, sm: 600 } }}
+      sx={{ maxHeight: { xs: window.innerHeight - 215, sm: 600 } }}
       className="tableContainer">
       <Table className="styled-table" stickyHeader>
         <TableHead>
@@ -200,7 +200,7 @@ export function ExpensesPage() {
               <Box>Total</Box>
               <Box sx={{ display: { xs: "none", sm: "table-cell" } }}>{totalPrice(records)}</Box>
             </TableCell>
-            <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+            <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }} align="left">
               Category
             </TableCell>
             <TableCell align="left">Tax</TableCell>
@@ -249,17 +249,17 @@ export function ExpensesPage() {
               </TableCell>
               <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }} align="left">
                 <Box className="flex items-center">
-                  {item?.categoryId && (
-                    <Box className="flex items-center">
-                      <Icon
-                        name={getCategory(item.categoryId).icon}
-                        css="text-2xl text-black mr-2"
-                      />
-                      <Box sx={{ display: { xs: "none", sm: "block" } }}>
+                  <Box>
+                    {item?.categoryId && (
+                      <Box className="flex items-center">
+                        <Icon
+                          name={getCategory(item.categoryId).icon}
+                          css="text-2xl text-black mr-2"
+                        />
                         {getCategory(item.categoryId).name}
                       </Box>
-                    </Box>
-                  )}
+                    )}
+                  </Box>
                   <Box>
                     {item?.notes && (
                       <IonButton
@@ -278,9 +278,31 @@ export function ExpensesPage() {
                 </Box>
               </TableCell>
               <TableCell align="left">
-                {item.taxable && (
-                  <Icon name="checkmark-circle-sharp" css="text-2xl text-green-500" />
-                )}
+                <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
+                  <Box className="flex items-center">
+                    {item.taxable && (
+                      <Icon name="checkmark-circle-sharp" css="text-2xl text-green-500" />
+                    )}
+                    {item?.notes && (
+                      <IonButton
+                        buttonType="icon"
+                        onClick={() =>
+                          present({
+                            message: item.notes,
+                            color: "dark",
+                            duration: constants.SUCCESS_DELAY
+                          })
+                        }>
+                        <Icon name="information-circle-sharp" css="text-2xl text-cyan-500" />
+                      </IonButton>
+                    )}
+                  </Box>
+                </Box>
+                <Box sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                  {item.taxable && (
+                    <Icon name="checkmark-circle-sharp" css="text-2xl text-green-500" />
+                  )}
+                </Box>
               </TableCell>
               <TableCell align="left">
                 <Box className="flex items-center">

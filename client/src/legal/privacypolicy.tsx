@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import logo from "@/assets/logo.png";
-import { NavType } from "@/util";
+import { constants, NavType } from "@/util";
 
 export default function PrivacyPolicyPage() {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ export default function PrivacyPolicyPage() {
         <img
           alt={String.empty}
           src={logo}
-          height="64px"
+          height={constants.LOGO_H}
           loading="lazy"
           className="cursor-pointer"
           onClick={() => navigate(NavType.Root)}

@@ -12,6 +12,7 @@ export const PROJECTS_MAX = 100;
 export const DELAY = 200;
 export const SUCCESS_DELAY = 3000;
 export const FAILURE_DELAY = 5000;
+export const LOGO_H = 64;
 
 export const ACTION_CODE = "actionCode";
 export const AUTH = "auth";

@@ -113,8 +113,8 @@ export function ForgotPasswordPage() {
                   <img
                     alt={String.empty}
                     src={logo}
+                    height={constants.LOGO_H}
                     loading="lazy"
-                    height="64px"
                     className="cursor-pointer"
                     onClick={() => navigate(NavType.Root)}
                   />

@@ -13,7 +13,7 @@ export default defineConfig({
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
       manifest: {
         name: "budgetezy.me",
-        short_name: "budgetezy.me",
+        short_name: "$ezy.me",
         description: "track, analyze, and manage your income and expenses",
         start_url: "/",
         display: "standalone",

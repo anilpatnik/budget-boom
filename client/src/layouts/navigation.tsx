@@ -51,7 +51,7 @@ function TabLayout() {
       <IonPage id="main-content">
         <Header />
         <TabMenu>
-          <IonRouterOutlet aria-hidden="false">
+          <IonRouterOutlet>
             <IonContent className="custom-content">
               <Outlet />
             </IonContent>
