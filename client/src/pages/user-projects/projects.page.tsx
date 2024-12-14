@@ -131,7 +131,7 @@ export function ProjectsPage() {
   return (
     <TableContainer
       component={Paper}
-      sx={{ maxHeight: { xs: window.innerHeight - 200, sm: 600 } }}
+      sx={{ maxHeight: { xs: window.innerHeight - 215, sm: 600 } }}
       className="tableContainer">
       <Table className="styled-table" stickyHeader>
         <TableHead>

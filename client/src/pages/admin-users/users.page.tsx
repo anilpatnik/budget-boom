@@ -194,7 +194,7 @@ export function UsersPage() {
           <IonCol>
             <TableContainer
               component={Paper}
-              sx={{ maxHeight: { xs: 650, sm: 600 } }}
+              sx={{ maxHeight: { xs: window.innerHeight - 215, sm: 600 } }}
               className="tableContainer">
               <Table className="styled-table" stickyHeader>
                 <TableHead>
