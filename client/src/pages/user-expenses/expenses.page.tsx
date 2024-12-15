@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, Fragment } from "react";
 import {
   IonButton,
   IonFabButton,
@@ -200,10 +200,15 @@ export function ExpensesPage() {
               <Box>Total</Box>
               <Box sx={{ display: { xs: "none", sm: "table-cell" } }}>{totalPrice(records)}</Box>
             </TableCell>
-            <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }} align="left">
+            <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
               Category
             </TableCell>
-            <TableCell align="left">Tax</TableCell>
+            <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+              Taxable
+            </TableCell>
+            <TableCell align="left" sx={{ display: { xs: "table-cell", sm: "none" } }}>
+              Notes
+            </TableCell>
             <TableCell align="left">
               <Box className="flex items-center">
                 <IonFabButton
@@ -247,7 +252,7 @@ export function ExpensesPage() {
                 align="left">
                 {item?.price && `${formatPrice(item?.price)}`}
               </TableCell>
-              <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }} align="left">
+              <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                 <Box className="flex items-center">
                   <Box>
                     {item?.categoryId && (
@@ -267,8 +272,9 @@ export function ExpensesPage() {
                         onClick={() =>
                           present({
                             message: item.notes,
+                            position: "top",
                             color: "dark",
-                            duration: constants.SUCCESS_DELAY
+                            duration: 1000
                           })
                         }>
                         <Icon name="information-circle-sharp" css="text-2xl text-cyan-500" />
@@ -277,32 +283,26 @@ export function ExpensesPage() {
                   </Box>
                 </Box>
               </TableCell>
-              <TableCell align="left">
-                <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
-                  <Box className="flex items-center">
-                    {item.taxable && (
-                      <Icon name="checkmark-circle-sharp" css="text-2xl text-green-500" />
-                    )}
-                    {item?.notes && (
-                      <IonButton
-                        buttonType="icon"
-                        onClick={() =>
-                          present({
-                            message: item.notes,
-                            color: "dark",
-                            duration: constants.SUCCESS_DELAY
-                          })
-                        }>
-                        <Icon name="information-circle-sharp" css="text-2xl text-cyan-500" />
-                      </IonButton>
-                    )}
-                  </Box>
-                </Box>
-                <Box sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  {item.taxable && (
-                    <Icon name="checkmark-circle-sharp" css="text-2xl text-green-500" />
-                  )}
-                </Box>
+              <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                {item.taxable && (
+                  <Icon name="checkmark-circle-sharp" css="text-2xl text-green-500" />
+                )}
+              </TableCell>
+              <TableCell align="left" sx={{ display: { xs: "table-cell", sm: "none" } }}>
+                {item?.notes && (
+                  <IonButton
+                    buttonType="icon"
+                    onClick={() =>
+                      present({
+                        message: item.notes,
+                        position: "top",
+                        color: "dark",
+                        duration: 1000
+                      })
+                    }>
+                    <Icon name="information-circle-sharp" css="text-2xl text-cyan-500" />
+                  </IonButton>
+                )}
               </TableCell>
               <TableCell align="left">
                 <Box className="flex items-center">

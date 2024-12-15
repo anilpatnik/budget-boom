@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import logo from "@/assets/logo.png";
 import { constants, NavType } from "@/util";
 
 export default function TermsConditionsPage() {
@@ -9,8 +8,8 @@ export default function TermsConditionsPage() {
       <div className="ion-hide-md-down text-center py-5">
         <img
           alt={String.empty}
-          src={logo}
-          height={constants.LOGO_H}
+          src={constants.LOGO_IMG}
+          height={constants.LOGO_HEIGHT}
           loading="lazy"
           className="cursor-pointer"
           onClick={() => navigate(NavType.Root)}

@@ -121,7 +121,7 @@ export const ProfilePicturePage = () => {
       />
       <IonThumbnail className="profile-pic-img" onClick={handleClick}>
         <img
-          src={file ? preview : user?.photo?.includes("https") ? user.photo : constants.STOCK_IMG}
+          src={file ? preview : user?.photo?.includes("https") ? user.photo : constants.PROFILE_IMG}
           alt={file?.name}
           loading="lazy"
           onLoad={() => file && URL.revokeObjectURL(preview)}

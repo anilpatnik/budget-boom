@@ -13,7 +13,7 @@ export default defineConfig({
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
       manifest: {
         name: "budgetezy.me",
-        short_name: "$ezy.me",
+        short_name: "budgetezy",
         description: "track, analyze, and manage your income and expenses",
         start_url: "/",
         display: "standalone",
@@ -21,15 +21,31 @@ export default defineConfig({
         background_color: "#ffffff",
         theme_color: "#2d89ef",
         icons: [
-          { src: "web-app-manifest-192x192.png", sizes: "196x196", type: "image/png" },
-          { src: "web-app-manifest-512x512.png", sizes: "512x512", type: "image/png" }
+          { src: "pwa-192x192.png", sizes: "192x192", type: "image/png" },
+          { src: "pwa-512x512.png", sizes: "512x512", type: "image/png" }
+        ],
+        screenshots: [
+          {
+            src: "pwa-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            form_factor: "wide"
+          },
+          {
+            src: "pwa-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            form_factor: "narrow"
+          }
         ]
       },
       workbox: {
+        cleanupOutdatedCaches: true,
         skipWaiting: true,
         clientsClaim: true,
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024 // Allow 10MB
-      }
+      },
+      devOptions: { enabled: true }
     })
   ],
   build: { outDir: "web-build" },

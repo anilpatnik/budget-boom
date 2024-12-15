@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  IonAvatar,
   IonButton,
   IonButtons,
   IonContent,
@@ -10,7 +9,7 @@ import {
   IonToolbar,
   useIonToast
 } from "@ionic/react";
-import { FormControl, InputLabel, MenuItem, Select, Switch } from "@mui/material";
+import { Avatar, FormControl, InputLabel, MenuItem, Select, Switch } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { AuthType, RoleType, constants, externaLogin } from "@/util";
@@ -36,7 +35,7 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
       emailVerified: user?.emailVerified || false,
       disabled: !user?.disabled || false,
       role: user?.role || RoleType.User,
-      photo: user?.photo || constants.STOCK_IMG,
+      photo: user?.photo || String.empty,
       providers: user?.providers || []
     },
     validateOnMount: false,
@@ -125,9 +124,11 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
       </IonHeader>
       <IonContent className="ion-padding">
         <form>
-          <IonAvatar className="profile-pic-center">
-            <img alt={formik.values.name} src={formik.values.photo} loading="lazy" />
-          </IonAvatar>
+          <Avatar
+            className="profile-pic-center"
+            sx={{ width: 80, height: 80 }}
+            src={formik.values.photo}
+          />
           <div className="my-6">
             <InputComponent
               name="name"

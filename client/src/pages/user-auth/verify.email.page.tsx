@@ -14,7 +14,6 @@ import {
 } from "@ionic/react";
 import { constants, NavType } from "@/util";
 import { resendVerifySignInEmail, verifySignInEmail } from "@/services";
-import banner from "@/assets/banner.png";
 
 export function VerifyEmailPage() {
   const hasMounted = useRef(false);
@@ -49,7 +48,7 @@ export function VerifyEmailPage() {
       <IonGrid>
         <IonRow>
           <IonCol className="ion-hide-md-down">
-            <img alt={String.empty} src={banner} loading="lazy" />
+            <img alt={String.empty} src={constants.BANNER_IMG} loading="lazy" />
           </IonCol>
           <IonCol sizeXs="12" sizeMd="5" sizeLg="4">
             <IonCard className="ion-padding-vertical">
@@ -77,7 +76,7 @@ export function VerifyEmailPage() {
       <IonGrid>
         <IonRow>
           <IonCol className="ion-hide-md-down">
-            <img alt={String.empty} src={banner} loading="lazy" />
+            <img alt={String.empty} src={constants.BANNER_IMG} loading="lazy" />
           </IonCol>
           <IonCol sizeXs="12" sizeMd="5" sizeLg="4">
             <IonCard className="ion-padding-vertical">

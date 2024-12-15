@@ -17,10 +17,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Icon, InputComponent } from "@/components";
-import { NavType, constants } from "@/util";
+import { NavType, config, constants } from "@/util";
 import { captchaVerify, sendForgotPasswordUrl } from "@/services";
-import logo from "@/assets/logo.png";
-import banner from "@/assets/banner.png";
 
 export function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false);
@@ -84,7 +82,7 @@ export function ForgotPasswordPage() {
     <IonGrid>
       <IonRow>
         <IonCol className="ion-hide-md-down">
-          <img alt={String.empty} src={banner} loading="lazy" />
+          <img alt={String.empty} src={constants.BANNER_IMG} loading="lazy" />
         </IonCol>
         <IonCol sizeXs="12" sizeMd="5" sizeLg="4">
           {success && (
@@ -112,8 +110,8 @@ export function ForgotPasswordPage() {
                 <IonCol>
                   <img
                     alt={String.empty}
-                    src={logo}
-                    height={constants.LOGO_H}
+                    src={constants.LOGO_IMG}
+                    height={constants.LOGO_HEIGHT}
                     loading="lazy"
                     className="cursor-pointer"
                     onClick={() => navigate(NavType.Root)}
@@ -143,7 +141,7 @@ export function ForgotPasswordPage() {
                           <ReCAPTCHA
                             id="id-recaptcha"
                             ref={recaptchaRef}
-                            sitekey={constants.CAPTCHA}
+                            sitekey={config.VITE_CAPTCHA_SITE}
                           />
                         </div>
                         <IonButton

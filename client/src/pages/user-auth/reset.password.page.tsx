@@ -18,8 +18,6 @@ import * as Yup from "yup";
 import { Icon, InputComponent, PasswordComponent, PasswordStrength } from "@/components";
 import { constants, NavType } from "@/util";
 import { updateForgotPassword, verifyForgotPasswordUrl } from "@/services";
-import logo from "@/assets/logo.png";
-import banner from "@/assets/banner.png";
 
 export function ResetPasswordPage() {
   const hasMounted = useRef(false);
@@ -83,7 +81,7 @@ export function ResetPasswordPage() {
       <IonGrid>
         <IonRow>
           <IonCol className="ion-hide-md-down">
-            <img alt={String.empty} src={banner} loading="lazy" />
+            <img alt={String.empty} src={constants.BANNER_IMG} loading="lazy" />
           </IonCol>
           <IonCol sizeXs="12" sizeMd="5" sizeLg="4">
             <IonCard className="ion-padding-vertical">
@@ -113,7 +111,7 @@ export function ResetPasswordPage() {
       <IonGrid>
         <IonRow>
           <IonCol className="ion-hide-md-down">
-            <img alt={String.empty} src={banner} loading="lazy" />
+            <img alt={String.empty} src={constants.BANNER_IMG} loading="lazy" />
           </IonCol>
           <IonCol sizeXs="12" sizeMd="5" sizeLg="4">
             <IonCard className="ion-padding-vertical">
@@ -142,7 +140,7 @@ export function ResetPasswordPage() {
     <IonGrid>
       <IonRow>
         <IonCol className="ion-hide-md-down">
-          <img alt={String.empty} src={banner} loading="lazy" />
+          <img alt={String.empty} src={constants.BANNER_IMG} loading="lazy" />
         </IonCol>
         <IonCol sizeXs="12" sizeMd="5" sizeLg="4">
           <IonGrid>
@@ -150,8 +148,8 @@ export function ResetPasswordPage() {
               <IonCol>
                 <img
                   alt={String.empty}
-                  src={logo}
-                  height={constants.LOGO_H}
+                  src={constants.LOGO_IMG}
+                  height={constants.LOGO_HEIGHT}
                   loading="lazy"
                   className="cursor-pointer"
                   onClick={() => navigate(NavType.Root)}

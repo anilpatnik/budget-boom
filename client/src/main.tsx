@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
+import { registerSW } from "virtual:pwa-register";
 import { setupIonicReact } from "@ionic/react";
 import App from "./App";
 
@@ -23,6 +24,15 @@ import "@ionic/react/css/text-transformation.css";
 import "./index.css";
 
 setupIonicReact(); // Ionic
+
+const updateSW = registerSW({
+  onNeedRefresh() {
+    if (confirm("New version is available. Reload?")) updateSW(true);
+  },
+  onOfflineReady() {
+    console.log("App is ready for offline use");
+  }
+});
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
