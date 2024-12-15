@@ -14,9 +14,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    // "types": ["vite-plugin-pwa/client"],
     "jsx": "react-jsx",
-    "paths": { "@/*": ["./src/*"] },
-    "types": ["vite-plugin-pwa/client"]
+    "paths": { "@/*": ["./src/*"] }
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
