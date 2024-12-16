@@ -8,8 +8,9 @@ import {
   personOutline
 } from "ionicons/icons";
 import { Box, Toolbar, Avatar, AppBar } from "@mui/material";
-import { NavType, RoleType, constants, isIOS } from "@/util";
+import { NavType, RoleType, constants } from "@/util";
 import { useStore } from "@/contexts";
+import { InstallPWA } from "./pwa.install";
 
 export function Header() {
   const { user } = useStore();
@@ -32,11 +33,15 @@ export function Header() {
               : "border-0 shadow-none"
           }>
           <Toolbar>
+            {/* PWA Install */}
+            <Box className="ion-hide-md-up">
+              <InstallPWA />
+            </Box>
             {/* Logo */}
             <Box
               sx={{
                 flexGrow: 1,
-                marginLeft: `${user.auth ? "3.5em" : "0"}`,
+                marginLeft: 0,
                 marginRight: `${user.auth ? "0" : "1.5em"}`
               }}
               className="ion-hide-md-up ion-text-center">

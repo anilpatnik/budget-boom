@@ -12,7 +12,7 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
       manifest: {
-        name: "budgetezy.me",
+        name: "budgetezy",
         short_name: "budgetezy",
         description: "track, analyze, and manage your income and expenses",
         start_url: "/",
@@ -26,15 +26,15 @@ export default defineConfig({
         ],
         screenshots: [
           {
-            src: "pwa-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
+            src: "screenshot1.jpg",
+            sizes: "1092x669",
+            type: "image/jpg",
             form_factor: "wide"
           },
           {
-            src: "pwa-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
+            src: "screenshot2.jpg",
+            sizes: "344x582",
+            type: "image/jpg",
             form_factor: "narrow"
           }
         ]
