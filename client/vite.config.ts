@@ -45,7 +45,7 @@ export default defineConfig({
         clientsClaim: true,
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024 // Allow 10MB
       },
-      devOptions: { enabled: true }
+      devOptions: { enabled: false }
     })
   ],
   build: { outDir: "web-build" },
