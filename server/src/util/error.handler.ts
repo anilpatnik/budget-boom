@@ -26,8 +26,8 @@ export const errorHandler = (err: any, req: Request, res: Response, next: NextFu
     errStack = error.stack?.replace(":", String.empty) || error.message;
   }
   helper.LogError(errStack);
-  if (errMessage === ResponseType.TokenExpired) res.status(403);
-  else if (errMessage === ResponseType.TokenInvalid) res.status(403);
+  if (errMessage === ResponseType.TokenExpired) res.status(401);
+  else if (errMessage === ResponseType.TokenInvalid) res.status(401);
   else if (errMessage === ResponseType.Unauthorised) res.status(401);
   else res.status(res.statusCode);
   // res.send({ name: err.name, message: err.message });
