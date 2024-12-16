@@ -108,119 +108,123 @@ export function SignInPage() {
 
   // Display a form to capture the user's email and password
   return (
-    <IonGrid>
-      <IonRow>
-        <IonCol className="ion-hide-md-down">
-          <img alt={String.empty} src={constants.BANNER_IMG} loading="lazy" />
-        </IonCol>
-        <IonCol sizeXs="12" sizeMd="5" sizeLg="4">
-          <IonGrid>
-            <IonRow className="ion-hide-md-down text-center">
-              <IonCol>
-                <img
-                  alt={String.empty}
-                  src={constants.LOGO_IMG}
-                  height={constants.LOGO_HEIGHT}
-                  loading="lazy"
-                  className="cursor-pointer"
-                  onClick={() => navigate(NavType.Root)}
-                />
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol className="text-center">
-                <IonGrid className="flex justify-center items-center">
-                  <IonRow>
-                    <IonCol sizeSm="6">
-                      <IonButton
-                        type="button"
-                        className="google-button"
-                        onClick={() => handleLogin(true, String.empty, String.empty)}>
-                        <Icon name="logo-google" slot="start" />
-                        Sign In with Google
-                      </IonButton>
-                    </IonCol>
-                  </IonRow>
-                </IonGrid>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-                <IonCard className="ion-padding-bottom">
-                  <IonCardContent>
-                    <form onSubmit={formik.handleSubmit}>
-                      <div className="my-6">
-                        <InputComponent
-                          name="email"
-                          label="Email"
-                          type="email"
-                          value={formik.values.email}
-                          touched={formik.touched.email}
-                          errorMessage={formik.errors.email}
-                          handleChange={formik.handleChange}
-                        />
+    <>
+      <IonGrid>
+        <IonRow>
+          <IonCol className="ion-hide-md-down">
+            <img alt={String.empty} src={constants.BANNER_IMG} loading="lazy" />
+          </IonCol>
+          <IonCol sizeXs="12" sizeMd="5" sizeLg="4">
+            <IonGrid>
+              <IonRow className="ion-hide-md-down text-center">
+                <IonCol>
+                  <img
+                    alt={String.empty}
+                    src={constants.LOGO_IMG}
+                    height={constants.LOGO_HEIGHT}
+                    loading="lazy"
+                    className="cursor-pointer"
+                    onClick={() => navigate(NavType.Root)}
+                  />
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol className="text-center">
+                  <IonGrid className="flex justify-center items-center">
+                    <IonRow>
+                      <IonCol sizeSm="6">
+                        <IonButton
+                          type="button"
+                          className="google-button"
+                          onClick={() => handleLogin(true, String.empty, String.empty)}>
+                          <Icon name="logo-google" slot="start" />
+                          Sign In with Google
+                        </IonButton>
+                      </IonCol>
+                    </IonRow>
+                  </IonGrid>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <IonCard className="ion-padding-bottom">
+                    <IonCardContent>
+                      <form onSubmit={formik.handleSubmit}>
+                        <div className="my-6">
+                          <InputComponent
+                            name="email"
+                            label="Email"
+                            type="email"
+                            value={formik.values.email}
+                            touched={formik.touched.email}
+                            errorMessage={formik.errors.email}
+                            handleChange={formik.handleChange}
+                          />
+                        </div>
+                        <div className="my-6">
+                          <PasswordComponent
+                            name="password"
+                            label="Password"
+                            value={formik.values.password}
+                            touched={formik.touched.password}
+                            errorMessage={formik.errors.password}
+                            handleChange={formik.handleChange}
+                          />
+                        </div>
+                        <div className="ion-margin-vertical">
+                          <ReCAPTCHA
+                            id="id-recaptcha"
+                            ref={recaptchaRef}
+                            sitekey={config.VITE_CAPTCHA_SITE}
+                          />
+                        </div>
+                        <IonButton
+                          id="id-submit-button"
+                          size="small"
+                          type="submit"
+                          className="ion-margin-vertical">
+                          <button type="submit" hidden />
+                          <Icon name="caret-forward-sharp" slot="start" />
+                          SIGN IN
+                        </IonButton>
+                      </form>
+                      <div className="ion-margin-top privacy">
+                        By clicking on Sign In (Google inclusive), I agree to the website
+                        <Link to={NavType.TermsConditions}> Terms and Conditions</Link> and
+                        <Link to={NavType.PrivacyPolicy}> Privacy Policy</Link>
                       </div>
-                      <div className="my-6">
-                        <PasswordComponent
-                          name="password"
-                          label="Password"
-                          value={formik.values.password}
-                          touched={formik.touched.password}
-                          errorMessage={formik.errors.password}
-                          handleChange={formik.handleChange}
-                        />
-                      </div>
-                      <div className="ion-margin-vertical">
-                        <ReCAPTCHA
-                          id="id-recaptcha"
-                          ref={recaptchaRef}
-                          sitekey={config.VITE_CAPTCHA_SITE}
-                        />
-                      </div>
-                      <IonButton
-                        id="id-submit-button"
-                        size="small"
-                        type="submit"
-                        className="ion-margin-vertical">
-                        <button type="submit" hidden />
-                        <Icon name="caret-forward-sharp" slot="start" />
-                        SIGN IN
-                      </IonButton>
-                    </form>
-                    <div className="ion-margin-top privacy">
-                      By clicking on Sign In (Google inclusive), I agree to the website
-                      <Link to={NavType.TermsConditions}> Terms and Conditions</Link> and
-                      <Link to={NavType.PrivacyPolicy}> Privacy Policy</Link>
-                    </div>
-                  </IonCardContent>
-                </IonCard>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol className="ion-text-center">
-                <div>
-                  <Link className="sign-label" to={NavType.ForgotPassword}>
-                    Forgot your password?
-                  </Link>
-                </div>
-                <div className="mt-4">
-                  <Link className="sign-label" to={NavType.SignUp}>
-                    Don’t have an account?
-                    <IonBadge color="secondary" className="badge">
-                      SIGN UP
-                    </IonBadge>
-                  </Link>
-                </div>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol className="ion-text-center">
-                <IonLoading isOpen={loading || false} spinner="bubbles" message="Loading..." />
-              </IonCol>
-            </IonRow>
-          </IonGrid>
-        </IonCol>
-      </IonRow>
-    </IonGrid>
+                    </IonCardContent>
+                  </IonCard>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol className="ion-text-center">
+                  <div>
+                    <Link className="sign-label" to={NavType.ForgotPassword}>
+                      Forgot your password?
+                    </Link>
+                  </div>
+                  <div className="mt-4">
+                    <Link className="sign-label" to={NavType.SignUp}>
+                      Don’t have an account?
+                      <IonBadge color="secondary" className="badge">
+                        SIGN UP
+                      </IonBadge>
+                    </Link>
+                  </div>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          </IonCol>
+        </IonRow>
+      </IonGrid>
+      <IonLoading
+        isOpen={loading || false}
+        spinner="circles"
+        message="Loading..."
+        showBackdrop={loading || false}
+        translucent={loading || false}
+      />
+    </>
   );
 }

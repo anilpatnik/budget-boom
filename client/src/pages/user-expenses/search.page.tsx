@@ -114,7 +114,16 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
               size="small"
               color="light"
               className="ml-5"
-              onClick={formik.handleReset}
+              onClick={() =>
+                formik.resetForm({
+                  values: {
+                    startDate: dateY90,
+                    endDate: dateT90,
+                    projectId: String.empty,
+                    categoryId: String.empty
+                  }
+                })
+              }
               onDoubleClick={() => handleClose()}>
               <Icon name="refresh-sharp" slot="start" />
               RESET
