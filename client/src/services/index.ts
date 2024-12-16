@@ -9,11 +9,7 @@ const authApi = axios.create({ baseURL: ApiUrl });
 authApi.interceptors.response.use(
   async response => response,
   async error => {
-    if (
-      error.response &&
-      error.response.status === 401 &&
-      error.response.statusText === "Unauthorized"
-    ) {
+    if (error.response && error.response.status === 401) {
       sessionStorage.clear();
       localStorage.clear();
       await fb.fSignOut().then(() => {
