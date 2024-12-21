@@ -194,10 +194,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
               size="small"
               color="secondary"
               type="submit"
-              onClick={() => formik.handleSubmit()}
-              onDoubleClick={() => handleClose()}
               disabled={loading}>
-              <button type="submit" hidden />
               {loading ? (
                 <Icon name="sync-sharp" css="icon-spinner" slot="start" />
               ) : (

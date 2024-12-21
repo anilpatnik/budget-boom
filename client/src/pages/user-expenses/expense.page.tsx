@@ -17,7 +17,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { CrudType, constants, convertoISO, dateNow, parsePrice } from "@/util";
 import { IExpense, IProject } from "@/models";
-import { getCategories, getCategory, upsertExpenseAsync } from "@/services";
+import { categories, getCategories, getCategory, upsertExpenseAsync } from "@/services";
 import {
   InputComponent,
   DateComponent,
@@ -47,7 +47,7 @@ export function ExpensePage({
     initialValues: {
       entryDate: expense?.entryDate || dateNow,
       projectId: expense?.projectId || String.empty,
-      categoryId: expense?.categoryId || getCategory(String.empty).id,
+      categoryId: expense?.categoryId || String.empty,
       price: Math.abs(expense?.price || 0),
       expenditure: !(expense?.price && expense?.price > 0),
       taxable: expense?.taxable || false,
@@ -248,10 +248,7 @@ export function ExpensePage({
               size="small"
               color="secondary"
               type="submit"
-              onClick={() => formik.handleSubmit()}
-              onDoubleClick={() => handleClose()}
               disabled={loading}>
-              <button type="submit" hidden />
               {loading ? (
                 <Icon name="sync-sharp" css="icon-spinner" slot="start" />
               ) : (
