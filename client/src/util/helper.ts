@@ -3,7 +3,7 @@ import { IExpense } from "@/models";
 export const parsePrice = (expense: boolean, price: number) => (expense ? -price : price);
 
 export const formatPrice = (price: number, currency?: string) => {
-  const formattedPrice = new Intl.NumberFormat(navigator.language, {
+  const formattedPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: currency ?? "NZD"
   }).format(price);
