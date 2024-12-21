@@ -151,7 +151,7 @@ export function ExpensePage({
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <form>
+        <form onSubmit={formik.handleSubmit}>
           <div className="my-6">
             <DateComponent
               name="entryDate"
@@ -247,9 +247,11 @@ export function ExpensePage({
               id="id-submit-button"
               size="small"
               color="secondary"
+              type="submit"
               onClick={() => formik.handleSubmit()}
               onDoubleClick={() => handleClose()}
               disabled={loading}>
+              <button type="submit" hidden />
               {loading ? (
                 <Icon name="sync-sharp" css="icon-spinner" slot="start" />
               ) : (

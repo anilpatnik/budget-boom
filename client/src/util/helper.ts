@@ -2,10 +2,10 @@ import { IExpense } from "@/models";
 
 export const parsePrice = (expense: boolean, price: number) => (expense ? -price : price);
 
-export const formatPrice = (price: number, currency?: string) => {
-  const formattedPrice = new Intl.NumberFormat("en-US", {
+export const formatPrice = (price: number, currency: string = "AUD") => {
+  const formattedPrice = new Intl.NumberFormat(navigator.language, {
     style: "currency",
-    currency: currency ?? "NZD"
+    currency
   }).format(price);
   if (price < 0) return formattedPrice.slice(1);
   return formattedPrice;

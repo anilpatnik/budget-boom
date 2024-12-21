@@ -134,7 +134,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <form>
+        <form onSubmit={formik.handleSubmit}>
           <div className="my-6">
             <InputComponent
               name="name"
@@ -193,9 +193,11 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
               id="id-submit-button"
               size="small"
               color="secondary"
+              type="submit"
               onClick={() => formik.handleSubmit()}
               onDoubleClick={() => handleClose()}
               disabled={loading}>
+              <button type="submit" hidden />
               {loading ? (
                 <Icon name="sync-sharp" css="icon-spinner" slot="start" />
               ) : (
