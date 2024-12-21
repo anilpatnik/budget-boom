@@ -50,6 +50,7 @@ export default defineConfig({
   ],
   build: { outDir: "web-build" },
   server: {
+    host: "0.0.0.0",
     port: 44454,
     https: {
       key: fs.readFileSync("../ssl.key"),

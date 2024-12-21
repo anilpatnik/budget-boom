@@ -18,14 +18,16 @@ import {
   TableRow
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { CrudType, dateFormat, formatPrice, totalPrice, constants } from "@/util";
+import { CrudType, dateFormat, constants, formatPrice, totalPrice } from "@/util";
 import { IExpense, Expense, IExpenseSearch, ExpenseSearch } from "@/models";
 import { getExpensesAsync, deleteExpenseAsync, getCategory, getAllProjectsAsync } from "@/services";
 import { Icon } from "@/components";
 import { ExpensePage } from "./expense.page";
 import { ExpenseSearchPage } from "./search.page";
+import { useStore } from "@/contexts";
 
 export function ExpensesPage() {
+  const { user } = useStore();
   const hasMounted = useRef(false);
   const [records, setRecords] = useState<IExpense[]>([]);
   const [record, setRecord] = useState<IExpense>(Expense);
@@ -198,7 +200,11 @@ export function ExpensesPage() {
             </TableCell>
             <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
               <Box>Total</Box>
-              <Box sx={{ display: { xs: "none", sm: "table-cell" } }}>{totalPrice(records)}</Box>
+              <Box sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                <Box className={totalPrice(records) < 0 ? "text-red-700" : String.empty}>
+                  {formatPrice(totalPrice(records), user?.countryId)}
+                </Box>
+              </Box>
             </TableCell>
             <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
               Category
@@ -243,14 +249,22 @@ export function ExpensesPage() {
                         css="text-2xl text-black mr-3"
                       />
                     )}
-                    {item?.price && `${formatPrice(item?.price)}`}
+                    {item?.price && (
+                      <Box className={item.price < 0 ? "text-red-700" : String.empty}>
+                        {formatPrice(item.price, user?.countryId)}
+                      </Box>
+                    )}
                   </Box>
                 </Box>
               </TableCell>
               <TableCell
                 sx={{ display: { xs: "none", sm: "table-cell", minWidth: 150 } }}
                 align="left">
-                {item?.price && `${formatPrice(item?.price)}`}
+                {item?.price && (
+                  <Box className={item.price < 0 ? "text-red-700" : String.empty}>
+                    {formatPrice(item.price, user?.countryId)}
+                  </Box>
+                )}
               </TableCell>
               <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                 <Box className="flex items-center">

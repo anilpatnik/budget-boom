@@ -1,25 +1,15 @@
 import { IExpense } from "@/models";
 
 export const parsePrice = (expense: boolean, price: number) => (expense ? -price : price);
-export const formatPrice = (price: number) => {
-  const formattedPrice = new Intl.NumberFormat("en-AU", {
+
+export const formatPrice = (price: number, currency?: string) => {
+  const formattedPrice = new Intl.NumberFormat(navigator.language, {
     style: "currency",
-    currency: "AUD"
+    currency: currency ?? "NZD"
   }).format(price);
-  if (price < 0) return `-${formattedPrice.slice(1)}`;
+  if (price < 0) return formattedPrice.slice(1);
   return formattedPrice;
 };
 
-export const totalPrice = (items: IExpense[]) => {
-  const total = items?.map(x => x.price || 0).reduce((sum, i) => sum + i, 0);
-  return formatPrice(total);
-};
-
-export const isIOS = () => {
-  const userAgent = navigator.userAgent.toLowerCase();
-  return userAgent.includes("iphone");
-};
-export const isAndroid = () => {
-  const userAgent = navigator.userAgent.toLowerCase();
-  return userAgent.includes("android");
-};
+export const totalPrice = (items: IExpense[]) =>
+  items?.map(x => x.price || 0).reduce((sum, i) => sum + i, 0);

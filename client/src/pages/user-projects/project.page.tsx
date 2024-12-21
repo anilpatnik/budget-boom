@@ -39,7 +39,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
     validationSchema: Yup.object({
       name: Yup.string().required("required"),
       budget: Yup.number()
-        .typeError("budget must be a number")
+        //.typeError("budget must be a number")
         .min(0, "budget should be zero or greater")
         .test("is-decimal", "budget should be two decimals", (val: any) => {
           if (val) return constants.TWO_DECIMAL_PATTERN.test(val);
@@ -150,12 +150,13 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
             <InputComponent
               name="budget"
               label="Budget"
+              type="number"
               startAdor={true}
               startAdorText="$"
-              value={formik.values.budget.toString()}
+              value={formik.values.budget > 0 ? formik.values.budget.toString() : String.empty}
               touched={formik.touched.budget}
               errorMessage={formik.errors.budget}
-              handleChange={formik.handleChange}
+              handleChange={e => formik.setFieldValue("budget", e.target.value)}
               optional={true}
             />
           </div>

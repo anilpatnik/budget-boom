@@ -124,6 +124,6 @@ export const categories = [
   }
 ];
 export const countries = [
-  { id: "AUS", name: "Australia", tax: "JUL" },
-  { id: "NZ", name: "New Zealand", tax: "APR" }
+  { id: "AUD", name: "Australia", tax: "JUL" },
+  { id: "NZD", name: "New Zealand", tax: "APR" }
 ];

@@ -58,7 +58,7 @@ export function ExpensePage({
       entryDate: Yup.date().required("required"),
       categoryId: Yup.string().required("required"),
       price: Yup.number()
-        .typeError("amount must be a number")
+        //.typeError("amount must be a number")
         .positive("amount should be greater than zero")
         .test("is-decimal", "amount should be two decimals", (val: any) => {
           if (val) return constants.TWO_DECIMAL_PATTERN.test(val);
@@ -169,12 +169,13 @@ export function ExpensePage({
                   <InputComponent
                     name="price"
                     label="Amount"
+                    type="number"
                     startAdor={true}
                     startAdorText="$"
-                    value={formik.values.price.toString()}
+                    value={formik.values.price > 0 ? formik.values.price.toString() : String.empty}
                     touched={formik.touched.price}
                     errorMessage={formik.errors.price}
-                    handleChange={formik.handleChange}
+                    handleChange={e => formik.setFieldValue("price", e.target.value)}
                   />
                 </IonCol>
                 <IonCol className="text-right" size="12" size-md="6">
