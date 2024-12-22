@@ -47,7 +47,7 @@ export function ExpensePage({
     initialValues: {
       entryDate: expense?.entryDate || dateNow,
       projectId: expense?.projectId || String.empty,
-      categoryId: expense?.categoryId || String.empty,
+      categoryId: expense?.categoryId || "FOOD",
       price: Math.abs(expense?.price || 0),
       expenditure: !(expense?.price && expense?.price > 0),
       taxable: expense?.taxable || false,
@@ -219,18 +219,6 @@ export function ExpensePage({
             </IonGrid>
           </div>
           <div className="my-6">
-            <AutoSelectComponent
-              name="projectId"
-              label="Project"
-              value={formik.values.projectId}
-              optional={true}
-              touched={formik.touched.projectId}
-              errorMessage={formik.errors.projectId}
-              handleChange={value => formik.setFieldValue("projectId", value)}
-              payload={projects || []}
-            />
-          </div>
-          <div className="my-6">
             <InputComponent
               name="notes"
               label="Notes"
@@ -240,6 +228,18 @@ export function ExpensePage({
               touched={formik.touched.notes}
               errorMessage={formik.errors.notes}
               handleChange={formik.handleChange}
+            />
+          </div>
+          <div className="my-6">
+            <AutoSelectComponent
+              name="projectId"
+              label="Project"
+              value={formik.values.projectId}
+              optional={true}
+              touched={formik.touched.projectId}
+              errorMessage={formik.errors.projectId}
+              handleChange={value => formik.setFieldValue("projectId", value)}
+              payload={projects || []}
             />
           </div>
           <div className="my-6">

@@ -9,12 +9,12 @@ export const getCountry = (id: string) =>
 export const categories = [
   {
     id: "NONE",
-    name: "None",
+    name: "Unclassified",
     icon: "sparkles-outline"
   },
   {
     id: "HOME",
-    name: "Home & Repairs",
+    name: "Home Maintenance",
     icon: "home-outline"
   },
   {
@@ -24,7 +24,7 @@ export const categories = [
   },
   {
     id: "INTEREST",
-    name: "Interest",
+    name: "Interest Paid",
     icon: "card-outline"
   },
   {
@@ -39,8 +39,13 @@ export const categories = [
   },
   {
     id: "CAR",
-    name: "Car & Repairs",
+    name: "Vehicle Maintenance",
     icon: "car-outline"
+  },
+  {
+    id: "FUEL",
+    name: "Vehicle Fuel",
+    icon: "scale-outline"
   },
   {
     id: "SHOPPING",
@@ -54,7 +59,7 @@ export const categories = [
   },
   {
     id: "EARNINGS",
-    name: "Income",
+    name: "Earned Income",
     icon: "cash-outline"
   },
   {
