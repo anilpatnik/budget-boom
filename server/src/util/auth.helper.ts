@@ -8,7 +8,7 @@ import { UserInfo, CreateRequest, UpdateRequest, fAuth } from "./firebase";
 
 // jwt token
 export const getToken = (payload: IToken) => {
-  return jwt.sign(payload, TOKEN_SECRET as string, { expiresIn: "6h" });
+  return jwt.sign(payload, TOKEN_SECRET as string, { expiresIn: "1y" });
 };
 export const verifyToken = (token: string): Promise<IToken | string> => {
   return new Promise((resolve, reject) => {
