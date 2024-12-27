@@ -33,6 +33,8 @@ export function ProfileInfoPage() {
         color: constants.DANGER,
         duration: constants.FAILURE_DELAY
       });
+      setLoading(false);
+      return;
     } else {
       setAuth(prev => ({
         ...prev,
@@ -40,8 +42,15 @@ export function ProfileInfoPage() {
         countryId,
         currency: getCountry(countryId ?? navigator.language)?.code
       }));
+      present({
+        message: "Updated Successfully",
+        color: constants.SUCCESS,
+        duration: constants.SUCCESS_DELAY
+      });
+      setTimeout(() => {
+        setLoading(false);
+      }, constants.DELAY);
     }
-    setTimeout(() => setLoading(false), constants.DELAY);
   };
 
   return (
