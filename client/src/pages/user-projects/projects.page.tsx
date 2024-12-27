@@ -174,13 +174,11 @@ export function ProjectsPage() {
                 <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
                   <Box className="mt-2 flex items-center">
                     {item?.actual && (
-                      <Box className="flex items-center">
-                        <Box className="text-purple-700">
-                          {formatPrice(item.actual, user?.countryId, user?.currency)}
-                        </Box>
-                        <Box className="mx-2">|</Box>
+                      <Box className="text-purple-700">
+                        {formatPrice(item.actual, user?.countryId, user?.currency)}
                       </Box>
                     )}
+                    <Box className="mx-2">|</Box>
                     {item?.budget && (
                       <Box className="text-cyan-700">
                         {formatPrice(item.budget, user?.countryId, user?.currency)}
