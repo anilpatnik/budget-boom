@@ -1,9 +1,19 @@
 import { IExpense } from "@/models";
+import { getCountry } from "@/services";
 
 export const parsePrice = (expense: boolean, price: number) => (expense ? -price : price);
 
-export const formatPrice = (price: number, currency: string = "AUD") => {
-  const formattedPrice = new Intl.NumberFormat(navigator.language, {
+export const formatPrice = (
+  price: number,
+  countryId: string = String.empty,
+  currency: string = String.empty
+) => {
+  if (countryId.length === 0 || currency.length === 0) {
+    const country = getCountry(navigator.language);
+    countryId = country.id;
+    currency = country.code;
+  }
+  const formattedPrice = new Intl.NumberFormat(countryId, {
     style: "currency",
     currency
   }).format(price);

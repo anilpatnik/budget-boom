@@ -1,8 +1,8 @@
 export const getCategories = () => categories.sort((a, b) => a.name.localeCompare(b.name));
-
 export const getCategory = (id: string) =>
   categories.find(x => x.id.toUpperCase() === id.toUpperCase()) ?? categories[0];
 
+export const getCountries = () => countries.sort((a, b) => a.name.localeCompare(b.name));
 export const getCountry = (id: string) =>
   countries.find(x => x.id.toUpperCase() === id.toUpperCase()) ?? countries[0];
 
@@ -129,6 +129,142 @@ export const categories = [
   }
 ];
 export const countries = [
-  { id: "AUD", name: "Australia", tax: "JUL" },
-  { id: "NZD", name: "New Zealand", tax: "APR" }
+  {
+    id: "en-AU",
+    name: "Australia",
+    code: "AUD",
+    tax: "July"
+  },
+  {
+    id: "en-NZ",
+    name: "New Zealand",
+    code: "NZD",
+    tax: "April"
+  },
+  {
+    id: "en-US",
+    name: "United States",
+    code: "USD",
+    tax: "April"
+  },
+  {
+    id: "en-GB",
+    name: "United Kingdom",
+    code: "GBP",
+    tax: "January"
+  },
+  {
+    id: "fr-FR",
+    name: "France",
+    code: "EUR",
+    tax: "May"
+  },
+  {
+    id: "de-DE",
+    name: "Germany",
+    code: "EUR",
+    tax: "May"
+  },
+  {
+    id: "es-ES",
+    name: "Spain",
+    code: "EUR",
+    tax: "May"
+  },
+  {
+    id: "it-IT",
+    name: "Italy",
+    code: "EUR",
+    tax: "May"
+  },
+  {
+    id: "pt-PT",
+    name: "Portugal",
+    code: "EUR",
+    tax: "April"
+  },
+  {
+    id: "ja-JP",
+    name: "Japan",
+    code: "JPY",
+    tax: "March"
+  },
+  {
+    id: "ko-KR",
+    name: "South Korea",
+    code: "KRW",
+    tax: "May"
+  },
+  {
+    id: "zh-CN",
+    name: "China",
+    code: "CNY",
+    tax: "March"
+  },
+  {
+    id: "hi-IN",
+    name: "India",
+    code: "INR",
+    tax: "March"
+  },
+  {
+    id: "af-ZA",
+    name: "South Africa",
+    code: "ZAR",
+    tax: "October"
+  },
+  {
+    id: "en-CA",
+    name: "Canada",
+    code: "CAD",
+    tax: "April"
+  },
+  {
+    id: "ru-RU",
+    name: "Russia",
+    code: "RUB",
+    tax: "April"
+  },
+  {
+    id: "en-IE",
+    name: "Ireland",
+    code: "EUR",
+    tax: "October"
+  },
+  {
+    id: "sv-SE",
+    name: "Sweden",
+    code: "SEK",
+    tax: "May"
+  },
+  {
+    id: "fi-FI",
+    name: "Finland",
+    code: "EUR",
+    tax: "May"
+  },
+  {
+    id: "no-NO",
+    name: "Norway",
+    code: "NOK",
+    tax: "May"
+  },
+  {
+    id: "da-DK",
+    name: "Denmark",
+    code: "DKK",
+    tax: "May"
+  },
+  {
+    id: "en-NL",
+    name: "Netherlands",
+    code: "EUR",
+    tax: "May"
+  },
+  {
+    id: "en-BR",
+    name: "Brazil",
+    code: "BRL",
+    tax: "April"
+  }
 ];

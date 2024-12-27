@@ -17,7 +17,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { CrudType, constants, convertoISO, dateNow, parsePrice } from "@/util";
 import { IExpense, IProject } from "@/models";
-import { categories, getCategories, getCategory, upsertExpenseAsync } from "@/services";
+import { getCategories, upsertExpenseAsync } from "@/services";
 import {
   InputComponent,
   DateComponent,

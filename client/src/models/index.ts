@@ -12,6 +12,7 @@ export interface IUser {
   role?: RoleType;
   token?: string;
   countryId?: string;
+  currency?: string;
   auth?: boolean;
   external?: boolean;
 }
@@ -22,6 +23,7 @@ export const User: IUser = {
   role: RoleType.User,
   token: String.empty,
   countryId: String.empty,
+  currency: String.empty,
   auth: false,
   external: false
 };
@@ -94,22 +96,6 @@ export interface IProjectData extends IAggregate {
   data?: IProject[];
 }
 
-export interface IExpenseSearch {
-  startDate?: string;
-  endDate?: string;
-  categoryId?: string;
-  projectId?: string;
-  page?: number;
-  size?: number;
-}
-export const ExpenseSearch: IExpenseSearch = {
-  startDate: String.empty,
-  endDate: String.empty,
-  categoryId: String.empty,
-  projectId: String.empty,
-  page: 0,
-  size: constants.PAGE_SIZE
-};
 export interface IExpense {
   id?: string;
   entryDate?: string;
@@ -135,3 +121,19 @@ export const Expense: IExpense = {
 export interface IExpenseData extends IAggregate {
   data?: IExpense[];
 }
+export interface IExpenseSearch {
+  startDate?: string;
+  endDate?: string;
+  categoryId?: string;
+  projectId?: string;
+  page?: number;
+  size?: number;
+}
+export const ExpenseSearch: IExpenseSearch = {
+  startDate: String.empty,
+  endDate: String.empty,
+  categoryId: String.empty,
+  projectId: String.empty,
+  page: 0,
+  size: constants.PAGE_SIZE
+};

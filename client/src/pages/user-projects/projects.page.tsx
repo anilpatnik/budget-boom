@@ -17,13 +17,15 @@ import {
   TableHead,
   TableRow
 } from "@mui/material";
-import { CrudType, dateFormat, constants } from "@/util";
+import { CrudType, dateFormat, constants, formatPrice } from "@/util";
 import { IProject, Project } from "@/models";
 import { deleteProjectAsync, getProjectsAsync } from "@/services";
 import { ProjectPage } from "./project.page";
 import { Icon } from "@/components";
+import { useStore } from "@/contexts";
 
 export function ProjectsPage() {
+  const { user } = useStore();
   const hasMounted = useRef(false);
   const [records, setRecords] = useState<IProject[]>([]);
   const [record, setRecord] = useState<IProject>(Project);
@@ -166,7 +168,9 @@ export function ProjectsPage() {
             <TableRow key={index}>
               <TableCell align="left">{item?.name}</TableCell>
               <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                {item?.budget ? `$${item?.budget?.toFixed(2)}` : String.empty}
+                {item?.budget
+                  ? formatPrice(item.budget, user?.countryId, user?.currency)
+                  : String.empty}
               </TableCell>
               <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                 {item?.startDate ? dateFormat(item.startDate) : String.empty}

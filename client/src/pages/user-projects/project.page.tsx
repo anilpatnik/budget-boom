@@ -31,7 +31,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
   const formik = useFormik({
     initialValues: {
       name: project?.name || String.empty,
-      budget: project?.budget || 0,
+      budget: Math.abs(project?.budget || 0),
       startDate: project?.startDate || dateT1,
       endDate: project?.endDate || dateT30
     },
@@ -52,13 +52,14 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
         .notRequired()
     }),
     onSubmit: async values => {
+      console.log(values);
       setLoading(true);
       if (project?.id?.length === 0) {
         const newProject: IProject = {
           id: crypto.randomUUID(),
           name: values?.name,
           prevName: project?.prevName,
-          budget: values?.budget,
+          budget: parseFloat(values?.budget?.toString()),
           startDate: values?.startDate,
           endDate: values?.endDate,
           type: CrudType.Create
@@ -89,7 +90,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
           id: project?.id,
           name: values?.name,
           prevName: project?.name,
-          budget: values?.budget,
+          budget: parseFloat(values?.budget?.toString()),
           startDate: values?.startDate,
           endDate: values?.endDate,
           type: CrudType.Update

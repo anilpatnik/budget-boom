@@ -196,7 +196,7 @@ export function ExpensesPage() {
               <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
                 <Box>Total</Box>
                 <Box className={totalPrice(records) < 0 ? "text-red-700" : String.empty}>
-                  {formatPrice(totalPrice(records))}
+                  {formatPrice(totalPrice(records), user?.countryId, user?.currency)}
                 </Box>
               </Box>
             </TableCell>
@@ -204,7 +204,7 @@ export function ExpensesPage() {
               <Box>Total</Box>
               <Box sx={{ display: { xs: "none", sm: "table-cell" } }}>
                 <Box className={totalPrice(records) < 0 ? "text-red-700" : String.empty}>
-                  {formatPrice(totalPrice(records))}
+                  {formatPrice(totalPrice(records), user?.countryId, user?.currency)}
                 </Box>
               </Box>
             </TableCell>
@@ -253,7 +253,7 @@ export function ExpensesPage() {
                     )}
                     {item?.price && (
                       <Box className={item.price < 0 ? "text-red-700" : String.empty}>
-                        {formatPrice(item.price, user?.countryId)}
+                        {formatPrice(item.price, user?.countryId, user?.currency)}
                       </Box>
                     )}
                   </Box>
@@ -264,7 +264,7 @@ export function ExpensesPage() {
                 align="left">
                 {item?.price && (
                   <Box className={item.price < 0 ? "text-red-700" : String.empty}>
-                    {formatPrice(item.price, user?.countryId)}
+                    {formatPrice(item.price, user?.countryId, user?.currency)}
                   </Box>
                 )}
               </TableCell>

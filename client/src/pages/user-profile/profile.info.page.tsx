@@ -3,7 +3,7 @@ import { IonButton, useIonToast } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useStore } from "@/contexts";
-import { countries, updateProfileInfo } from "@/services";
+import { getCountries, getCountry, updateProfileInfo } from "@/services";
 import { Icon, InputComponent, SelectComponent } from "@/components";
 import { constants } from "@/util";
 
@@ -34,7 +34,12 @@ export function ProfileInfoPage() {
         duration: constants.FAILURE_DELAY
       });
     } else {
-      setAuth(prev => ({ ...prev, name, countryId }));
+      setAuth(prev => ({
+        ...prev,
+        name,
+        countryId,
+        currency: getCountry(countryId ?? navigator.language)?.code
+      }));
     }
     setTimeout(() => setLoading(false), constants.DELAY);
   };
@@ -60,7 +65,7 @@ export function ProfileInfoPage() {
           touched={formik.touched.countryId}
           errorMessage={formik.errors.countryId}
           handleChange={formik.handleChange}
-          payload={countries || []}
+          payload={getCountries() || []}
         />
       </div>
       <IonButton

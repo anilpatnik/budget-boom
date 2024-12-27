@@ -17,7 +17,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { Icon, InputComponent, PasswordComponent } from "@/components";
 import { NavType, RoleType, config, constants } from "@/util";
 import { useStore } from "@/contexts";
-import { captchaVerify, signInWithEmail, signInWithGoogle } from "@/services";
+import { captchaVerify, getCountry, signInWithEmail, signInWithGoogle } from "@/services";
 
 export function SignInPage() {
   const { setAuth } = useStore();
@@ -84,7 +84,8 @@ export function SignInPage() {
           role: res?.resource?.role,
           photo: res?.resource?.photo,
           token: res?.resource?.token,
-          countryId: res?.resource?.countryId
+          countryId: res?.resource?.countryId,
+          currency: getCountry(res?.resource?.countryId ?? navigator.language)?.code
         }));
       } else {
         if (res?.resource)
