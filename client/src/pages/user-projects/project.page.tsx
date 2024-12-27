@@ -52,7 +52,6 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
         .notRequired()
     }),
     onSubmit: async values => {
-      console.log(values);
       setLoading(true);
       if (project?.id?.length === 0) {
         const newProject: IProject = {
