@@ -59,6 +59,7 @@ export interface IProject {
   name?: string;
   prevName?: string;
   budget?: number;
+  actual?: number;
   startDate?: string;
   endDate?: string;
   type?: CrudType;

@@ -79,6 +79,7 @@ export interface IProject {
   name?: string;
   prevName?: string;
   budget?: number;
+  actual?: number;
   startDate?: string;
   endDate?: string;
   type?: CrudType;
@@ -88,6 +89,7 @@ export const Project: IProject = {
   name: String.empty,
   prevName: String.empty,
   budget: 0,
+  actual: 0,
   startDate: String.empty,
   endDate: String.empty,
   type: CrudType.Read

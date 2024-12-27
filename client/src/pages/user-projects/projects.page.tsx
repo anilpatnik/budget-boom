@@ -143,6 +143,9 @@ export function ProjectsPage() {
               Budget
             </TableCell>
             <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+              Actual
+            </TableCell>
+            <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
               Start Date
             </TableCell>
             <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
@@ -166,10 +169,34 @@ export function ProjectsPage() {
         <TableBody>
           {records?.map((item, index) => (
             <TableRow key={index}>
-              <TableCell align="left">{item?.name}</TableCell>
+              <TableCell align="left">
+                <Box>{item?.name}</Box>
+                <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
+                  <Box className="mt-2 flex items-center">
+                    {item?.actual && (
+                      <Box className="flex items-center">
+                        <Box className="text-purple-700">
+                          {formatPrice(item.actual, user?.countryId, user?.currency)}
+                        </Box>
+                        <Box className="mx-2">|</Box>
+                      </Box>
+                    )}
+                    {item?.budget && (
+                      <Box className="text-cyan-700">
+                        {formatPrice(item.budget, user?.countryId, user?.currency)}
+                      </Box>
+                    )}
+                  </Box>
+                </Box>
+              </TableCell>
               <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                 {item?.budget
                   ? formatPrice(item.budget, user?.countryId, user?.currency)
+                  : String.empty}
+              </TableCell>
+              <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                {item?.actual
+                  ? formatPrice(item.actual, user?.countryId, user?.currency)
                   : String.empty}
               </TableCell>
               <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { helper, dbhelper, CrudType } from "../util";
 import { IProject, IProjectData } from "../models";
+import { getExpenseTotalByProjectId } from "../util/db.helper";
 
 export const getAllProjectsAsync = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -21,16 +22,19 @@ export const getProjectsAsync = async (req: Request, res: Response, next: NextFu
     const userId = req?.auth?.id || String.empty;
     const { page, size } = req.body;
     const [dbProjects, count] = await dbhelper.getProjects(userId, page, size);
-    const projects: IProject[] = dbProjects?.map(dbProject => {
-      return {
-        id: dbProject?.id,
-        name: dbProject?.name,
-        prevName: dbProject?.name,
-        budget: dbProject?.budget || 0,
-        startDate: dbProject?.startDate ? helper.formatDate(dbProject?.startDate) : String.empty,
-        endDate: dbProject?.endDate ? helper.formatDate(dbProject?.endDate) : String.empty
-      };
-    });
+    const projects: IProject[] = await Promise.all(
+      dbProjects?.map(async dbProject => {
+        return {
+          id: dbProject?.id,
+          name: dbProject?.name,
+          prevName: dbProject?.name,
+          budget: dbProject?.budget || 0,
+          actual: await getExpenseTotalByProjectId(userId, dbProject.id),
+          startDate: dbProject?.startDate ? helper.formatDate(dbProject?.startDate) : String.empty,
+          endDate: dbProject?.endDate ? helper.formatDate(dbProject?.endDate) : String.empty
+        };
+      }) || []
+    );
     const projectData: IProjectData = { data: helper.removeUndefined(projects), count };
     const resJson = helper.responseJson<IProjectData>(true, projectData);
     res.json(resJson);
