@@ -163,22 +163,22 @@ export function ExpensePage({
             />
           </div>
           <div className="my-6">
+            <InputComponent
+              name="price"
+              label="Amount"
+              type="number"
+              startAdor={true}
+              startAdorText="$"
+              value={formik.values.price > 0 ? formik.values.price.toString() : String.empty}
+              touched={formik.touched.price}
+              errorMessage={formik.errors.price}
+              handleChange={e => formik.setFieldValue("price", e.target.value)}
+            />
+          </div>
+          <div className="my-6">
             <IonGrid className="p-0 m-0">
               <IonRow>
-                <IonCol className="p-0 m-0" size="12" size-md="6">
-                  <InputComponent
-                    name="price"
-                    label="Amount"
-                    type="number"
-                    startAdor={true}
-                    startAdorText="$"
-                    value={formik.values.price > 0 ? formik.values.price.toString() : String.empty}
-                    touched={formik.touched.price}
-                    errorMessage={formik.errors.price}
-                    handleChange={e => formik.setFieldValue("price", e.target.value)}
-                  />
-                </IonCol>
-                <IonCol className="text-right" size="12" size-md="6">
+                <IonCol className="p-0 m-0">
                   <IonLabel>Money {formik.values.expenditure ? "Spent" : "Received"}</IonLabel>
                   <Switch
                     id="expenditure"
@@ -187,27 +187,8 @@ export function ExpensePage({
                     onChange={formik.handleChange}
                   />
                 </IonCol>
-              </IonRow>
-            </IonGrid>
-          </div>
-          <div className="my-6">
-            <IonGrid className="p-0 m-0">
-              <IonRow>
-                <IonCol className="p-0 m-0" size="12" size-md="6">
-                  <SelectComponent
-                    name="categoryId"
-                    label="Category"
-                    value={formik.values.categoryId}
-                    touched={formik.touched.categoryId}
-                    errorMessage={formik.errors.categoryId}
-                    handleChange={formik.handleChange}
-                    payload={getCategories() || []}
-                  />
-                </IonCol>
-                <IonCol className="text-right" size="12" size-md="6">
-                  <IonLabel>
-                    {formik.values.taxable ? "Included" : "Include"} in Tax Calculation
-                  </IonLabel>
+                <IonCol className="p-0 m-0">
+                  <IonLabel>Tax Claimable</IonLabel>
                   <Switch
                     id="taxable"
                     name="taxable"
@@ -217,6 +198,17 @@ export function ExpensePage({
                 </IonCol>
               </IonRow>
             </IonGrid>
+          </div>
+          <div className="my-6">
+            <SelectComponent
+              name="categoryId"
+              label="Category"
+              value={formik.values.categoryId}
+              touched={formik.touched.categoryId}
+              errorMessage={formik.errors.categoryId}
+              handleChange={formik.handleChange}
+              payload={getCategories() || []}
+            />
           </div>
           <div className="my-6">
             <InputComponent

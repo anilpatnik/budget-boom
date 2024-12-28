@@ -69,7 +69,7 @@ export function ProfileInfoPage() {
       <div className="my-6">
         <SelectComponent
           name="countryId"
-          label="Tax Country"
+          label="Country"
           value={formik.values.countryId}
           touched={formik.touched.countryId}
           errorMessage={formik.errors.countryId}

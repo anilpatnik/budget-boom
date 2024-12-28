@@ -1,5 +1,6 @@
 import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 import { IonContent, IonPage, IonRouterOutlet } from "@ionic/react";
+import { ToastContainer } from "react-toastify";
 import { NavType, RoleType, RouterType, constants } from "@/util";
 import { StoreProvider, useStore } from "@/contexts";
 import {
@@ -58,6 +59,7 @@ function TabLayout() {
           </IonRouterOutlet>
         </TabMenu>
         <Footer />
+        <ToastContainer />
       </IonPage>
     </StoreProvider>
   );

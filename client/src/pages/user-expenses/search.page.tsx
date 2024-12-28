@@ -53,7 +53,7 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <form>
+        <form onSubmit={formik.handleSubmit}>
           <div className="my-6 flex items-center">
             <div>
               <DateComponent
@@ -101,12 +101,7 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
             />
           </div>
           <div className="my-6">
-            <IonButton
-              id="id-submit-button"
-              size="small"
-              color="secondary"
-              onClick={() => formik.handleSubmit()}
-              onDoubleClick={() => handleClose()}>
+            <IonButton id="id-submit-button" size="small" color="secondary" type="submit">
               <Icon name="search-sharp" slot="start" />
               SEARCH
             </IonButton>

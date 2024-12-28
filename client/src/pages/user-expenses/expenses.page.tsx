@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, Fragment } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   IonButton,
   IonFabButton,
@@ -18,6 +18,7 @@ import {
   TableRow
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
+import { toast, Slide } from "react-toastify";
 import { CrudType, dateFormat, constants, formatPrice, totalPrice } from "@/util";
 import { IExpense, Expense, IExpenseSearch, ExpenseSearch } from "@/models";
 import { getExpensesAsync, deleteExpenseAsync, getCategory, getAllProjectsAsync } from "@/services";
@@ -212,7 +213,7 @@ export function ExpensesPage() {
               Category
             </TableCell>
             <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-              Taxable
+              Tax
             </TableCell>
             <TableCell align="left" sx={{ display: { xs: "table-cell", sm: "none" } }}>
               Notes
@@ -286,11 +287,11 @@ export function ExpensesPage() {
                       <IonButton
                         buttonType="icon"
                         onClick={() =>
-                          present({
-                            message: item.notes,
-                            position: "top",
-                            color: "dark",
-                            duration: 1000
+                          toast(item.notes, {
+                            position: "top-center",
+                            autoClose: 1000,
+                            theme: "dark",
+                            transition: Slide
                           })
                         }>
                         <Icon name="information-circle-sharp" css="text-2xl text-cyan-500" />
@@ -309,11 +310,11 @@ export function ExpensesPage() {
                   <IonButton
                     buttonType="icon"
                     onClick={() =>
-                      present({
-                        message: item.notes,
-                        position: "top",
-                        color: "dark",
-                        duration: 1000
+                      toast(item.notes, {
+                        position: "top-center",
+                        autoClose: 1000,
+                        theme: "dark",
+                        transition: Slide
                       })
                     }>
                     <Icon name="information-circle-sharp" css="text-2xl text-cyan-500" />

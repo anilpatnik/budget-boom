@@ -200,3 +200,9 @@ ion-item:last-child {
   margin: 0 auto;
   display: table;
 }
+/* Toastify */
+@media (max-width: 768px) {
+  .Toastify__toast-container {
+    padding: 10px;
+  }
+}

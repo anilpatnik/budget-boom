@@ -123,7 +123,7 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <form>
+        <form onSubmit={formik.handleSubmit}>
           <Avatar
             className="profile-pic-center"
             sx={{ width: 80, height: 80 }}
@@ -223,8 +223,7 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
               id="id-submit-button"
               size="small"
               color="secondary"
-              onClick={() => formik.handleSubmit()}
-              onDoubleClick={() => handleClose()}
+              type="submit"
               disabled={loading}>
               {loading ? (
                 <Icon name="sync-sharp" css="icon-spinner" slot="start" />
