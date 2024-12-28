@@ -173,29 +173,21 @@ export function ProjectsPage() {
                 <Box>{item?.name}</Box>
                 <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
                   <Box className="mt-2 flex items-center">
-                    {item?.actual && (
-                      <Box className="text-purple-700">
-                        {formatPrice(item.actual, user?.countryId, user?.currency)}
-                      </Box>
-                    )}
+                    <Box className="text-purple-700">
+                      {formatPrice(item.actual ?? 0, user?.countryId, user?.currency)}
+                    </Box>
                     <Box className="mx-2">|</Box>
-                    {item?.budget && (
-                      <Box className="text-cyan-700">
-                        {formatPrice(item.budget, user?.countryId, user?.currency)}
-                      </Box>
-                    )}
+                    <Box className="text-cyan-700">
+                      {formatPrice(item.budget ?? 0, user?.countryId, user?.currency)}
+                    </Box>
                   </Box>
                 </Box>
               </TableCell>
               <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                {item?.budget
-                  ? formatPrice(item.budget, user?.countryId, user?.currency)
-                  : String.empty}
+                {formatPrice(item.budget ?? 0, user?.countryId, user?.currency)}
               </TableCell>
               <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                {item?.actual
-                  ? formatPrice(item.actual, user?.countryId, user?.currency)
-                  : String.empty}
+                {formatPrice(item.actual ?? 0, user?.countryId, user?.currency)}
               </TableCell>
               <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                 {item?.startDate ? dateFormat(item.startDate) : String.empty}

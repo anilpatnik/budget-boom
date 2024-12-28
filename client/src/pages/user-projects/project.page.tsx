@@ -59,6 +59,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
           name: values?.name,
           prevName: project?.prevName,
           budget: parseFloat(values?.budget?.toString()),
+          actual: project?.actual,
           startDate: values?.startDate,
           endDate: values?.endDate,
           type: CrudType.Create
@@ -90,6 +91,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
           name: values?.name,
           prevName: project?.name,
           budget: parseFloat(values?.budget?.toString()),
+          actual: project?.actual,
           startDate: values?.startDate,
           endDate: values?.endDate,
           type: CrudType.Update
