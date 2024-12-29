@@ -13,7 +13,7 @@ import {
 } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { CrudType, constants, convertoISO, dateT1, dateT30 } from "@/util";
+import { CrudType, constants, convertoISO, dateAdd } from "@/util";
 import { IProject } from "@/models";
 import { upsertProjectAsync } from "@/services";
 import { InputComponent, DateComponent, Icon } from "@/components";
@@ -32,8 +32,8 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
     initialValues: {
       name: project?.name || String.empty,
       budget: Math.abs(project?.budget || 0),
-      startDate: project?.startDate || dateT1,
-      endDate: project?.endDate || dateT30
+      startDate: project?.startDate || dateAdd(1),
+      endDate: project?.endDate || dateAdd(30)
     },
     validateOnMount: false,
     validationSchema: Yup.object({
@@ -173,7 +173,9 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
                     optional={true}
                     touched={formik.touched.startDate}
                     errorMessage={formik.errors.startDate}
-                    handleChange={e => formik.setFieldValue("startDate", e.target.value || dateT1)}
+                    handleChange={e =>
+                      formik.setFieldValue("startDate", e.target.value || dateAdd(1))
+                    }
                   />
                 </IonCol>
                 <IonCol>
@@ -184,7 +186,9 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
                     optional={true}
                     touched={formik.touched.endDate}
                     errorMessage={formik.errors.endDate}
-                    handleChange={e => formik.setFieldValue("endDate", e.target.value || dateT30)}
+                    handleChange={e =>
+                      formik.setFieldValue("endDate", e.target.value || dateAdd(30))
+                    }
                   />
                 </IonCol>
               </IonRow>

@@ -1,7 +1,7 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonPage, IonToolbar } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { convertoISO, dateY90, dateT90 } from "@/util";
+import { convertoISO, dateAdd } from "@/util";
 import { IExpenseSearch, IProject } from "@/models";
 import { getCategories } from "@/services";
 import { DateComponent, SelectComponent, AutoSelectComponent, Icon } from "@/components";
@@ -15,8 +15,8 @@ type ComponentProps = {
 export function ExpenseSearchPage({ search, projects, handleClose, handleSearch }: ComponentProps) {
   const formik = useFormik({
     initialValues: {
-      startDate: search?.startDate || dateY90,
-      endDate: search?.endDate || dateT90,
+      startDate: search?.startDate || dateAdd(-30),
+      endDate: search?.endDate || dateAdd(1),
       projectId: search?.projectId || String.empty,
       categoryId: search?.categoryId || String.empty
     },
@@ -62,7 +62,9 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
                 value={convertoISO(formik.values.startDate)}
                 touched={formik.touched.startDate}
                 errorMessage={formik.errors.startDate}
-                handleChange={e => formik.setFieldValue("startDate", e.target.value || dateY90)}
+                handleChange={e =>
+                  formik.setFieldValue("startDate", e.target.value || dateAdd(-30))
+                }
               />
             </div>
             <div className="ml-5">
@@ -72,7 +74,7 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
                 value={convertoISO(formik.values.endDate)}
                 touched={formik.touched.endDate}
                 errorMessage={formik.errors.endDate}
-                handleChange={e => formik.setFieldValue("endDate", e.target.value || dateT90)}
+                handleChange={e => formik.setFieldValue("endDate", e.target.value || dateAdd(1))}
               />
             </div>
           </div>
@@ -112,8 +114,8 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
               onClick={() =>
                 formik.resetForm({
                   values: {
-                    startDate: dateY90,
-                    endDate: dateT90,
+                    startDate: dateAdd(-30),
+                    endDate: dateAdd(1),
                     projectId: String.empty,
                     categoryId: String.empty
                   }
