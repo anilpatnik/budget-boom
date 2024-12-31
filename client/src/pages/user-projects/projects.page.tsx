@@ -157,13 +157,10 @@ export function ProjectsPage() {
                 <Box>{item?.name}</Box>
                 <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
                   <Box className="mt-2 flex items-center">
-                    <Box
-                      className={
-                        (item.actual ?? 0) > (item.budget ?? 0) ? "text-red-700" : "text-green-700"
-                      }>
+                    <Box className="text-indigo-700 font-bold">
                       {formatPrice(item.actual ?? 0, user?.countryId, user?.currency)}
                     </Box>
-                    <Box className="mx-2">|</Box>
+                    <Box className="mx-2">💰</Box>
                     <Box className="text-cyan-700">
                       {formatPrice(item.budget ?? 0, user?.countryId, user?.currency)}
                     </Box>
