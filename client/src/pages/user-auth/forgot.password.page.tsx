@@ -10,14 +10,13 @@ import {
   IonCardTitle,
   IonCol,
   IonGrid,
-  IonRow,
-  useIonToast
+  IonRow
 } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Icon, InputComponent } from "@/components";
-import { NavType, config, constants } from "@/util";
+import { NavType, config, constants, toastify } from "@/util";
 import { captchaVerify, sendForgotPasswordUrl } from "@/services";
 
 export function ForgotPasswordPage() {
@@ -25,7 +24,6 @@ export function ForgotPasswordPage() {
   const [success, setSuccess] = useState(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
   const navigate = useNavigate();
-  const [present] = useIonToast();
 
   const formik = useFormik({
     initialValues: { email: String.empty },
@@ -45,11 +43,7 @@ export function ForgotPasswordPage() {
       if (recaptchaRef.current) {
         captchaValue = recaptchaRef.current.getValue();
         if (!captchaValue) {
-          present({
-            message: "Please verify reCAPTCHA!",
-            color: constants.DANGER,
-            duration: constants.SUCCESS_DELAY
-          });
+          toastify("Please verify reCAPTCHA!", constants.ERROR, constants.SUCCESS_DELAY);
           return;
         }
       }
@@ -64,11 +58,7 @@ export function ForgotPasswordPage() {
       if (res) {
         setSuccess(true);
       } else {
-        present({
-          message: "Email Not Found",
-          color: constants.DANGER,
-          duration: constants.FAILURE_DELAY
-        });
+        toastify("Email Not Found", constants.ERROR, constants.FAILURE_DELAY);
       }
     } finally {
       setTimeout(() => {

@@ -1,14 +1,13 @@
 import { useState } from "react";
-import { IonButton, useIonToast } from "@ionic/react";
+import { IonButton } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Icon, PasswordComponent, PasswordStrength } from "@/components";
 import { updateProfilePassword } from "@/services";
-import { constants } from "@/util";
+import { constants, toastify } from "@/util";
 
 export function ProfilePasswordPage() {
   const [loading, setLoading] = useState(false);
-  const [present] = useIonToast();
 
   const formik = useFormik({
     initialValues: {
@@ -36,17 +35,13 @@ export function ProfilePasswordPage() {
     setLoading(true);
     const res = await updateProfilePassword(password);
     if (res && !res?.success) {
-      present({
-        message: res?.resource,
-        color: constants.DANGER,
-        duration: constants.FAILURE_DELAY
-      });
+      toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
     } else {
-      present({
-        message: "You have successfully changed your password",
-        color: constants.SUCCESS,
-        duration: constants.SUCCESS_DELAY
-      });
+      toastify(
+        "You have successfully changed your password",
+        constants.SUCCESS,
+        constants.SUCCESS_DELAY
+      );
     }
     setTimeout(() => {
       formik.resetForm();

@@ -8,20 +8,18 @@ import {
   IonCol,
   IonGrid,
   IonLoading,
-  IonRow,
-  useIonToast
+  IonRow
 } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Icon, InputComponent, PasswordComponent } from "@/components";
-import { NavType, RoleType, config, constants } from "@/util";
+import { NavType, RoleType, config, constants, toastify } from "@/util";
 import { useStore } from "@/contexts";
 import { captchaVerify, getCountry, signInWithEmail, signInWithGoogle } from "@/services";
 
 export function SignInPage() {
   const { setAuth } = useStore();
-  const [present] = useIonToast();
   const navigate = useNavigate();
   const { state } = useLocation();
   const [loading, setLoading] = useState(false);
@@ -54,11 +52,7 @@ export function SignInPage() {
         if (recaptchaRef.current) {
           captchaValue = recaptchaRef.current.getValue();
           if (!captchaValue) {
-            present({
-              message: "Please verify reCAPTCHA!",
-              color: constants.DANGER,
-              duration: constants.SUCCESS_DELAY
-            });
+            toastify("Please verify reCAPTCHA!", constants.ERROR, constants.SUCCESS_DELAY);
             return;
           }
         }
@@ -88,12 +82,7 @@ export function SignInPage() {
           currency: getCountry(res?.resource?.countryId ?? navigator.language)?.code
         }));
       } else {
-        if (res?.resource)
-          present({
-            message: res?.resource,
-            color: constants.DANGER,
-            duration: constants.FAILURE_DELAY
-          });
+        if (res?.resource) toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
       }
     } finally {
       setTimeout(() => {

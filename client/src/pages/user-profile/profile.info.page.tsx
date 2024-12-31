@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { IonButton, useIonToast } from "@ionic/react";
+import { IonButton } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useStore } from "@/contexts";
 import { getCountries, getCountry, updateProfileInfo } from "@/services";
 import { Icon, InputComponent, SelectComponent } from "@/components";
-import { constants } from "@/util";
+import { constants, toastify } from "@/util";
 
 export function ProfileInfoPage() {
   const { user, setAuth } = useStore();
   const [loading, setLoading] = useState(false);
-  const [present] = useIonToast();
 
   const formik = useFormik({
     initialValues: {
@@ -28,11 +27,7 @@ export function ProfileInfoPage() {
     setLoading(true);
     const res = await updateProfileInfo(name, countryId);
     if (res && !res?.success) {
-      present({
-        message: res?.resource,
-        color: constants.DANGER,
-        duration: constants.FAILURE_DELAY
-      });
+      toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
       setLoading(false);
       return;
     } else {
@@ -42,11 +37,7 @@ export function ProfileInfoPage() {
         countryId,
         currency: getCountry(countryId ?? navigator.language)?.code
       }));
-      present({
-        message: "Updated Successfully",
-        color: constants.SUCCESS,
-        duration: constants.SUCCESS_DELAY
-      });
+      toastify("Updated Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
       setTimeout(() => {
         setLoading(false);
       }, constants.DELAY);

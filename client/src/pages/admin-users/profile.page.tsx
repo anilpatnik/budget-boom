@@ -6,13 +6,12 @@ import {
   IonHeader,
   IonLabel,
   IonPage,
-  IonToolbar,
-  useIonToast
+  IonToolbar
 } from "@ionic/react";
 import { Avatar, FormControl, InputLabel, MenuItem, Select, Switch } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { AuthType, RoleType, constants, externaLogin } from "@/util";
+import { AuthType, RoleType, constants, externaLogin, toastify } from "@/util";
 import { IAdminUser } from "@/models";
 import { updateUserAsync } from "@/services";
 import { InputComponent, PasswordComponent, Icon } from "@/components";
@@ -25,7 +24,6 @@ type ComponentProps = {
 };
 export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: ComponentProps) {
   const [loading, setLoading] = useState(false);
-  const [present] = useIonToast();
 
   const formik = useFormik({
     initialValues: {
@@ -55,19 +53,11 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
         };
         const res = await updateUserAsync(newUser);
         if (res && !res?.success) {
-          present({
-            message: res?.resource,
-            color: constants.DANGER,
-            duration: constants.FAILURE_DELAY
-          });
+          toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
           setLoading(false);
           return;
         } else {
-          present({
-            message: "Created Successfully",
-            color: constants.SUCCESS,
-            duration: constants.SUCCESS_DELAY
-          });
+          toastify("Created Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
           setTimeout(() => {
             const xUser = { ...newUser, uid: res?.resource };
             handleNew(xUser);
@@ -84,19 +74,11 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
         };
         const res = await updateUserAsync(updateUser);
         if (res && !res?.success) {
-          present({
-            message: res?.resource,
-            color: constants.DANGER,
-            duration: constants.FAILURE_DELAY
-          });
+          toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
           setLoading(false);
           return;
         } else {
-          present({
-            message: "Updated Successfully",
-            color: constants.SUCCESS,
-            duration: constants.SUCCESS_DELAY
-          });
+          toastify("Updated Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
           setTimeout(() => {
             const xUser = { ...updateUser, email: user?.email, uid: res?.resource };
             handleEdit(xUser);

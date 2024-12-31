@@ -1,12 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import {
-  IonButton,
-  IonFabButton,
-  IonSpinner,
-  useIonAlert,
-  useIonModal,
-  useIonToast
-} from "@ionic/react";
+import { IonButton, IonFabButton, IonSpinner, useIonAlert, useIonModal } from "@ionic/react";
 import {
   Box,
   Paper,
@@ -18,8 +11,7 @@ import {
   TableRow
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { toast, Slide } from "react-toastify";
-import { CrudType, dateFormat, constants, formatPrice, totalPrice } from "@/util";
+import { CrudType, dateFormat, constants, formatPrice, totalPrice, toastify } from "@/util";
 import { IExpense, Expense, IExpenseSearch, ExpenseSearch } from "@/models";
 import { getExpensesAsync, deleteExpenseAsync, getCategory, getAllProjectsAsync } from "@/services";
 import { Icon } from "@/components";
@@ -43,7 +35,6 @@ export function ExpensesPage() {
   });
   const queryRef = useRef(payload);
   const [presentAlert] = useIonAlert();
-  const [present] = useIonToast();
 
   const { isLoading: loadingProjects, data: projects } = useQuery({
     queryKey: ["all-user-projects"],
@@ -128,19 +119,11 @@ export function ExpensesPage() {
     setLoadingCol(colId);
     const res = await deleteExpenseAsync(id);
     if (res && !res?.success) {
-      present({
-        message: res?.resource,
-        color: constants.DANGER,
-        duration: constants.FAILURE_DELAY
-      });
+      toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
       setLoadingCol(String.empty);
       return;
     } else {
-      present({
-        message: "Deleted Successfully",
-        color: constants.SUCCESS,
-        duration: constants.SUCCESS_DELAY
-      });
+      toastify("Deleted Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
       setTimeout(() => {
         deleteRecord(id);
         setLoadingCol(String.empty);
@@ -213,7 +196,7 @@ export function ExpensesPage() {
               Category
             </TableCell>
             <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-              Tax
+              Taxable
             </TableCell>
             <TableCell align="left" sx={{ display: { xs: "table-cell", sm: "none" } }}>
               Notes
@@ -284,16 +267,7 @@ export function ExpensesPage() {
                   </Box>
                   <Box>
                     {item?.notes && (
-                      <IonButton
-                        buttonType="icon"
-                        onClick={() =>
-                          toast(item.notes, {
-                            position: "top-center",
-                            autoClose: 1000,
-                            theme: "dark",
-                            transition: Slide
-                          })
-                        }>
+                      <IonButton buttonType="icon" onClick={() => toastify(item.notes)}>
                         <Icon name="information-circle-sharp" css="text-2xl text-cyan-500" />
                       </IonButton>
                     )}
@@ -307,16 +281,7 @@ export function ExpensesPage() {
               </TableCell>
               <TableCell align="left" sx={{ display: { xs: "table-cell", sm: "none" } }}>
                 {item?.notes && (
-                  <IonButton
-                    buttonType="icon"
-                    onClick={() =>
-                      toast(item.notes, {
-                        position: "top-center",
-                        autoClose: 1000,
-                        theme: "dark",
-                        transition: Slide
-                      })
-                    }>
+                  <IonButton buttonType="icon" onClick={() => toastify(item.notes)}>
                     <Icon name="information-circle-sharp" css="text-2xl text-cyan-500" />
                   </IonButton>
                 )}

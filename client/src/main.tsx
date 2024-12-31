@@ -22,7 +22,7 @@ import "@ionic/react/css/text-transformation.css";
 /* Custom styles */
 import "./index.css";
 
-setupIonicReact(); // Ionic
+setupIonicReact({ mode: "md" }); // Ionic
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>

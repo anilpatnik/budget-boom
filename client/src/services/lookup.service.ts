@@ -44,7 +44,7 @@ export const categories = [
   },
   {
     id: "FUEL",
-    name: "Vehicle Fuel",
+    name: "Fuel & Parking",
     icon: "scale-outline"
   },
   {
@@ -126,6 +126,11 @@ export const categories = [
     id: "COFFEE",
     name: "Coffee & Drinks",
     icon: "cafe-outline"
+  },
+  {
+    id: "OFFICE",
+    name: "Office Supplies",
+    icon: "desktop-outline"
   }
 ];
 export const countries = [

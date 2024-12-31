@@ -9,13 +9,12 @@ import {
   IonLabel,
   IonPage,
   IonRow,
-  IonToolbar,
-  useIonToast
+  IonToolbar
 } from "@ionic/react";
 import { Switch } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { CrudType, constants, convertoISO, dateNow, parsePrice } from "@/util";
+import { CrudType, constants, convertoISO, dateNow, parsePrice, toastify } from "@/util";
 import { IExpense, IProject } from "@/models";
 import { getCategories, upsertExpenseAsync } from "@/services";
 import {
@@ -41,7 +40,6 @@ export function ExpensePage({
   handleEdit
 }: ComponentProps) {
   const [loading, setLoading] = useState(false);
-  const [present] = useIonToast();
 
   const formik = useFormik({
     initialValues: {
@@ -81,19 +79,11 @@ export function ExpensePage({
         };
         const res = await upsertExpenseAsync(newExpense);
         if (res && !res?.success) {
-          present({
-            message: res?.resource,
-            color: constants.DANGER,
-            duration: constants.FAILURE_DELAY
-          });
+          toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
           setLoading(false);
           return;
         } else {
-          present({
-            message: "Created Successfully",
-            color: constants.SUCCESS,
-            duration: constants.SUCCESS_DELAY
-          });
+          toastify("Created Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
           setTimeout(() => {
             const xExpense = { ...newExpense, id: res?.resource?.id };
             handleNew(xExpense);
@@ -113,19 +103,11 @@ export function ExpensePage({
         };
         const res = await upsertExpenseAsync(updateExpense);
         if (res && !res?.success) {
-          present({
-            message: res?.resource,
-            color: constants.DANGER,
-            duration: constants.FAILURE_DELAY
-          });
+          toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
           setLoading(false);
           return;
         } else {
-          present({
-            message: "Updated Successfully",
-            color: constants.SUCCESS,
-            duration: constants.SUCCESS_DELAY
-          });
+          toastify("Updated Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
           setTimeout(() => {
             handleEdit(updateExpense);
             setLoading(false);

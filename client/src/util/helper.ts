@@ -1,3 +1,4 @@
+import { toast, Slide, TypeOptions, ToastPosition } from "react-toastify";
 import { IExpense } from "@/models";
 import { getCountry } from "@/services";
 
@@ -23,3 +24,17 @@ export const formatPrice = (
 
 export const totalPrice = (items: IExpense[]) =>
   items?.map(x => x.price || 0).reduce((sum, i) => sum + i, 0);
+
+export const toastify = (
+  message: string = String.empty,
+  color: TypeOptions = "default",
+  duration: number = 1000,
+  position: ToastPosition = "top-center"
+) => {
+  return toast(message, {
+    type: color,
+    autoClose: duration,
+    position,
+    transition: Slide
+  });
+};

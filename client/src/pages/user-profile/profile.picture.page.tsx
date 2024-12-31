@@ -1,7 +1,16 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { IonButton, IonThumbnail, useIonAlert, useIonToast } from "@ionic/react";
-import { NavType, RoleType, ServiceType, constants, downloadFile, fb, uploadFile } from "@/util";
+import { IonButton, IonThumbnail, useIonAlert } from "@ionic/react";
+import {
+  NavType,
+  RoleType,
+  ServiceType,
+  constants,
+  downloadFile,
+  fb,
+  uploadFile,
+  toastify
+} from "@/util";
 import { useStore } from "@/contexts";
 import { deleteProfileAsync, updateProfilePic } from "@/services";
 import { Icon } from "@/components";
@@ -12,7 +21,6 @@ export const ProfilePicturePage = () => {
   const [preview, setPreview] = useState(String.empty);
   const [loading, setLoading] = useState(false);
   const inputFileRef = useRef<HTMLInputElement>(null);
-  const [present] = useIonToast();
   const [presentAlert] = useIonAlert();
   const navigate = useNavigate();
 
@@ -38,11 +46,7 @@ export const ProfilePicturePage = () => {
         if (imgUrl?.length > 5) {
           updateProfilePic(imgUrl).then(res => {
             if (res && !res?.success) {
-              present({
-                message: res?.resource,
-                color: constants.DANGER,
-                duration: constants.FAILURE_DELAY
-              });
+              toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
             } else {
               setAuth(prev => ({ ...prev, photo: imgUrl }));
             }
@@ -58,17 +62,13 @@ export const ProfilePicturePage = () => {
     try {
       const res = await deleteProfileAsync();
       if (res && !res?.success) {
-        present({
-          message: res?.resource,
-          color: constants.DANGER,
-          duration: constants.FAILURE_DELAY
-        });
+        toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
       } else {
-        present({
-          message: "Thank you for being with us 🙏 We're sad to see you go 😢",
-          color: constants.SUCCESS,
-          duration: constants.SUCCESS_DELAY
-        });
+        toastify(
+          "Thank you for being with us 🙏 We're sad to see you go 😢",
+          constants.SUCCESS,
+          constants.SUCCESS_DELAY
+        );
         navigate(NavType.SignOut);
       }
     } finally {

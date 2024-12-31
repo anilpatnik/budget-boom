@@ -20,4 +20,4 @@ export const ACTION_CODE = "actionCode";
 export const AUTH = "auth";
 export const PROJECTS = "projects";
 export const SUCCESS = "success";
-export const DANGER = "danger";
+export const ERROR = "error";

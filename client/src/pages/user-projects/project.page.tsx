@@ -8,12 +8,11 @@ import {
   IonHeader,
   IonPage,
   IonRow,
-  IonToolbar,
-  useIonToast
+  IonToolbar
 } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { CrudType, constants, convertoISO, dateAdd } from "@/util";
+import { CrudType, constants, convertoISO, dateAdd, toastify } from "@/util";
 import { IProject } from "@/models";
 import { upsertProjectAsync } from "@/services";
 import { InputComponent, DateComponent, Icon } from "@/components";
@@ -26,7 +25,6 @@ type ComponentProps = {
 };
 export function ProjectPage({ project, handleClose, handleNew, handleEdit }: ComponentProps) {
   const [loading, setLoading] = useState(false);
-  const [present] = useIonToast();
 
   const formik = useFormik({
     initialValues: {
@@ -66,19 +64,11 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
         };
         const res = await upsertProjectAsync(newProject);
         if (res && !res?.success) {
-          present({
-            message: res?.resource,
-            color: constants.DANGER,
-            duration: constants.FAILURE_DELAY
-          });
+          toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
           setLoading(false);
           return;
         } else {
-          present({
-            message: "Created Successfully",
-            color: constants.SUCCESS,
-            duration: constants.SUCCESS_DELAY
-          });
+          toastify("Created Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
           setTimeout(() => {
             const xProject = { ...newProject, id: res?.resource?.id };
             handleNew(xProject);
@@ -98,19 +88,11 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
         };
         const res = await upsertProjectAsync(updateProject);
         if (res && !res?.success) {
-          present({
-            message: res?.resource,
-            color: constants.DANGER,
-            duration: constants.FAILURE_DELAY
-          });
+          toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
           setLoading(false);
           return;
         } else {
-          present({
-            message: "Updated Successfully",
-            color: constants.SUCCESS,
-            duration: constants.SUCCESS_DELAY
-          });
+          toastify("Updated Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
           setTimeout(() => {
             handleEdit(updateProject);
             setLoading(false);

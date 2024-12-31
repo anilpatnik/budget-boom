@@ -1,12 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import {
-  IonButton,
-  IonFabButton,
-  IonSpinner,
-  useIonAlert,
-  useIonModal,
-  useIonToast
-} from "@ionic/react";
+import { IonButton, IonFabButton, IonSpinner, useIonAlert, useIonModal } from "@ionic/react";
 import {
   Box,
   Paper,
@@ -17,7 +10,7 @@ import {
   TableHead,
   TableRow
 } from "@mui/material";
-import { CrudType, dateFormat, constants, formatPrice } from "@/util";
+import { CrudType, dateFormat, constants, formatPrice, toastify } from "@/util";
 import { IProject, Project } from "@/models";
 import { deleteProjectAsync, getProjectsAsync } from "@/services";
 import { ProjectPage } from "./project.page";
@@ -34,7 +27,6 @@ export function ProjectsPage() {
   const [loadingInit, setLoadingInit] = useState<boolean>(false);
   const [loadingCol, setLoadingCol] = useState<string>(String.empty);
   const [presentAlert] = useIonAlert();
-  const [present] = useIonToast();
 
   const fetchData = async (page: number = 0) => {
     if (loading) return;
@@ -107,19 +99,11 @@ export function ProjectsPage() {
     setLoadingCol(colId);
     const res = await deleteProjectAsync(id);
     if (res && !res?.success) {
-      present({
-        message: res?.resource,
-        color: constants.DANGER,
-        duration: constants.FAILURE_DELAY
-      });
+      toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
       setLoadingCol(String.empty);
       return;
     } else {
-      present({
-        message: "Deleted Successfully",
-        color: constants.SUCCESS,
-        duration: constants.SUCCESS_DELAY
-      });
+      toastify("Deleted Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
       setTimeout(() => {
         deleteRecord(id);
         setLoadingCol(String.empty);
@@ -173,7 +157,10 @@ export function ProjectsPage() {
                 <Box>{item?.name}</Box>
                 <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
                   <Box className="mt-2 flex items-center">
-                    <Box className="text-purple-700">
+                    <Box
+                      className={
+                        (item.actual ?? 0) > (item.budget ?? 0) ? "text-red-700" : "text-green-700"
+                      }>
                       {formatPrice(item.actual ?? 0, user?.countryId, user?.currency)}
                     </Box>
                     <Box className="mx-2">|</Box>

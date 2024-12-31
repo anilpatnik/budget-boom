@@ -7,8 +7,7 @@ import {
   IonRow,
   IonSpinner,
   useIonAlert,
-  useIonModal,
-  useIonToast
+  useIonModal
 } from "@ionic/react";
 import {
   Box,
@@ -22,7 +21,7 @@ import {
   TableHead,
   TableRow
 } from "@mui/material";
-import { CrudType, RoleType, newPassword, constants } from "@/util";
+import { CrudType, RoleType, newPassword, constants, toastify } from "@/util";
 import { AdminUser, IAdminUser, AdminUserSearch, IAdminUserSearch } from "@/models";
 import { deleteUserAsync, getUserAsync, getUsersAsync } from "@/services";
 import { UserProfilePage } from "./profile.page";
@@ -43,7 +42,6 @@ export function UsersPage() {
   });
   const queryRef = useRef(payload);
   const [presentAlert] = useIonAlert();
-  const [present] = useIonToast();
 
   const fetchData = async () => {
     if (loading) return;
@@ -128,19 +126,11 @@ export function UsersPage() {
     setLoadingCol(colId);
     const res = await deleteUserAsync(id);
     if (res && !res?.success) {
-      present({
-        message: res?.resource,
-        color: constants.DANGER,
-        duration: constants.FAILURE_DELAY
-      });
+      toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
       setLoadingCol(String.empty);
       return;
     } else {
-      present({
-        message: "Deleted Successfully",
-        color: constants.SUCCESS,
-        duration: constants.SUCCESS_DELAY
-      });
+      toastify("Deleted Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
       setTimeout(() => {
         deleteRecord(id);
         setLoadingCol(String.empty);
