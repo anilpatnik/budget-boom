@@ -178,17 +178,15 @@ export function ExpensesPage() {
             <TableCell align="left">
               <Box sx={{ display: { xs: "none", sm: "table-cell" } }}>Date</Box>
               <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
-                <Box>Total</Box>
                 <Box className={totalPrice(records) < 0 ? "text-red-700" : String.empty}>
-                  {formatPrice(totalPrice(records), user?.countryId, user?.currency)}
+                  💰 {formatPrice(totalPrice(records), user?.countryId, user?.currency)}
                 </Box>
               </Box>
             </TableCell>
             <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-              <Box>Total</Box>
               <Box sx={{ display: { xs: "none", sm: "table-cell" } }}>
                 <Box className={totalPrice(records) < 0 ? "text-red-700" : String.empty}>
-                  {formatPrice(totalPrice(records), user?.countryId, user?.currency)}
+                  💰 {formatPrice(totalPrice(records), user?.countryId, user?.currency)}
                 </Box>
               </Box>
             </TableCell>

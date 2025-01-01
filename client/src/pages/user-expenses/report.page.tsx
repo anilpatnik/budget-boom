@@ -102,15 +102,15 @@ export function ExpenseReportPage() {
           <TableRow>
             <TableCell align="left">
               <Box className="flex items-center">
-                <Box>Total</Box>
-                <Box className="mx-2">💰</Box>
+                <Box className="mr-2">💰</Box>
                 <Box className={totalPrice(records) < 0 ? "text-red-700" : "text-green-700"}>
                   {formatPrice(totalPrice(records), user?.countryId, user?.currency)}
                 </Box>
               </Box>
               <Box className="mt-2 flex items-center text-blue-700">
+                <Box className="mr-2">📅</Box>
                 <Box>{dateFormat(queryRef.current.startDate ?? String.empty)}</Box>
-                <Box className="mx-2">📅</Box>
+                <Box className="mx-2">~</Box>
                 <Box>{dateFormat(queryRef.current.endDate ?? String.empty)}</Box>
               </Box>
             </TableCell>

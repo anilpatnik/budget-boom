@@ -144,37 +144,29 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
               optional={true}
             />
           </div>
-          <div className="my-6">
-            <IonGrid>
-              <IonRow>
-                <IonCol>
-                  <DateComponent
-                    name="startDate"
-                    label="Start Date"
-                    value={convertoISO(formik.values.startDate)}
-                    optional={true}
-                    touched={formik.touched.startDate}
-                    errorMessage={formik.errors.startDate}
-                    handleChange={e =>
-                      formik.setFieldValue("startDate", e.target.value || dateAdd(1))
-                    }
-                  />
-                </IonCol>
-                <IonCol>
-                  <DateComponent
-                    name="endDate"
-                    label="End Date"
-                    value={convertoISO(formik.values.endDate)}
-                    optional={true}
-                    touched={formik.touched.endDate}
-                    errorMessage={formik.errors.endDate}
-                    handleChange={e =>
-                      formik.setFieldValue("endDate", e.target.value || dateAdd(30))
-                    }
-                  />
-                </IonCol>
-              </IonRow>
-            </IonGrid>
+          <div className="my-6 flex items-center">
+            <div>
+              <DateComponent
+                name="startDate"
+                label="Start Date"
+                value={convertoISO(formik.values.startDate)}
+                optional={true}
+                touched={formik.touched.startDate}
+                errorMessage={formik.errors.startDate}
+                handleChange={e => formik.setFieldValue("startDate", e.target.value || dateAdd(1))}
+              />
+            </div>
+            <div className="ml-10">
+              <DateComponent
+                name="endDate"
+                label="End Date"
+                value={convertoISO(formik.values.endDate)}
+                optional={true}
+                touched={formik.touched.endDate}
+                errorMessage={formik.errors.endDate}
+                handleChange={e => formik.setFieldValue("endDate", e.target.value || dateAdd(30))}
+              />
+            </div>
           </div>
           <div className="my-6">
             <IonButton

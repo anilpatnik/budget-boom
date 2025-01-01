@@ -67,7 +67,7 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
                 }
               />
             </div>
-            <div className="ml-5">
+            <div className="ml-10">
               <DateComponent
                 name="endDate"
                 label="End Date"
