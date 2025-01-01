@@ -10,7 +10,7 @@ import {
   TableHead,
   TableRow
 } from "@mui/material";
-import { categoryMap, constants, dateAdd, dateFormat, formatPrice } from "@/util";
+import { categoryMap, constants, dateAdd, dateFormat, formatPrice, totalPrice } from "@/util";
 import { IExpense, IExpenseSearch, ExpenseSearch } from "@/models";
 import { getCategory, getExpenseReportAsync } from "@/services";
 import { Icon } from "@/components";
@@ -101,10 +101,16 @@ export function ExpenseReportPage() {
         <TableHead>
           <TableRow>
             <TableCell align="left">
-              Category
+              <Box className="flex items-center">
+                <Box>Total</Box>
+                <Box className="mx-2">💰</Box>
+                <Box className={totalPrice(records) < 0 ? "text-red-700" : "text-green-700"}>
+                  {formatPrice(totalPrice(records), user?.countryId, user?.currency)}
+                </Box>
+              </Box>
               <Box className="mt-2 flex items-center text-blue-700">
                 <Box>{dateFormat(queryRef.current.startDate ?? String.empty)}</Box>
-                <Box className="mx-2">📆</Box>
+                <Box className="mx-2">📅</Box>
                 <Box>{dateFormat(queryRef.current.endDate ?? String.empty)}</Box>
               </Box>
             </TableCell>
