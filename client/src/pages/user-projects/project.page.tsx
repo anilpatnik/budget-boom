@@ -150,7 +150,6 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
                 name="startDate"
                 label="Start Date"
                 value={convertoISO(formik.values.startDate)}
-                optional={true}
                 touched={formik.touched.startDate}
                 errorMessage={formik.errors.startDate}
                 handleChange={e => formik.setFieldValue("startDate", e.target.value || dateAdd(1))}
@@ -161,7 +160,6 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
                 name="endDate"
                 label="End Date"
                 value={convertoISO(formik.values.endDate)}
-                optional={true}
                 touched={formik.touched.endDate}
                 errorMessage={formik.errors.endDate}
                 handleChange={e => formik.setFieldValue("endDate", e.target.value || dateAdd(30))}
