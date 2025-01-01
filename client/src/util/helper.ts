@@ -1,6 +1,6 @@
 import { toast, Slide, TypeOptions, ToastPosition } from "react-toastify";
 import { IExpense } from "@/models";
-import { getCountry } from "@/services";
+import { categories, getCountry } from "@/services";
 
 export const parsePrice = (expense: boolean, price: number) => (expense ? -price : price);
 
@@ -38,3 +38,5 @@ export const toastify = (
     transition: Slide
   });
 };
+
+export const categoryMap = Object.fromEntries(categories.map(cat => [cat.id, cat]));

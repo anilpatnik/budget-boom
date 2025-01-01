@@ -42,3 +42,10 @@ export const deleteExpenseAsync = async (id: string) => {
     return { success: false, resource: err.message };
   }
 };
+
+export const getExpenseReportAsync = async (payload: IExpenseSearch): Promise<IExpense[]> => {
+  const url = `${ServiceType.Expenses}${ServiceType.Report}`;
+  const response = await authApi.post(url, payload);
+  if (response?.data?.resource) return response?.data?.resource;
+  return [{ ...Expense }];
+};

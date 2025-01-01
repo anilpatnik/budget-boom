@@ -74,6 +74,7 @@ export interface IExpenseSearch extends IPaging {
   endDate?: string;
   categoryId?: string;
   projectId?: string;
+  taxable?: boolean;
 }
 
 export interface IExpense {

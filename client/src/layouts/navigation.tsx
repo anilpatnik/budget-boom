@@ -138,6 +138,15 @@ export const router = createBrowserRouter([
         element: <PreRoute routerType={RouterType.User} roles={[RoleType.User]} />,
         children: [
           {
+            path: NavType.Report,
+            element: <ExpensesHomePage />
+          }
+        ]
+      },
+      {
+        element: <PreRoute routerType={RouterType.User} roles={[RoleType.User]} />,
+        children: [
+          {
             path: NavType.Projects,
             element: <ProjectsHomePage />
           }

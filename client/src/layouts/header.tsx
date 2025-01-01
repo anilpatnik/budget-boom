@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { IonButton, IonButtons, IonHeader, IonIcon, IonToolbar, isPlatform } from "@ionic/react";
 import {
+  barChartOutline,
   cashOutline,
   libraryOutline,
   lockClosedOutline,
@@ -97,6 +98,15 @@ export function Header() {
                         size="small"
                         onClick={() => handleMenuClick(NavType.Projects)}>
                         <IonIcon icon={libraryOutline} className="mr-2" /> Projects
+                      </IonButton>
+                    )}
+                    {/* Report */}
+                    {user?.role === RoleType.User && (
+                      <IonButton
+                        id="id-report-menu"
+                        size="small"
+                        onClick={() => handleMenuClick(NavType.Report)}>
+                        <IonIcon icon={barChartOutline} className="mr-2" /> Report
                       </IonButton>
                     )}
                     {/* Profile */}

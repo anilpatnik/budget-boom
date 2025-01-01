@@ -130,6 +130,18 @@ export const getExpenseTotalByProjectId = async (userId: string, projectId: stri
   return result._sum.price || 0;
 };
 
+export const getExpenseTotalByCategoryId = async (where: object = {}) => {
+  const result = await prisma.expense.groupBy({
+    by: ["categoryId"],
+    where,
+    _sum: { price: true }
+  });
+  return result.map(item => ({
+    categoryId: item.categoryId,
+    price: item._sum.price || 0
+  }));
+};
+
 export const upsertExpense = async (userId: string, expense: IExpense) => {
   const { id, projectId, categoryId, price = 0, taxable = false, notes, entryDate } = expense;
   const expenseData: any = {

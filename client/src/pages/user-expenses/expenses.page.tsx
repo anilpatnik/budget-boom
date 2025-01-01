@@ -16,7 +16,7 @@ import { IExpense, Expense, IExpenseSearch, ExpenseSearch } from "@/models";
 import { getExpensesAsync, deleteExpenseAsync, getCategory, getAllProjectsAsync } from "@/services";
 import { Icon } from "@/components";
 import { ExpensePage } from "./expense.page";
-import { ExpenseSearchPage } from "./search.page";
+import { ExpenseSearchPage } from "./expense.search.page";
 import { useStore } from "@/contexts";
 
 export function ExpensesPage() {

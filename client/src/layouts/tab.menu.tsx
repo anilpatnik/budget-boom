@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { IonIcon, IonLabel, IonTabBar, IonTabButton, IonTabs } from "@ionic/react";
 import {
+  barChartOutline,
   cashOutline,
   libraryOutline,
   lockClosedOutline,
@@ -37,6 +38,13 @@ export function TabMenu({ children }: { children: any }) {
             <IonTabButton tab="projects" href={NavType.Projects}>
               <IonIcon icon={libraryOutline} />
               <IonLabel>Projects</IonLabel>
+            </IonTabButton>
+          )}
+          {/* Report */}
+          {user?.role === RoleType.User && (
+            <IonTabButton tab="report" href={NavType.Report}>
+              <IonIcon icon={barChartOutline} />
+              <IonLabel>Report</IonLabel>
             </IonTabButton>
           )}
           {/* Profile */}

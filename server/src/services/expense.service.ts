@@ -106,3 +106,39 @@ export const deleteExpenseAsync = async (req: Request, res: Response, next: Next
     return next(error);
   }
 };
+
+export const getExpenseReportAsync = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req?.auth?.id || String.empty;
+    const expenseSearch: IExpenseSearch = req.body;
+    let whereCondition = {};
+    // user filter
+    whereCondition = {
+      ...whereCondition,
+      userId: { equals: userId }
+    };
+    // date filter
+    if (expenseSearch.startDate && expenseSearch.endDate) {
+      whereCondition = {
+        ...whereCondition,
+        entryDate: {
+          gte: new Date(helper.formatDate(expenseSearch.startDate)),
+          lte: new Date(helper.formatDate(expenseSearch.endDate))
+        }
+      };
+    }
+    // tax filter
+    if (expenseSearch.taxable) {
+      whereCondition = {
+        ...whereCondition,
+        taxable: { equals: expenseSearch.taxable }
+      };
+    }
+    // get expenses
+    const dbExpenses = await dbhelper.getExpenseTotalByCategoryId(whereCondition);
+    const resJson = helper.responseJson<IExpense>(true, helper.removeUndefined(dbExpenses));
+    res.json(resJson);
+  } catch (error) {
+    return next(error);
+  }
+};

@@ -57,6 +57,7 @@ export enum NavType {
   Categories = "/categories",
   Projects = "/projects",
   Expenses = "/expenses",
+  Report = "/report",
   NotFound = "/404"
 }
 
@@ -72,5 +73,6 @@ export enum ServiceType {
   Projects = "/projects",
   Project = "/project",
   Expenses = "/expenses",
-  Expense = "/expense"
+  Expense = "/expense",
+  Report = "/report"
 }

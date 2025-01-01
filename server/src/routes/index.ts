@@ -25,5 +25,6 @@ apiRouter.post("/expenses", authelper.authorize(), expense.getExpensesAsync);
 apiRouter.get("/expenses/:expenseid", authelper.authorize(), expense.getExpenseAsync);
 apiRouter.post("/expense", authelper.authorize(), expense.upsertExpenseAsync);
 apiRouter.delete("/expenses/:expenseid", authelper.authorize(), expense.deleteExpenseAsync);
+apiRouter.post("/expenses/report", authelper.authorize(), expense.getExpenseReportAsync);
 
 export { apiRouter };

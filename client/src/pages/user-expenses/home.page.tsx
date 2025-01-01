@@ -1,11 +1,13 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { IonBreadcrumb, IonBreadcrumbs } from "@ionic/react";
 import { NavType } from "@/util";
 import { ExpensesPage } from "./expenses.page";
-import { Icon } from "@/components";
+import { ExpenseReportPage } from "./report.page";
+import { Icon, LazyLoading } from "@/components";
 
 export function ExpensesHomePage() {
   const navigate = useNavigate();
+  const location = useLocation();
   return (
     <>
       <IonBreadcrumbs className="ion-margin-vertical">
@@ -17,8 +19,15 @@ export function ExpensesHomePage() {
           <Icon name="caret-forward-outline" slot="separator" />
           Expenses
         </IonBreadcrumb>
+        {location.pathname === NavType.Report && (
+          <IonBreadcrumb className="cursor-pointer">
+            <Icon name="caret-forward-outline" slot="separator" />
+            Report
+          </IonBreadcrumb>
+        )}
       </IonBreadcrumbs>
-      <ExpensesPage />
+      {location.pathname === NavType.Expenses && <ExpensesPage />}
+      {location.pathname === NavType.Report && <ExpenseReportPage />}
     </>
   );
 }

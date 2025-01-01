@@ -128,6 +128,7 @@ export interface IExpenseSearch {
   endDate?: string;
   categoryId?: string;
   projectId?: string;
+  taxable?: boolean;
   page?: number;
   size?: number;
 }
@@ -136,6 +137,7 @@ export const ExpenseSearch: IExpenseSearch = {
   endDate: String.empty,
   categoryId: String.empty,
   projectId: String.empty,
+  taxable: false,
   page: 0,
   size: constants.PAGE_SIZE
 };
