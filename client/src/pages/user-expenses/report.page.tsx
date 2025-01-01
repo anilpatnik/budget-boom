@@ -10,12 +10,12 @@ import {
   TableHead,
   TableRow
 } from "@mui/material";
-import { categoryMap, constants, dateAdd, formatPrice } from "@/util";
+import { categoryMap, constants, dateAdd, dateFormat, formatPrice } from "@/util";
 import { IExpense, IExpenseSearch, ExpenseSearch } from "@/models";
 import { getCategory, getExpenseReportAsync } from "@/services";
 import { Icon } from "@/components";
-import { ExpenseReportSearchPage } from "./report.search.page";
 import { useStore } from "@/contexts";
+import { ExpenseReportSearchPage } from "./report.search.page";
 
 export function ExpenseReportPage() {
   const { user } = useStore();
@@ -100,7 +100,14 @@ export function ExpenseReportPage() {
       <Table className="styled-table" stickyHeader>
         <TableHead>
           <TableRow>
-            <TableCell align="left">Category</TableCell>
+            <TableCell align="left">
+              Category
+              <Box className="mt-2 flex items-center text-blue-700">
+                <Box>{dateFormat(queryRef.current.startDate ?? String.empty)}</Box>
+                <Box className="mx-2">📆</Box>
+                <Box>{dateFormat(queryRef.current.endDate ?? String.empty)}</Box>
+              </Box>
+            </TableCell>
             <TableCell align="left">
               <IonFabButton
                 id="id-search-button"
@@ -126,7 +133,7 @@ export function ExpenseReportPage() {
               </TableCell>
               <TableCell align="left">
                 {item?.price && (
-                  <Box className={item.price < 0 ? "text-red-700" : String.empty}>
+                  <Box className={item.price < 0 ? "text-red-700" : "text-green-700"}>
                     {formatPrice(item.price, user?.countryId, user?.currency)}
                   </Box>
                 )}
