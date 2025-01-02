@@ -11,7 +11,16 @@ import {
   TableRow
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { CrudType, dateFormat, constants, formatPrice, totalPrice, toastify } from "@/util";
+import {
+  CrudType,
+  dateFormat,
+  constants,
+  formatPrice,
+  totalPrice,
+  toastify,
+  totalExpense,
+  totalIncome
+} from "@/util";
 import { IExpense, Expense, IExpenseSearch, ExpenseSearch } from "@/models";
 import { getExpensesAsync, deleteExpenseAsync, getCategory, getAllProjectsAsync } from "@/services";
 import { Icon } from "@/components";
@@ -178,16 +187,34 @@ export function ExpensesPage() {
             <TableCell align="left">
               <Box sx={{ display: { xs: "none", sm: "table-cell" } }}>Date</Box>
               <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
-                <Box className={totalPrice(records) < 0 ? "text-red-700" : "text-green-700"}>
-                  💰 {formatPrice(totalPrice(records), user?.countryId, user?.currency)}
-                </Box>
+                <div className="flex justify-between items-center">
+                  <div className="mr-2">💰</div>
+                  <div className="text-green-700">
+                    {formatPrice(totalIncome(records), user?.countryId, user?.currency)}
+                  </div>
+                </div>
+                <div className="mt-2 flex justify-between items-center">
+                  <div className="mr-2">💰</div>
+                  <div className="text-red-700">
+                    {formatPrice(totalExpense(records), user?.countryId, user?.currency)}
+                  </div>
+                </div>
               </Box>
             </TableCell>
             <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
               <Box sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                <Box className={totalPrice(records) < 0 ? "text-red-700" : "text-green-700"}>
-                  💰 {formatPrice(totalPrice(records), user?.countryId, user?.currency)}
-                </Box>
+                <div className="flex justify-between items-center">
+                  <div className="mr-2">💰</div>
+                  <div className="text-green-700">
+                    {formatPrice(totalIncome(records), user?.countryId, user?.currency)}
+                  </div>
+                </div>
+                <div className="mt-2 flex justify-between items-center">
+                  <div className="mr-2">💰</div>
+                  <div className="text-red-700">
+                    {formatPrice(totalExpense(records), user?.countryId, user?.currency)}
+                  </div>
+                </div>
               </Box>
             </TableCell>
             <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>

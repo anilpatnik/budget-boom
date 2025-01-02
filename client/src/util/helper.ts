@@ -26,6 +26,12 @@ export const formatPrice = (
 export const totalPrice = (items: IExpense[]) =>
   items?.map(x => x.price || 0).reduce((sum, i) => sum + i, 0);
 
+export const totalIncome = (items: IExpense[]) =>
+  items?.map(x => (x.price && x.price > 0 ? x.price : 0)).reduce((sum, i) => sum + i, 0);
+
+export const totalExpense = (items: IExpense[]) =>
+  items?.map(x => (x.price && x.price < 0 ? x.price : 0)).reduce((sum, i) => sum + i, 0);
+
 export const toastify = (
   message: string = String.empty,
   color: TypeOptions = "default",

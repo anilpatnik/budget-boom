@@ -11,7 +11,16 @@ import {
   TableRow
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { categoryMap, constants, dateAdd, dateFormat, formatPrice, totalPrice } from "@/util";
+import {
+  categoryMap,
+  constants,
+  dateAdd,
+  dateFormat,
+  formatPrice,
+  totalExpense,
+  totalIncome,
+  totalPrice
+} from "@/util";
 import { IExpense, IExpenseSearch, ExpenseSearch } from "@/models";
 import { getCategory, getExpenseReportAsync, getAllProjectsAsync } from "@/services";
 import { Icon } from "@/components";
@@ -111,18 +120,30 @@ export function ExpenseReportPage() {
         <TableHead>
           <TableRow>
             <TableCell align="left">
-              <Box className="flex items-center">
-                <Box className="mr-2">💰</Box>
-                <Box className={totalPrice(records) < 0 ? "text-red-700" : "text-green-700"}>
+              <div className="flex justify-between items-center">
+                <div className="mr-2">💰 Income</div>
+                <div className="text-green-700">
+                  {formatPrice(totalIncome(records), user?.countryId, user?.currency)}
+                </div>
+              </div>
+              <div className="mt-2 flex justify-between items-center">
+                <div className="mr-2">💰 Expense</div>
+                <div className="text-red-700">
+                  {formatPrice(totalExpense(records), user?.countryId, user?.currency)}
+                </div>
+              </div>
+              <div className="mt-2 flex justify-between items-center">
+                <div className="mr-2">💰 Total</div>
+                <div className={totalPrice(records) < 0 ? "text-red-700" : "text-green-700"}>
                   {formatPrice(totalPrice(records), user?.countryId, user?.currency)}
-                </Box>
-              </Box>
-              <Box className="mt-2 flex items-center text-blue-700">
-                <Box className="mr-2">📅</Box>
-                <Box>{dateFormat(queryRef.current.startDate ?? String.empty)}</Box>
-                <Box className="mx-2">~</Box>
-                <Box>{dateFormat(queryRef.current.endDate ?? String.empty)}</Box>
-              </Box>
+                </div>
+              </div>
+              <div className="mt-2 flex items-center text-blue-700">
+                <div className="mr-2">📅</div>
+                <div>{dateFormat(queryRef.current.startDate ?? String.empty)}</div>
+                <div className="mx-2">-</div>
+                <div>{dateFormat(queryRef.current.endDate ?? String.empty)}</div>
+              </div>
             </TableCell>
             <TableCell align="left">
               <IonFabButton
