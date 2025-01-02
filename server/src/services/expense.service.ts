@@ -117,6 +117,13 @@ export const getExpenseReportAsync = async (req: Request, res: Response, next: N
       ...whereCondition,
       userId: { equals: userId }
     };
+    // project filter
+    if (expenseSearch.projectId) {
+      whereCondition = {
+        ...whereCondition,
+        projectId: { equals: expenseSearch.projectId }
+      };
+    }
     // date filter
     if (expenseSearch.startDate && expenseSearch.endDate) {
       whereCondition = {

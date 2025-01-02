@@ -28,7 +28,10 @@ export function AutoSelectComponent({
   payload = [],
   handleChange
 }: ComponentProps) {
-  const selectedValue = useMemo(() => payload.find(option => option.id === value), [payload]);
+  const selectedValue = useMemo(
+    () => payload.find(option => option.id === value) || null,
+    [payload, value]
+  );
   return (
     <Autocomplete
       id={`id-${name}`}
@@ -39,8 +42,8 @@ export function AutoSelectComponent({
           {option.name}
         </li>
       )}
-      defaultValue={selectedValue}
-      onChange={(e, value) => handleChange(value?.id || String.empty)}
+      value={selectedValue}
+      onChange={(e, newValue) => handleChange(newValue?.id || "")}
       disabled={disabled}
       renderInput={params => (
         <TextField

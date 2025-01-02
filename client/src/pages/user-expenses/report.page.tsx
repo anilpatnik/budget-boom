@@ -10,9 +10,10 @@ import {
   TableHead,
   TableRow
 } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 import { categoryMap, constants, dateAdd, dateFormat, formatPrice, totalPrice } from "@/util";
 import { IExpense, IExpenseSearch, ExpenseSearch } from "@/models";
-import { getCategory, getExpenseReportAsync } from "@/services";
+import { getCategory, getExpenseReportAsync, getAllProjectsAsync } from "@/services";
 import { Icon } from "@/components";
 import { useStore } from "@/contexts";
 import { ExpenseReportSearchPage } from "./report.search.page";
@@ -30,6 +31,12 @@ export function ExpenseReportPage() {
     size: constants.PAGE_SIZE
   });
   const queryRef = useRef(payload);
+
+  const { isLoading: loadingProjects, data: projects } = useQuery({
+    queryKey: ["all-user-projects"],
+    refetchOnMount: true,
+    queryFn: async () => await getAllProjectsAsync()
+  });
 
   const fetchData = async () => {
     if (loading) return;
@@ -61,6 +68,7 @@ export function ExpenseReportPage() {
 
   const [presentSearchModal, dismissSearchModal] = useIonModal(ExpenseReportSearchPage, {
     search: payload,
+    projects,
     handleClose: () => dismissSearchModal(),
     handleSearch: (item?: any) => {
       handleSearch(item);
@@ -82,7 +90,8 @@ export function ExpenseReportPage() {
       page: 0,
       startDate: item?.startDate,
       endDate: item?.endDate,
-      taxable: item?.taxable
+      taxable: item?.taxable,
+      projectId: item?.projectId
     }));
     setTimeout(() => {
       setRecords([]);
@@ -90,7 +99,8 @@ export function ExpenseReportPage() {
     }, constants.DELAY);
   };
 
-  if (loading) return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
+  if (loadingProjects || loading)
+    return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 
   return (
     <TableContainer
@@ -139,7 +149,10 @@ export function ExpenseReportPage() {
               </TableCell>
               <TableCell align="left">
                 {item?.price && (
-                  <Box className={item.price < 0 ? "text-red-700" : "text-green-700"}>
+                  <Box
+                    className={
+                      item.price < 0 ? "text-red-700 font-bold" : "text-green-700 font-bold"
+                    }>
                     {formatPrice(item.price, user?.countryId, user?.currency)}
                   </Box>
                 )}

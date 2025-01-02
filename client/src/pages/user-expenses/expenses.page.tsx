@@ -178,14 +178,14 @@ export function ExpensesPage() {
             <TableCell align="left">
               <Box sx={{ display: { xs: "none", sm: "table-cell" } }}>Date</Box>
               <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
-                <Box className={totalPrice(records) < 0 ? "text-red-700" : String.empty}>
+                <Box className={totalPrice(records) < 0 ? "text-red-700" : "text-green-700"}>
                   💰 {formatPrice(totalPrice(records), user?.countryId, user?.currency)}
                 </Box>
               </Box>
             </TableCell>
             <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
               <Box sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                <Box className={totalPrice(records) < 0 ? "text-red-700" : String.empty}>
+                <Box className={totalPrice(records) < 0 ? "text-red-700" : "text-green-700"}>
                   💰 {formatPrice(totalPrice(records), user?.countryId, user?.currency)}
                 </Box>
               </Box>
@@ -234,7 +234,10 @@ export function ExpensesPage() {
                       />
                     )}
                     {item?.price && (
-                      <Box className={item.price < 0 ? "text-red-700" : String.empty}>
+                      <Box
+                        className={
+                          item.price < 0 ? "text-red-700 font-bold" : "text-green-700 font-bold"
+                        }>
                         {formatPrice(item.price, user?.countryId, user?.currency)}
                       </Box>
                     )}
@@ -245,7 +248,10 @@ export function ExpensesPage() {
                 sx={{ display: { xs: "none", sm: "table-cell", minWidth: 150 } }}
                 align="left">
                 {item?.price && (
-                  <Box className={item.price < 0 ? "text-red-700" : String.empty}>
+                  <Box
+                    className={
+                      item.price < 0 ? "text-red-700 font-bold" : "text-green-700 font-bold"
+                    }>
                     {formatPrice(item.price, user?.countryId, user?.currency)}
                   </Box>
                 )}

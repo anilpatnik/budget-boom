@@ -11,20 +11,27 @@ import { Switch } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { convertoISO, dateAdd } from "@/util";
-import { IExpenseSearch } from "@/models";
-import { DateComponent, Icon } from "@/components";
+import { IExpenseSearch, IProject } from "@/models";
+import { DateComponent, AutoSelectComponent, Icon } from "@/components";
 
 type ComponentProps = {
   search?: IExpenseSearch;
+  projects?: IProject[];
   handleClose: () => void;
   handleSearch: (item?: any) => void;
 };
-export function ExpenseReportSearchPage({ search, handleClose, handleSearch }: ComponentProps) {
+export function ExpenseReportSearchPage({
+  search,
+  projects,
+  handleClose,
+  handleSearch
+}: ComponentProps) {
   const formik = useFormik({
     initialValues: {
       startDate: search?.startDate || dateAdd(-30),
       endDate: search?.endDate || dateAdd(1),
-      taxable: search?.taxable || false
+      taxable: search?.taxable || false,
+      projectId: search?.projectId || String.empty
     },
     validateOnMount: false,
     validationSchema: Yup.object({
@@ -37,7 +44,8 @@ export function ExpenseReportSearchPage({ search, handleClose, handleSearch }: C
       const search: IExpenseSearch = {
         startDate: values?.startDate,
         endDate: values?.endDate,
-        taxable: values?.taxable
+        taxable: values?.taxable,
+        projectId: values?.projectId
       };
       handleSearch(search);
     }
@@ -93,6 +101,18 @@ export function ExpenseReportSearchPage({ search, handleClose, handleSearch }: C
             />
           </div>
           <div className="my-6">
+            <AutoSelectComponent
+              name="projectId"
+              label="Project"
+              optional={true}
+              value={formik.values.projectId}
+              touched={formik.touched.projectId}
+              errorMessage={formik.errors.projectId}
+              handleChange={value => formik.setFieldValue("projectId", value)}
+              payload={projects || []}
+            />
+          </div>
+          <div className="my-6">
             <IonButton id="id-submit-button" size="small" color="secondary" type="submit">
               <Icon name="search-sharp" slot="start" />
               SEARCH
@@ -106,7 +126,8 @@ export function ExpenseReportSearchPage({ search, handleClose, handleSearch }: C
                   values: {
                     startDate: dateAdd(-30),
                     endDate: dateAdd(1),
-                    taxable: false
+                    taxable: false,
+                    projectId: String.empty
                   }
                 })
               }

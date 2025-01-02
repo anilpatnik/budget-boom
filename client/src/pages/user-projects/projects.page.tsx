@@ -161,17 +161,21 @@ export function ProjectsPage() {
                       {formatPrice(item.actual ?? 0, user?.countryId, user?.currency)}
                     </Box>
                     <Box className="mx-2">🌾</Box>
-                    <Box className="text-cyan-700">
+                    <Box className="text-cyan-700 font-bold">
                       {formatPrice(item.budget ?? 0, user?.countryId, user?.currency)}
                     </Box>
                   </Box>
                 </Box>
               </TableCell>
               <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                {formatPrice(item.budget ?? 0, user?.countryId, user?.currency)}
+                <Box className="text-indigo-700 font-bold">
+                  {formatPrice(item.budget ?? 0, user?.countryId, user?.currency)}
+                </Box>
               </TableCell>
               <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                {formatPrice(item.actual ?? 0, user?.countryId, user?.currency)}
+                <Box className="text-cyan-700 font-bold">
+                  {formatPrice(item.actual ?? 0, user?.countryId, user?.currency)}
+                </Box>
               </TableCell>
               <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                 {item?.startDate ? dateFormat(item.startDate) : String.empty}
