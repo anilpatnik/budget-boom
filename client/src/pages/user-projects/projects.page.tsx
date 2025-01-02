@@ -160,7 +160,7 @@ export function ProjectsPage() {
                     <Box className="text-indigo-700 font-bold">
                       {formatPrice(item.actual ?? 0, user?.countryId, user?.currency)}
                     </Box>
-                    <Box className="mx-2">🌾</Box>
+                    <Box className="mx-2">|</Box>
                     <Box className="text-cyan-700 font-bold">
                       {formatPrice(item.budget ?? 0, user?.countryId, user?.currency)}
                     </Box>
