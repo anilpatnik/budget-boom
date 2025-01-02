@@ -1,18 +1,8 @@
 import { useState } from "react";
-import {
-  IonButton,
-  IonButtons,
-  IonCol,
-  IonContent,
-  IonGrid,
-  IonHeader,
-  IonPage,
-  IonRow,
-  IonToolbar
-} from "@ionic/react";
+import { IonButton, IonButtons, IonContent, IonHeader, IonPage, IonToolbar } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { CrudType, constants, convertoISO, dateAdd, toastify } from "@/util";
+import { CrudType, constants, convertoISO, dateAdd, parsePrice, toastify } from "@/util";
 import { IProject } from "@/models";
 import { upsertProjectAsync } from "@/services";
 import { InputComponent, DateComponent, Icon } from "@/components";
@@ -56,7 +46,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
           id: crypto.randomUUID(),
           name: values?.name,
           prevName: project?.prevName,
-          budget: parseFloat(values?.budget?.toString()),
+          budget: parsePrice(false, values?.budget),
           actual: project?.actual,
           startDate: values?.startDate,
           endDate: values?.endDate,
@@ -80,7 +70,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
           id: project?.id,
           name: values?.name,
           prevName: project?.name,
-          budget: parseFloat(values?.budget?.toString()),
+          budget: parsePrice(false, values?.budget),
           actual: project?.actual,
           startDate: values?.startDate,
           endDate: values?.endDate,

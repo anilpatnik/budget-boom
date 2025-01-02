@@ -2,7 +2,8 @@ import { toast, Slide, TypeOptions, ToastPosition } from "react-toastify";
 import { IExpense } from "@/models";
 import { categories, getCountry } from "@/services";
 
-export const parsePrice = (expense: boolean, price: number) => (expense ? -price : price);
+export const parsePrice = (expense: boolean, price: number) =>
+  expense ? parseFloat((-1 * price)?.toString()) : parseFloat(price?.toString());
 
 export const formatPrice = (
   price: number,
