@@ -12,7 +12,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { convertoISO, dateAdd } from "@/util";
 import { IExpenseSearch, IProject } from "@/models";
-import { DateComponent, AutoSelectComponent, Icon } from "@/components";
+import { DateComponent, Icon, SelectComponent } from "@/components";
 
 type ComponentProps = {
   search?: IExpenseSearch;
@@ -101,14 +101,14 @@ export function ExpenseReportSearchPage({
             />
           </div>
           <div className="my-6">
-            <AutoSelectComponent
+            <SelectComponent
               name="projectId"
               label="Project"
-              optional={true}
               value={formik.values.projectId}
+              optional={true}
               touched={formik.touched.projectId}
               errorMessage={formik.errors.projectId}
-              handleChange={value => formik.setFieldValue("projectId", value)}
+              handleChange={formik.handleChange}
               payload={projects || []}
             />
           </div>

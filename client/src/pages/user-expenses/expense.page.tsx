@@ -17,13 +17,7 @@ import * as Yup from "yup";
 import { CrudType, constants, convertoISO, dateNow, parsePrice, toastify } from "@/util";
 import { IExpense, IProject } from "@/models";
 import { getCategories, upsertExpenseAsync } from "@/services";
-import {
-  InputComponent,
-  DateComponent,
-  SelectComponent,
-  AutoSelectComponent,
-  Icon
-} from "@/components";
+import { InputComponent, DateComponent, SelectComponent, Icon } from "@/components";
 
 type ComponentProps = {
   projects?: IProject[];
@@ -205,14 +199,14 @@ export function ExpensePage({
             />
           </div>
           <div className="my-6">
-            <AutoSelectComponent
+            <SelectComponent
               name="projectId"
               label="Project"
               value={formik.values.projectId}
               optional={true}
               touched={formik.touched.projectId}
               errorMessage={formik.errors.projectId}
-              handleChange={value => formik.setFieldValue("projectId", value)}
+              handleChange={formik.handleChange}
               payload={projects || []}
             />
           </div>
