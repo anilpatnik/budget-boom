@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { helper, dbhelper } from "../util";
-import { IExpense, IExpenseData, IExpenseSearch } from "../models";
+import { IExpense, IExpenseData, IExpenseReport, IExpenseSearch } from "../models";
 
 export const getExpensesAsync = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -141,9 +141,20 @@ export const getExpenseReportAsync = async (req: Request, res: Response, next: N
         taxable: { equals: expenseSearch.taxable }
       };
     }
+
     // get expenses
     const dbExpenses = await dbhelper.getExpenseTotalByCategoryId(whereCondition);
-    const resJson = helper.responseJson<IExpense>(true, helper.removeUndefined(dbExpenses));
+    const expenses = helper.removeUndefined(dbExpenses);
+
+    // get expense and income total
+    const dbExpense = await dbhelper.getExpenseTotal(whereCondition);
+    const dbIncome = await dbhelper.getIcomeTotal(whereCondition);
+
+    const resJson = helper.responseJson<IExpenseReport>(true, {
+      data: expenses,
+      expense: dbExpense,
+      income: dbIncome
+    });
     res.json(resJson);
   } catch (error) {
     return next(error);

@@ -133,6 +133,7 @@ export const categories = [
     icon: "desktop-outline"
   }
 ];
+
 export const countries = [
   {
     id: "en-AU",

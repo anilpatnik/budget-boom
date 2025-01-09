@@ -16,7 +16,6 @@ import {
   dateFormat,
   constants,
   formatPrice,
-  totalPrice,
   toastify,
   totalExpense,
   totalIncome
@@ -48,7 +47,10 @@ export function ExpensesPage() {
   const { isLoading: loadingProjects, data: projects } = useQuery({
     queryKey: ["all-user-projects"],
     refetchOnMount: true,
-    queryFn: async () => await getAllProjectsAsync()
+    queryFn: async () => {
+      const projects = await getAllProjectsAsync();
+      return projects.filter(x => !x.inactive);
+    }
   });
 
   const fetchData = async () => {

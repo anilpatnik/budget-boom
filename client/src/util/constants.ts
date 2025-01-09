@@ -12,8 +12,8 @@ export const TOKEN_LENGTH = 10;
 export const PAGE_SIZE = 25;
 export const PROJECTS_MAX = 100;
 export const DELAY = 200;
-export const SUCCESS_DELAY = 3000;
-export const FAILURE_DELAY = 5000;
+export const SUCCESS_DELAY = 1000;
+export const FAILURE_DELAY = 3000;
 export const LOGO_HEIGHT = 64;
 
 export const ACTION_CODE = "actionCode";

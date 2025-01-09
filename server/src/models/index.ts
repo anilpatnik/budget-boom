@@ -10,11 +10,6 @@ export interface IPaging {
   size?: number;
 }
 
-export interface IAggregate {
-  count?: number;
-  total?: number;
-}
-
 export interface IToken {
   id?: string;
   uid?: string;
@@ -43,8 +38,9 @@ export interface IAdminUser {
   role?: RoleType;
 }
 
-export interface IAdminUserData extends IAggregate {
+export interface IAdminUserData {
   data?: IAdminUser[];
+  count?: number;
 }
 
 export interface IAdminUserSearch extends IPaging {
@@ -62,11 +58,13 @@ export interface IProject {
   actual?: number;
   startDate?: string;
   endDate?: string;
+  inactive?: boolean;
   type?: CrudType;
 }
 
-export interface IProjectData extends IAggregate {
+export interface IProjectData {
   data?: IProject[];
+  count?: number;
 }
 
 export interface IExpenseSearch extends IPaging {
@@ -89,6 +87,13 @@ export interface IExpense {
   type?: CrudType;
 }
 
-export interface IExpenseData extends IAggregate {
+export interface IExpenseData {
   data?: IExpense[];
+  count?: number;
+}
+
+export interface IExpenseReport {
+  data?: IExpense[];
+  expense?: number;
+  income?: number;
 }

@@ -1,10 +1,5 @@
 import { AuthType, CrudType, RoleType, SearchType, constants } from "@/util";
 
-export interface IAggregate {
-  count?: number;
-  total?: number;
-}
-
 export interface IUser {
   name?: string;
   email?: string;
@@ -54,8 +49,9 @@ export const AdminUser: IAdminUser = {
   role: RoleType.User,
   type: CrudType.Read
 };
-export interface IAdminUserData extends IAggregate {
+export interface IAdminUserData {
   data?: IAdminUser[];
+  count?: number;
 }
 export interface IAdminUserSearch {
   searchType?: SearchType;
@@ -82,6 +78,7 @@ export interface IProject {
   actual?: number;
   startDate?: string;
   endDate?: string;
+  inactive?: boolean;
   type?: CrudType;
 }
 export const Project: IProject = {
@@ -92,10 +89,12 @@ export const Project: IProject = {
   actual: 0,
   startDate: String.empty,
   endDate: String.empty,
+  inactive: false,
   type: CrudType.Read
 };
-export interface IProjectData extends IAggregate {
+export interface IProjectData {
   data?: IProject[];
+  count?: number;
 }
 
 export interface IExpense {
@@ -120,8 +119,14 @@ export const Expense: IExpense = {
   projectName: String.empty,
   type: CrudType.Read
 };
-export interface IExpenseData extends IAggregate {
+export interface IExpenseData {
   data?: IExpense[];
+  count?: number;
+}
+export interface IExpenseReport {
+  data?: IExpense[];
+  expense?: number;
+  income?: number;
 }
 export interface IExpenseSearch {
   startDate?: string;

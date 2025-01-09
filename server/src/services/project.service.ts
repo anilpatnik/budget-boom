@@ -8,7 +8,7 @@ export const getAllProjectsAsync = async (req: Request, res: Response, next: Nex
     const userId = req?.auth?.id || String.empty;
     const dbProjects = await dbhelper.getAllProjects(userId);
     const projects: IProject[] = dbProjects?.map(dbProject => {
-      return { id: dbProject?.id, name: dbProject?.name };
+      return { id: dbProject?.id, name: dbProject?.name, inactive: dbProject?.inactive || false };
     });
     const resJson = helper.responseJson<IProjectData>(true, helper.removeUndefined(projects));
     res.json(resJson);
@@ -31,7 +31,8 @@ export const getProjectsAsync = async (req: Request, res: Response, next: NextFu
           budget: dbProject?.budget || 0,
           actual: await getExpenseTotalByProjectId(userId, dbProject.id),
           startDate: dbProject?.startDate ? helper.formatDate(dbProject?.startDate) : String.empty,
-          endDate: dbProject?.endDate ? helper.formatDate(dbProject?.endDate) : String.empty
+          endDate: dbProject?.endDate ? helper.formatDate(dbProject?.endDate) : String.empty,
+          inactive: dbProject?.inactive || false
         };
       }) || []
     );
@@ -54,7 +55,8 @@ export const getProjectAsync = async (req: Request, res: Response, next: NextFun
       prevName: dbProject?.name,
       budget: dbProject?.budget || 0,
       startDate: dbProject?.startDate ? helper.formatDate(dbProject?.startDate) : String.empty,
-      endDate: dbProject?.endDate ? helper.formatDate(dbProject?.endDate) : String.empty
+      endDate: dbProject?.endDate ? helper.formatDate(dbProject?.endDate) : String.empty,
+      inactive: dbProject?.inactive || false
     };
     const resJson = helper.responseJson<IProject>(true, helper.removeUndefined(project));
     res.json(resJson);

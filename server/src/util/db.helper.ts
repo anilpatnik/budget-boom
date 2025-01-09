@@ -59,7 +59,7 @@ export const deleteUser = async (id: string) => await prisma.user.delete({ where
 
 export const getAllProjects = async (userId: string) =>
   await prisma.project.findMany({
-    where: { inactive: false, userId },
+    where: { userId },
     orderBy: { name: "asc" }
   });
 
@@ -68,17 +68,17 @@ export const getProjects = async (userId: string, page: number = 0, size: number
     prisma.project.findMany({
       skip: page, // page * size,
       take: size,
-      where: { inactive: false, userId },
+      where: { userId },
       orderBy: { name: "asc" }
     }),
-    prisma.project.count({ where: { inactive: false, userId } })
+    prisma.project.count({ where: { userId } })
   ]);
 
 export const getProject = async (id: string) => await prisma.project.findUnique({ where: { id } });
 
 export const getProjectCountByName = async (userId: string, name: string) =>
   await prisma.project.count({
-    where: { userId, name: { equals: name, mode: "insensitive" }, inactive: false }
+    where: { userId, name: { equals: name, mode: "insensitive" } }
   });
 
 export const upsertProject = async (userId: string, project: IProject) => {
@@ -86,7 +86,8 @@ export const upsertProject = async (userId: string, project: IProject) => {
     name: project?.name || "",
     budget: project?.budget || 0,
     startDate: parseDate(project?.startDate),
-    endDate: parseDate(project?.endDate)
+    endDate: parseDate(project?.endDate),
+    inactive: project?.inactive || false
   });
   const projectData = buildProjectData(project);
   return await prisma.project.upsert({
@@ -140,6 +141,22 @@ export const getExpenseTotalByCategoryId = async (where: object = {}) => {
     categoryId: item.categoryId,
     price: item._sum.price || 0
   }));
+};
+
+export const getExpenseTotal = async (where: object = {}) => {
+  const result = await prisma.expense.aggregate({
+    where: { ...where, price: { lte: 0 } },
+    _sum: { price: true }
+  });
+  return result._sum.price || 0;
+};
+
+export const getIcomeTotal = async (where: object = {}) => {
+  const result = await prisma.expense.aggregate({
+    where: { ...where, price: { gte: 0 } },
+    _sum: { price: true }
+  });
+  return result._sum.price || 0;
 };
 
 export const upsertExpense = async (userId: string, expense: IExpense) => {

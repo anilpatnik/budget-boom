@@ -154,7 +154,9 @@ export function ProjectsPage() {
           {records?.map((item, index) => (
             <TableRow key={index}>
               <TableCell align="left">
-                <Box>{item?.name}</Box>
+                <div>
+                  {item?.inactive ? <div className="line-through">{item?.name}</div> : item?.name}
+                </div>
                 <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
                   <Box className="mt-2 flex items-center">
                     <Box className="text-indigo-700 font-bold">

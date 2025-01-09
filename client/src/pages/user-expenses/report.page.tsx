@@ -11,16 +11,7 @@ import {
   TableRow
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import {
-  categoryMap,
-  constants,
-  dateAdd,
-  dateFormat,
-  formatPrice,
-  totalExpense,
-  totalIncome,
-  totalPrice
-} from "@/util";
+import { categoryMap, constants, dateAdd, dateFormat, formatPrice } from "@/util";
 import { IExpense, IExpenseSearch, ExpenseSearch } from "@/models";
 import { getCategory, getExpenseReportAsync, getAllProjectsAsync } from "@/services";
 import { Icon } from "@/components";
@@ -31,6 +22,8 @@ export function ExpenseReportPage() {
   const { user } = useStore();
   const hasMounted = useRef(false);
   const [records, setRecords] = useState<IExpense[]>([]);
+  const [expenseTotal, setExpense] = useState<number>(0);
+  const [incomeTotal, setIncome] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [payload, setPayload] = useState<IExpenseSearch>({
     ...ExpenseSearch,
@@ -52,12 +45,14 @@ export function ExpenseReportPage() {
     setLoading(true);
     try {
       const response = await getExpenseReportAsync(queryRef.current);
-      const sortedData = [...response].sort((a, b) => {
+      const sortedData = [...(response?.data ?? [])].sort((a, b) => {
         const nameA = categoryMap[a.categoryId ?? String.empty]?.name || "";
         const nameB = categoryMap[b.categoryId ?? String.empty]?.name || "";
         return nameA.localeCompare(nameB);
       });
       setRecords(prev => [...prev, ...sortedData]);
+      setExpense(response?.expense ?? 0);
+      setIncome(response?.income ?? 0);
     } catch (error) {
       console.error("error fetching data:", error);
     } finally {
@@ -123,19 +118,19 @@ export function ExpenseReportPage() {
               <div className="flex justify-between items-center">
                 <div className="mr-2">💰 Income</div>
                 <div className="text-green-700">
-                  {formatPrice(totalIncome(records), user?.countryId, user?.currency)}
+                  {formatPrice(incomeTotal, user?.countryId, user?.currency)}
                 </div>
               </div>
               <div className="mt-2 flex justify-between items-center">
                 <div className="mr-2">💰 Expense</div>
                 <div className="text-red-700">
-                  {formatPrice(totalExpense(records), user?.countryId, user?.currency)}
+                  {formatPrice(expenseTotal, user?.countryId, user?.currency)}
                 </div>
               </div>
               <div className="mt-2 flex justify-between items-center">
                 <div className="mr-2">💰 Total</div>
-                <div className={totalPrice(records) < 0 ? "text-red-700" : "text-green-700"}>
-                  {formatPrice(totalPrice(records), user?.countryId, user?.currency)}
+                <div className={incomeTotal + expenseTotal < 0 ? "text-red-700" : "text-green-700"}>
+                  {formatPrice(incomeTotal + expenseTotal, user?.countryId, user?.currency)}
                 </div>
               </div>
               <div className="mt-2 flex items-center text-blue-700">

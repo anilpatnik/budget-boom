@@ -1,5 +1,5 @@
 import { ServiceType } from "@/util";
-import { Expense, IExpense, IExpenseData, IExpenseSearch } from "@/models";
+import { Expense, IExpense, IExpenseData, IExpenseReport, IExpenseSearch } from "@/models";
 import { authApi } from "./index";
 
 export const getExpensesAsync = async (payload: IExpenseSearch): Promise<IExpenseData> => {
@@ -43,9 +43,9 @@ export const deleteExpenseAsync = async (id: string) => {
   }
 };
 
-export const getExpenseReportAsync = async (payload: IExpenseSearch): Promise<IExpense[]> => {
+export const getExpenseReportAsync = async (payload: IExpenseSearch): Promise<IExpenseReport> => {
   const url = `${ServiceType.Expenses}${ServiceType.Report}`;
   const response = await authApi.post(url, payload);
   if (response?.data?.resource) return response?.data?.resource;
-  return [{ ...Expense }];
+  return { data: [{ ...Expense }], expense: 0, income: 0 };
 };

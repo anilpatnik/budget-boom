@@ -1,11 +1,20 @@
 import { useState } from "react";
-import { IonButton, IonButtons, IonContent, IonHeader, IonPage, IonToolbar } from "@ionic/react";
+import {
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonLabel,
+  IonPage,
+  IonToolbar
+} from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { CrudType, constants, convertoISO, dateAdd, parsePrice, toastify } from "@/util";
 import { IProject } from "@/models";
 import { upsertProjectAsync } from "@/services";
 import { InputComponent, DateComponent, Icon } from "@/components";
+import { Switch } from "@mui/material";
 
 type ComponentProps = {
   project?: IProject;
@@ -21,7 +30,8 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
       name: project?.name || String.empty,
       budget: Math.abs(project?.budget || 0),
       startDate: project?.startDate || dateAdd(1),
-      endDate: project?.endDate || dateAdd(30)
+      endDate: project?.endDate || dateAdd(30),
+      inactive: project?.inactive || false
     },
     validateOnMount: false,
     validationSchema: Yup.object({
@@ -50,6 +60,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
           actual: project?.actual,
           startDate: values?.startDate,
           endDate: values?.endDate,
+          inactive: values?.inactive,
           type: CrudType.Create
         };
         const res = await upsertProjectAsync(newProject);
@@ -74,6 +85,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
           actual: project?.actual,
           startDate: values?.startDate,
           endDate: values?.endDate,
+          inactive: values?.inactive,
           type: CrudType.Update
         };
         const res = await upsertProjectAsync(updateProject);
@@ -112,13 +124,16 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
           <div className="my-6">
             <InputComponent
               name="name"
-              label="Name"
+              label="Project Name"
               type="text"
               value={formik.values.name}
               touched={formik.touched.name}
               errorMessage={formik.errors.name}
               handleChange={formik.handleChange}
             />
+            <p className="text-sm text-zinc-500">
+              House Renovation, My Birthday Party, Bangkok Holiday
+            </p>
           </div>
           <div className="my-6">
             <InputComponent
@@ -155,6 +170,15 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
                 handleChange={e => formik.setFieldValue("endDate", e.target.value || dateAdd(30))}
               />
             </div>
+          </div>
+          <div className="my-6">
+            <IonLabel>Completed</IonLabel>
+            <Switch
+              id="inactive"
+              name="inactive"
+              checked={formik.values.inactive}
+              onChange={formik.handleChange}
+            />
           </div>
           <div className="my-6">
             <IonButton
