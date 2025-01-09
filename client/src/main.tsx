@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { setupIonicReact } from "@ionic/react";
 import App from "./App";
+import { StartHere } from "./practice";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -26,6 +27,6 @@ setupIonicReact({ mode: "md" }); // Ionic
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
-    <App />
+    <StartHere />
   </StrictMode>
 );
