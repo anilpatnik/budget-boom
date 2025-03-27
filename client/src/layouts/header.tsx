@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { IonButton, IonButtons, IonHeader, IonIcon, IonToolbar, isPlatform } from "@ionic/react";
 import {
   barChartOutline,
@@ -13,9 +13,12 @@ import { NavType, RoleType, constants } from "@/util";
 import { useStore } from "@/contexts";
 import { InstallPWA } from "./pwa.install";
 
+import { ShepherdProvider, ShepherdDemo } from "./demo";
+
 export function Header() {
   const { user } = useStore();
   const navigate = useNavigate();
+  const location = useLocation();
   const handleMenuClick = (url: string) => navigate(url);
   return (
     <IonHeader
@@ -34,16 +37,20 @@ export function Header() {
               : "border-0 shadow-none"
           }>
           <Toolbar>
+            {/* Mobile ONLY */}
             {/* PWA Install */}
             <Box className="ion-hide-md-up">
               <InstallPWA />
             </Box>
+
+            {/* Mobile ONLY */}
             {/* Logo */}
             <Box
               sx={{
                 flexGrow: 1,
                 marginLeft: 0,
-                marginRight: `${user.auth ? "0" : "1.5em"}`
+                marginRight:
+                  location.pathname === NavType.Root ? "0" : `${user.auth ? "0" : "1.5em"}`
               }}
               className="ion-hide-md-up ion-text-center">
               <img
@@ -55,6 +62,30 @@ export function Header() {
                 onClick={() => handleMenuClick(NavType.Root)}
               />
             </Box>
+
+            {/* Unauthenticated and Home Page ONLY */}
+            {!user?.auth && location.pathname === NavType.Root && (
+              <>
+                {/* Left Nav Menu */}
+                <Box sx={{ flexGrow: 1 }} className="ion-hide-md-down"></Box>
+                {/* Right Nav Menu */}
+                <Box sx={{ flexGrow: 0 }}>
+                  <IonButtons>
+                    <ShepherdProvider>
+                      <ShepherdDemo />
+                    </ShepherdProvider>
+                    <IonButton
+                      id="id-logoff-menu"
+                      size="small"
+                      onClick={() => handleMenuClick(NavType.SignIn)}>
+                      <IonIcon icon={lockClosedOutline} className="mr-2" /> Login
+                    </IonButton>
+                  </IonButtons>
+                </Box>
+              </>
+            )}
+
+            {/* Desktop ONLY - Authenticated */}
             {user?.auth && (
               <>
                 {/* Logo */}
@@ -126,6 +157,8 @@ export function Header() {
                 </Box>
               </>
             )}
+
+            {/* Desktop and Mobile - Authenticated */}
             {/* Avatar */}
             {user?.auth && (
               <Avatar

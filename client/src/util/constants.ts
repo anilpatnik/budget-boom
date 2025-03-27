@@ -2,6 +2,19 @@ import logo from "@/assets/logo.png";
 import banner from "@/assets/banner.png";
 import profile from "@/assets/profile.jpg";
 
+import demo1 from "@/assets/demo/1001.png";
+import demo2 from "@/assets/demo/1002.png";
+import demo3 from "@/assets/demo/1003.png";
+import demo4 from "@/assets/demo/1004.png";
+import demo5 from "@/assets/demo/1005.png";
+import demo6 from "@/assets/demo/1006.png";
+export const DEMO_1 = demo1;
+export const DEMO_2 = demo2;
+export const DEMO_3 = demo3;
+export const DEMO_4 = demo4;
+export const DEMO_5 = demo5;
+export const DEMO_6 = demo6;
+
 export const LOGO_IMG = logo;
 export const BANNER_IMG = banner;
 export const PROFILE_IMG = profile;

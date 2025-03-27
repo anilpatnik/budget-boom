@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { IonIcon, IonLabel, IonTabBar, IonTabButton, IonTabs } from "@ionic/react";
 import {
   barChartOutline,
@@ -13,7 +12,6 @@ import { useStore } from "@/contexts";
 
 export function TabMenu({ children }: { children: any }) {
   const { user } = useStore();
-  const navigate = useNavigate();
   return (
     <IonTabs>
       {children}
@@ -52,7 +50,7 @@ export function TabMenu({ children }: { children: any }) {
             <IonIcon icon={personOutline} />
             <IonLabel>My Profile</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="logout" onClick={() => navigate(NavType.SignOut)}>
+          <IonTabButton tab="logout" href={NavType.SignOut}>
             <IonIcon icon={lockClosedOutline} />
             <IonLabel>Logout</IonLabel>
           </IonTabButton>
