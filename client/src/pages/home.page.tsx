@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   IonCard,
@@ -8,7 +8,8 @@ import {
   IonCol,
   IonGrid,
   IonLabel,
-  IonRow
+  IonRow,
+  IonSpinner
 } from "@ionic/react";
 import { constants, NavType, RoleType } from "@/util";
 import { useStore } from "@/contexts";
@@ -16,6 +17,7 @@ import { useStore } from "@/contexts";
 export function RootPage() {
   const hasMounted = useRef(false);
   const { user } = useStore();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   // const isFetching = useRef(false);
   /*
@@ -42,14 +44,15 @@ export function RootPage() {
   useEffect(() => {
     if (hasMounted.current) return;
     hasMounted.current = true;
+    setLoading(true);
     // fetchData();
     if (user.auth && user.role === RoleType.Admin) {
       setTimeout(() => navigate(NavType.Profile), constants.DELAY);
-    }
-    if (user.auth) {
+    } else if (user.auth) {
       setTimeout(() => navigate(NavType.Expenses), constants.DELAY);
-    }
+    } else setTimeout(() => setLoading(false), constants.DELAY);
   }, []);
+  if (loading) return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
   return (
     <IonGrid>
       <IonRow className="ion-hide-md-down text-center">

@@ -1,20 +1,23 @@
 import { useNavigate } from "react-router-dom";
 import { constants, NavType } from "@/util";
+import { useStore } from "@/contexts";
 
 export default function TermsConditionsPage() {
   const navigate = useNavigate();
+  const { user } = useStore();
   return (
     <div className="ion-padding-horizontal statement">
-      <div className="ion-hide-md-down text-center py-5">
-        <img
-          alt={String.empty}
-          src={constants.LOGO_IMG}
-          height={constants.LOGO_HEIGHT}
-          loading="lazy"
-          className="cursor-pointer"
-          onClick={() => navigate(NavType.Root)}
-        />
-      </div>
+      {!user?.auth && (
+        <div className="ion-hide-md-down text-center py-5">
+          <img
+            alt={String.empty}
+            src={constants.LOGO_IMG}
+            loading="lazy"
+            className="cursor-pointer"
+            onClick={() => navigate(NavType.Root)}
+          />
+        </div>
+      )}
       <h5>PLEASE READ THESE TERMS AND CONDITIONS OF USE CAREFULLY BEFORE USING THIS WEBSITE</h5>
       <p>
         Welcome to our website. If you continue to browse and use this website you are agreeing to

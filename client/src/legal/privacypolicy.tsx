@@ -1,20 +1,23 @@
 import { useNavigate } from "react-router-dom";
 import { constants, NavType } from "@/util";
+import { useStore } from "@/contexts";
 
 export default function PrivacyPolicyPage() {
   const navigate = useNavigate();
+  const { user } = useStore();
   return (
     <div className="ion-padding-horizontal statement">
-      <div className="ion-hide-md-down text-center py-5">
-        <img
-          alt={String.empty}
-          src={constants.LOGO_IMG}
-          height={constants.LOGO_HEIGHT}
-          loading="lazy"
-          className="cursor-pointer"
-          onClick={() => navigate(NavType.Root)}
-        />
-      </div>
+      {!user?.auth && (
+        <div className="ion-hide-md-down text-center py-5">
+          <img
+            alt={String.empty}
+            src={constants.LOGO_IMG}
+            loading="lazy"
+            className="cursor-pointer"
+            onClick={() => navigate(NavType.Root)}
+          />
+        </div>
+      )}
       <h5>PRIVACY POLICY</h5>
       <p>
         At app digital pty ltd, we are committed to protecting your privacy as a customer and an

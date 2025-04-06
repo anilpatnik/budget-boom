@@ -59,7 +59,7 @@ export function Header() {
                 height={constants.LOGO_HEIGHT}
                 loading="lazy"
                 className="cursor-pointer"
-                onClick={() => handleMenuClick(NavType.Root)}
+                onClick={() => (!user?.auth ? handleMenuClick(NavType.Root) : String.empty)}
               />
             </Box>
 
@@ -95,8 +95,6 @@ export function Header() {
                     src={constants.LOGO_IMG}
                     height={constants.LOGO_HEIGHT}
                     loading="lazy"
-                    className="cursor-pointer"
-                    onClick={() => handleMenuClick(NavType.Root)}
                   />
                 </Box>
                 {/* Left Nav Menu */}
