@@ -1,18 +1,19 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "CommonJS",
-    "sourceMap": true,
-    "outDir": "./api-build",
-    "rootDir": "./src",
+    "target": "es6",
+    "module": "commonjs",
+    "rootDir": "src",
+    "outDir": "backend",
     "strict": true,
-    "moduleResolution": "Node",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
     "noImplicitAny": false,
-    "allowSyntheticDefaultImports": true
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["**/*.dev.ts"],
+  "exclude": ["node_modules", "backend"],
   "include": ["src"]
 }

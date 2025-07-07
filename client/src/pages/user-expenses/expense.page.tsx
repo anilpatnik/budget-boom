@@ -1,23 +1,17 @@
 import { useState } from "react";
-import {
-  IonButton,
-  IonButtons,
-  IonCol,
-  IonContent,
-  IonGrid,
-  IonHeader,
-  IonLabel,
-  IonPage,
-  IonRow,
-  IonToolbar
-} from "@ionic/react";
-import { Switch } from "@mui/material";
+import { IonButton, IonButtons, IonContent, IonHeader, IonPage, IonToolbar } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { CrudType, constants, convertoISO, dateNow, parsePrice, toastify } from "@/util";
 import { IExpense, IProject } from "@/models";
 import { getCategories, upsertExpenseAsync } from "@/services";
-import { InputComponent, DateComponent, SelectComponent, Icon } from "@/components";
+import {
+  InputComponent,
+  DateComponent,
+  SelectComponent,
+  Icon,
+  ToggleButtonComponent
+} from "@/components";
 
 type ComponentProps = {
   projects?: IProject[];
@@ -42,7 +36,6 @@ export function ExpensePage({
       categoryId: expense?.categoryId || "FOOD",
       price: Math.abs(expense?.price || 0),
       expenditure: !(expense?.price && expense?.price > 0),
-      taxable: expense?.taxable || false,
       notes: expense?.notes || String.empty
     },
     validateOnMount: false,
@@ -67,7 +60,6 @@ export function ExpensePage({
           projectId: values?.projectId,
           categoryId: values?.categoryId,
           price: parsePrice(values?.expenditure, values?.price),
-          taxable: values?.taxable,
           notes: values?.notes,
           type: CrudType.Create
         };
@@ -91,7 +83,6 @@ export function ExpensePage({
           projectId: values?.projectId,
           categoryId: values?.categoryId,
           price: parsePrice(values?.expenditure, values?.price),
-          taxable: values?.taxable,
           notes: values?.notes,
           type: CrudType.Update
         };
@@ -129,6 +120,17 @@ export function ExpensePage({
       <IonContent className="ion-padding">
         <form onSubmit={formik.handleSubmit}>
           <div className="my-6">
+            <ToggleButtonComponent
+              trueLabel="expense"
+              falseLabel="income"
+              value={formik.values.expenditure}
+              exclusive={true}
+              handleChange={(_, value: boolean) => formik.setFieldValue("expenditure", value)}
+              color="secondary"
+              size="medium"
+            />
+          </div>
+          <div className="my-6">
             <DateComponent
               name="entryDate"
               label="Date"
@@ -143,6 +145,7 @@ export function ExpensePage({
               name="price"
               label="Amount"
               type="number"
+              fullWidth={false}
               startAdor={true}
               startAdorText="$"
               value={formik.values.price > 0 ? formik.values.price.toString() : String.empty}
@@ -150,30 +153,6 @@ export function ExpensePage({
               errorMessage={formik.errors.price}
               handleChange={e => formik.setFieldValue("price", e.target.value)}
             />
-          </div>
-          <div className="my-6">
-            <IonGrid className="p-0 m-0">
-              <IonRow>
-                <IonCol className="p-0 m-0">
-                  <IonLabel>Money {formik.values.expenditure ? "Spent" : "Received"}</IonLabel>
-                  <Switch
-                    id="expenditure"
-                    name="expenditure"
-                    checked={formik.values.expenditure}
-                    onChange={formik.handleChange}
-                  />
-                </IonCol>
-                <IonCol className="p-0 m-0">
-                  <IonLabel>Tax Claimable</IonLabel>
-                  <Switch
-                    id="taxable"
-                    name="taxable"
-                    checked={formik.values.taxable}
-                    onChange={formik.handleChange}
-                  />
-                </IonCol>
-              </IonRow>
-            </IonGrid>
           </div>
           <div className="my-6">
             <SelectComponent

@@ -18,7 +18,7 @@ import {
   ExpensesHomePage
 } from "@/pages";
 import { Header } from "./header";
-import { Footer } from "./footer";
+// import { Footer } from "./footer";
 import { TabMenu } from "./tab.menu";
 import { PrivacyPolicyPage, TermsConditionsPage } from "@/legal";
 
@@ -38,9 +38,9 @@ export function PreRoute({
   if (!user?.auth && (routerType === RouterType.User || routerType === RouterType.Role)) {
     return <Navigate to={NavType.SignIn} replace state={{ from: location.pathname }} />;
   } else if (user?.auth && routerType === RouterType.Auth) {
-    return <Navigate to={NavType.Root} replace />;
+    return (window.location.href = NavType.Root);
   } else if (user?.auth && routerType === RouterType.Role && !isAllowed) {
-    return <Navigate to={NavType.Root} replace />;
+    return (window.location.href = NavType.Root);
   } else {
     return children ? children : <Outlet />;
   }
@@ -50,15 +50,16 @@ function TabLayout() {
   return (
     <StoreProvider>
       <IonPage id="main-content">
-        <Header />
+        {location.pathname !== NavType.Root && <Header />}
         <TabMenu>
           <IonRouterOutlet>
-            <IonContent className="custom-content">
+            <IonContent
+              className={(location.pathname !== NavType.Root && "custom-content") || String.empty}>
               <Outlet />
             </IonContent>
           </IonRouterOutlet>
         </TabMenu>
-        <Footer />
+        {/* location.pathname !== NavType.Root && <Footer /> */}
         <ToastContainer />
       </IonPage>
     </StoreProvider>

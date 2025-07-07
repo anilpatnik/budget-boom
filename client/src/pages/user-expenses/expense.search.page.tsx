@@ -1,10 +1,19 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonPage, IonToolbar } from "@ionic/react";
+import {
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonLabel,
+  IonPage,
+  IonToolbar
+} from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { convertoISO, dateAdd } from "@/util";
+import { convertoISO, monthStart, monthEnd } from "@/util";
 import { IExpenseSearch, IProject } from "@/models";
 import { getCategories } from "@/services";
 import { DateComponent, SelectComponent, Icon } from "@/components";
+import { Switch } from "@mui/material";
 
 type ComponentProps = {
   search?: IExpenseSearch;
@@ -15,10 +24,11 @@ type ComponentProps = {
 export function ExpenseSearchPage({ search, projects, handleClose, handleSearch }: ComponentProps) {
   const formik = useFormik({
     initialValues: {
-      startDate: search?.startDate || dateAdd(-30),
-      endDate: search?.endDate || dateAdd(1),
+      startDate: search?.startDate || monthStart,
+      endDate: search?.endDate || monthEnd,
       projectId: search?.projectId || String.empty,
-      categoryId: search?.categoryId || String.empty
+      categoryId: search?.categoryId || String.empty,
+      skip: search?.skip || false
     },
     validateOnMount: false,
     validationSchema: Yup.object({
@@ -29,10 +39,11 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
     }),
     onSubmit: async values => {
       const search: IExpenseSearch = {
-        startDate: values?.startDate,
-        endDate: values?.endDate,
+        startDate: values?.skip ? String.empty : values?.startDate,
+        endDate: values?.skip ? String.empty : values?.endDate,
         projectId: values?.projectId,
-        categoryId: values?.categoryId
+        categoryId: values?.categoryId,
+        skip: values?.skip
       };
       handleSearch(search);
     }
@@ -62,9 +73,7 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
                 value={convertoISO(formik.values.startDate)}
                 touched={formik.touched.startDate}
                 errorMessage={formik.errors.startDate}
-                handleChange={e =>
-                  formik.setFieldValue("startDate", e.target.value || dateAdd(-30))
-                }
+                handleChange={e => formik.setFieldValue("startDate", e.target.value || monthStart)}
               />
             </div>
             <div className="ml-10">
@@ -74,7 +83,7 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
                 value={convertoISO(formik.values.endDate)}
                 touched={formik.touched.endDate}
                 errorMessage={formik.errors.endDate}
-                handleChange={e => formik.setFieldValue("endDate", e.target.value || dateAdd(1))}
+                handleChange={e => formik.setFieldValue("endDate", e.target.value || monthEnd)}
               />
             </div>
           </div>
@@ -103,6 +112,15 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
             />
           </div>
           <div className="my-6">
+            <IonLabel class="text-sm text-gray-700">Skip Date Range</IonLabel>
+            <Switch
+              id="skip"
+              name="skip"
+              checked={formik.values.skip}
+              onChange={formik.handleChange}
+            />
+          </div>
+          <div className="my-6">
             <IonButton id="id-submit-button" size="small" color="secondary" type="submit">
               <Icon name="search-sharp" slot="start" />
               SEARCH
@@ -114,10 +132,11 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
               onClick={() =>
                 formik.resetForm({
                   values: {
-                    startDate: dateAdd(-30),
-                    endDate: dateAdd(1),
+                    startDate: monthStart,
+                    endDate: monthEnd,
                     projectId: String.empty,
-                    categoryId: String.empty
+                    categoryId: String.empty,
+                    skip: false
                   }
                 })
               }

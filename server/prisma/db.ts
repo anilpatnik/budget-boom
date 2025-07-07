@@ -1,19 +1,18 @@
 import { faker } from "@faker-js/faker";
 import { RoleType as dbRoleType } from "@prisma/client";
 
-export const mockExpenses = async (count: number) => {
+export async function mockExpenses(count: number) {
   return Array.from({ length: count }, () => ({
     id: faker.string.uuid(),
     entryDate: faker.date.between({ from: "2023-01-01", to: "2025-12-31" }),
     price: parseFloat(faker.finance.amount({ min: -1000, max: 1000, dec: 2 })),
     categoryId: faker.helpers.arrayElement(categories),
     projectId: faker.helpers.arrayElement(projects),
-    taxable: faker.datatype.boolean(),
     userId: "zzzzz-zzzzz-zzzzz-zzzzz"
   }));
-};
+}
 
-export const mockProjects = async (count: number) => {
+export async function mockProjects(count: number) {
   return Array.from({ length: count }, () => ({
     id: faker.string.uuid(),
     name: faker.company.name(),
@@ -22,9 +21,9 @@ export const mockProjects = async (count: number) => {
     endDate: faker.date.future(),
     userId: "zzzzz-zzzzz-zzzzz-zzzzz"
   }));
-};
+}
 
-export const mockUsers = async (count: number) => {
+export async function mockUsers(count: number) {
   return Array.from({ length: count }, () => ({
     id: faker.string.uuid(),
     uid: faker.string.uuid(),
@@ -32,9 +31,9 @@ export const mockUsers = async (count: number) => {
     email: faker.internet.email(),
     role: faker.helpers.enumValue(dbRoleType)
   }));
-};
+}
 
-export const categories = [
+const categories = [
   "NONE",
   "HOME",
   "INTEREST",
@@ -53,7 +52,7 @@ export const categories = [
   "TRAVEL"
 ];
 
-export const projects = [
+const projects = [
   "zzzzz-zzzzz-zzzzz-zzzzz",
   "zzzzz-zzzzz-zzzzz-zzzzz",
   "zzzzz-zzzzz-zzzzz-zzzzz",

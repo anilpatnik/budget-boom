@@ -101,7 +101,6 @@ export interface IExpense {
   id?: string;
   entryDate?: string;
   price?: number;
-  taxable?: boolean;
   notes?: string;
   categoryId?: string;
   projectId?: string;
@@ -112,7 +111,6 @@ export const Expense: IExpense = {
   id: String.empty,
   entryDate: String.empty,
   price: 0,
-  taxable: false,
   notes: String.empty,
   categoryId: String.empty,
   projectId: String.empty,
@@ -133,7 +131,7 @@ export interface IExpenseSearch {
   endDate?: string;
   categoryId?: string;
   projectId?: string;
-  taxable?: boolean;
+  skip?: boolean;
   page?: number;
   size?: number;
 }
@@ -142,7 +140,7 @@ export const ExpenseSearch: IExpenseSearch = {
   endDate: String.empty,
   categoryId: String.empty,
   projectId: String.empty,
-  taxable: false,
+  skip: false,
   page: 0,
   size: constants.PAGE_SIZE
 };

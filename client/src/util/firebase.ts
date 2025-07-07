@@ -21,7 +21,7 @@ import {
   VITE_FIREBASE_APP_ID,
   VITE_FIREBASE_MESSAGING_SENDER_ID,
   VITE_FIREBASE_PROJECT_ID
-} from "./config";
+} from "./configs";
 
 const authDomain =
   process.env.NODE_ENV !== "production"

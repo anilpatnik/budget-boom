@@ -1,41 +1,45 @@
-#### Install Tools and Packages
+#### Postgres
 
-- Install [Git](https://git-scm.com/downloads)
-  - Verify `git -V`
-  - Configure [Posh Git](https://git-scm.com/book/en/v2/Appendix-A:-Git-in-Other-Environments-Git-in-PowerShell) in **PowerShell**
-- Install [Node](https://nodejs.org/en/download)
-  - Verify `node -v`
-  - Verify `npm -v`
-- Install [VS Code](https://code.visualstudio.com)
-- Install VS Code Extensions
+- Create Postgres and pgAdmin `docker-compose up -d`
+- Create database schema `npx prisma db push`
+- Seed database `npx prisma db seed`
+- Browse database `npx prisma studio`
+- Browse [pgadmin](http://localhost:8085)
+  - Login with `admin@domain.com ~ password`
+- Drop Postgres and pgAdmin **post dev** `docker-compose down --rmi all -v`
 
-  - [TypeScript](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-typescript-next)
-  - [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
-  - [VS Code Icons](https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons)
-  - [Tailwind](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
-  - [Prisma](https://marketplace.visualstudio.com/items?itemName=Prisma.prisma)
-  - [DotENV](https://marketplace.visualstudio.com/items?itemName=mikestead.dotenv)
+#### Frontend
 
-#### Download and Open App
+- Create `.env` in **client**
+  - NEXT_PUBLIC_FIREBASE_API_KEY=
+  - NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+  - NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+  - NEXT_PUBLIC_FIREBASE_APP_ID=
+  - NEXT_PUBLIC_CAPTCHA_SITE=
+  - NEXT_PUBLIC_API=[url](https://localhost:44455)
+- Browse [app](https://localhost:44454)
 
-- Download App `git clone https://github.com/anilpatnik/budget-boom.git`
-- Open `budget-boom` folder in VS Code
+#### Backend
 
-#### Build and Run API (Node)
+- Create `firebase.config.json` in **server**
+- Create `.env` in **server**
+  - GOOGLE_APPLICATION_CREDENTIALS=./firebase.config.json
+  - ENVIRONMENT=development
+  - TOKEN_SECRET=
+  - CAPTCHA_SECRET=
+  - DATABASE_URL=[url](postgresql://postgres:password@localhost:5432/postgres)
+  - SHADOW_DATABASE_URL=[url](postgresql://postgres:password@localhost:5432/postgres)
+- Browse [swagger](https://localhost:44455/swagger)
 
-- Open VS Code `TERMINAL`
-- Go to `server` folder
-- Create file `firebase.config.json`
-- Create file `.env`
-- Copy and Paste env variables from `.env.dev`
-- Install npm packages `npm install`
-- Start dev server `npm run dev`
+#### Prisma
 
-#### Build and Run Web (React)
+- Create migrations from schema `npx prisma migrate dev --name init`
+- Connect to database `npx prisma db pull`
+- Create database schema `npx prisma db push`
+- Seed database `npx prisma db seed`
+- Browse database `npx prisma studio`
 
-- Open VS Code `TERMINAL`
-- Go to `client` folder
-- Create file `.env`
-- Copy and Paste env variables from `.env.dev`
-- Install npm packages `npm install`
-- Start dev server `npm run dev`
+#### Crypto
+
+- node
+- require('crypto').randomBytes(64).toString('hex')

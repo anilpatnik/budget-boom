@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import { dateAdd } from "@/util";
+import { yearEnd, yearStart } from "@/util";
 
 type ComponentProps = {
   name?: string;
@@ -24,8 +24,8 @@ export function DateComponent({
   handleChange,
   handleBlur,
   disabled = false,
-  min = dateAdd(-90),
-  max = dateAdd(90)
+  min = yearStart,
+  max = yearEnd
 }: ComponentProps) {
   return (
     <TextField
@@ -38,7 +38,6 @@ export function DateComponent({
       onBlur={handleBlur}
       variant="standard"
       onKeyDown={e => e.preventDefault()} // disable keyboard input
-      slotProps={{ input: { min, max }, inputLabel: { shrink: true } }}
       error={touched && Boolean(errorMessage)}
       helperText={touched && errorMessage}
       disabled={disabled}

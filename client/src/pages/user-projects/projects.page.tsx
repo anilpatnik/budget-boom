@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, Fragment } from "react";
 import { IonButton, IonFabButton, IonSpinner, useIonAlert, useIonModal } from "@ionic/react";
 import {
   Box,
@@ -14,7 +14,7 @@ import { CrudType, dateFormat, constants, formatPrice, toastify } from "@/util";
 import { IProject, Project } from "@/models";
 import { deleteProjectAsync, getProjectsAsync } from "@/services";
 import { ProjectPage } from "./project.page";
-import { Icon } from "@/components";
+import { Icon, ProjectProgressBar } from "@/components";
 import { useStore } from "@/contexts";
 
 export function ProjectsPage() {
@@ -122,7 +122,9 @@ export function ProjectsPage() {
       <Table className="styled-table" stickyHeader>
         <TableHead>
           <TableRow>
-            <TableCell align="left">Name</TableCell>
+            <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+              Name
+            </TableCell>
             <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
               Budget
             </TableCell>
@@ -135,6 +137,14 @@ export function ProjectsPage() {
             <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
               End Date
             </TableCell>
+            <TableCell
+              align="left"
+              sx={{
+                display: { xs: "table-cell", sm: "none" },
+                maxWidth: 0,
+                padding: "0px !important"
+              }}></TableCell>
+            <TableCell align="left" sx={{ display: { xs: "table-cell", sm: "none" } }}></TableCell>
             <TableCell align="left">
               <Box className="flex items-center">
                 {constants.PROJECTS_MAX > records.length && (
@@ -152,80 +162,149 @@ export function ProjectsPage() {
         </TableHead>
         <TableBody>
           {records?.map((item, index) => (
-            <TableRow key={index}>
-              <TableCell align="left">
-                <div>
-                  {item?.inactive ? <div className="line-through">{item?.name}</div> : item?.name}
-                </div>
-                <Box sx={{ display: { xs: "table-cell", sm: "none" } }}>
-                  <Box className="mt-2 flex items-center">
-                    <Box className="text-indigo-700 font-bold">
-                      {formatPrice(item.actual ?? 0, user?.countryId, user?.currency)}
-                    </Box>
-                    <Box className="mx-2">|</Box>
-                    <Box className="text-cyan-700 font-bold">
-                      {formatPrice(item.budget ?? 0, user?.countryId, user?.currency)}
-                    </Box>
+            <Fragment key={index}>
+              <TableRow>
+                <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                  {item?.inactive ? <div className="text-red-700">{item?.name}</div> : item?.name}
+                </TableCell>
+                <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                  <Box className="text-indigo-700 font-bold">
+                    {formatPrice(item.budget ?? 0, user?.countryId, user?.currency)}
                   </Box>
-                </Box>
-              </TableCell>
-              <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                <Box className="text-indigo-700 font-bold">
-                  {formatPrice(item.budget ?? 0, user?.countryId, user?.currency)}
-                </Box>
-              </TableCell>
-              <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                <Box className="text-cyan-700 font-bold">
-                  {formatPrice(item.actual ?? 0, user?.countryId, user?.currency)}
-                </Box>
-              </TableCell>
-              <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                {item?.startDate ? dateFormat(item.startDate) : String.empty}
-              </TableCell>
-              <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                {item?.endDate ? dateFormat(item.endDate) : String.empty}
-              </TableCell>
-              <TableCell align="left">
-                <Box className="flex items-center">
-                  <IonButton
-                    id="id-edit-button"
-                    title="EDIT PROJECT"
-                    size="small"
-                    buttonType="icon"
-                    onClick={() => handleOpen(item, "EDIT")}>
-                    {loadingCol === `${item?.id}-EDIT` ? (
-                      <Icon name="sync-sharp" css="text-xl text-blue-500 icon-spinner" />
-                    ) : (
-                      <Icon name="card-sharp" css="text-xl text-blue-500" />
-                    )}
-                  </IonButton>
-                  <IonButton
-                    id="id-delete-button"
-                    title="DELETE PROJECT"
-                    fill="clear"
-                    onClick={() =>
-                      presentAlert({
-                        header: "Are you sure?",
-                        buttons: [
-                          { text: "Cancel" },
-                          {
-                            text: "Confirm",
-                            handler: () => {
-                              handleDelete(item?.id || String.empty, "DELETE");
+                </TableCell>
+                <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                  <Box className="text-cyan-700 font-bold">
+                    {formatPrice(item.actual ?? 0, user?.countryId, user?.currency)}
+                  </Box>
+                </TableCell>
+                <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                  {item?.startDate ? dateFormat(item.startDate) : String.empty}
+                </TableCell>
+                <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                  {item?.endDate ? dateFormat(item.endDate) : String.empty}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  sx={{
+                    display: { xs: "table-cell", sm: "none" },
+                    maxWidth: 0,
+                    padding: "0px !important"
+                  }}
+                  rowSpan={2}></TableCell>
+                <TableCell
+                  align="left"
+                  sx={{
+                    display: { xs: "table-cell", sm: "none" },
+                    borderBottom: "none",
+                    borderTop: "none"
+                  }}>
+                  <div className={`font-bold ${item?.inactive && "text-red-700"}`}>
+                    {item?.name}
+                  </div>
+                </TableCell>
+                <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                  <Box className="flex items-center">
+                    <IonButton
+                      id="id-edit-button"
+                      title="EDIT PROJECT"
+                      size="small"
+                      buttonType="icon"
+                      onClick={() => handleOpen(item, "EDIT")}>
+                      {loadingCol === `${item?.id}-EDIT` ? (
+                        <Icon name="sync-sharp" css="text-xl text-blue-500 icon-spinner" />
+                      ) : (
+                        <Icon name="card-sharp" css="text-xl text-blue-500" />
+                      )}
+                    </IonButton>
+                    <IonButton
+                      id="id-delete-button"
+                      title="DELETE PROJECT"
+                      fill="clear"
+                      onClick={() =>
+                        presentAlert({
+                          header: "Are you sure?",
+                          buttons: [
+                            { text: "Cancel" },
+                            {
+                              text: "Confirm",
+                              handler: () => {
+                                handleDelete(item?.id || String.empty, "DELETE");
+                              }
                             }
-                          }
-                        ]
-                      })
-                    }>
-                    {loadingCol === `${item?.id}-DELETE` ? (
-                      <Icon name="sync-sharp" css="text-xl text-red-500 icon-spinner" />
-                    ) : (
-                      <Icon name="trash-bin-sharp" css="text-xl text-red-500" />
-                    )}
-                  </IonButton>
-                </Box>
-              </TableCell>
-            </TableRow>
+                          ]
+                        })
+                      }>
+                      {loadingCol === `${item?.id}-DELETE` ? (
+                        <Icon name="sync-sharp" css="text-xl text-red-500 icon-spinner" />
+                      ) : (
+                        <Icon name="trash-bin-sharp" css="text-xl text-red-500" />
+                      )}
+                    </IonButton>
+                  </Box>
+                </TableCell>
+                <TableCell
+                  align="left"
+                  sx={{
+                    display: { xs: "table-cell", sm: "none" },
+                    borderBottom: "none",
+                    borderTop: "none"
+                  }}>
+                  <Box className="flex items-center">
+                    <IonButton
+                      id="id-edit-button"
+                      title="EDIT PROJECT"
+                      size="small"
+                      buttonType="icon"
+                      onClick={() => handleOpen(item, "EDIT")}>
+                      {loadingCol === `${item?.id}-EDIT` ? (
+                        <Icon name="sync-sharp" css="text-xl text-blue-500 icon-spinner" />
+                      ) : (
+                        <Icon name="card-sharp" css="text-xl text-blue-500" />
+                      )}
+                    </IonButton>
+                    <IonButton
+                      id="id-delete-button"
+                      title="DELETE PROJECT"
+                      fill="clear"
+                      onClick={() =>
+                        presentAlert({
+                          header: "Are you sure?",
+                          buttons: [
+                            { text: "Cancel" },
+                            {
+                              text: "Confirm",
+                              handler: () => {
+                                handleDelete(item?.id || String.empty, "DELETE");
+                              }
+                            }
+                          ]
+                        })
+                      }>
+                      {loadingCol === `${item?.id}-DELETE` ? (
+                        <Icon name="sync-sharp" css="text-xl text-red-500 icon-spinner" />
+                      ) : (
+                        <Icon name="trash-bin-sharp" css="text-xl text-red-500" />
+                      )}
+                    </IonButton>
+                  </Box>
+                </TableCell>
+              </TableRow>
+              <TableRow sx={{ display: { xs: "table-row", sm: "none" } }}>
+                <TableCell colSpan={2}>
+                  <ProjectProgressBar
+                    payload={{
+                      startdate: item?.startDate,
+                      endate: item?.endDate,
+                      actual: Math.abs(item?.actual || 0),
+                      budget: item?.budget,
+                      countryId: user?.countryId,
+                      currency: user?.currency,
+                      inactive: item?.inactive
+                    }}
+                  />
+                </TableCell>
+              </TableRow>
+            </Fragment>
           ))}
           {records.length < total && constants.PAGE_SIZE < total && (
             <TableRow>

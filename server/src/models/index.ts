@@ -1,4 +1,4 @@
-import { AuthType, CrudType, RoleType, SearchType } from "../util";
+import { AuthType, CrudType, RoleType, SearchType } from "../utils/enums";
 
 export interface IResponse<T> {
   success?: boolean;
@@ -72,14 +72,12 @@ export interface IExpenseSearch extends IPaging {
   endDate?: string;
   categoryId?: string;
   projectId?: string;
-  taxable?: boolean;
 }
 
 export interface IExpense {
   id?: string;
   entryDate?: string;
   price?: number;
-  taxable?: boolean;
   notes?: string;
   categoryId?: string;
   projectId?: string;

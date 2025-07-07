@@ -10,7 +10,15 @@ import {
 } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { CrudType, constants, convertoISO, dateAdd, parsePrice, toastify } from "@/util";
+import {
+  CrudType,
+  constants,
+  convertoISO,
+  monthStart,
+  monthEnd,
+  parsePrice,
+  toastify
+} from "@/util";
 import { IProject } from "@/models";
 import { upsertProjectAsync } from "@/services";
 import { InputComponent, DateComponent, Icon } from "@/components";
@@ -29,8 +37,8 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
     initialValues: {
       name: project?.name || String.empty,
       budget: Math.abs(project?.budget || 0),
-      startDate: project?.startDate || dateAdd(1),
-      endDate: project?.endDate || dateAdd(30),
+      startDate: project?.startDate || monthStart,
+      endDate: project?.endDate || monthEnd,
       inactive: project?.inactive || false
     },
     validateOnMount: false,
@@ -147,6 +155,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
               errorMessage={formik.errors.budget}
               handleChange={e => formik.setFieldValue("budget", e.target.value)}
               optional={true}
+              fullWidth={false}
             />
           </div>
           <div className="my-6 flex items-center">
@@ -157,7 +166,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
                 value={convertoISO(formik.values.startDate)}
                 touched={formik.touched.startDate}
                 errorMessage={formik.errors.startDate}
-                handleChange={e => formik.setFieldValue("startDate", e.target.value || dateAdd(1))}
+                handleChange={e => formik.setFieldValue("startDate", e.target.value || monthStart)}
               />
             </div>
             <div className="ml-10">
@@ -167,12 +176,12 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
                 value={convertoISO(formik.values.endDate)}
                 touched={formik.touched.endDate}
                 errorMessage={formik.errors.endDate}
-                handleChange={e => formik.setFieldValue("endDate", e.target.value || dateAdd(30))}
+                handleChange={e => formik.setFieldValue("endDate", e.target.value || monthEnd)}
               />
             </div>
           </div>
           <div className="my-6">
-            <IonLabel>Completed</IonLabel>
+            <IonLabel class="text-sm text-gray-700">Completed</IonLabel>
             <Switch
               id="inactive"
               name="inactive"

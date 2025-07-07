@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import { VitePWA } from "vite-plugin-pwa";
 import fs from "node:fs";
 import * as path from "path";
+import tailwindcss from "@tailwindcss/vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -46,9 +47,10 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024 // Allow 10MB
       },
       devOptions: { enabled: true }
-    })
+    }),
+    tailwindcss()
   ],
-  build: { outDir: "web-build" },
+  build: { outDir: "frontend" },
   server: {
     host: "0.0.0.0",
     port: 44454,

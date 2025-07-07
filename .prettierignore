@@ -1,6 +1,6 @@
 # Ignore artifacts:
-web-build
-api-build
+frontend
+backend
 coverage
 
 # Ignore all HTML files:

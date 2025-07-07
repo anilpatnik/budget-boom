@@ -7,3 +7,5 @@ export { SelectComponent } from "./select.component";
 export { AutoSelectComponent } from "./auto.select.component";
 export { PasswordComponent } from "./password.component";
 export { DateComponent } from "./date.component";
+export { ToggleButtonComponent } from "./toggle.button.component";
+export { ProjectProgressBar } from "./project.progress.bar";

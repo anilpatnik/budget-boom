@@ -9,6 +9,7 @@ import {
   IonCardSubtitle,
   IonCol,
   IonGrid,
+  IonLabel,
   IonRow,
   IonSpinner
 } from "@ionic/react";
@@ -38,7 +39,7 @@ export function VerifyEmailPage() {
 
   const resendVerificationEmail = async () => {
     const res = await resendVerifySignInEmail();
-    navigate(NavType.Root);
+    window.location.href = NavType.Root;
   };
 
   if (preLoading)
@@ -51,18 +52,18 @@ export function VerifyEmailPage() {
             <img alt={String.empty} src={constants.BANNER_IMG} loading="lazy" />
           </IonCol>
           <IonCol sizeXs="12" sizeMd="5" sizeLg="4">
-            <IonCard className="ion-padding-vertical">
-              <IonCardHeader>
+            <IonCard className="ion-padding-vertical ion-text-center">
+              <IonCardHeader className="ion-padding-bottom">
                 <IonCardSubtitle>Congratulations!</IonCardSubtitle>
               </IonCardHeader>
               <IonCardContent>
                 You have successfully verified your email address with us.
                 <div className="ion-margin-top">
-                  <Link className="sign-label" to={NavType.SignIn}>
-                    Return to
-                    <IonBadge color="secondary" className="badge">
+                  <Link to={NavType.SignIn} className="flex justify-center items-center space-x-2">
+                    <IonLabel>Back to</IonLabel>
+                    <IonButton color="secondary" size="small" shape="round" fill="outline">
                       SIGN IN
-                    </IonBadge>
+                    </IonButton>
                   </Link>
                 </div>
               </IonCardContent>
@@ -79,8 +80,8 @@ export function VerifyEmailPage() {
             <img alt={String.empty} src={constants.BANNER_IMG} loading="lazy" />
           </IonCol>
           <IonCol sizeXs="12" sizeMd="5" sizeLg="4">
-            <IonCard className="ion-padding-vertical">
-              <IonCardHeader>
+            <IonCard className="ion-padding-vertical ion-text-center">
+              <IonCardHeader className="ion-padding-bottom">
                 <IonCardSubtitle>Sorry!</IonCardSubtitle>
               </IonCardHeader>
               <IonCardContent>
@@ -91,11 +92,11 @@ export function VerifyEmailPage() {
                   </IonButton>
                 </div>
                 <div className="ion-margin-top">
-                  <Link className="sign-label" to={NavType.SignIn}>
-                    Return to
-                    <IonBadge color="secondary" className="badge">
+                  <Link to={NavType.SignIn} className="flex justify-center items-center space-x-2">
+                    <IonLabel>Back to</IonLabel>
+                    <IonButton color="secondary" size="small" shape="round" fill="outline">
                       SIGN IN
-                    </IonBadge>
+                    </IonButton>
                   </Link>
                 </div>
               </IonCardContent>

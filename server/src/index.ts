@@ -1,17 +1,18 @@
-import express, { Application } from "express";
-import helmet from "helmet";
-import cors from "cors";
-import { https } from "firebase-functions";
-import { errorHandler, helper } from "./util";
-import { apiRouter } from "./routes";
+import { https as firebase } from "firebase-functions";
+import https from "https";
+import fs from "fs";
+import app from "./app";
 
-const api: Application = express();
-
-api.use(helmet());
-api.use(express.json());
-api.use(cors({ origin: "*" }));
-api.use(helper.limiter);
-api.use("/api", apiRouter);
-api.use(errorHandler);
-
-exports.api = https.onRequest(api);
+if (process.env.ENVIRONMENT !== "production") {
+  const options = {
+    key: fs.readFileSync("../ssl.key"),
+    cert: fs.readFileSync("../ssl.pem")
+  };
+  const httpsServer = https.createServer(options, app);
+  const PORT: number = 44455;
+  httpsServer.listen(PORT, () =>
+    console.log(`${process.env.ENVIRONMENT} server: https://localhost:${PORT}`)
+  );
+} else {
+  exports.api = firebase.onRequest(app);
+}

@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 /* Ionic Styles */
 :root {
@@ -205,4 +203,19 @@ ion-item:last-child {
   .Toastify__toast-container {
     padding: 10px;
   }
+}
+
+.tab-content {
+  display: none;
+}
+.tab-content.active {
+  display: block;
+}
+.tab-button.active {
+  background-color: #3b82f6;
+  color: white;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  transition: transform 0.3s ease;
 }

@@ -1,0 +1,1016 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"RoleType": {
+				"enum": [
+					10,
+					20
+				],
+				"type": "number"
+			},
+			"IUser": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"photo": {
+						"type": "string"
+					},
+					"role": {
+						"$ref": "#/components/schemas/RoleType"
+					},
+					"token": {
+						"type": "string"
+					},
+					"countryId": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IResponse_IUser_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"resource": {
+						"$ref": "#/components/schemas/IUser"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IResponse_string_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"resource": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AuthType": {
+				"enum": [
+					"password",
+					"google",
+					"facebook"
+				],
+				"type": "string"
+			},
+			"IAdminUser": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"uid": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"photo": {
+						"type": "string"
+					},
+					"emailVerified": {
+						"type": "boolean"
+					},
+					"disabled": {
+						"type": "boolean"
+					},
+					"providers": {
+						"items": {
+							"$ref": "#/components/schemas/AuthType"
+						},
+						"type": "array"
+					},
+					"role": {
+						"$ref": "#/components/schemas/RoleType"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IAdminUserData": {
+				"properties": {
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/IAdminUser"
+						},
+						"type": "array"
+					},
+					"count": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IResponse_IAdminUserData_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"resource": {
+						"$ref": "#/components/schemas/IAdminUserData"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SearchType": {
+				"enum": [
+					10,
+					20
+				],
+				"type": "number"
+			},
+			"IAdminUserSearch": {
+				"properties": {
+					"page": {
+						"type": "number",
+						"format": "double"
+					},
+					"size": {
+						"type": "number",
+						"format": "double"
+					},
+					"searchType": {
+						"$ref": "#/components/schemas/SearchType"
+					},
+					"searchInput": {
+						"type": "string"
+					},
+					"role": {
+						"$ref": "#/components/schemas/RoleType"
+					},
+					"active": {
+						"type": "boolean"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IResponse_IAdminUser_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"resource": {
+						"$ref": "#/components/schemas/IAdminUser"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CrudType": {
+				"enum": [
+					10,
+					20,
+					30,
+					40
+				],
+				"type": "number"
+			},
+			"IProject": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"prevName": {
+						"type": "string"
+					},
+					"budget": {
+						"type": "number",
+						"format": "double"
+					},
+					"actual": {
+						"type": "number",
+						"format": "double"
+					},
+					"startDate": {
+						"type": "string"
+					},
+					"endDate": {
+						"type": "string"
+					},
+					"inactive": {
+						"type": "boolean"
+					},
+					"type": {
+						"$ref": "#/components/schemas/CrudType"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IProjectData": {
+				"properties": {
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/IProject"
+						},
+						"type": "array"
+					},
+					"count": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IResponse_IProjectData_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"resource": {
+						"$ref": "#/components/schemas/IProjectData"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IExpense": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"entryDate": {
+						"type": "string"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"notes": {
+						"type": "string"
+					},
+					"categoryId": {
+						"type": "string"
+					},
+					"projectId": {
+						"type": "string"
+					},
+					"projectName": {
+						"type": "string"
+					},
+					"type": {
+						"$ref": "#/components/schemas/CrudType"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IExpenseData": {
+				"properties": {
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/IExpense"
+						},
+						"type": "array"
+					},
+					"count": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IResponse_IExpenseData_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"resource": {
+						"$ref": "#/components/schemas/IExpenseData"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IExpenseSearch": {
+				"properties": {
+					"page": {
+						"type": "number",
+						"format": "double"
+					},
+					"size": {
+						"type": "number",
+						"format": "double"
+					},
+					"startDate": {
+						"type": "string"
+					},
+					"endDate": {
+						"type": "string"
+					},
+					"categoryId": {
+						"type": "string"
+					},
+					"projectId": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IResponse_IExpense_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"resource": {
+						"$ref": "#/components/schemas/IExpense"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IExpenseReport": {
+				"properties": {
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/IExpense"
+						},
+						"type": "array"
+					},
+					"expense": {
+						"type": "number",
+						"format": "double"
+					},
+					"income": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IResponse_IExpenseReport_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"resource": {
+						"$ref": "#/components/schemas/IExpenseReport"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"bearerAuth": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
+	},
+	"info": {
+		"title": "api",
+		"version": "1.0.0",
+		"contact": {}
+	},
+	"paths": {
+		"/signin": {
+			"post": {
+				"operationId": "SignInAsync",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse_IUser_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"🔓 Auth Routes"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"uid": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"uid"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/profile": {
+			"post": {
+				"operationId": "UpdateProfileAsync",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse_string_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"🔓 Auth Routes"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"countryId": {
+										"type": "string"
+									},
+									"name": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"countryId",
+									"name"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteProfileAsync",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse_string_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"🔓 Auth Routes"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/users": {
+			"post": {
+				"operationId": "GetUsersAsync",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse_IAdminUserData_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"👤 User Routes"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IAdminUserSearch"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/{userid}": {
+			"get": {
+				"operationId": "GetUserAsync",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse_IAdminUser_"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get user by ID\r\nRetrieves detailed information about a specific user using their ID.",
+				"tags": [
+					"👤 User Routes"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userid",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteUserAsync",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse_string_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"👤 User Routes"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userid",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/user": {
+			"post": {
+				"operationId": "UpsertUserAsync",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse_string_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"👤 User Routes"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IAdminUser"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/projects/all": {
+			"get": {
+				"operationId": "GetAllProjectsAsync",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse_IProjectData_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"🚀 Project Routes"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/projects": {
+			"post": {
+				"operationId": "GetProjectsAsync",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse_IProjectData_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"🚀 Project Routes"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"size": {
+										"type": "number",
+										"format": "double"
+									},
+									"page": {
+										"type": "number",
+										"format": "double"
+									}
+								},
+								"required": [
+									"size",
+									"page"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/projects/{projectid}": {
+			"get": {
+				"operationId": "GetProjectAsync",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse_string_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"🚀 Project Routes"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "projectid",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteProjectAsync",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse_string_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"🚀 Project Routes"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "projectid",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/project": {
+			"post": {
+				"operationId": "UpsertProjectAsync",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse_string_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"🚀 Project Routes"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IProject"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/expenses": {
+			"post": {
+				"operationId": "GetExpensesAsync",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse_IExpenseData_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"📈 Expense Routes"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IExpenseSearch"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/expenses/{expenseid}": {
+			"get": {
+				"operationId": "GetExpenseAsync",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse_IExpense_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"📈 Expense Routes"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "expenseid",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "DeleteExpenseAsync",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse_string_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"📈 Expense Routes"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "expenseid",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/expense": {
+			"post": {
+				"operationId": "UpsertExpenseAsync",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse_IExpense_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"📈 Expense Routes"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IExpense"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/expenses/report": {
+			"post": {
+				"operationId": "GetExpenseReportAsync",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse_IExpenseReport_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"📈 Expense Routes"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IExpenseSearch"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/api"
+		}
+	]
+}

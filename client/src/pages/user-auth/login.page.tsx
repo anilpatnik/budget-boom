@@ -7,6 +7,7 @@ import {
   IonCardContent,
   IonCol,
   IonGrid,
+  IonLabel,
   IonLoading,
   IonRow
 } from "@ionic/react";
@@ -89,7 +90,7 @@ export function SignInPage() {
         if (!external) recaptchaRef.current?.reset();
         if (success) {
           if (state?.from) navigate(state.from);
-          else navigate(NavType.Root);
+          else window.location.href = NavType.Root;
         }
         setLoading(false);
       }, constants.DELAY);
@@ -106,20 +107,22 @@ export function SignInPage() {
           </IonCol>
           <IonCol sizeXs="12" sizeMd="5" sizeLg="4">
             <IonGrid>
-              <IonRow className="ion-hide-md-down text-center">
-                <IonCol>
-                  <img
-                    alt={String.empty}
-                    src={constants.LOGO_IMG}
-                    height={constants.LOGO_HEIGHT}
-                    loading="lazy"
-                    className="cursor-pointer"
-                    onClick={() => navigate(NavType.Root)}
-                  />
+              <IonRow className="ion-hide-md-down">
+                <IonCol className="flex justify-center items-center">
+                  <a href={NavType.Root}>
+                    <img
+                      alt={String.empty}
+                      src={constants.LOGO_IMG}
+                      height="64px"
+                      width="64px"
+                      loading="lazy"
+                      className="cursor-pointer"
+                    />
+                  </a>
                 </IonCol>
               </IonRow>
-              <IonRow>
-                <IonCol className="text-center">
+              <IonRow className="ion-padding">
+                <IonCol>
                   <IonGrid className="flex justify-center items-center">
                     <IonRow>
                       <IonCol sizeSm="6">
@@ -135,9 +138,9 @@ export function SignInPage() {
                   </IonGrid>
                 </IonCol>
               </IonRow>
-              <IonRow>
+              <IonRow className="ion-padding">
                 <IonCol>
-                  <IonCard className="ion-padding-bottom">
+                  <IonCard>
                     <IonCardContent>
                       <form onSubmit={formik.handleSubmit}>
                         <div className="my-6">
@@ -188,19 +191,15 @@ export function SignInPage() {
                 </IonCol>
               </IonRow>
               <IonRow>
-                <IonCol className="ion-text-center">
-                  <div>
-                    <Link className="sign-label" to={NavType.ForgotPassword}>
-                      Forgot your password?
-                    </Link>
-                  </div>
+                <IonCol className="ion-text-center mt-4">
+                  <Link to={NavType.SignUp} className="flex justify-center items-center space-x-2">
+                    <IonLabel>Don’t have an account?</IonLabel>
+                    <IonButton color="secondary" size="small" shape="round" fill="outline">
+                      SIGN UP
+                    </IonButton>
+                  </Link>
                   <div className="mt-4">
-                    <Link className="sign-label" to={NavType.SignUp}>
-                      Don’t have an account?
-                      <IonBadge color="secondary" className="badge">
-                        SIGN UP
-                      </IonBadge>
-                    </Link>
+                    <Link to={NavType.ForgotPassword}>Forgot your password?</Link>
                   </div>
                 </IonCol>
               </IonRow>

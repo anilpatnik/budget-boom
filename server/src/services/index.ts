@@ -1,4 +1,6 @@
-export * as auth from "./auth.service";
-export * as user from "./user.service";
-export * as project from "./project.service";
-export * as expense from "./expense.service";
+export * as dbService from "./prisma";
+export * as fbService from "./firebase";
+export * as authService from "./auth";
+export * as userService from "./user";
+export * as projectService from "./project";
+export * as expenseService from "./expense";

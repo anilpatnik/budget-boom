@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "client/web-build",
+    "public": "client/frontend",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       { "source": "/api/**", "function": "api" },

@@ -11,7 +11,7 @@ import {
   TableRow
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { categoryMap, constants, dateAdd, dateFormat, formatPrice } from "@/util";
+import { categoryMap, constants, dateFormat, formatPrice, monthStart, monthEnd } from "@/util";
 import { IExpense, IExpenseSearch, ExpenseSearch } from "@/models";
 import { getCategory, getExpenseReportAsync, getAllProjectsAsync } from "@/services";
 import { Icon } from "@/components";
@@ -27,8 +27,8 @@ export function ExpenseReportPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [payload, setPayload] = useState<IExpenseSearch>({
     ...ExpenseSearch,
-    startDate: dateAdd(-30),
-    endDate: dateAdd(1),
+    startDate: monthStart,
+    endDate: monthEnd,
     page: 0,
     size: constants.PAGE_SIZE
   });
@@ -94,8 +94,8 @@ export function ExpenseReportPage() {
       page: 0,
       startDate: item?.startDate,
       endDate: item?.endDate,
-      taxable: item?.taxable,
-      projectId: item?.projectId
+      projectId: item?.projectId,
+      skip: item?.skip
     }));
     setTimeout(() => {
       setRecords([]);
@@ -133,12 +133,14 @@ export function ExpenseReportPage() {
                   {formatPrice(incomeTotal + expenseTotal, user?.countryId, user?.currency)}
                 </div>
               </div>
-              <div className="mt-2 flex items-center text-blue-700">
-                <div className="mr-2">📅</div>
-                <div>{dateFormat(queryRef.current.startDate ?? String.empty)}</div>
-                <div className="mx-2">-</div>
-                <div>{dateFormat(queryRef.current.endDate ?? String.empty)}</div>
-              </div>
+              {!queryRef.current.skip && (
+                <div className="mt-2 flex items-center text-blue-700">
+                  <div className="mr-2">📅</div>
+                  <div>{dateFormat(queryRef.current?.startDate ?? String.empty)}</div>
+                  <div className="mx-2">-</div>
+                  <div>{dateFormat(queryRef.current?.endDate ?? String.empty)}</div>
+                </div>
+              )}
             </TableCell>
             <TableCell align="left">
               <IonFabButton

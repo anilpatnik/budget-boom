@@ -9,7 +9,7 @@ export function UsersHomePage() {
   return (
     <>
       <IonBreadcrumbs className="ion-margin-vertical">
-        <IonBreadcrumb onClick={() => navigate(NavType.Root)} className="cursor-pointer">
+        <IonBreadcrumb className="cursor-pointer">
           <Icon name="caret-forward-outline" slot="separator" />
           Home
         </IonBreadcrumb>

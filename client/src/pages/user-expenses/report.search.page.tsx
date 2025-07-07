@@ -10,7 +10,7 @@ import {
 import { Switch } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { convertoISO, dateAdd } from "@/util";
+import { convertoISO, monthEnd, monthStart } from "@/util";
 import { IExpenseSearch, IProject } from "@/models";
 import { DateComponent, Icon, SelectComponent } from "@/components";
 
@@ -28,10 +28,10 @@ export function ExpenseReportSearchPage({
 }: ComponentProps) {
   const formik = useFormik({
     initialValues: {
-      startDate: search?.startDate || dateAdd(-30),
-      endDate: search?.endDate || dateAdd(1),
-      taxable: search?.taxable || false,
-      projectId: search?.projectId || String.empty
+      startDate: search?.startDate || monthStart,
+      endDate: search?.endDate || monthEnd,
+      projectId: search?.projectId || String.empty,
+      skip: search?.skip || false
     },
     validateOnMount: false,
     validationSchema: Yup.object({
@@ -42,10 +42,10 @@ export function ExpenseReportSearchPage({
     }),
     onSubmit: async values => {
       const search: IExpenseSearch = {
-        startDate: values?.startDate,
-        endDate: values?.endDate,
-        taxable: values?.taxable,
-        projectId: values?.projectId
+        startDate: values?.skip ? String.empty : values?.startDate,
+        endDate: values?.skip ? String.empty : values?.endDate,
+        projectId: values?.projectId,
+        skip: values?.skip
       };
       handleSearch(search);
     }
@@ -75,9 +75,7 @@ export function ExpenseReportSearchPage({
                 value={convertoISO(formik.values.startDate)}
                 touched={formik.touched.startDate}
                 errorMessage={formik.errors.startDate}
-                handleChange={e =>
-                  formik.setFieldValue("startDate", e.target.value || dateAdd(-30))
-                }
+                handleChange={e => formik.setFieldValue("startDate", e.target.value || monthStart)}
               />
             </div>
             <div className="ml-10">
@@ -87,18 +85,9 @@ export function ExpenseReportSearchPage({
                 value={convertoISO(formik.values.endDate)}
                 touched={formik.touched.endDate}
                 errorMessage={formik.errors.endDate}
-                handleChange={e => formik.setFieldValue("endDate", e.target.value || dateAdd(1))}
+                handleChange={e => formik.setFieldValue("endDate", e.target.value || monthEnd)}
               />
             </div>
-          </div>
-          <div className="my-6">
-            <IonLabel>Taxable</IonLabel>
-            <Switch
-              id="taxable"
-              name="taxable"
-              checked={formik.values.taxable}
-              onChange={formik.handleChange}
-            />
           </div>
           <div className="my-6">
             <SelectComponent
@@ -113,6 +102,15 @@ export function ExpenseReportSearchPage({
             />
           </div>
           <div className="my-6">
+            <IonLabel class="text-sm text-gray-700">Skip Date Range</IonLabel>
+            <Switch
+              id="skip"
+              name="skip"
+              checked={formik.values.skip}
+              onChange={formik.handleChange}
+            />
+          </div>
+          <div className="my-6">
             <IonButton id="id-submit-button" size="small" color="secondary" type="submit">
               <Icon name="search-sharp" slot="start" />
               SEARCH
@@ -124,10 +122,10 @@ export function ExpenseReportSearchPage({
               onClick={() =>
                 formik.resetForm({
                   values: {
-                    startDate: dateAdd(-30),
-                    endDate: dateAdd(1),
-                    taxable: false,
-                    projectId: String.empty
+                    startDate: monthStart,
+                    endDate: monthEnd,
+                    projectId: String.empty,
+                    skip: false
                   }
                 })
               }

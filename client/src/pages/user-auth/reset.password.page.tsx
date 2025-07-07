@@ -10,6 +10,7 @@ import {
   IonCardTitle,
   IonCol,
   IonGrid,
+  IonLabel,
   IonRow,
   IonSpinner
 } from "@ionic/react";
@@ -84,18 +85,18 @@ export function ResetPasswordPage() {
             <img alt={String.empty} src={constants.BANNER_IMG} loading="lazy" />
           </IonCol>
           <IonCol sizeXs="12" sizeMd="5" sizeLg="4">
-            <IonCard className="ion-padding-vertical">
-              <IonCardHeader>
+            <IonCard className="ion-padding-vertical ion-text-center">
+              <IonCardHeader className="ion-padding-bottom">
                 <IonCardSubtitle>Sorry!</IonCardSubtitle>
               </IonCardHeader>
               <IonCardContent>
                 Reset password link is invalid or expired.
                 <div className="ion-margin-top">
-                  <Link className="sign-label" to={NavType.SignIn}>
-                    Return to
-                    <IonBadge color="secondary" className="badge">
+                  <Link to={NavType.SignIn} className="flex justify-center items-center space-x-2">
+                    <IonLabel>Back to</IonLabel>
+                    <IonButton color="secondary" size="small" shape="round" fill="outline">
                       SIGN IN
-                    </IonBadge>
+                    </IonButton>
                   </Link>
                 </div>
               </IonCardContent>
@@ -114,18 +115,18 @@ export function ResetPasswordPage() {
             <img alt={String.empty} src={constants.BANNER_IMG} loading="lazy" />
           </IonCol>
           <IonCol sizeXs="12" sizeMd="5" sizeLg="4">
-            <IonCard className="ion-padding-vertical">
-              <IonCardHeader>
+            <IonCard className="ion-padding-vertical ion-text-center">
+              <IonCardHeader className="ion-padding-bottom">
                 <IonCardSubtitle>Password reset successful!</IonCardSubtitle>
               </IonCardHeader>
               <IonCardContent>
                 You have successfully changed your password.
                 <div className="ion-margin-top">
-                  <Link className="sign-label" to={NavType.SignIn}>
-                    Return to
-                    <IonBadge color="secondary" className="badge">
+                  <Link to={NavType.SignIn} className="flex justify-center items-center space-x-2">
+                    <IonLabel>Back to</IonLabel>
+                    <IonButton color="secondary" size="small" shape="round" fill="outline">
                       SIGN IN
-                    </IonBadge>
+                    </IonButton>
                   </Link>
                 </div>
               </IonCardContent>
@@ -144,22 +145,24 @@ export function ResetPasswordPage() {
         </IonCol>
         <IonCol sizeXs="12" sizeMd="5" sizeLg="4">
           <IonGrid>
-            <IonRow className="ion-hide-md-down text-center">
-              <IonCol>
-                <img
-                  alt={String.empty}
-                  src={constants.LOGO_IMG}
-                  height={constants.LOGO_HEIGHT}
-                  loading="lazy"
-                  className="cursor-pointer"
-                  onClick={() => navigate(NavType.Root)}
-                />
+            <IonRow className="ion-hide-md-down">
+              <IonCol className="flex justify-center items-center">
+                <a href={NavType.Root}>
+                  <img
+                    alt={String.empty}
+                    src={constants.LOGO_IMG}
+                    height="64px"
+                    width="64px"
+                    loading="lazy"
+                    className="cursor-pointer"
+                  />
+                </a>
               </IonCol>
             </IonRow>
-            <IonRow>
+            <IonRow className="ion-padding">
               <IonCol>
-                <IonCard className="ion-padding-bottom">
-                  <IonCardHeader>
+                <IonCard className="ion-padding-vertical">
+                  <IonCardHeader className="ion-text-center">
                     <IonCardTitle>Reset your Password</IonCardTitle>
                   </IonCardHeader>
                   <IonCardContent>
@@ -215,11 +218,11 @@ export function ResetPasswordPage() {
             </IonRow>
             <IonRow className="ion-margin-vertical">
               <IonCol className="ion-text-center">
-                <Link className="sign-label" to={NavType.SignIn}>
-                  Return to
-                  <IonBadge color="secondary" className="badge">
+                <Link to={NavType.SignIn} className="flex justify-center items-center space-x-2">
+                  <IonLabel>Back to</IonLabel>
+                  <IonButton color="secondary" size="small" shape="round" fill="outline">
                     SIGN IN
-                  </IonBadge>
+                  </IonButton>
                 </Link>
               </IonCol>
             </IonRow>

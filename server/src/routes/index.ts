@@ -1,30 +1,31 @@
 import express, { Router } from "express";
-import { auth, user, project, expense } from "../services";
-import { authelper, RoleType } from "../util";
+import { authCtrl, userCtrl, projectCtrl, expenseCtrl } from "../controllers";
+import { authMiddleware } from "../middlewares";
+import { RoleType } from "../utils/enums";
 
 const apiRouter: Router = express.Router();
 
-apiRouter.post("/signin", auth.signInAsync);
-apiRouter.post("/captcha", auth.captchaVerifyAsync);
+apiRouter.post("/signin", authCtrl.signInAsync);
+apiRouter.post("/captcha", authCtrl.captchaVerifyAsync);
 
-apiRouter.post("/profile", authelper.authorize(), auth.updateProfileAsync);
-apiRouter.delete("/profile", authelper.authorize(), auth.deleteProfileAsync);
+apiRouter.post("/profile", authMiddleware(), authCtrl.updateProfileAsync);
+apiRouter.delete("/profile", authMiddleware(), authCtrl.deleteProfileAsync);
 
-apiRouter.post("/users", authelper.authorize([RoleType.Admin]), user.getUsersAsync);
-apiRouter.get("/users/:userid", authelper.authorize([RoleType.Admin]), user.getUserAsync);
-apiRouter.post("/user", authelper.authorize([RoleType.Admin]), user.upsertUserAsync);
-apiRouter.delete("/users/:userid", authelper.authorize([RoleType.Admin]), user.deleteUserAsync);
+apiRouter.post("/users", authMiddleware([RoleType.Admin]), userCtrl.getUsersAsync);
+apiRouter.get("/users/:userid", authMiddleware([RoleType.Admin]), userCtrl.getUserAsync);
+apiRouter.post("/user", authMiddleware([RoleType.Admin]), userCtrl.upsertUserAsync);
+apiRouter.delete("/users/:userid", authMiddleware([RoleType.Admin]), userCtrl.deleteUserAsync);
 
-apiRouter.get("/projects/all", authelper.authorize(), project.getAllProjectsAsync);
-apiRouter.post("/projects", authelper.authorize(), project.getProjectsAsync);
-apiRouter.get("/projects/:projectid", authelper.authorize(), project.getProjectAsync);
-apiRouter.post("/project", authelper.authorize(), project.upsertProjectAsync);
-apiRouter.delete("/projects/:projectid", authelper.authorize(), project.deleteProjectAsync);
+apiRouter.get("/projects/all", authMiddleware(), projectCtrl.getAllProjectsAsync);
+apiRouter.post("/projects", authMiddleware(), projectCtrl.getProjectsAsync);
+apiRouter.get("/projects/:projectid", authMiddleware(), projectCtrl.getProjectAsync);
+apiRouter.post("/project", authMiddleware(), projectCtrl.upsertProjectAsync);
+apiRouter.delete("/projects/:projectid", authMiddleware(), projectCtrl.deleteProjectAsync);
 
-apiRouter.post("/expenses", authelper.authorize(), expense.getExpensesAsync);
-apiRouter.get("/expenses/:expenseid", authelper.authorize(), expense.getExpenseAsync);
-apiRouter.post("/expense", authelper.authorize(), expense.upsertExpenseAsync);
-apiRouter.delete("/expenses/:expenseid", authelper.authorize(), expense.deleteExpenseAsync);
-apiRouter.post("/expenses/report", authelper.authorize(), expense.getExpenseReportAsync);
+apiRouter.post("/expenses", authMiddleware(), expenseCtrl.getExpensesAsync);
+apiRouter.get("/expenses/:expenseid", authMiddleware(), expenseCtrl.getExpenseAsync);
+apiRouter.post("/expense", authMiddleware(), expenseCtrl.upsertExpenseAsync);
+apiRouter.delete("/expenses/:expenseid", authMiddleware(), expenseCtrl.deleteExpenseAsync);
+apiRouter.post("/expenses/report", authMiddleware(), expenseCtrl.getExpenseReportAsync);
 
 export { apiRouter };

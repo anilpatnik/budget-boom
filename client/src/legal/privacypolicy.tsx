@@ -6,16 +6,19 @@ export default function PrivacyPolicyPage() {
   const navigate = useNavigate();
   const { user } = useStore();
   return (
-    <div className="ion-padding-horizontal statement">
+    <div className="statement ion-padding">
       {!user?.auth && (
-        <div className="ion-hide-md-down text-center py-5">
-          <img
-            alt={String.empty}
-            src={constants.LOGO_IMG}
-            loading="lazy"
-            className="cursor-pointer"
-            onClick={() => navigate(NavType.Root)}
-          />
+        <div className="ion-hide-md-down flex justify-center items-center">
+          <a href={NavType.Root}>
+            <img
+              alt={String.empty}
+              src={constants.LOGO_IMG}
+              height="64px"
+              width="64px"
+              loading="lazy"
+              className="cursor-pointer"
+            />
+          </a>
         </div>
       )}
       <h5>PRIVACY POLICY</h5>

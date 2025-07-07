@@ -1,5 +1,5 @@
 export * from "./extensions";
-export * as config from "./config";
+export * as config from "./configs";
 export * from "./enums";
 export * as constants from "./constants";
 export * as fb from "./firebase";

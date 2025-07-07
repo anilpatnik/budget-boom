@@ -4,7 +4,9 @@ import { NavType } from "@/util";
 
 export function Footer() {
   return (
-    <IonFooter className="ion-hide-md-down footer border-0 shadow-none text-center">
+    <IonFooter
+      className="ion-hide-md-down footer"
+      style={{ border: 0, boxShadow: "none", textAlign: "center" }}>
       <IonToolbar>
         <div className="flex justify-center items-center">
           <Link id="id-terms-conditions-link" className="mr-2" to={NavType.TermsConditions}>

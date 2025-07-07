@@ -1,13 +1,18 @@
+# compiled output
 node_modules
 typings
 coverage
-web-build
-api-build
+build
+dist
 android
 ios
 migrations
-dev-dist
 
+# custom build output
+frontend
+backend
+
+# dependencies
 .DS_Store
 .vscode
 .env
@@ -23,11 +28,15 @@ dev-dist
 *.mobileprovision
 *.orig.*
 
+# logs 
 npm-debug.log*
+pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
 firebase-debug.log*
 ui-debug.log*
 
+# config files
 expo-env.d.ts
 firebase.config.json
