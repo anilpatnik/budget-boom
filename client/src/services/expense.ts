@@ -1,14 +1,14 @@
 import { ServiceType } from "@/util";
 import { Expense, IExpense, IExpenseData, IExpenseReport, IExpenseSearch } from "@/models";
-import { authApi } from "./index";
+import { authApi } from "@/services";
 
-export const getExpensesAsync = async (payload: IExpenseSearch): Promise<IExpenseData> => {
+export async function getExpensesAsync(payload: IExpenseSearch): Promise<IExpenseData> {
   const response = await authApi.post(ServiceType.Expenses, payload);
   if (response?.data?.resource) return response?.data?.resource;
   return { data: [{ ...Expense }], count: 0 };
-};
+}
 
-export const getExpenseAsync = async (id: string): Promise<IExpense> => {
+export async function getExpenseAsync(id: string): Promise<IExpense> {
   try {
     const url = `${ServiceType.Expenses}/${id}`;
     const response = await authApi.get(url);
@@ -18,9 +18,9 @@ export const getExpenseAsync = async (id: string): Promise<IExpense> => {
     const err = error as Error;
   }
   return { ...Expense };
-};
+}
 
-export const upsertExpenseAsync = async (payload: IExpense) => {
+export async function upsertExpenseAsync(payload: IExpense) {
   try {
     const response = await authApi.post(ServiceType.Expense, payload);
     const { success, resource } = response.data;
@@ -29,9 +29,9 @@ export const upsertExpenseAsync = async (payload: IExpense) => {
     const err = error as Error;
     return { success: false, resource: err.message };
   }
-};
+}
 
-export const deleteExpenseAsync = async (id: string) => {
+export async function deleteExpenseAsync(id: string) {
   try {
     const url = `${ServiceType.Expenses}/${id}`;
     const response = await authApi.delete(url);
@@ -41,11 +41,11 @@ export const deleteExpenseAsync = async (id: string) => {
     const err = error as Error;
     return { success: false, resource: err.message };
   }
-};
+}
 
-export const getExpenseReportAsync = async (payload: IExpenseSearch): Promise<IExpenseReport> => {
+export async function getExpenseReportAsync(payload: IExpenseSearch): Promise<IExpenseReport> {
   const url = `${ServiceType.Expenses}${ServiceType.Report}`;
   const response = await authApi.post(url, payload);
   if (response?.data?.resource) return response?.data?.resource;
   return { data: [{ ...Expense }], expense: 0, income: 0 };
-};
+}

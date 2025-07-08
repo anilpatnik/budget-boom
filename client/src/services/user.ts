@@ -1,15 +1,14 @@
 import { ServiceType } from "@/util";
 import { AdminUser, IAdminUser, IAdminUserData, IAdminUserSearch } from "@/models";
-import { authApi } from "./index";
+import { authApi } from "@/services";
 
-// user profile
-export const getUsersAsync = async (payload: IAdminUserSearch): Promise<IAdminUserData> => {
+export async function getUsersAsync(payload: IAdminUserSearch): Promise<IAdminUserData> {
   const response = await authApi.post(ServiceType.Users, payload);
   if (response?.data?.resource) return response?.data?.resource;
   return { data: [{ ...AdminUser }], count: 0 };
-};
+}
 
-export const getUserAsync = async (id: string): Promise<IAdminUser> => {
+export async function getUserAsync(id: string): Promise<IAdminUser> {
   try {
     const url = `${ServiceType.Users}/${id}`;
     const response = await authApi.get(url);
@@ -19,9 +18,9 @@ export const getUserAsync = async (id: string): Promise<IAdminUser> => {
     const err = error as Error;
   }
   return { ...AdminUser };
-};
+}
 
-export const updateUserAsync = async (user: IAdminUser) => {
+export async function updateUserAsync(user: IAdminUser) {
   try {
     const response = await authApi.post(ServiceType.User, user);
     const { success, resource } = response.data;
@@ -30,9 +29,9 @@ export const updateUserAsync = async (user: IAdminUser) => {
     const err = error as Error;
     return { success: false, resource: err.message };
   }
-};
+}
 
-export const deleteUserAsync = async (id: string) => {
+export async function deleteUserAsync(id: string) {
   try {
     const url = `${ServiceType.Users}/${id}`;
     const response = await authApi.delete(url);
@@ -42,4 +41,4 @@ export const deleteUserAsync = async (id: string) => {
     const err = error as Error;
     return { success: false, resource: err.message };
   }
-};
+}

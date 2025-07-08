@@ -1,10 +1,18 @@
-export const getCategories = () => categories.sort((a, b) => a.name.localeCompare(b.name));
-export const getCategory = (id: string) =>
-  categories.find(x => x.id.toUpperCase() === id.toUpperCase()) ?? categories[0];
+export function getCategories() {
+  return categories.sort((a, b) => a.name.localeCompare(b.name));
+}
 
-export const getCountries = () => countries.sort((a, b) => a.name.localeCompare(b.name));
-export const getCountry = (id: string) =>
-  countries.find(x => x.id.toUpperCase() === id.toUpperCase()) ?? countries[0];
+export function getCategory(id: string) {
+  return categories.find(x => x.id.toUpperCase() === id.toUpperCase()) ?? categories[0];
+}
+
+export function getCountries() {
+  return countries.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export function getCountry(id: string) {
+  return countries.find(x => x.id.toUpperCase() === id.toUpperCase()) ?? countries[0];
+}
 
 export const categories = [
   {

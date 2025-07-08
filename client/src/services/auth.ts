@@ -1,7 +1,7 @@
 import { ErrorMessage, ServiceType, constants, fb } from "@/util";
-import { authApi, openApi } from "./index";
+import { authApi, openApi } from "@/services";
 
-export const createUserWithEmail = async (name: string, email: string, password: string) => {
+export async function createUserWithEmail(name: string, email: string, password: string) {
   try {
     const fbUser = await fb.createUserWithEmailAndPassword(fb.fAuth, email, password);
     if (fbUser?.user?.uid?.length === 0) throw new Error("SignUp Failed!");
@@ -12,9 +12,9 @@ export const createUserWithEmail = async (name: string, email: string, password:
     const err = ErrorMessage(error as fb.FirebaseError | Error);
     return { success: false, resource: err };
   }
-};
+}
 
-export const signInWithEmail = async (email: string, password: string) => {
+export async function signInWithEmail(email: string, password: string) {
   try {
     const fbUser = await fb.signInWithEmailAndPassword(fb.fAuth, email, password);
     if (fbUser?.user?.uid?.length === 0 || !fbUser?.user?.emailVerified)
@@ -25,9 +25,9 @@ export const signInWithEmail = async (email: string, password: string) => {
     const err = ErrorMessage(error as fb.FirebaseError | Error);
     return { success: false, resource: err };
   }
-};
+}
 
-export const signInWithGoogle = async () => {
+export async function signInWithGoogle() {
   try {
     const provider = new fb.GoogleAuthProvider();
     const fbUser = await fb.signInWithPopup(fb.fAuth, provider);
@@ -38,16 +38,16 @@ export const signInWithGoogle = async () => {
     const err = ErrorMessage(error as fb.FirebaseError | Error);
     return { success: false, resource: err };
   }
-};
+}
 
-export const getUser = async (fbUser: fb.UserCredential) => {
+export async function getUser(fbUser: fb.UserCredential) {
   // const zone = new Date().getTimezoneOffset().toString();
   const response = await openApi.post(ServiceType.SignIn, fbUser.user);
   const { success, resource } = response.data;
   return { success, resource };
-};
+}
 
-export const verifySignInEmail = async (actionCode: string) => {
+export async function verifySignInEmail(actionCode: string) {
   try {
     await fb.applyActionCode(fb.fAuth, actionCode);
     return true;
@@ -55,9 +55,9 @@ export const verifySignInEmail = async (actionCode: string) => {
     // console.log("Verify SignIn Email", error);
     return false;
   }
-};
+}
 
-export const resendVerifySignInEmail = async () => {
+export async function resendVerifySignInEmail() {
   try {
     const user = fb.fAuth.currentUser;
     if (user?.uid) fb.sendEmailVerification(user);
@@ -66,9 +66,9 @@ export const resendVerifySignInEmail = async () => {
     // console.log("Resend Verify SignIn Email", error);
     return false;
   }
-};
+}
 
-export const sendForgotPasswordUrl = async (email: string) => {
+export async function sendForgotPasswordUrl(email: string) {
   try {
     await fb.sendPasswordResetEmail(fb.fAuth, email);
     return true;
@@ -76,9 +76,9 @@ export const sendForgotPasswordUrl = async (email: string) => {
     // console.log("Send Forgot Reset Email", error);
     return false;
   }
-};
+}
 
-export const verifyForgotPasswordUrl = async (actionCode: string) => {
+export async function verifyForgotPasswordUrl(actionCode: string) {
   try {
     const response = await fb.verifyPasswordResetCode(fb.fAuth, actionCode);
     return { success: true, resource: response };
@@ -86,9 +86,9 @@ export const verifyForgotPasswordUrl = async (actionCode: string) => {
     const err = ErrorMessage(error as fb.FirebaseError | Error);
     return { success: false, resource: err };
   }
-};
+}
 
-export const updateForgotPassword = async (actionCode: string, newPassword: string) => {
+export async function updateForgotPassword(actionCode: string, newPassword: string) {
   try {
     await fb.confirmPasswordReset(fb.fAuth, actionCode, newPassword);
     return true;
@@ -96,9 +96,9 @@ export const updateForgotPassword = async (actionCode: string, newPassword: stri
     // console.log("Update Forgot Password", error);
     return false;
   }
-};
+}
 
-export const updateProfilePassword = async (newPassword: string) => {
+export async function updateProfilePassword(newPassword: string) {
   try {
     const user = fb.fAuth.currentUser;
     if (user?.uid) await fb.updatePassword(user, newPassword);
@@ -107,9 +107,9 @@ export const updateProfilePassword = async (newPassword: string) => {
     const err = ErrorMessage(error as fb.FirebaseError | Error);
     return { success: false, resource: err };
   }
-};
+}
 
-export const updateProfilePic = async (photoURL: string) => {
+export async function updateProfilePic(photoURL: string) {
   try {
     const user = fb.fAuth.currentUser;
     if (user?.uid) await fb.updateProfile(user, { photoURL });
@@ -118,9 +118,9 @@ export const updateProfilePic = async (photoURL: string) => {
     const err = ErrorMessage(error as fb.FirebaseError | Error);
     return { success: false, resource: err };
   }
-};
+}
 
-export const updateProfileInfo = async (name: string, countryId?: string) => {
+export async function updateProfileInfo(name: string, countryId?: string) {
   try {
     const response = await authApi.post(ServiceType.Profile, { name, countryId });
     const { success, resource } = response.data;
@@ -129,9 +129,9 @@ export const updateProfileInfo = async (name: string, countryId?: string) => {
     const err = error as Error;
     return { success: false, resource: err.message };
   }
-};
+}
 
-export const deleteProfileAsync = async () => {
+export async function deleteProfileAsync() {
   try {
     const response = await authApi.delete(ServiceType.Profile);
     const { success, resource } = response.data;
@@ -140,9 +140,9 @@ export const deleteProfileAsync = async () => {
     const err = error as Error;
     return { success: false, resource: err.message };
   }
-};
+}
 
-export const captchaVerify = async (token: string) => {
+export async function captchaVerify(token: string) {
   try {
     const response = await openApi.post(ServiceType.Captcha, { token });
     const { success, hostname } = response.data;
@@ -151,4 +151,4 @@ export const captchaVerify = async (token: string) => {
     const err = error as Error;
     return { success: false, resource: err.message };
   }
-};
+}

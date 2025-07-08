@@ -26,9 +26,9 @@ export function setToken() {
   authApi.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 }
 
-export * from "./auth.service";
-export * from "./user.service";
-export * from "./lookup.service";
-export * from "./project.service";
-export * from "./expense.service";
+export * from "./auth";
+export * from "./user";
+export * from "./lookup";
+export * from "./project";
+export * from "./expense";
 export { openApi, authApi };
