@@ -90,7 +90,7 @@ export function SignInPage() {
         if (!external) recaptchaRef.current?.reset();
         if (success) {
           if (state?.from) navigate(state.from);
-          else window.location.href = NavType.Root;
+          else window.location.replace(NavType.Root);
         }
         setLoading(false);
       }, constants.DELAY);
@@ -193,7 +193,7 @@ export function SignInPage() {
               <IonRow>
                 <IonCol className="ion-text-center mt-4">
                   <Link to={NavType.SignUp} className="flex justify-center items-center space-x-2">
-                    <IonLabel>Don’t have an account?</IonLabel>
+                    <IonLabel>Do not have an account?</IonLabel>
                     <IonButton color="secondary" size="small" shape="round" fill="outline">
                       SIGN UP
                     </IonButton>

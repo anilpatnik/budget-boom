@@ -1,5 +1,5 @@
 import axios from "axios";
-import { constants, config, fb } from "@/util";
+import { constants, config, fb, NavType } from "@/util";
 import { IUser, User } from "@/models";
 
 const ApiUrl = process.env.NODE_ENV !== "production" ? (config.VITE_API as string) : "/api";
@@ -13,7 +13,7 @@ authApi.interceptors.response.use(
       sessionStorage.clear();
       localStorage.clear();
       await fb.fSignOut().then(() => {
-        window.location.href = window.location.origin;
+        window.location.replace(NavType.Root);
       });
     }
     return Promise.reject(error);

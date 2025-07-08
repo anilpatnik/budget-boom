@@ -8,6 +8,7 @@
     "build": "tsup",
     "start": "node backend/index.js",
     "tsoa:spec": "tsoa spec",
+    "prisma:gen": "prisma generate",
     "prisma:seed": "ts-node src/prisma/seed.ts"
   },
   "dependencies": {

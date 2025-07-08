@@ -4,6 +4,7 @@ typings
 coverage
 build
 dist
+dev-dist
 android
 ios
 migrations

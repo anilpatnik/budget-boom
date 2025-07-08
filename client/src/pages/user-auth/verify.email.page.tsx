@@ -39,7 +39,7 @@ export function VerifyEmailPage() {
 
   const resendVerificationEmail = async () => {
     const res = await resendVerifySignInEmail();
-    window.location.href = NavType.Root;
+    window.location.replace(NavType.Root);
   };
 
   if (preLoading)

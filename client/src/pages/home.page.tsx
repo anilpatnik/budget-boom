@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   IonCard,
   IonCardContent,
@@ -33,7 +32,6 @@ export function RootPage() {
   const hasMounted = useRef(false);
   const { user } = useStore();
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (hasMounted.current) return;
@@ -41,9 +39,9 @@ export function RootPage() {
     setLoading(true);
     // fetchData();
     if (user.auth && user.role === RoleType.Admin) {
-      setTimeout(() => (window.location.href = NavType.Profile), constants.DELAY);
+      setTimeout(() => window.location.replace(NavType.Profile), constants.DELAY);
     } else if (user.auth) {
-      setTimeout(() => (window.location.href = NavType.Expenses), constants.DELAY);
+      setTimeout(() => window.location.replace(NavType.Expenses), constants.DELAY);
     } else setTimeout(() => setLoading(false), constants.DELAY);
   }, []);
 

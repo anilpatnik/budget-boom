@@ -22,7 +22,7 @@ const theme = createTheme({
   }
 });
 
-const App = () => {
+function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
@@ -37,6 +37,6 @@ const App = () => {
       </ThemeProvider>
     </QueryClientProvider>
   );
-};
+}
 
 export default App;

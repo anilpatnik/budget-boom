@@ -1,5 +1,5 @@
 import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
-import { IonContent, IonPage, IonRouterOutlet } from "@ionic/react";
+import { IonContent, IonPage, IonRouterOutlet, IonSpinner } from "@ionic/react";
 import { ToastContainer } from "react-toastify";
 import { NavType, RoleType, RouterType, constants } from "@/util";
 import { StoreProvider, useStore } from "@/contexts";
@@ -38,9 +38,9 @@ export function PreRoute({
   if (!user?.auth && (routerType === RouterType.User || routerType === RouterType.Role)) {
     return <Navigate to={NavType.SignIn} replace state={{ from: location.pathname }} />;
   } else if (user?.auth && routerType === RouterType.Auth) {
-    return (window.location.href = NavType.Root);
+    return window.location.replace(NavType.Root);
   } else if (user?.auth && routerType === RouterType.Role && !isAllowed) {
-    return (window.location.href = NavType.Root);
+    return window.location.replace(NavType.Root);
   } else {
     return children ? children : <Outlet />;
   }
