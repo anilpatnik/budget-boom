@@ -7,7 +7,7 @@ import { useStore } from "@/contexts";
 import { fbService, authService } from "@/services";
 import { Icon } from "@/components";
 
-export const ProfilePicturePage = () => {
+export function ProfilePicturePage() {
   const { user, setAuth } = useStore();
   const [file, setFile] = useState<File>();
   const [preview, setPreview] = useState(String.empty);
@@ -151,4 +151,4 @@ export const ProfilePicturePage = () => {
       )}
     </>
   );
-};
+}
