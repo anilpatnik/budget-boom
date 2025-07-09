@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { constants, NavType } from "@/util";
+import { constants } from "@/utils";
+import { NavType } from "@/utils/enums";
 import { useStore } from "@/contexts";
 
-export default function TermsConditionsPage() {
+export function TermsConditions() {
   const navigate = useNavigate();
   const { user } = useStore();
   return (

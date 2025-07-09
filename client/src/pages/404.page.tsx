@@ -1,4 +1,4 @@
-import { constants } from "@/util";
+import { constants } from "@/utils";
 import { Box, Container, Typography } from "@mui/material";
 
 export function NotFoundPage() {

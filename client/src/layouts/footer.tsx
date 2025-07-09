@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { IonFooter, IonToolbar } from "@ionic/react";
-import { NavType } from "@/util";
+import { NavType } from "@/utils/enums";
 
 export function Footer() {
   return (

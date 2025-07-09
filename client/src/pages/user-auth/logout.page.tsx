@@ -1,9 +1,10 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { IonSpinner } from "@ionic/react";
-import { NavType, fb } from "@/util";
+import { NavType } from "@/utils/enums";
 import { useStore } from "@/contexts";
 import { User } from "@/models";
+import { fbService } from "@/services";
 
 export function SignOutPage() {
   const hasMounted = useRef(false);
@@ -17,7 +18,7 @@ export function SignOutPage() {
   const handleLogout = async () => {
     sessionStorage.clear();
     localStorage.clear();
-    await fb.fSignOut();
+    await fbService.firebaseSignOut();
     setAuth({ ...User });
     navigate(NavType.SignIn);
   };

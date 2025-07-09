@@ -2,9 +2,9 @@ import { useState } from "react";
 import { IonButton } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Icon, PasswordComponent, PasswordStrength } from "@/components";
-import { updateProfilePassword } from "@/services";
-import { constants, toastify } from "@/util";
+import { Icon, PasswordField, PasswordStrength } from "@/components";
+import { authService } from "@/services";
+import { constants, helper } from "@/utils";
 
 export function ProfilePasswordPage() {
   const [loading, setLoading] = useState(false);
@@ -33,11 +33,11 @@ export function ProfilePasswordPage() {
 
   const handleSubmit = async (password: string) => {
     setLoading(true);
-    const res = await updateProfilePassword(password);
+    const res = await authService.updateProfilePassword(password);
     if (res && !res?.success) {
-      toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+      helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
     } else {
-      toastify(
+      helper.toastify(
         "You have successfully changed your password",
         constants.SUCCESS,
         constants.SUCCESS_DELAY
@@ -52,7 +52,7 @@ export function ProfilePasswordPage() {
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="my-6">
-        <PasswordComponent
+        <PasswordField
           name="password"
           label="Password"
           value={formik.values.password}
@@ -63,7 +63,7 @@ export function ProfilePasswordPage() {
         <PasswordStrength password={formik.values.password} />
       </div>
       <div className="my-6">
-        <PasswordComponent
+        <PasswordField
           name="confirmpassword"
           label="Confirm Password"
           value={formik.values.confirmpassword}

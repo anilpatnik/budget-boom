@@ -11,21 +11,14 @@ import {
   TableRow
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import {
-  CrudType,
-  dateFormat,
-  constants,
-  formatPrice,
-  toastify,
-  totalExpense,
-  totalIncome
-} from "@/util";
+import { constants, helper, dateHelper } from "@/utils";
+import { CrudType } from "@/utils/enums";
 import { IExpense, Expense, IExpenseSearch, ExpenseSearch } from "@/models";
-import { getExpensesAsync, deleteExpenseAsync, getCategory, getAllProjectsAsync } from "@/services";
+import { lookupService, projectService, expenseService } from "@/services";
 import { Icon } from "@/components";
+import { useStore } from "@/contexts";
 import { ExpensePage } from "./expense.page";
 import { ExpenseSearchPage } from "./expense.search.page";
-import { useStore } from "@/contexts";
 
 export function ExpensesPage() {
   const { user } = useStore();
@@ -48,7 +41,7 @@ export function ExpensesPage() {
     queryKey: ["all-user-projects"],
     refetchOnMount: true,
     queryFn: async () => {
-      const projects = await getAllProjectsAsync();
+      const projects = await projectService.getAllProjectsAsync();
       return projects.filter(x => !x.inactive);
     }
   });
@@ -58,7 +51,7 @@ export function ExpensesPage() {
     if (queryRef.current.page === 0) setLoadingInit(true);
     else setLoading(true);
     try {
-      const response = await getExpensesAsync(queryRef.current);
+      const response = await expenseService.getExpensesAsync(queryRef.current);
       setRecords(prev => [...prev, ...(response?.data ?? [])]);
       setTotal(response?.count ?? 0);
     } catch (error) {
@@ -128,13 +121,13 @@ export function ExpensesPage() {
   const handleDelete = async (id: string, col?: string) => {
     const colId = `${id}-${col}`;
     setLoadingCol(colId);
-    const res = await deleteExpenseAsync(id);
+    const res = await expenseService.deleteExpenseAsync(id);
     if (res && !res?.success) {
-      toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+      helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
       setLoadingCol(String.empty);
       return;
     } else {
-      toastify("Deleted Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
+      helper.toastify("Deleted Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
       setTimeout(() => {
         deleteRecord(id);
         setLoadingCol(String.empty);
@@ -194,20 +187,28 @@ export function ExpensesPage() {
             <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
               <div className="space-y-2">
                 <div className="text-green-700">
-                  {formatPrice(totalIncome(records), user?.countryId, user?.currency)}
+                  {helper.formatPrice(helper.totalIncome(records), user?.countryId, user?.currency)}
                 </div>
                 <div className="text-red-700">
-                  {formatPrice(totalExpense(records), user?.countryId, user?.currency)}
+                  {helper.formatPrice(
+                    helper.totalExpense(records),
+                    user?.countryId,
+                    user?.currency
+                  )}
                 </div>
               </div>
             </TableCell>
             <TableCell align="left" sx={{ display: { xs: "table-cell", sm: "none" } }}>
               <div className="space-y-2">
                 <div className="text-green-700">
-                  {formatPrice(totalIncome(records), user?.countryId, user?.currency)}
+                  {helper.formatPrice(helper.totalIncome(records), user?.countryId, user?.currency)}
                 </div>
                 <div className="text-red-700">
-                  {formatPrice(totalExpense(records), user?.countryId, user?.currency)}
+                  {helper.formatPrice(
+                    helper.totalExpense(records),
+                    user?.countryId,
+                    user?.currency
+                  )}
                 </div>
               </div>
             </TableCell>
@@ -238,7 +239,7 @@ export function ExpensesPage() {
             <Fragment key={index}>
               <TableRow>
                 <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  {item?.entryDate && dateFormat(item.entryDate)}
+                  {item?.entryDate && dateHelper.dateFormat(item.entryDate)}
                 </TableCell>
                 <TableCell
                   align="left"
@@ -246,14 +247,17 @@ export function ExpensesPage() {
                   rowSpan={2}>
                   <div>
                     <div className="mb-3.5 mt-1.5">
-                      {item?.entryDate && dateFormat(item.entryDate)}
+                      {item?.entryDate && dateHelper.dateFormat(item.entryDate)}
                     </div>
                     <div className="flex items-center">
                       {item?.price && (
                         <div className="text-xl mr-3">{item.price < 0 ? `📉` : `📈`}</div>
                       )}
                       {item?.categoryId && (
-                        <Icon name={getCategory(item.categoryId).icon} css="text-2xl" />
+                        <Icon
+                          name={lookupService.getCategory(item.categoryId).icon}
+                          css="text-2xl"
+                        />
                       )}
                     </div>
                   </div>
@@ -262,10 +266,10 @@ export function ExpensesPage() {
                   {item?.categoryId && (
                     <Box className="flex items-center">
                       <Icon
-                        name={getCategory(item.categoryId).icon}
+                        name={lookupService.getCategory(item.categoryId).icon}
                         css="text-2xl text-black mr-2"
                       />
-                      {item?.notes ? item.notes : getCategory(item.categoryId).name}
+                      {item?.notes ? item.notes : lookupService.getCategory(item.categoryId).name}
                     </Box>
                   )}
                 </TableCell>
@@ -275,7 +279,7 @@ export function ExpensesPage() {
                       className={
                         item.price < 0 ? "text-red-700 font-bold" : "text-green-700 font-bold"
                       }>
-                      {formatPrice(item.price, user?.countryId, user?.currency)}
+                      {helper.formatPrice(item.price, user?.countryId, user?.currency)}
                     </Box>
                   )}
                 </TableCell>
@@ -291,7 +295,7 @@ export function ExpensesPage() {
                       className={
                         item.price < 0 ? "text-red-700 font-bold" : "text-green-700 font-bold"
                       }>
-                      {formatPrice(item.price, user?.countryId, user?.currency)}
+                      {helper.formatPrice(item.price, user?.countryId, user?.currency)}
                     </Box>
                   )}
                 </TableCell>
@@ -385,7 +389,9 @@ export function ExpensesPage() {
               {item?.categoryId && (
                 <TableRow sx={{ display: { xs: "table-row", sm: "none" } }}>
                   <TableCell colSpan={3}>
-                    <Box>{item?.notes ? item.notes : getCategory(item.categoryId).name}</Box>
+                    <Box>
+                      {item?.notes ? item.notes : lookupService.getCategory(item.categoryId).name}
+                    </Box>
                   </TableCell>
                 </TableRow>
               )}

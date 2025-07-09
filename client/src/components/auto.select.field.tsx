@@ -6,7 +6,7 @@ type Payload = {
   name?: string;
   icon?: string;
 };
-type ComponentProps = {
+type Props = {
   name?: string;
   value?: string;
   label?: string;
@@ -17,7 +17,7 @@ type ComponentProps = {
   payload: Payload[];
   handleChange: (value: string) => void;
 };
-export function AutoSelectComponent({
+export function AutoSelectField({
   name,
   value,
   label,
@@ -27,7 +27,7 @@ export function AutoSelectComponent({
   disabled = false,
   payload = [],
   handleChange
-}: ComponentProps) {
+}: Props) {
   const selectedValue = useMemo(
     () => payload.find(option => option.id === value) || null,
     [payload, value]

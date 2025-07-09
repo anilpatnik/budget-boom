@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  IonBadge,
   IonButton,
   IonCard,
   IonCardContent,
@@ -13,8 +12,9 @@ import {
   IonRow,
   IonSpinner
 } from "@ionic/react";
-import { constants, NavType } from "@/util";
-import { resendVerifySignInEmail, verifySignInEmail } from "@/services";
+import { constants } from "@/utils";
+import { NavType } from "@/utils/enums";
+import { authService } from "@/services";
 
 export function VerifyEmailPage() {
   const hasMounted = useRef(false);
@@ -31,14 +31,14 @@ export function VerifyEmailPage() {
 
   const verifyEmail = async () => {
     if (params.actionCode) {
-      const res = await verifySignInEmail(params.actionCode);
+      const res = await authService.verifySignInEmail(params.actionCode);
       setSuccess(res);
     }
     setTimeout(() => setPreLoading(false), constants.DELAY);
   };
 
   const resendVerificationEmail = async () => {
-    const res = await resendVerifySignInEmail();
+    const res = await authService.resendVerifySignInEmail();
     window.location.replace(NavType.Root);
   };
 

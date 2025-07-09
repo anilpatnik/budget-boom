@@ -9,9 +9,10 @@ import {
   personOutline
 } from "ionicons/icons";
 import { Box, Toolbar, Avatar, AppBar } from "@mui/material";
-import { NavType, RoleType, constants } from "@/util";
+import { constants } from "@/utils";
+import { NavType, RoleType } from "@/utils/enums";
 import { useStore } from "@/contexts";
-import { InstallPWA } from "./pwa.install";
+import { InstallPWA } from "@/layouts";
 
 export function Header() {
   const { user } = useStore();

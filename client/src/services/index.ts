@@ -1,8 +1,11 @@
 import axios from "axios";
-import { constants, config, fb, NavType } from "@/util";
+import { constants } from "@/utils";
+import { NavType } from "@/utils/enums";
+import { VITE_API } from "@/utils/configs";
 import { IUser, User } from "@/models";
+import { firebaseSignOut } from "@/services/firebase";
 
-const ApiUrl = process.env.NODE_ENV !== "production" ? (config.VITE_API as string) : "/api";
+const ApiUrl = process.env.NODE_ENV !== "production" ? (VITE_API as string) : "/api";
 const openApi = axios.create({ baseURL: ApiUrl });
 const authApi = axios.create({ baseURL: ApiUrl });
 
@@ -12,7 +15,7 @@ authApi.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       sessionStorage.clear();
       localStorage.clear();
-      await fb.fSignOut().then(() => {
+      await firebaseSignOut().then(() => {
         window.location.replace(NavType.Root);
       });
     }
@@ -26,9 +29,10 @@ export function setToken() {
   authApi.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 }
 
-export * from "./auth";
-export * from "./user";
-export * from "./lookup";
-export * from "./project";
-export * from "./expense";
+export * as fbService from "./firebase";
+export * as lookupService from "./lookup";
+export * as authService from "./auth";
+export * as userService from "./user";
+export * as projectService from "./project";
+export * as expenseService from "./expense";
 export { openApi, authApi };

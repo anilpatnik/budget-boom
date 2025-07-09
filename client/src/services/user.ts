@@ -1,5 +1,5 @@
-import { ServiceType } from "@/util";
 import { AdminUser, IAdminUser, IAdminUserData, IAdminUserSearch } from "@/models";
+import { ServiceType } from "@/utils/enums";
 import { authApi } from "@/services";
 
 export async function getUsersAsync(payload: IAdminUserSearch): Promise<IAdminUserData> {

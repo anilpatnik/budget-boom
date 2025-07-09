@@ -2,7 +2,7 @@ import { RouterProvider } from "react-router-dom";
 import { IonApp, IonSpinner } from "@ionic/react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { router } from "./layouts/navigation";
+import { router } from "@/layouts";
 
 const queryClient = new QueryClient({
   defaultOptions: {

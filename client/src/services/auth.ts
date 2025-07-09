@@ -1,46 +1,55 @@
-import { ErrorMessage, ServiceType, constants, fb } from "@/util";
-import { authApi, openApi } from "@/services";
+import { constants } from "@/utils";
+import { ServiceType } from "@/utils/enums";
+import { openApi, authApi, fbService } from "@/services";
 
 export async function createUserWithEmail(name: string, email: string, password: string) {
   try {
-    const fbUser = await fb.createUserWithEmailAndPassword(fb.fAuth, email, password);
+    const fbUser = await fbService.createUserWithEmailAndPassword(
+      fbService.firebaseAuth,
+      email,
+      password
+    );
     if (fbUser?.user?.uid?.length === 0) throw new Error("SignUp Failed!");
-    await fb.updateProfile(fbUser.user, { displayName: name });
-    await fb.sendEmailVerification(fbUser.user);
+    await fbService.updateProfile(fbUser.user, { displayName: name });
+    await fbService.sendEmailVerification(fbUser.user);
     return { success: true, resource: fbUser.user.uid };
   } catch (error) {
-    const err = ErrorMessage(error as fb.FirebaseError | Error);
+    const err = fbService.ErrorMessage(error as fbService.FirebaseError | Error);
     return { success: false, resource: err };
   }
 }
 
 export async function signInWithEmail(email: string, password: string) {
   try {
-    const fbUser = await fb.signInWithEmailAndPassword(fb.fAuth, email, password);
+    const fbUser = await fbService.signInWithEmailAndPassword(
+      fbService.firebaseAuth,
+      email,
+      password
+    );
     if (fbUser?.user?.uid?.length === 0 || !fbUser?.user?.emailVerified)
       throw new Error("SignIn Failed!");
     if (fbUser) return await getUser(fbUser);
     return { success: false, resource: fbUser };
   } catch (error) {
-    const err = ErrorMessage(error as fb.FirebaseError | Error);
+    const err = fbService.ErrorMessage(error as fbService.FirebaseError | Error);
     return { success: false, resource: err };
   }
 }
 
 export async function signInWithGoogle() {
   try {
-    const provider = new fb.GoogleAuthProvider();
-    const fbUser = await fb.signInWithPopup(fb.fAuth, provider);
+    const provider = new fbService.GoogleAuthProvider();
+    const fbUser = await fbService.signInWithPopup(fbService.firebaseAuth, provider);
     if (fbUser?.user?.uid?.length === 0) throw new Error("SignUp Failed!");
     if (fbUser) return await getUser(fbUser);
     return { success: false, resource: fbUser };
   } catch (error) {
-    const err = ErrorMessage(error as fb.FirebaseError | Error);
+    const err = fbService.ErrorMessage(error as fbService.FirebaseError | Error);
     return { success: false, resource: err };
   }
 }
 
-export async function getUser(fbUser: fb.UserCredential) {
+export async function getUser(fbUser: fbService.UserCredential) {
   // const zone = new Date().getTimezoneOffset().toString();
   const response = await openApi.post(ServiceType.SignIn, fbUser.user);
   const { success, resource } = response.data;
@@ -49,7 +58,7 @@ export async function getUser(fbUser: fb.UserCredential) {
 
 export async function verifySignInEmail(actionCode: string) {
   try {
-    await fb.applyActionCode(fb.fAuth, actionCode);
+    await fbService.applyActionCode(fbService.firebaseAuth, actionCode);
     return true;
   } catch (error) {
     // console.log("Verify SignIn Email", error);
@@ -59,8 +68,8 @@ export async function verifySignInEmail(actionCode: string) {
 
 export async function resendVerifySignInEmail() {
   try {
-    const user = fb.fAuth.currentUser;
-    if (user?.uid) fb.sendEmailVerification(user);
+    const user = fbService.firebaseAuth.currentUser;
+    if (user?.uid) fbService.sendEmailVerification(user);
     return true;
   } catch (error) {
     // console.log("Resend Verify SignIn Email", error);
@@ -70,7 +79,7 @@ export async function resendVerifySignInEmail() {
 
 export async function sendForgotPasswordUrl(email: string) {
   try {
-    await fb.sendPasswordResetEmail(fb.fAuth, email);
+    await fbService.sendPasswordResetEmail(fbService.firebaseAuth, email);
     return true;
   } catch (error) {
     // console.log("Send Forgot Reset Email", error);
@@ -80,17 +89,17 @@ export async function sendForgotPasswordUrl(email: string) {
 
 export async function verifyForgotPasswordUrl(actionCode: string) {
   try {
-    const response = await fb.verifyPasswordResetCode(fb.fAuth, actionCode);
+    const response = await fbService.verifyPasswordResetCode(fbService.firebaseAuth, actionCode);
     return { success: true, resource: response };
   } catch (error) {
-    const err = ErrorMessage(error as fb.FirebaseError | Error);
+    const err = fbService.ErrorMessage(error as fbService.FirebaseError | Error);
     return { success: false, resource: err };
   }
 }
 
 export async function updateForgotPassword(actionCode: string, newPassword: string) {
   try {
-    await fb.confirmPasswordReset(fb.fAuth, actionCode, newPassword);
+    await fbService.confirmPasswordReset(fbService.firebaseAuth, actionCode, newPassword);
     return true;
   } catch (error) {
     // console.log("Update Forgot Password", error);
@@ -100,22 +109,22 @@ export async function updateForgotPassword(actionCode: string, newPassword: stri
 
 export async function updateProfilePassword(newPassword: string) {
   try {
-    const user = fb.fAuth.currentUser;
-    if (user?.uid) await fb.updatePassword(user, newPassword);
+    const user = fbService.firebaseAuth.currentUser;
+    if (user?.uid) await fbService.updatePassword(user, newPassword);
     return { success: true, resource: constants.SUCCESS };
   } catch (error) {
-    const err = ErrorMessage(error as fb.FirebaseError | Error);
+    const err = fbService.ErrorMessage(error as fbService.FirebaseError | Error);
     return { success: false, resource: err };
   }
 }
 
 export async function updateProfilePic(photoURL: string) {
   try {
-    const user = fb.fAuth.currentUser;
-    if (user?.uid) await fb.updateProfile(user, { photoURL });
+    const user = fbService.firebaseAuth.currentUser;
+    if (user?.uid) await fbService.updateProfile(user, { photoURL });
     return { success: true, resource: constants.SUCCESS };
   } catch (error) {
-    const err = ErrorMessage(error as fb.FirebaseError | Error);
+    const err = fbService.ErrorMessage(error as fbService.FirebaseError | Error);
     return { success: false, resource: err };
   }
 }

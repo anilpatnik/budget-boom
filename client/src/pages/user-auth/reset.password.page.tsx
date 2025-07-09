@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  IonBadge,
   IonButton,
   IonCard,
   IonCardContent,
@@ -16,9 +15,10 @@ import {
 } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Icon, InputComponent, PasswordComponent, PasswordStrength } from "@/components";
-import { constants, NavType } from "@/util";
-import { updateForgotPassword, verifyForgotPasswordUrl } from "@/services";
+import { Icon, InputField, PasswordField, PasswordStrength } from "@/components";
+import { constants } from "@/utils";
+import { NavType } from "@/utils/enums";
+import { authService } from "@/services";
 
 export function ResetPasswordPage() {
   const hasMounted = useRef(false);
@@ -59,7 +59,7 @@ export function ResetPasswordPage() {
 
   const verifyForgotPassword = async () => {
     if (params.actionCode) {
-      const res = await verifyForgotPasswordUrl(params.actionCode);
+      const res = await authService.verifyForgotPasswordUrl(params.actionCode);
       if (res?.success) setEmail(res?.resource ?? String.empty);
     }
     setTimeout(() => setPreLoading(false), constants.DELAY);
@@ -68,7 +68,7 @@ export function ResetPasswordPage() {
   const handleSubmit = async (password: string) => {
     if (params.actionCode) {
       setLoading(true);
-      const res = await updateForgotPassword(params.actionCode, password);
+      const res = await authService.updateForgotPassword(params.actionCode, password);
       setSuccess(res);
       setTimeout(() => setLoading(false), constants.DELAY);
     }
@@ -168,7 +168,7 @@ export function ResetPasswordPage() {
                   <IonCardContent>
                     <form onSubmit={formik.handleSubmit}>
                       <div className="my-6">
-                        <InputComponent
+                        <InputField
                           name="email"
                           label="Email"
                           type="email"
@@ -177,7 +177,7 @@ export function ResetPasswordPage() {
                         />
                       </div>
                       <div className="my-6">
-                        <PasswordComponent
+                        <PasswordField
                           name="password"
                           label="Password"
                           value={formik.values.password}
@@ -188,7 +188,7 @@ export function ResetPasswordPage() {
                         <PasswordStrength password={formik.values.password} />
                       </div>
                       <div className="my-6">
-                        <PasswordComponent
+                        <PasswordField
                           name="confirmpassword"
                           label="Confirm Password"
                           value={formik.values.confirmpassword}

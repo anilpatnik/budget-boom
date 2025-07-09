@@ -1,11 +1,11 @@
-export { LazyLoading } from "./lazy.component";
-export { Icon } from "./icon.component";
-export { PasswordStrength } from "./password.strength";
+export { LazyLoading } from "./lazy.loading";
+export { Icon } from "./icon";
 
-export { InputComponent } from "./input.component";
-export { SelectComponent } from "./select.component";
-export { AutoSelectComponent } from "./auto.select.component";
-export { PasswordComponent } from "./password.component";
-export { DateComponent } from "./date.component";
-export { ToggleButtonComponent } from "./toggle.button.component";
-export { ProjectProgressBar } from "./project.progress.bar";
+export { InputField } from "./input.field";
+export { DateField } from "./date.field";
+export { SelectField } from "./select.field";
+export { AutoSelectField } from "./auto.select.field";
+export { PasswordField } from "./password.field";
+export { PasswordStrength } from "./password.strength";
+export { ToggleField } from "./toggle.field";
+export { ProgressField } from "./progress.field";

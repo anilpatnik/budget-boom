@@ -1,9 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { IonBreadcrumb, IonBreadcrumbs } from "@ionic/react";
-import { NavType } from "@/util";
+import { NavType } from "@/utils/enums";
+import { Icon } from "@/components";
 import { ExpensesPage } from "./expenses.page";
 import { ExpenseReportPage } from "./report.page";
-import { Icon, LazyLoading } from "@/components";
 
 export function ExpensesHomePage() {
   const navigate = useNavigate();

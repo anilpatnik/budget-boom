@@ -1,5 +1,6 @@
-import { ServiceType, constants } from "@/util";
 import { IProject, IProjectData, Project } from "@/models";
+import { constants } from "@/utils";
+import { ServiceType } from "@/utils/enums";
 import { authApi } from "@/services";
 
 export async function getAllProjectsAsync(): Promise<IProject[]> {

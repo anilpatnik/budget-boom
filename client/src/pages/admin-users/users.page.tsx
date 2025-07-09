@@ -21,11 +21,12 @@ import {
   TableHead,
   TableRow
 } from "@mui/material";
-import { CrudType, RoleType, newPassword, constants, toastify } from "@/util";
+import { constants, helper } from "@/utils";
+import { CrudType, RoleType } from "@/utils/enums";
 import { AdminUser, IAdminUser, AdminUserSearch, IAdminUserSearch } from "@/models";
-import { deleteUserAsync, getUserAsync, getUsersAsync } from "@/services";
-import { UserProfilePage } from "./profile.page";
+import { userService } from "@/services";
 import { Icon } from "@/components";
+import { UserProfilePage } from "./profile.page";
 
 export function UsersPage() {
   const hasMounted = useRef(false);
@@ -48,7 +49,7 @@ export function UsersPage() {
     if (queryRef.current.page === 0) setLoadingInit(true);
     else setLoading(true);
     try {
-      const response = await getUsersAsync(queryRef.current);
+      const response = await userService.getUsersAsync(queryRef.current);
       setRecords(prev => [...prev, ...(response?.data ?? [])]);
       setTotal(response?.count ?? 0);
     } catch (error) {
@@ -103,8 +104,8 @@ export function UsersPage() {
   const handleOpen = async (user?: IAdminUser, col?: string) => {
     const colId = `${user?.uid}-${col}`;
     setLoadingCol(colId);
-    const dbUser = await getUserAsync(user?.uid || String.empty);
-    const password = newPassword();
+    const dbUser = await userService.getUserAsync(user?.uid || String.empty);
+    const password = helper.newPassword();
     if (dbUser) {
       const newUser = { ...dbUser, password, type: CrudType.Update };
       setRecord(newUser);
@@ -124,13 +125,13 @@ export function UsersPage() {
   const handleDelete = async (id: string, col?: string) => {
     const colId = `${id}-${col}`;
     setLoadingCol(colId);
-    const res = await deleteUserAsync(id);
+    const res = await userService.deleteUserAsync(id);
     if (res && !res?.success) {
-      toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+      helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
       setLoadingCol(String.empty);
       return;
     } else {
-      toastify("Deleted Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
+      helper.toastify("Deleted Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
       setTimeout(() => {
         deleteRecord(id);
         setLoadingCol(String.empty);

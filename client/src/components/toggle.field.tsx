@@ -5,7 +5,7 @@ import {
   ToggleButtonProps
 } from "@mui/material";
 
-type ComponentProps = {
+type Props = {
   name?: string;
   value?: boolean;
   trueLabel?: string;
@@ -17,7 +17,7 @@ type ComponentProps = {
   color?: ToggleButtonGroupProps["color"];
   size?: ToggleButtonProps["size"];
 };
-export function ToggleButtonComponent({
+export function ToggleField({
   name,
   value,
   trueLabel = "Yes",
@@ -28,7 +28,7 @@ export function ToggleButtonComponent({
   disabled = false,
   color = "primary",
   size = "small"
-}: ComponentProps) {
+}: Props) {
   return (
     <ToggleButtonGroup
       id={`id-${name}`}

@@ -10,35 +10,28 @@ import {
 } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {
-  CrudType,
-  constants,
-  convertoISO,
-  monthStart,
-  monthEnd,
-  parsePrice,
-  toastify
-} from "@/util";
+import { constants, helper, dateHelper } from "@/utils";
+import { CrudType } from "@/utils/enums";
 import { IProject } from "@/models";
-import { upsertProjectAsync } from "@/services";
-import { InputComponent, DateComponent, Icon } from "@/components";
+import { projectService } from "@/services";
+import { InputField, DateField, Icon } from "@/components";
 import { Switch } from "@mui/material";
 
-type ComponentProps = {
+type Props = {
   project?: IProject;
   handleClose: () => void;
   handleNew: (item?: any) => void;
   handleEdit: (item?: any) => void;
 };
-export function ProjectPage({ project, handleClose, handleNew, handleEdit }: ComponentProps) {
+export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Props) {
   const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
       name: project?.name || String.empty,
       budget: Math.abs(project?.budget || 0),
-      startDate: project?.startDate || monthStart,
-      endDate: project?.endDate || monthEnd,
+      startDate: project?.startDate || dateHelper.monthStart,
+      endDate: project?.endDate || dateHelper.monthEnd,
       inactive: project?.inactive || false
     },
     validateOnMount: false,
@@ -64,20 +57,20 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
           id: crypto.randomUUID(),
           name: values?.name,
           prevName: project?.prevName,
-          budget: parsePrice(false, values?.budget),
+          budget: helper.parsePrice(false, values?.budget),
           actual: project?.actual,
           startDate: values?.startDate,
           endDate: values?.endDate,
           inactive: values?.inactive,
           type: CrudType.Create
         };
-        const res = await upsertProjectAsync(newProject);
+        const res = await projectService.upsertProjectAsync(newProject);
         if (res && !res?.success) {
-          toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+          helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
           setLoading(false);
           return;
         } else {
-          toastify("Created Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
+          helper.toastify("Created Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
           setTimeout(() => {
             const xProject = { ...newProject, id: res?.resource?.id };
             handleNew(xProject);
@@ -89,20 +82,20 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
           id: project?.id,
           name: values?.name,
           prevName: project?.name,
-          budget: parsePrice(false, values?.budget),
+          budget: helper.parsePrice(false, values?.budget),
           actual: project?.actual,
           startDate: values?.startDate,
           endDate: values?.endDate,
           inactive: values?.inactive,
           type: CrudType.Update
         };
-        const res = await upsertProjectAsync(updateProject);
+        const res = await projectService.upsertProjectAsync(updateProject);
         if (res && !res?.success) {
-          toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+          helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
           setLoading(false);
           return;
         } else {
-          toastify("Updated Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
+          helper.toastify("Updated Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
           setTimeout(() => {
             handleEdit(updateProject);
             setLoading(false);
@@ -130,7 +123,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
       <IonContent className="ion-padding">
         <form onSubmit={formik.handleSubmit}>
           <div className="my-6">
-            <InputComponent
+            <InputField
               name="name"
               label="Project Name"
               type="text"
@@ -144,7 +137,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
             </p>
           </div>
           <div className="my-6">
-            <InputComponent
+            <InputField
               name="budget"
               label="Budget"
               type="number"
@@ -160,23 +153,27 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Com
           </div>
           <div className="my-6 flex items-center">
             <div>
-              <DateComponent
+              <DateField
                 name="startDate"
                 label="Start Date"
-                value={convertoISO(formik.values.startDate)}
+                value={dateHelper.convertoISO(formik.values.startDate)}
                 touched={formik.touched.startDate}
                 errorMessage={formik.errors.startDate}
-                handleChange={e => formik.setFieldValue("startDate", e.target.value || monthStart)}
+                handleChange={e =>
+                  formik.setFieldValue("startDate", e.target.value || dateHelper.monthStart)
+                }
               />
             </div>
             <div className="ml-10">
-              <DateComponent
+              <DateField
                 name="endDate"
                 label="End Date"
-                value={convertoISO(formik.values.endDate)}
+                value={dateHelper.convertoISO(formik.values.endDate)}
                 touched={formik.touched.endDate}
                 errorMessage={formik.errors.endDate}
-                handleChange={e => formik.setFieldValue("endDate", e.target.value || monthEnd)}
+                handleChange={e =>
+                  formik.setFieldValue("endDate", e.target.value || dateHelper.monthEnd)
+                }
               />
             </div>
           </div>

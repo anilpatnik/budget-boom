@@ -3,9 +3,9 @@ import { IonButton } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useStore } from "@/contexts";
-import { getCountries, getCountry, updateProfileInfo } from "@/services";
-import { Icon, InputComponent, SelectComponent } from "@/components";
-import { constants, toastify } from "@/util";
+import { authService, lookupService } from "@/services";
+import { Icon, InputField, SelectField } from "@/components";
+import { constants, helper } from "@/utils";
 
 export function ProfileInfoPage() {
   const { user, setAuth } = useStore();
@@ -25,9 +25,9 @@ export function ProfileInfoPage() {
 
   const handleSubmit = async (name: string, countryId?: string) => {
     setLoading(true);
-    const res = await updateProfileInfo(name, countryId);
+    const res = await authService.updateProfileInfo(name, countryId);
     if (res && !res?.success) {
-      toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+      helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
       setLoading(false);
       return;
     } else {
@@ -35,9 +35,9 @@ export function ProfileInfoPage() {
         ...prev,
         name,
         countryId,
-        currency: getCountry(countryId ?? navigator.language)?.code
+        currency: lookupService.getCountry(countryId ?? navigator.language)?.code
       }));
-      toastify("Updated Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
+      helper.toastify("Updated Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
       setTimeout(() => {
         setLoading(false);
       }, constants.DELAY);
@@ -47,7 +47,7 @@ export function ProfileInfoPage() {
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="my-6">
-        <InputComponent
+        <InputField
           name="name"
           label="Name"
           type="text"
@@ -58,14 +58,14 @@ export function ProfileInfoPage() {
         />
       </div>
       <div className="my-6">
-        <SelectComponent
+        <SelectField
           name="countryId"
           label="Country"
           value={formik.values.countryId}
           touched={formik.touched.countryId}
           errorMessage={formik.errors.countryId}
           handleChange={formik.handleChange}
-          payload={getCountries() || []}
+          payload={lookupService.getCountries() || []}
         />
       </div>
       <IonButton

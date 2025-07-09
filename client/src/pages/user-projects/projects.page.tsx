@@ -10,12 +10,13 @@ import {
   TableHead,
   TableRow
 } from "@mui/material";
-import { CrudType, dateFormat, constants, formatPrice, toastify } from "@/util";
+import { constants, helper, dateHelper } from "@/utils";
+import { CrudType } from "@/utils/enums";
 import { IProject, Project } from "@/models";
-import { deleteProjectAsync, getProjectsAsync } from "@/services";
-import { ProjectPage } from "./project.page";
-import { Icon, ProjectProgressBar } from "@/components";
+import { projectService } from "@/services";
+import { Icon, ProgressField } from "@/components";
 import { useStore } from "@/contexts";
+import { ProjectPage } from "./project.page";
 
 export function ProjectsPage() {
   const { user } = useStore();
@@ -33,7 +34,7 @@ export function ProjectsPage() {
     if (page === 0) setLoadingInit(true);
     else setLoading(true);
     try {
-      const response = await getProjectsAsync(page, constants.PAGE_SIZE);
+      const response = await projectService.getProjectsAsync(page, constants.PAGE_SIZE);
       setRecords(prev => [...prev, ...(response?.data ?? [])]);
       setTotal(response?.count ?? 0);
     } catch (error) {
@@ -97,13 +98,13 @@ export function ProjectsPage() {
   const handleDelete = async (id: string, col?: string) => {
     const colId = `${id}-${col}`;
     setLoadingCol(colId);
-    const res = await deleteProjectAsync(id);
+    const res = await projectService.deleteProjectAsync(id);
     if (res && !res?.success) {
-      toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+      helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
       setLoadingCol(String.empty);
       return;
     } else {
-      toastify("Deleted Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
+      helper.toastify("Deleted Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
       setTimeout(() => {
         deleteRecord(id);
         setLoadingCol(String.empty);
@@ -169,19 +170,19 @@ export function ProjectsPage() {
                 </TableCell>
                 <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                   <Box className="text-indigo-700 font-bold">
-                    {formatPrice(item.budget ?? 0, user?.countryId, user?.currency)}
+                    {helper.formatPrice(item.budget ?? 0, user?.countryId, user?.currency)}
                   </Box>
                 </TableCell>
                 <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                   <Box className="text-cyan-700 font-bold">
-                    {formatPrice(item.actual ?? 0, user?.countryId, user?.currency)}
+                    {helper.formatPrice(item.actual ?? 0, user?.countryId, user?.currency)}
                   </Box>
                 </TableCell>
                 <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  {item?.startDate ? dateFormat(item.startDate) : String.empty}
+                  {item?.startDate ? dateHelper.dateFormat(item.startDate) : String.empty}
                 </TableCell>
                 <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  {item?.endDate ? dateFormat(item.endDate) : String.empty}
+                  {item?.endDate ? dateHelper.dateFormat(item.endDate) : String.empty}
                 </TableCell>
                 <TableCell
                   align="left"
@@ -291,7 +292,7 @@ export function ProjectsPage() {
               </TableRow>
               <TableRow sx={{ display: { xs: "table-row", sm: "none" } }}>
                 <TableCell colSpan={2}>
-                  <ProjectProgressBar
+                  <ProgressField
                     payload={{
                       startdate: item?.startDate,
                       endate: item?.endDate,

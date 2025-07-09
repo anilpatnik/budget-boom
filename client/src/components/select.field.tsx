@@ -1,12 +1,12 @@
 import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from "@mui/material";
-import { Icon } from "./icon.component";
+import { Icon } from "@/components";
 
 type Payload = {
   id?: string;
   name?: string;
   icon?: string;
 };
-type ComponentProps = {
+type Props = {
   name?: string;
   value?: string;
   label?: string;
@@ -18,7 +18,7 @@ type ComponentProps = {
   disabled?: boolean;
   payload: Payload[];
 };
-export function SelectComponent({
+export function SelectField({
   name,
   value,
   label,
@@ -29,7 +29,7 @@ export function SelectComponent({
   handleBlur,
   disabled = false,
   payload = []
-}: ComponentProps) {
+}: Props) {
   return (
     <FormControl error={touched && Boolean(errorMessage)} fullWidth>
       <InputLabel id={`id-${name}-label`} shrink={true} variant="standard">

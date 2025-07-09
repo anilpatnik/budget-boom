@@ -1,6 +1,6 @@
-import { formatPrice } from "@/util";
+import { helper } from "@/utils";
 
-type ProgressBar = {
+type IProgressField = {
   startdate?: string;
   endate?: string;
   actual?: number;
@@ -9,12 +9,8 @@ type ProgressBar = {
   currency?: string;
   inactive?: boolean;
 };
-
-type Props = {
-  payload: ProgressBar;
-};
-
-export function ProjectProgressBar({ payload }: Props) {
+type Props = { payload: IProgressField };
+export function ProgressField({ payload }: Props) {
   // project due date calc
   const now = new Date();
   const startDate = payload.startdate ? new Date(payload.startdate) : now;
@@ -41,7 +37,7 @@ export function ProjectProgressBar({ payload }: Props) {
         <span className="text-sm text-gray-600">
           {!payload.inactive && <span>{remainingDaysLabel} |</span>}
           <span className={moneySpent < 0 ? "text-green-700 ml-2" : "text-red-700 ml-2"}>
-            {formatPrice(moneySpent || 0, payload.countryId, payload.currency)}
+            {helper.formatPrice(moneySpent || 0, payload.countryId, payload.currency)}
           </span>
         </span>
         <span className="text-sm">{percentageUsed.toFixed(1)}%</span>
@@ -54,11 +50,11 @@ export function ProjectProgressBar({ payload }: Props) {
       <div className="flex justify-between">
         <span className="text-indigo-700">
           <span className="text-neutral-700 mr-2">Spent</span>
-          {formatPrice(actual || 0, payload.countryId, payload.currency)}
+          {helper.formatPrice(actual || 0, payload.countryId, payload.currency)}
         </span>
         <span className="text-cyan-700">
           <span className="text-neutral-700 mr-2">Budget</span>
-          {formatPrice(budget || 0, payload.countryId, payload.currency)}
+          {helper.formatPrice(budget || 0, payload.countryId, payload.currency)}
         </span>
       </div>
     </div>

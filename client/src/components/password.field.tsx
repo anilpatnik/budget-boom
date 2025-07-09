@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { IconButton, InputAdornment, TextField } from "@mui/material";
-import { Icon } from "./icon.component";
+import { Icon } from "@/components";
 
-type ComponentProps = {
+type Props = {
   name?: string;
   value?: string;
   label?: string;
@@ -12,7 +12,7 @@ type ComponentProps = {
   handleChange?: (e: any) => void;
   handleBlur?: (e: any) => void;
 };
-export function PasswordComponent({
+export function PasswordField({
   name,
   value,
   label,
@@ -21,7 +21,7 @@ export function PasswordComponent({
   errorMessage,
   handleChange,
   handleBlur
-}: ComponentProps) {
+}: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);

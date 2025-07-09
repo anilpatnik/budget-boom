@@ -10,26 +10,21 @@ import {
 import { Switch } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { convertoISO, monthEnd, monthStart } from "@/util";
+import { dateHelper } from "@/utils";
 import { IExpenseSearch, IProject } from "@/models";
-import { DateComponent, Icon, SelectComponent } from "@/components";
+import { DateField, Icon, SelectField } from "@/components";
 
-type ComponentProps = {
+type Props = {
   search?: IExpenseSearch;
   projects?: IProject[];
   handleClose: () => void;
   handleSearch: (item?: any) => void;
 };
-export function ExpenseReportSearchPage({
-  search,
-  projects,
-  handleClose,
-  handleSearch
-}: ComponentProps) {
+export function ExpenseReportSearchPage({ search, projects, handleClose, handleSearch }: Props) {
   const formik = useFormik({
     initialValues: {
-      startDate: search?.startDate || monthStart,
-      endDate: search?.endDate || monthEnd,
+      startDate: search?.startDate || dateHelper.monthStart,
+      endDate: search?.endDate || dateHelper.monthEnd,
       projectId: search?.projectId || String.empty,
       skip: search?.skip || false
     },
@@ -69,28 +64,32 @@ export function ExpenseReportSearchPage({
         <form onSubmit={formik.handleSubmit}>
           <div className="my-6 flex items-center">
             <div>
-              <DateComponent
+              <DateField
                 name="startDate"
                 label="Start Date"
-                value={convertoISO(formik.values.startDate)}
+                value={dateHelper.convertoISO(formik.values.startDate)}
                 touched={formik.touched.startDate}
                 errorMessage={formik.errors.startDate}
-                handleChange={e => formik.setFieldValue("startDate", e.target.value || monthStart)}
+                handleChange={e =>
+                  formik.setFieldValue("startDate", e.target.value || dateHelper.monthStart)
+                }
               />
             </div>
             <div className="ml-10">
-              <DateComponent
+              <DateField
                 name="endDate"
                 label="End Date"
-                value={convertoISO(formik.values.endDate)}
+                value={dateHelper.convertoISO(formik.values.endDate)}
                 touched={formik.touched.endDate}
                 errorMessage={formik.errors.endDate}
-                handleChange={e => formik.setFieldValue("endDate", e.target.value || monthEnd)}
+                handleChange={e =>
+                  formik.setFieldValue("endDate", e.target.value || dateHelper.monthEnd)
+                }
               />
             </div>
           </div>
           <div className="my-6">
-            <SelectComponent
+            <SelectField
               name="projectId"
               label="Project"
               value={formik.values.projectId}
@@ -122,8 +121,8 @@ export function ExpenseReportSearchPage({
               onClick={() =>
                 formik.resetForm({
                   values: {
-                    startDate: monthStart,
-                    endDate: monthEnd,
+                    startDate: dateHelper.monthStart,
+                    endDate: dateHelper.monthEnd,
                     projectId: String.empty,
                     skip: false
                   }

@@ -1,9 +1,8 @@
-import { useNavigate } from "react-router-dom";
-import { constants, NavType } from "@/util";
+import { constants } from "@/utils";
+import { NavType } from "@/utils/enums";
 import { useStore } from "@/contexts";
 
-export default function PrivacyPolicyPage() {
-  const navigate = useNavigate();
+export function PrivacyPolicy() {
   const { user } = useStore();
   return (
     <div className="statement ion-padding">

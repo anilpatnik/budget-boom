@@ -1,18 +1,10 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IonButton, IonThumbnail, useIonAlert } from "@ionic/react";
-import {
-  NavType,
-  RoleType,
-  ServiceType,
-  constants,
-  downloadFile,
-  fb,
-  uploadFile,
-  toastify
-} from "@/util";
+import { constants, helper } from "@/utils";
+import { NavType, RoleType, ServiceType } from "@/utils/enums";
 import { useStore } from "@/contexts";
-import { deleteProfileAsync, updateProfilePic } from "@/services";
+import { fbService, authService } from "@/services";
 import { Icon } from "@/components";
 
 export const ProfilePicturePage = () => {
@@ -37,16 +29,16 @@ export const ProfilePicturePage = () => {
   const handleSubmit = async (e: any) => {
     if (file?.size) {
       setLoading(true);
-      const imgFile = `${ServiceType.Users}/${fb.fAuth.currentUser?.uid}/profile.${file.name
-        .split(".")
-        .pop()}`;
-      const snapshot = await uploadFile(file, imgFile);
+      const imgFile = `${ServiceType.Users}/${
+        fbService.firebaseAuth.currentUser?.uid
+      }/profile.${file.name.split(".").pop()}`;
+      const snapshot = await fbService.uploadFile(file, imgFile);
       if (snapshot.state === constants.SUCCESS) {
-        const imgUrl = await downloadFile(imgFile);
+        const imgUrl = await fbService.downloadFile(imgFile);
         if (imgUrl?.length > 5) {
-          updateProfilePic(imgUrl).then(res => {
+          authService.updateProfilePic(imgUrl).then(res => {
             if (res && !res?.success) {
-              toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+              helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
             } else {
               setAuth(prev => ({ ...prev, photo: imgUrl }));
             }
@@ -60,11 +52,11 @@ export const ProfilePicturePage = () => {
   const handleUserDelete = async () => {
     setLoading(true);
     try {
-      const res = await deleteProfileAsync();
+      const res = await authService.deleteProfileAsync();
       if (res && !res?.success) {
-        toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+        helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
       } else {
-        toastify(
+        helper.toastify(
           "Thank you for being with us 🙏 We're sad to see you go 😢",
           constants.SUCCESS,
           constants.SUCCESS_DELAY

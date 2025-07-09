@@ -16,9 +16,11 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ReCAPTCHA from "react-google-recaptcha";
-import { Icon, InputComponent } from "@/components";
-import { NavType, config, constants, toastify } from "@/util";
-import { captchaVerify, sendForgotPasswordUrl } from "@/services";
+import { Icon, InputField } from "@/components";
+import { constants, helper } from "@/utils";
+import { NavType } from "@/utils/enums";
+import { VITE_CAPTCHA_SITE } from "@/utils/configs";
+import { authService } from "@/services";
 
 export function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false);
@@ -44,22 +46,22 @@ export function ForgotPasswordPage() {
       if (recaptchaRef.current) {
         captchaValue = recaptchaRef.current.getValue();
         if (!captchaValue) {
-          toastify("Please verify reCAPTCHA!", constants.ERROR, constants.SUCCESS_DELAY);
+          helper.toastify("Please verify reCAPTCHA!", constants.ERROR, constants.SUCCESS_DELAY);
           return;
         }
       }
       setLoading(true);
       // verify recaptcha response
       if (captchaValue) {
-        const captchaRes = await captchaVerify(captchaValue);
+        const captchaRes = await authService.captchaVerify(captchaValue);
         if (!captchaRes.success) return;
       }
       // forgot password
-      const res = await sendForgotPasswordUrl(email);
+      const res = await authService.sendForgotPasswordUrl(email);
       if (res) {
         setSuccess(true);
       } else {
-        toastify("Email Not Found", constants.ERROR, constants.FAILURE_DELAY);
+        helper.toastify("Email Not Found", constants.ERROR, constants.FAILURE_DELAY);
       }
     } finally {
       setTimeout(() => {
@@ -85,11 +87,11 @@ export function ForgotPasswordPage() {
                 An email message has been sent containing a link to <strong>Reset</strong> your
                 password.
                 <div className="ion-margin-top">
-                  <Link className="sign-label" to={NavType.SignIn}>
-                    Return to
-                    <IonBadge color="secondary" className="badge">
+                  <Link to={NavType.SignIn} className="flex justify-center items-center space-x-2">
+                    <IonLabel>Back to</IonLabel>
+                    <IonButton color="secondary" size="small" shape="round" fill="outline">
                       SIGN IN
-                    </IonBadge>
+                    </IonButton>
                   </Link>
                 </div>
               </IonCardContent>
@@ -120,7 +122,7 @@ export function ForgotPasswordPage() {
                     <IonCardContent>
                       <form onSubmit={formik.handleSubmit}>
                         <div className="my-6">
-                          <InputComponent
+                          <InputField
                             name="email"
                             label="Email"
                             type="email"
@@ -134,7 +136,7 @@ export function ForgotPasswordPage() {
                           <ReCAPTCHA
                             id="id-recaptcha"
                             ref={recaptchaRef}
-                            sitekey={config.VITE_CAPTCHA_SITE}
+                            sitekey={VITE_CAPTCHA_SITE}
                           />
                         </div>
                         <IonButton

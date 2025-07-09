@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
-  IonBadge,
   IonButton,
   IonCard,
   IonCardContent,
@@ -14,10 +13,12 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ReCAPTCHA from "react-google-recaptcha";
-import { Icon, InputComponent, PasswordComponent } from "@/components";
-import { NavType, RoleType, config, constants, toastify } from "@/util";
+import { Icon, InputField, PasswordField } from "@/components";
+import { constants, helper } from "@/utils";
+import { NavType, RoleType } from "@/utils/enums";
+import { VITE_CAPTCHA_SITE } from "@/utils/configs";
+import { authService, lookupService } from "@/services";
 import { useStore } from "@/contexts";
-import { captchaVerify, getCountry, signInWithEmail, signInWithGoogle } from "@/services";
 
 export function SignInPage() {
   const { setAuth } = useStore();
@@ -53,19 +54,21 @@ export function SignInPage() {
         if (recaptchaRef.current) {
           captchaValue = recaptchaRef.current.getValue();
           if (!captchaValue) {
-            toastify("Please verify reCAPTCHA!", constants.ERROR, constants.SUCCESS_DELAY);
+            helper.toastify("Please verify reCAPTCHA!", constants.ERROR, constants.SUCCESS_DELAY);
             return;
           }
         }
         setLoading(true);
         // verify recaptcha response
         if (captchaValue) {
-          const captchaRes = await captchaVerify(captchaValue);
+          const captchaRes = await authService.captchaVerify(captchaValue);
           if (!captchaRes.success) return;
         }
       } else setLoading(true);
       // auth login
-      const res = external ? await signInWithGoogle() : await signInWithEmail(email, password);
+      const res = external
+        ? await authService.signInWithGoogle()
+        : await authService.signInWithEmail(email, password);
       success = res?.success;
       if (res?.success) {
         auth = res?.resource?.token?.length > constants.TOKEN_LENGTH;
@@ -80,10 +83,10 @@ export function SignInPage() {
           photo: res?.resource?.photo,
           token: res?.resource?.token,
           countryId: res?.resource?.countryId,
-          currency: getCountry(res?.resource?.countryId ?? navigator.language)?.code
+          currency: lookupService.getCountry(res?.resource?.countryId ?? navigator.language)?.code
         }));
       } else {
-        if (res?.resource) toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+        if (res?.resource) helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
       }
     } finally {
       setTimeout(() => {
@@ -144,7 +147,7 @@ export function SignInPage() {
                     <IonCardContent>
                       <form onSubmit={formik.handleSubmit}>
                         <div className="my-6">
-                          <InputComponent
+                          <InputField
                             name="email"
                             label="Email"
                             type="email"
@@ -155,7 +158,7 @@ export function SignInPage() {
                           />
                         </div>
                         <div className="my-6">
-                          <PasswordComponent
+                          <PasswordField
                             name="password"
                             label="Password"
                             value={formik.values.password}
@@ -168,7 +171,7 @@ export function SignInPage() {
                           <ReCAPTCHA
                             id="id-recaptcha"
                             ref={recaptchaRef}
-                            sitekey={config.VITE_CAPTCHA_SITE}
+                            sitekey={VITE_CAPTCHA_SITE}
                           />
                         </div>
                         <IonButton

@@ -1,6 +1,6 @@
 import { InputAdornment, TextField } from "@mui/material";
 
-type ComponentProps = {
+type Props = {
   name?: string;
   value?: string;
   label?: string;
@@ -18,7 +18,7 @@ type ComponentProps = {
   startAdor?: boolean;
   startAdorText?: string;
 };
-export function InputComponent({
+export function InputField({
   name,
   value,
   label,
@@ -35,7 +35,7 @@ export function InputComponent({
   disabled = false,
   startAdor = false,
   startAdorText
-}: ComponentProps) {
+}: Props) {
   return (
     <TextField
       id={`id-${name}`}

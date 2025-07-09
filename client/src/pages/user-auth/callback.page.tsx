@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { IonSpinner } from "@ionic/react";
-import { NavType } from "@/util";
+import { NavType } from "@/utils/enums";
 
 export function CallbackPage() {
   const hasMounted = useRef(false);

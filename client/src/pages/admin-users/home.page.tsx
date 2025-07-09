@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { IonBreadcrumb, IonBreadcrumbs } from "@ionic/react";
-import { NavType } from "@/util";
-import { UsersPage } from "./users.page";
+import { NavType } from "@/utils/enums";
 import { Icon } from "@/components";
+import { UsersPage } from "./users.page";
 
 export function UsersHomePage() {
   const navigate = useNavigate();

@@ -24,7 +24,8 @@ import {
   Mail,
   Lock
 } from "lucide-react";
-import { constants, NavType, RoleType } from "@/util";
+import { constants } from "@/utils";
+import { NavType, RoleType } from "@/utils/enums";
 import { useStore } from "@/contexts";
 import { Icon } from "@/components";
 

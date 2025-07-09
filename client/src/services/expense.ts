@@ -1,5 +1,5 @@
-import { ServiceType } from "@/util";
 import { Expense, IExpense, IExpenseData, IExpenseReport, IExpenseSearch } from "@/models";
+import { ServiceType } from "@/utils/enums";
 import { authApi } from "@/services";
 
 export async function getExpensesAsync(payload: IExpenseSearch): Promise<IExpenseData> {

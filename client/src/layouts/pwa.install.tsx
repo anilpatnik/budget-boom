@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { IonButton } from "@ionic/react";
 
-export const InstallPWA = () => {
+export function InstallPWA() {
   const [beforeInstallEvent, setBeforeInstallEvent] = useState<any | undefined>(undefined);
   const [installingViaButton, setInstallingViaButton] = useState(false);
 
@@ -42,4 +42,4 @@ export const InstallPWA = () => {
       )}
     </>
   );
-};
+}

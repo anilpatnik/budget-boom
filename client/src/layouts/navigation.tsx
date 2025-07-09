@@ -1,7 +1,8 @@
 import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
-import { IonContent, IonPage, IonRouterOutlet, IonSpinner } from "@ionic/react";
+import { IonContent, IonPage, IonRouterOutlet } from "@ionic/react";
 import { ToastContainer } from "react-toastify";
-import { NavType, RoleType, RouterType, constants } from "@/util";
+import { constants } from "@/utils";
+import { NavType, RoleType, RouterType } from "@/utils/enums";
 import { StoreProvider, useStore } from "@/contexts";
 import {
   RootPage,
@@ -17,12 +18,10 @@ import {
   ProjectsHomePage,
   ExpensesHomePage
 } from "@/pages";
-import { Header } from "./header";
-// import { Footer } from "./footer";
-import { TabMenu } from "./tab.menu";
-import { PrivacyPolicyPage, TermsConditionsPage } from "@/legal";
+import { Header, TabMenu } from "@/layouts";
+import { PrivacyPolicy, TermsConditions } from "@/legal";
 
-export function PreRoute({
+function PreRoute({
   children,
   routerType,
   roles
@@ -78,11 +77,11 @@ export const router = createBrowserRouter([
       },
       {
         path: NavType.PrivacyPolicy,
-        element: <PrivacyPolicyPage />
+        element: <PrivacyPolicy />
       },
       {
         path: NavType.TermsConditions,
-        element: <TermsConditionsPage />
+        element: <TermsConditions />
       },
       {
         element: <PreRoute routerType={RouterType.Auth} />,

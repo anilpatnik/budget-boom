@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
-import { yearEnd, yearStart } from "@/util";
+import { dateHelper } from "@/utils";
 
-type ComponentProps = {
+type Props = {
   name?: string;
   value?: string;
   label?: string;
@@ -14,7 +14,7 @@ type ComponentProps = {
   min?: string;
   max?: string;
 };
-export function DateComponent({
+export function DateField({
   name,
   value,
   label,
@@ -24,9 +24,9 @@ export function DateComponent({
   handleChange,
   handleBlur,
   disabled = false,
-  min = yearStart,
-  max = yearEnd
-}: ComponentProps) {
+  min = dateHelper.yearStart,
+  max = dateHelper.yearEnd
+}: Props) {
   return (
     <TextField
       id={`id-${name}`}

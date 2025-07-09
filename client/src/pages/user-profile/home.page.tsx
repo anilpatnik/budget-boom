@@ -9,12 +9,12 @@ import {
   IonItem
 } from "@ionic/react";
 import { LazyLoading } from "@/components";
-import { AccordionType, NavType } from "@/util";
+import { AccordionType } from "@/utils/enums";
 import { useStore } from "@/contexts";
+import { Icon } from "@/components";
 import { ProfileInfoPage } from "./profile.info.page";
 import { ProfilePasswordPage } from "./profile.password.page";
 import { ProfilePicturePage } from "./profile.picture.page";
-import { Icon } from "@/components";
 
 export function ProfileHomePage() {
   const navigate = useNavigate();

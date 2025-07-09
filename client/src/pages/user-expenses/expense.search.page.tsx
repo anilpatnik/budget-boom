@@ -9,23 +9,23 @@ import {
 } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { convertoISO, monthStart, monthEnd } from "@/util";
+import { dateHelper } from "@/utils";
 import { IExpenseSearch, IProject } from "@/models";
-import { getCategories } from "@/services";
-import { DateComponent, SelectComponent, Icon } from "@/components";
+import { lookupService } from "@/services";
+import { DateField, SelectField, Icon } from "@/components";
 import { Switch } from "@mui/material";
 
-type ComponentProps = {
+type Props = {
   search?: IExpenseSearch;
   projects?: IProject[];
   handleClose: () => void;
   handleSearch: (item?: any) => void;
 };
-export function ExpenseSearchPage({ search, projects, handleClose, handleSearch }: ComponentProps) {
+export function ExpenseSearchPage({ search, projects, handleClose, handleSearch }: Props) {
   const formik = useFormik({
     initialValues: {
-      startDate: search?.startDate || monthStart,
-      endDate: search?.endDate || monthEnd,
+      startDate: search?.startDate || dateHelper.monthStart,
+      endDate: search?.endDate || dateHelper.monthEnd,
       projectId: search?.projectId || String.empty,
       categoryId: search?.categoryId || String.empty,
       skip: search?.skip || false
@@ -67,28 +67,32 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
         <form onSubmit={formik.handleSubmit}>
           <div className="my-6 flex items-center">
             <div>
-              <DateComponent
+              <DateField
                 name="startDate"
                 label="Start Date"
-                value={convertoISO(formik.values.startDate)}
+                value={dateHelper.convertoISO(formik.values.startDate)}
                 touched={formik.touched.startDate}
                 errorMessage={formik.errors.startDate}
-                handleChange={e => formik.setFieldValue("startDate", e.target.value || monthStart)}
+                handleChange={e =>
+                  formik.setFieldValue("startDate", e.target.value || dateHelper.monthStart)
+                }
               />
             </div>
             <div className="ml-10">
-              <DateComponent
+              <DateField
                 name="endDate"
                 label="End Date"
-                value={convertoISO(formik.values.endDate)}
+                value={dateHelper.convertoISO(formik.values.endDate)}
                 touched={formik.touched.endDate}
                 errorMessage={formik.errors.endDate}
-                handleChange={e => formik.setFieldValue("endDate", e.target.value || monthEnd)}
+                handleChange={e =>
+                  formik.setFieldValue("endDate", e.target.value || dateHelper.monthEnd)
+                }
               />
             </div>
           </div>
           <div className="my-6">
-            <SelectComponent
+            <SelectField
               name="categoryId"
               label="Category"
               optional={true}
@@ -96,11 +100,11 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
               touched={formik.touched.categoryId}
               errorMessage={formik.errors.categoryId}
               handleChange={formik.handleChange}
-              payload={getCategories() || []}
+              payload={lookupService.getCategories() || []}
             />
           </div>
           <div className="my-6">
-            <SelectComponent
+            <SelectField
               name="projectId"
               label="Project"
               value={formik.values.projectId}
@@ -132,8 +136,8 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
               onClick={() =>
                 formik.resetForm({
                   values: {
-                    startDate: monthStart,
-                    endDate: monthEnd,
+                    startDate: dateHelper.monthStart,
+                    endDate: dateHelper.monthEnd,
                     projectId: String.empty,
                     categoryId: String.empty,
                     skip: false

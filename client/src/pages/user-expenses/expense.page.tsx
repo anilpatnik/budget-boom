@@ -2,36 +2,25 @@ import { useState } from "react";
 import { IonButton, IonButtons, IonContent, IonHeader, IonPage, IonToolbar } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { CrudType, constants, convertoISO, dateNow, parsePrice, toastify } from "@/util";
+import { constants, helper, dateHelper } from "@/utils";
+import { CrudType } from "@/utils/enums";
 import { IExpense, IProject } from "@/models";
-import { getCategories, upsertExpenseAsync } from "@/services";
-import {
-  InputComponent,
-  DateComponent,
-  SelectComponent,
-  Icon,
-  ToggleButtonComponent
-} from "@/components";
+import { lookupService, expenseService } from "@/services";
+import { InputField, DateField, SelectField, Icon, ToggleField } from "@/components";
 
-type ComponentProps = {
+type Props = {
   projects?: IProject[];
   expense?: IExpense;
   handleClose: () => void;
   handleNew: (item?: any) => void;
   handleEdit: (item?: any) => void;
 };
-export function ExpensePage({
-  projects,
-  expense,
-  handleClose,
-  handleNew,
-  handleEdit
-}: ComponentProps) {
+export function ExpensePage({ projects, expense, handleClose, handleNew, handleEdit }: Props) {
   const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
-      entryDate: expense?.entryDate || dateNow,
+      entryDate: expense?.entryDate || dateHelper.dateNow,
       projectId: expense?.projectId || String.empty,
       categoryId: expense?.categoryId || "FOOD",
       price: Math.abs(expense?.price || 0),
@@ -59,17 +48,17 @@ export function ExpensePage({
           entryDate: values?.entryDate,
           projectId: values?.projectId,
           categoryId: values?.categoryId,
-          price: parsePrice(values?.expenditure, values?.price),
+          price: helper.parsePrice(values?.expenditure, values?.price),
           notes: values?.notes,
           type: CrudType.Create
         };
-        const res = await upsertExpenseAsync(newExpense);
+        const res = await expenseService.upsertExpenseAsync(newExpense);
         if (res && !res?.success) {
-          toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+          helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
           setLoading(false);
           return;
         } else {
-          toastify("Created Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
+          helper.toastify("Created Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
           setTimeout(() => {
             const xExpense = { ...newExpense, id: res?.resource?.id };
             handleNew(xExpense);
@@ -82,17 +71,17 @@ export function ExpensePage({
           entryDate: values?.entryDate,
           projectId: values?.projectId,
           categoryId: values?.categoryId,
-          price: parsePrice(values?.expenditure, values?.price),
+          price: helper.parsePrice(values?.expenditure, values?.price),
           notes: values?.notes,
           type: CrudType.Update
         };
-        const res = await upsertExpenseAsync(updateExpense);
+        const res = await expenseService.upsertExpenseAsync(updateExpense);
         if (res && !res?.success) {
-          toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+          helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
           setLoading(false);
           return;
         } else {
-          toastify("Updated Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
+          helper.toastify("Updated Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
           setTimeout(() => {
             handleEdit(updateExpense);
             setLoading(false);
@@ -120,7 +109,7 @@ export function ExpensePage({
       <IonContent className="ion-padding">
         <form onSubmit={formik.handleSubmit}>
           <div className="my-6">
-            <ToggleButtonComponent
+            <ToggleField
               trueLabel="expense"
               falseLabel="income"
               value={formik.values.expenditure}
@@ -131,17 +120,19 @@ export function ExpensePage({
             />
           </div>
           <div className="my-6">
-            <DateComponent
+            <DateField
               name="entryDate"
               label="Date"
-              value={convertoISO(formik.values.entryDate)}
+              value={dateHelper.convertoISO(formik.values.entryDate)}
               touched={formik.touched.entryDate}
               errorMessage={formik.errors.entryDate}
-              handleChange={e => formik.setFieldValue("entryDate", e.target.value || dateNow)}
+              handleChange={e =>
+                formik.setFieldValue("entryDate", e.target.value || dateHelper.dateNow)
+              }
             />
           </div>
           <div className="my-6">
-            <InputComponent
+            <InputField
               name="price"
               label="Amount"
               type="number"
@@ -155,18 +146,18 @@ export function ExpensePage({
             />
           </div>
           <div className="my-6">
-            <SelectComponent
+            <SelectField
               name="categoryId"
               label="Category"
               value={formik.values.categoryId}
               touched={formik.touched.categoryId}
               errorMessage={formik.errors.categoryId}
               handleChange={formik.handleChange}
-              payload={getCategories() || []}
+              payload={lookupService.getCategories() || []}
             />
           </div>
           <div className="my-6">
-            <InputComponent
+            <InputField
               name="notes"
               label="Notes"
               type="text"
@@ -178,7 +169,7 @@ export function ExpensePage({
             />
           </div>
           <div className="my-6">
-            <SelectComponent
+            <SelectField
               name="projectId"
               label="Project"
               value={formik.values.projectId}

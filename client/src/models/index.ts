@@ -1,4 +1,5 @@
-import { AuthType, CrudType, RoleType, SearchType, constants } from "@/util";
+import { constants } from "@/utils";
+import { AuthType, CrudType, RoleType, SearchType } from "@/utils/enums";
 
 export interface IUser {
   name?: string;

@@ -7,7 +7,7 @@ import {
   peopleOutline,
   personOutline
 } from "ionicons/icons";
-import { NavType, RoleType } from "@/util";
+import { NavType, RoleType } from "@/utils/enums";
 import { useStore } from "@/contexts";
 
 export function TabMenu({ children }: { children: any }) {

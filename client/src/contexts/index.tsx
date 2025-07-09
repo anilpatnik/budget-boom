@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, createContext, useContext } from "react";
 import { useLocalStorage } from "usehooks-ts";
-import { constants } from "@/util";
 import { IUser } from "@/models";
+import { constants } from "@/utils";
 import { setToken } from "@/services";
 
 type ContextProps = {

@@ -11,18 +11,19 @@ import {
 import { Avatar, FormControl, InputLabel, MenuItem, Select, Switch } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { AuthType, RoleType, constants, externaLogin, toastify } from "@/util";
+import { constants, helper } from "@/utils";
+import { AuthType, RoleType } from "@/utils/enums";
 import { IAdminUser } from "@/models";
-import { updateUserAsync } from "@/services";
-import { InputComponent, PasswordComponent, Icon } from "@/components";
+import { userService } from "@/services";
+import { InputField, PasswordField, Icon } from "@/components";
 
-type ComponentProps = {
+type Props = {
   user?: IAdminUser;
   handleClose: () => void;
   handleNew: (item?: any) => void;
   handleEdit: (item?: any) => void;
 };
-export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: ComponentProps) {
+export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Props) {
   const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
@@ -51,13 +52,13 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
           password: values?.password,
           role: values?.role
         };
-        const res = await updateUserAsync(newUser);
+        const res = await userService.updateUserAsync(newUser);
         if (res && !res?.success) {
-          toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+          helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
           setLoading(false);
           return;
         } else {
-          toastify("Created Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
+          helper.toastify("Created Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
           setTimeout(() => {
             const xUser = { ...newUser, uid: res?.resource };
             handleNew(xUser);
@@ -72,13 +73,13 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
           emailVerified: values?.emailVerified,
           disabled: !values?.disabled
         };
-        const res = await updateUserAsync(updateUser);
+        const res = await userService.updateUserAsync(updateUser);
         if (res && !res?.success) {
-          toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+          helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
           setLoading(false);
           return;
         } else {
-          toastify("Updated Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
+          helper.toastify("Updated Successfully", constants.SUCCESS, constants.SUCCESS_DELAY);
           setTimeout(() => {
             const xUser = { ...updateUser, email: user?.email, uid: res?.resource };
             handleEdit(xUser);
@@ -112,7 +113,7 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
             src={formik.values.photo}
           />
           <div className="my-6">
-            <InputComponent
+            <InputField
               name="name"
               label="Name"
               type="text"
@@ -125,7 +126,7 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
           {user?.uid?.length === 0 && (
             <>
               <div className="my-6">
-                <InputComponent
+                <InputField
                   name="email"
                   label="Email"
                   type="email"
@@ -136,7 +137,7 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
                 />
               </div>
               <div className="my-6">
-                <PasswordComponent
+                <PasswordField
                   name="password"
                   label="Password"
                   value={formik.values.password}
@@ -166,7 +167,7 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Co
           </div>
           {user?.uid?.length !== 0 && (
             <>
-              {!externaLogin(formik.values.providers) && (
+              {!helper.externaLogin(formik.values.providers) && (
                 <div className="ion-margin-vertical">
                   <IonLabel>Email Verified</IonLabel>
                   <Switch
