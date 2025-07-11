@@ -8,11 +8,10 @@ on:
 
 env:
   ENV_NAME: ${{ github.ref_name == 'product' && 'PROD' || 'TEST' }}
-  GOOGLE_APPLICATION_CREDENTIALS_PATH: ${{ github.workspace }}/gcloud.json
 
 jobs:
   changes:
-    if: false
+    if: true
     runs-on: ubuntu-latest
     name: Paths Changes Filter
     outputs:
@@ -58,18 +57,10 @@ jobs:
         run: npm install -g firebase-tools
 
       - name: Authenticate with Firebase
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets[format('{0}_GOOGLE_APPLICATION_CREDENTIALS', env.ENV_NAME)] }}
-        run: |
-          echo "$GOOGLE_APPLICATION_CREDENTIALS" > "$GOOGLE_APPLICATION_CREDENTIALS_PATH"
+        run: firebase use --token ${{ secrets.FIREBASE_TOKEN }} ${{ github.ref_name }}
 
       - name: Deploy Firebase Functions
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets[format('{0}_GOOGLE_APPLICATION_CREDENTIALS', env.ENV_NAME)] }}
-          FIREBASE_PROJECT_ID: ${{ secrets[format('{0}_FIREBASE_PROJECT_ID', env.ENV_NAME)] }}
-        run: |
-          export GOOGLE_APPLICATION_CREDENTIALS="$GOOGLE_APPLICATION_CREDENTIALS_PATH"
-          firebase deploy --only functions --project "$FIREBASE_PROJECT_ID"
+        run: firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
 
   build-deploy-frontend:
     name: Frontend
@@ -96,15 +87,7 @@ jobs:
         run: npm install -g firebase-tools
 
       - name: Authenticate with Firebase
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets[format('{0}_GOOGLE_APPLICATION_CREDENTIALS', env.ENV_NAME)] }}
-        run: |
-          echo "$GOOGLE_APPLICATION_CREDENTIALS" > "$GOOGLE_APPLICATION_CREDENTIALS_PATH"
+        run: firebase use --token ${{ secrets.FIREBASE_TOKEN }} ${{ github.ref_name }}
 
       - name: Deploy Firebase Hosting
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets[format('{0}_GOOGLE_APPLICATION_CREDENTIALS', env.ENV_NAME)] }}
-          FIREBASE_PROJECT_ID: ${{ secrets[format('{0}_FIREBASE_PROJECT_ID', env.ENV_NAME)] }}
-        run: |
-          export GOOGLE_APPLICATION_CREDENTIALS="$GOOGLE_APPLICATION_CREDENTIALS_PATH"
-          firebase deploy --only hosting --project "$FIREBASE_PROJECT_ID"
+        run: firebase deploy --only hosting --token ${{ secrets.FIREBASE_TOKEN }}
