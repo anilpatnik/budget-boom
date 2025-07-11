@@ -3,15 +3,16 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - Xdevelop
-      - Xproduct
+      - develop
+      - product
 
 env:
-  ENV_NAME: ${{ github.ref_name == 'Xproduct' && 'PROD' || 'TEST' }}
+  ENV_NAME: ${{ github.ref_name == 'product' && 'PROD' || 'TEST' }}
   GOOGLE_APPLICATION_CREDENTIALS_PATH: ${{ github.workspace }}/gcloud.json
 
 jobs:
   changes:
+    if: true
     runs-on: ubuntu-latest
     name: Paths Changes Filter
     outputs:
