@@ -189,6 +189,7 @@ export async function upsertExpense(userId: string, expense: IExpense) {
     notes,
     entryDate: helper.parseDate(entryDate)
   };
+  // if (projectId) expenseData.projectId = projectId;
   return prisma.expense.upsert({
     where: { id, userId },
     update: expenseData,
