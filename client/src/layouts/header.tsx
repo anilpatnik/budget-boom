@@ -17,7 +17,7 @@ import { InstallPWA } from "@/layouts";
 export function Header() {
   const { user } = useStore();
   const navigate = useNavigate();
-  const handleMenuClick = (url: string) => navigate(url);
+  const handleMenuClick = (url: string) => navigate(url, { replace: true });
 
   return (
     <IonHeader
@@ -52,16 +52,27 @@ export function Header() {
                 justifyContent: "center"
               }}
               className="ion-hide-md-up">
-              <a href={!user?.auth ? NavType.Root : String.empty}>
+              {!user?.auth && (
+                <a href={NavType.Root}>
+                  <img
+                    alt={String.empty}
+                    src={constants.LOGO_IMG}
+                    height="48px"
+                    width="48px"
+                    loading="lazy"
+                    className="cursor-pointer"
+                  />
+                </a>
+              )}
+              {user?.auth && (
                 <img
                   alt={String.empty}
                   src={constants.LOGO_IMG}
                   height="48px"
                   width="48px"
                   loading="lazy"
-                  className="cursor-pointer"
                 />
-              </a>
+              )}
             </Box>
 
             {/* Desktop ONLY - Authenticated */}

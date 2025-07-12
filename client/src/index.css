@@ -30,8 +30,6 @@ ion-header {
   --ion-background-color: #ffffff85;
   --padding-start: 7.5px;
   --padding-end: 7.5px;
-  --padding-top: 86px;
-  --padding-bottom: 16px;
 }
 ion-content {
   --offset-bottom: auto !important;
@@ -92,8 +90,7 @@ ion-item:last-child {
   box-shadow: none !important;
 }
 /* Table */
-.styled-table > tbody > tr > td,
-.styled-table > thead > tr > th {
+.styled-table > tbody > tr > td {
   letter-spacing: 0.045em;
   padding: 6px 16px;
 }
@@ -101,6 +98,7 @@ ion-item:last-child {
   background-color: #f4f6f8;
   color: #637381;
   font-weight: 700;
+  letter-spacing: 0.045em;
 }
 /* Hide scrollbar for Webkit browsers (e.g., Chrome, Safari) */
 .tableContainer::-webkit-scrollbar {
@@ -108,7 +106,6 @@ ion-item:last-child {
 }
 /* Hide scrollbar for all modern browsers */
 .tableContainer {
-  scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
 /* Ensure overflow functionality remains */

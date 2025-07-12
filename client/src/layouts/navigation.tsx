@@ -1,5 +1,5 @@
 import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
-import { IonContent, IonPage, IonRouterOutlet } from "@ionic/react";
+import { IonContent, IonPage } from "@ionic/react";
 import { ToastContainer } from "react-toastify";
 import { constants } from "@/utils";
 import { NavType, RoleType, RouterType } from "@/utils/enums";
@@ -49,17 +49,23 @@ function TabLayout() {
   return (
     <StoreProvider>
       <IonPage id="main-content">
-        {location.pathname !== NavType.Root && <Header />}
-        <TabMenu>
-          <IonRouterOutlet>
-            <IonContent
-              className={(location.pathname !== NavType.Root && "custom-content") || String.empty}>
-              <Outlet />
+        {location.pathname !== NavType.Root && (
+          <>
+            <Header />
+            <IonContent className="custom-content">
+              <div className="pb-16">
+                <Outlet />
+              </div>
             </IonContent>
-          </IonRouterOutlet>
-        </TabMenu>
-        {/* location.pathname !== NavType.Root && <Footer /> */}
-        <ToastContainer />
+            <TabMenu />
+            <ToastContainer />
+          </>
+        )}
+        {location.pathname === NavType.Root && (
+          <IonContent>
+            <Outlet />
+          </IonContent>
+        )}
       </IonPage>
     </StoreProvider>
   );

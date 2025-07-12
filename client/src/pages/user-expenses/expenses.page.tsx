@@ -1,4 +1,5 @@
-import { useRef, useState, useEffect, Fragment } from "react";
+import { useRef, useState, useEffect, Fragment, useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import { IonButton, IonFabButton, IonSpinner, useIonAlert, useIonModal } from "@ionic/react";
 import {
   Box,
@@ -22,6 +23,7 @@ import { ExpenseSearchPage } from "./expense.search.page";
 
 export function ExpensesPage() {
   const { user } = useStore();
+  const { search } = useLocation();
   const hasMounted = useRef(false);
   const [records, setRecords] = useState<IExpense[]>([]);
   const [record, setRecord] = useState<IExpense>(Expense);
@@ -29,13 +31,20 @@ export function ExpensesPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingInit, setLoadingInit] = useState<boolean>(false);
   const [loadingCol, setLoadingCol] = useState<string>(String.empty);
+  const [presentAlert] = useIonAlert();
+
+  // initial search payload
+  const projectId = useMemo(() => {
+    return new URLSearchParams(search).get("q") || String.empty;
+  }, [search]);
   const [payload, setPayload] = useState<IExpenseSearch>({
     ...ExpenseSearch,
     page: 0,
-    size: constants.PAGE_SIZE
+    size: constants.PAGE_SIZE,
+    projectId,
+    skip: Boolean(projectId)
   });
   const queryRef = useRef(payload);
-  const [presentAlert] = useIonAlert();
 
   const { isLoading: loadingProjects, data: projects } = useQuery({
     queryKey: ["all-user-projects"],

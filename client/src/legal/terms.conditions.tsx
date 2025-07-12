@@ -1,10 +1,8 @@
-import { useNavigate } from "react-router-dom";
 import { constants } from "@/utils";
 import { NavType } from "@/utils/enums";
 import { useStore } from "@/contexts";
 
 export function TermsConditions() {
-  const navigate = useNavigate();
   const { user } = useStore();
   return (
     <div className="statement ion-padding">
