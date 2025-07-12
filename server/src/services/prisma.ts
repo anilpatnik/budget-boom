@@ -184,12 +184,11 @@ export async function upsertExpense(userId: string, expense: IExpense) {
   const expenseData: any = {
     userId,
     categoryId,
-    projectId,
+    projectId: projectId || null,
     price,
     notes,
     entryDate: helper.parseDate(entryDate)
   };
-  // if (projectId) expenseData.projectId = projectId;
   return prisma.expense.upsert({
     where: { id, userId },
     update: expenseData,

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { IonButton, IonButtons, IonContent, IonHeader, IonPage, IonToolbar } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import toast, { Toaster } from "react-hot-toast";
 import { constants, helper, dateHelper } from "@/utils";
 import { CrudType } from "@/utils/enums";
 import { IExpense, IProject } from "@/models";
@@ -54,7 +55,10 @@ export function ExpensePage({ projects, expense, handleClose, handleNew, handleE
         };
         const res = await expenseService.upsertExpenseAsync(newExpense);
         if (res && !res?.success) {
-          helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+          toast.error(res?.resource, {
+            duration: constants.FAILURE_DELAY,
+            position: "bottom-center"
+          });
           setLoading(false);
           return;
         } else {
@@ -77,7 +81,10 @@ export function ExpensePage({ projects, expense, handleClose, handleNew, handleE
         };
         const res = await expenseService.upsertExpenseAsync(updateExpense);
         if (res && !res?.success) {
-          helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+          toast.error(res?.resource, {
+            duration: constants.FAILURE_DELAY,
+            position: "bottom-center"
+          });
           setLoading(false);
           return;
         } else {
@@ -206,6 +213,7 @@ export function ExpensePage({ projects, expense, handleClose, handleNew, handleE
           </div>
         </form>
       </IonContent>
+      <Toaster />
     </IonPage>
   );
 }

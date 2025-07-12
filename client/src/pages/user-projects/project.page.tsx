@@ -10,6 +10,7 @@ import {
 } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import toast, { Toaster } from "react-hot-toast";
 import { constants, helper, dateHelper } from "@/utils";
 import { CrudType } from "@/utils/enums";
 import { IProject } from "@/models";
@@ -66,7 +67,10 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Pro
         };
         const res = await projectService.upsertProjectAsync(newProject);
         if (res && !res?.success) {
-          helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+          toast.error(res?.resource, {
+            duration: constants.FAILURE_DELAY,
+            position: "bottom-center"
+          });
           setLoading(false);
           return;
         } else {
@@ -91,7 +95,10 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Pro
         };
         const res = await projectService.upsertProjectAsync(updateProject);
         if (res && !res?.success) {
-          helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+          toast.error(res?.resource, {
+            duration: constants.FAILURE_DELAY,
+            position: "bottom-center"
+          });
           setLoading(false);
           return;
         } else {
@@ -212,6 +219,7 @@ export function ProjectPage({ project, handleClose, handleNew, handleEdit }: Pro
           </div>
         </form>
       </IonContent>
+      <Toaster />
     </IonPage>
   );
 }
