@@ -7,27 +7,10 @@ import {
   IonCardTitle,
   IonButton
 } from "@ionic/react";
-import {
-  Shield,
-  CheckCircle,
-  FolderOpen,
-  PlusCircle,
-  Check,
-  Tag,
-  Utensils,
-  Car,
-  Gamepad2,
-  Target,
-  DollarSign,
-  ChartLine,
-  Globe,
-  Mail,
-  Lock
-} from "lucide-react";
 import { constants } from "@/utils";
 import { NavType, RoleType } from "@/utils/enums";
 import { useStore } from "@/contexts";
-import { Icon } from "@/components";
+import { Icon, LucideIcon } from "@/components";
 
 export function RootPage() {
   const hasMounted = useRef(false);
@@ -86,7 +69,7 @@ export function RootPage() {
           <div className="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
             <div className="text-center">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <DollarSign className="w-8 h-8 text-blue-600" />
+                <LucideIcon name="DollarSign" css="w-8 h-8 text-blue-600" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Add Expenses</h3>
               <div className="text-gray-600">
@@ -96,7 +79,7 @@ export function RootPage() {
 
             <div className="text-center">
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FolderOpen className="w-8 h-8 text-green-600" />
+                <LucideIcon name="FolderOpen" css="w-8 h-8 text-green-600" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Organize Projects</h3>
               <div className="text-gray-600">
@@ -106,7 +89,7 @@ export function RootPage() {
 
             <div className="text-center">
               <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <ChartLine className="w-8 h-8 text-purple-600" />
+                <LucideIcon name="ChartLine" css="w-8 h-8 text-purple-600" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Analyze Data</h3>
               <div className="text-gray-600">
@@ -116,7 +99,7 @@ export function RootPage() {
 
             <div className="text-center">
               <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-8 h-8 text-orange-600" />
+                <LucideIcon name="CheckCircle" css="w-8 h-8 text-orange-600" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Stay Informed</h3>
               <div className="text-gray-600">
@@ -138,7 +121,7 @@ export function RootPage() {
             <IonCard className="text-center border-none shadow-lg hover:shadow-xl transition-shadow">
               <IonCardHeader>
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <PlusCircle className="w-8 h-8 text-blue-600" />
+                  <LucideIcon name="PlusCircle" css="w-8 h-8 text-blue-600" />
                 </div>
                 <IonCardTitle className="text-xl">Expense Tracking</IonCardTitle>
               </IonCardHeader>
@@ -148,15 +131,15 @@ export function RootPage() {
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-center text-gray-600">
-                    <Check className="w-4 h-4 text-green-500 mr-2" />
+                    <LucideIcon name="Check" css="w-4 h-4 text-green-500 mr-2" />
                     Quick transaction entry
                   </div>
                   <div className="flex items-center text-gray-600">
-                    <Check className="w-4 h-4 text-green-500 mr-2" />
+                    <LucideIcon name="Check" css="w-4 h-4 text-green-500 mr-2" />
                     Categorisation
                   </div>
                   <div className="flex items-center text-gray-600">
-                    <Check className="w-4 h-4 text-green-500 mr-2" />
+                    <LucideIcon name="Check" css="w-4 h-4 text-green-500 mr-2" />
                     Project assignment
                   </div>
                 </div>
@@ -166,7 +149,7 @@ export function RootPage() {
             <IonCard className="text-center border-none shadow-lg hover:shadow-xl transition-shadow">
               <IonCardHeader>
                 <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Tag className="w-8 h-8 text-purple-600" />
+                  <LucideIcon name="Tag" css="w-8 h-8 text-purple-600" />
                 </div>
                 <IonCardTitle className="text-xl">Smart Categories</IonCardTitle>
               </IonCardHeader>
@@ -177,15 +160,15 @@ export function RootPage() {
                 </div>
                 <div className="grid grid-cols-3 gap-3">
                   <div className="flex flex-col items-center p-3 bg-orange-50 rounded-lg">
-                    <Utensils className="w-6 h-6 text-orange-600 mb-1" />
+                    <LucideIcon name="Utensils" css="w-6 h-6 text-orange-600 mb-1" />
                     <span className="text-xs text-gray-600">Food</span>
                   </div>
                   <div className="flex flex-col items-center p-3 bg-blue-50 rounded-lg">
-                    <Car className="w-6 h-6 text-blue-600 mb-1" />
+                    <LucideIcon name="Car" css="w-6 h-6 text-blue-600 mb-1" />
                     <span className="text-xs text-gray-600">Travel</span>
                   </div>
                   <div className="flex flex-col items-center p-3 bg-green-50 rounded-lg">
-                    <Gamepad2 className="w-6 h-6 text-green-600 mb-1" />
+                    <LucideIcon name="Gamepad2" css="w-6 h-6 text-green-600 mb-1" />
                     <span className="text-xs text-gray-600">Fun</span>
                   </div>
                 </div>
@@ -195,7 +178,7 @@ export function RootPage() {
             <IonCard className="text-center border-none shadow-lg hover:shadow-xl transition-shadow">
               <IonCardHeader>
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Target className="w-8 h-8 text-green-600" />
+                  <LucideIcon name="Target" css="w-8 h-8 text-green-600" />
                 </div>
                 <IonCardTitle className="text-xl">Project Budgets</IonCardTitle>
               </IonCardHeader>
@@ -223,7 +206,7 @@ export function RootPage() {
             <IonCard className="text-center border-none shadow-lg hover:shadow-xl transition-shadow">
               <IonCardHeader>
                 <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Globe className="w-8 h-8 text-indigo-600" />
+                  <LucideIcon name="Globe" css="w-8 h-8 text-indigo-600" />
                 </div>
                 <IonCardTitle className="text-xl">Currency Support</IonCardTitle>
               </IonCardHeader>
@@ -251,7 +234,7 @@ export function RootPage() {
             <IonCard className="text-center border-none shadow-lg hover:shadow-xl transition-shadow">
               <IonCardHeader>
                 <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Shield className="w-8 h-8 text-red-600" />
+                  <LucideIcon name="Shield" css="w-8 h-8 text-red-600" />
                 </div>
                 <IonCardTitle className="text-xl">Secure Authentication</IonCardTitle>
               </IonCardHeader>
@@ -261,7 +244,7 @@ export function RootPage() {
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-center text-sm text-gray-600">
-                    <Mail className="w-4 h-4 text-blue-500 mr-2" />
+                    <LucideIcon name="Mail" css="w-4 h-4 text-blue-500 mr-2" />
                     Email and password login
                   </div>
                   <div className="flex items-center text-sm text-gray-600">
@@ -269,7 +252,7 @@ export function RootPage() {
                     Gmail integration
                   </div>
                   <div className="flex items-center text-sm text-gray-600">
-                    <Lock className="w-4 h-4 text-yellow-500 mr-2" />
+                    <LucideIcon name="Lock" css="w-4 h-4 text-yellow-500 mr-2" />
                     Password recovery
                   </div>
                 </div>
@@ -279,7 +262,7 @@ export function RootPage() {
             <IonCard className="text-center border-none shadow-lg hover:shadow-xl transition-shadow">
               <IonCardHeader>
                 <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <ChartLine className="w-8 h-8 text-yellow-600" />
+                  <LucideIcon name="ChartLine" css="w-8 h-8 text-yellow-600" />
                 </div>
                 <IonCardTitle className="text-xl">Visual Analytics</IonCardTitle>
               </IonCardHeader>

@@ -14,7 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { constants, helper, dateHelper } from "@/utils";
 import { IExpense, IExpenseSearch, ExpenseSearch } from "@/models";
 import { lookupService, projectService, expenseService } from "@/services";
-import { Icon } from "@/components";
+import { Icon, LucideIcon } from "@/components";
 import { useStore } from "@/contexts";
 import { ExpenseReportSearchPage } from "./report.search.page";
 
@@ -160,7 +160,7 @@ export function ExpenseReportPage() {
               <TableCell align="left" sx={{ minWidth: 150 }}>
                 {item?.categoryId && (
                   <Box className="flex items-center">
-                    <Icon
+                    <LucideIcon
                       name={lookupService.getCategory(item.categoryId).icon}
                       css="text-2xl text-black mr-2"
                     />

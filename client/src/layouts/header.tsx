@@ -1,18 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { IonButton, IonButtons, IonHeader, IonIcon, IonToolbar, isPlatform } from "@ionic/react";
-import {
-  barChartOutline,
-  cashOutline,
-  libraryOutline,
-  lockClosedOutline,
-  peopleOutline,
-  personOutline
-} from "ionicons/icons";
+import { IonButton, IonButtons, IonHeader, IonToolbar, isPlatform } from "@ionic/react";
 import { Box, Toolbar, Avatar, AppBar } from "@mui/material";
 import { constants } from "@/utils";
 import { NavType, RoleType } from "@/utils/enums";
 import { useStore } from "@/contexts";
 import { InstallPWA } from "@/layouts";
+import { Icon } from "@/components";
 
 export function Header() {
   const { user } = useStore();
@@ -99,7 +92,7 @@ export function Header() {
                         id="id-users-menu"
                         size="small"
                         onClick={() => handleMenuClick(NavType.Users)}>
-                        <IonIcon icon={peopleOutline} className="mr-2" /> Users
+                        <Icon name="people-outline" css="mr-2" /> Users
                       </IonButton>
                     )}
                     {/* Expenses */}
@@ -108,7 +101,8 @@ export function Header() {
                         id="id-expenses-menu"
                         size="small"
                         onClick={() => handleMenuClick(NavType.Expenses)}>
-                        <IonIcon icon={cashOutline} className="mr-2" /> Expenses
+                        <Icon name="cash-outline" css="mr-2" />
+                        Expenses
                       </IonButton>
                     )}
                     {/* Projects */}
@@ -117,7 +111,7 @@ export function Header() {
                         id="id-projects-menu"
                         size="small"
                         onClick={() => handleMenuClick(NavType.Projects)}>
-                        <IonIcon icon={libraryOutline} className="mr-2" /> Projects
+                        <Icon name="library-outline" css="mr-2" /> Projects
                       </IonButton>
                     )}
                     {/* Report */}
@@ -126,7 +120,7 @@ export function Header() {
                         id="id-report-menu"
                         size="small"
                         onClick={() => handleMenuClick(NavType.Report)}>
-                        <IonIcon icon={barChartOutline} className="mr-2" /> Report
+                        <Icon name="bar-chart-outline" css="mr-2" /> Report
                       </IonButton>
                     )}
                     {/* Profile */}
@@ -134,13 +128,13 @@ export function Header() {
                       id="id-my-profile-menu"
                       size="small"
                       onClick={() => handleMenuClick(NavType.Profile)}>
-                      <IonIcon icon={personOutline} className="mr-2" /> My Profile
+                      <Icon name="person-outline" css="mr-2" /> My Profile
                     </IonButton>
                     <IonButton
                       id="id-logoff-menu"
                       size="small"
                       onClick={() => handleMenuClick(NavType.SignOut)}>
-                      <IonIcon icon={lockClosedOutline} className="mr-2" /> Logout
+                      <Icon name="lock-closed-outline" css="mr-2" /> Logout
                     </IonButton>
                   </IonButtons>
                 </Box>

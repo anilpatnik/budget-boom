@@ -1,5 +1,5 @@
 import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from "@mui/material";
-import { Icon } from "@/components";
+import { LucideIcon } from "@/components";
 
 type Payload = {
   id?: string;
@@ -50,7 +50,9 @@ export function SelectField({
         {payload?.map((x, index) => (
           <MenuItem key={index} value={x.id}>
             <div className="flex items-center">
-              {x.icon && x.icon.length > 0 && <Icon name={x.icon} css="text-lg text-black mr-2" />}
+              {x.icon && x.icon.length > 0 && (
+                <LucideIcon name={x.icon} css="text-lg text-black mr-2" />
+              )}
               {x.name}
             </div>
           </MenuItem>

@@ -15,130 +15,204 @@ export function getCountry(id: string) {
 }
 
 export const categories = [
-  {
-    id: "NONE",
-    name: "Unclassified",
-    icon: "sparkles-outline"
-  },
-  {
-    id: "HOME",
-    name: "Home Maintenance",
-    icon: "home-outline"
-  },
-  {
-    id: "HOMELOAN",
-    name: "Home Loan",
-    icon: "server-outline"
-  },
-  {
-    id: "INTEREST",
-    name: "Interest Paid",
-    icon: "card-outline"
-  },
-  {
-    id: "FOOD",
-    name: "Eating Out & Takeaway",
-    icon: "restaurant-outline"
-  },
-  {
-    id: "GROCERIES",
-    name: "Groceries",
-    icon: "cart-outline"
-  },
-  {
-    id: "CAR",
-    name: "Vehicle Maintenance",
-    icon: "car-outline"
-  },
-  {
-    id: "FUEL",
-    name: "Fuel & Parking",
-    icon: "scale-outline"
-  },
-  {
-    id: "SHOPPING",
-    name: "Shopping",
-    icon: "bag-handle-outline"
-  },
-  {
-    id: "UTILITIES",
-    name: "Utilities",
-    icon: "receipt-outline"
-  },
+  // Income
   {
     id: "EARNINGS",
-    name: "Earned Income",
-    icon: "cash-outline"
+    name: "Income",
+    icon: "DollarSign",
+    group: "Income"
   },
   {
     id: "BUSINESS",
     name: "Business",
-    icon: "briefcase-outline"
+    icon: "Briefcase",
+    group: "Income"
   },
   {
-    id: "DONATION",
-    name: "Gifts & Donations",
-    icon: "gift-outline"
+    id: "INVESTMENTS",
+    name: "Investments",
+    icon: "TrendingUp",
+    group: "Income"
+  },
+  // Housing
+  {
+    id: "HOME",
+    name: "Home",
+    icon: "Home",
+    group: "Housing"
   },
   {
-    id: "EDUCATION",
-    name: "Education",
-    icon: "school-outline"
-  },
-  {
-    id: "ENTERTAINMENT",
-    name: "Entertainment",
-    icon: "ticket-outline"
-  },
-  {
-    id: "HEALTH",
-    name: "Health & Medical",
-    icon: "fitness-outline"
+    id: "HOMELOAN",
+    name: "Mortgage",
+    icon: "Building",
+    group: "Housing"
   },
   {
     id: "HOTEL",
-    name: "Hotel & Rent",
-    icon: "bed-outline"
+    name: "Accommodation",
+    icon: "Hotel",
+    group: "Housing"
+  },
+  // Utilities
+  {
+    id: "POWER",
+    name: "Power",
+    icon: "Zap",
+    group: "Utilities"
+  },
+  {
+    id: "GAS",
+    name: "Gas",
+    icon: "Flame",
+    group: "Utilities"
+  },
+  {
+    id: "WATER",
+    name: "Water",
+    icon: "Droplet",
+    group: "Utilities"
+  },
+  {
+    id: "INTERNET",
+    name: "Internet",
+    icon: "Wifi",
+    group: "Utilities"
+  },
+  {
+    id: "MOBILE",
+    name: "Mobile",
+    icon: "Smartphone",
+    group: "Utilities"
+  },
+  {
+    id: "COUNCILRATES",
+    name: "Council",
+    icon: "Landmark",
+    group: "Utilities"
+  },
+  // Transportation
+  {
+    id: "CAR",
+    name: "Vehicle",
+    icon: "Car",
+    group: "Transportation"
+  },
+  {
+    id: "FUEL",
+    name: "Fuel",
+    icon: "Fuel",
+    group: "Transportation"
+  },
+  {
+    id: "PARKING",
+    name: "Parking",
+    icon: "ParkingCircle",
+    group: "Transportation"
   },
   {
     id: "TRAVEL",
-    name: "Travel & Holidays",
-    icon: "airplane-outline"
+    name: "Travel",
+    icon: "Plane",
+    group: "Transportation"
+  },
+  // Food & Drink
+  {
+    id: "GROCERIES",
+    name: "Groceries",
+    icon: "ShoppingCart",
+    group: "Food"
   },
   {
-    id: "INSURANCE",
-    name: "Insurance",
-    icon: "umbrella-outline"
+    id: "FOOD",
+    name: "Dining",
+    icon: "Utensils",
+    group: "Food"
+  },
+  {
+    id: "CAFE",
+    name: "Cafe",
+    icon: "Coffee",
+    group: "Food"
+  },
+  // Personal
+  {
+    id: "SHOPPING",
+    name: "Shopping",
+    icon: "ShoppingBag",
+    group: "Personal"
   },
   {
     id: "PERSONALCARE",
-    name: "Personal Care",
-    icon: "cut-outline"
+    name: "Grooming",
+    icon: "Scissors",
+    group: "Personal"
+  },
+  {
+    id: "HEALTH",
+    name: "Health",
+    icon: "Heart",
+    group: "Personal"
   },
   {
     id: "PETS",
     name: "Pets",
-    icon: "paw-outline"
+    icon: "PawPrint",
+    group: "Personal"
   },
   {
     id: "CHILDCARE",
     name: "Childcare",
-    icon: "people-outline"
+    icon: "Baby",
+    group: "Personal"
   },
   {
-    id: "INVENSTMENTS",
-    name: "Investments",
-    icon: "diamond-outline"
+    id: "HOLIDAYS",
+    name: "Holidays",
+    icon: "Sun",
+    group: "Personal"
+  },
+  // Miscellaneous
+  {
+    id: "NONE",
+    name: "Unclassified",
+    icon: "Sparkles",
+    group: "Miscellaneous"
   },
   {
-    id: "COFFEE",
-    name: "Coffee & Drinks",
-    icon: "cafe-outline"
+    id: "INTEREST",
+    name: "Interest",
+    icon: "CreditCard",
+    group: "Miscellaneous"
+  },
+  {
+    id: "DONATION",
+    name: "Donations",
+    icon: "Gift",
+    group: "Miscellaneous"
+  },
+  {
+    id: "EDUCATION",
+    name: "Education",
+    icon: "GraduationCap",
+    group: "Miscellaneous"
+  },
+  {
+    id: "ENTERTAINMENT",
+    name: "Entertainment",
+    icon: "Ticket",
+    group: "Miscellaneous"
+  },
+  {
+    id: "INSURANCE",
+    name: "Insurance",
+    icon: "Shield",
+    group: "Miscellaneous"
   },
   {
     id: "OFFICE",
-    name: "Office Supplies",
-    icon: "desktop-outline"
+    name: "Office",
+    icon: "Monitor",
+    group: "Miscellaneous"
   }
 ];
 

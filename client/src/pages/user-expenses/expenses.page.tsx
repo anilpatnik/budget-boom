@@ -16,7 +16,7 @@ import { constants, helper, dateHelper } from "@/utils";
 import { CrudType } from "@/utils/enums";
 import { IExpense, Expense, IExpenseSearch, ExpenseSearch } from "@/models";
 import { lookupService, projectService, expenseService } from "@/services";
-import { Icon } from "@/components";
+import { Icon, LucideIcon } from "@/components";
 import { useStore } from "@/contexts";
 import { ExpensePage } from "./expense.page";
 import { ExpenseSearchPage } from "./expense.search.page";
@@ -263,7 +263,7 @@ export function ExpensesPage() {
                         <div className="text-xl mr-3">{item.price < 0 ? `📉` : `📈`}</div>
                       )}
                       {item?.categoryId && (
-                        <Icon
+                        <LucideIcon
                           name={lookupService.getCategory(item.categoryId).icon}
                           css="text-2xl"
                         />
@@ -274,7 +274,7 @@ export function ExpensesPage() {
                 <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                   {item?.categoryId && (
                     <Box className="flex items-center">
-                      <Icon
+                      <LucideIcon
                         name={lookupService.getCategory(item.categoryId).icon}
                         css="text-2xl text-black mr-2"
                       />

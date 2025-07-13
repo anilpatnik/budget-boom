@@ -1,5 +1,6 @@
 export { LazyLoading } from "./lazy.loading";
 export { Icon } from "./icon";
+export { LucideIcon } from "./icon.lucide";
 
 export { InputField } from "./input.field";
 export { DateField } from "./date.field";
