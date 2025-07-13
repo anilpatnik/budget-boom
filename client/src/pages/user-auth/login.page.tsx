@@ -93,7 +93,7 @@ export function SignInPage() {
         if (!external) recaptchaRef.current?.reset();
         if (success) {
           if (state?.from) navigate(state.from);
-          else window.location.replace(NavType.Root);
+          else navigate(NavType.Root, { replace: true });
         }
         setLoading(false);
       }, constants.DELAY);

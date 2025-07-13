@@ -1,4 +1,5 @@
-import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
+import { useEffect } from "react";
+import { Outlet, createBrowserRouter, useLocation, useNavigate } from "react-router-dom";
 import { IonContent, IonPage } from "@ionic/react";
 import { ToastContainer } from "react-toastify";
 import { constants } from "@/utils";
@@ -6,6 +7,7 @@ import { NavType, RoleType, RouterType } from "@/utils/enums";
 import { StoreProvider, useStore } from "@/contexts";
 import {
   RootPage,
+  HomePage,
   CallbackPage,
   SignInPage,
   SignOutPage,
@@ -31,25 +33,29 @@ function PreRoute({
   roles?: RoleType[];
 }) {
   const { user } = useStore();
-  // role based access
-  const isAllowed = roles && roles?.length > 0 && roles?.includes(user?.role ?? RoleType.User);
-  // render component
-  if (!user?.auth && (routerType === RouterType.User || routerType === RouterType.Role)) {
-    return <Navigate to={NavType.SignIn} replace state={{ from: location.pathname }} />;
-  } else if (user?.auth && routerType === RouterType.Auth) {
-    return window.location.replace(NavType.Root);
-  } else if (user?.auth && routerType === RouterType.Role && !isAllowed) {
-    return window.location.replace(NavType.Root);
-  } else {
-    return children ? children : <Outlet />;
-  }
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const isAllowed = roles && roles.length > 0 && roles.includes(user?.role ?? RoleType.User);
+
+  useEffect(() => {
+    if (!user?.auth && (routerType === RouterType.User || routerType === RouterType.Role)) {
+      navigate(NavType.SignIn, { replace: true, state: location.pathname });
+    } else if (user?.auth && routerType === RouterType.Auth) {
+      navigate(NavType.Root, { replace: true });
+    } else if (user?.auth && routerType === RouterType.Role && !isAllowed) {
+      navigate(NavType.Root, { replace: true });
+    }
+  }, [user?.auth, routerType, isAllowed, location.pathname, navigate]);
+
+  return children ? children : <Outlet />;
 }
 
 function TabLayout() {
   return (
     <StoreProvider>
       <IonPage id="main-content">
-        {location.pathname !== NavType.Root && (
+        {location.pathname !== NavType.Root && location.pathname !== NavType.Home ? (
           <>
             <Header />
             <IonContent className="custom-content">
@@ -60,8 +66,7 @@ function TabLayout() {
             <TabMenu />
             <ToastContainer />
           </>
-        )}
-        {location.pathname === NavType.Root && (
+        ) : (
           <IonContent>
             <Outlet />
           </IonContent>
@@ -80,6 +85,10 @@ export const router = createBrowserRouter([
         index: true,
         path: NavType.Root,
         element: <RootPage />
+      },
+      {
+        path: NavType.Home,
+        element: <HomePage />
       },
       {
         path: NavType.PrivacyPolicy,

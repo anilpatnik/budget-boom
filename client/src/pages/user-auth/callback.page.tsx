@@ -16,7 +16,7 @@ export function CallbackPage() {
       navigate(`${NavType.ResetPassword}/${actionCode}`);
     else if (mode?.toLocaleLowerCase() === "verifyemail")
       navigate(`${NavType.VerifyEmail}/${actionCode}`);
-    else window.location.replace(NavType.Root);
+    else navigate(NavType.Root, { replace: true });
   }, []);
   return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 }

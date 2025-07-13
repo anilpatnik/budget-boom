@@ -14,7 +14,6 @@
     "@ionic/react": "^8.6.2",
     "@mui/material": "^7.2.0",
     "@tailwindcss/vite": "^4.1.11",
-    "@tanstack/react-query": "^5.81.5",
     "axios": "^1.10.0",
     "date-fns": "^4.1.0",
     "firebase": "^11.9.1",

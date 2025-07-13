@@ -1,5 +1,6 @@
-export { RootPage } from "./home.page";
-export { NotFoundPage } from "./404.page";
+export { AppPage } from "./root/app.page";
+export { RootPage } from "./root/root.page";
+export { HomePage } from "./root/home.page";
 
 export { SignInPage } from "./user-auth/login.page";
 export { SignOutPage } from "./user-auth/logout.page";

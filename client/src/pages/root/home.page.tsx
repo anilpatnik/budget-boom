@@ -1,36 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonSpinner,
-  IonCardTitle,
-  IonButton
-} from "@ionic/react";
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton } from "@ionic/react";
 import { constants } from "@/utils";
-import { NavType, RoleType } from "@/utils/enums";
-import { useStore } from "@/contexts";
+import { NavType } from "@/utils/enums";
 import { Icon, LucideIcon } from "@/components";
 
-export function RootPage() {
-  const hasMounted = useRef(false);
-  const { user } = useStore();
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (hasMounted.current) return;
-    hasMounted.current = true;
-    setLoading(true);
-    // fetchData();
-    if (user.auth && user.role === RoleType.Admin) {
-      setTimeout(() => window.location.replace(NavType.Profile), constants.DELAY);
-    } else if (user.auth) {
-      setTimeout(() => window.location.replace(NavType.Expenses), constants.DELAY);
-    } else setTimeout(() => setLoading(false), constants.DELAY);
-  }, []);
-
-  if (loading) return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
-
+export function HomePage() {
   return (
     <div>
       <div className="container mx-auto px-4 py-16">

@@ -43,6 +43,7 @@ export enum PageType {
 
 export enum NavType {
   Root = "/",
+  Home = "/home",
   PrivacyPolicy = "/privacy-policy",
   TermsConditions = "/terms-conditions",
   SignIn = "/signin",

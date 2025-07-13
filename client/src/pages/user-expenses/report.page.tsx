@@ -10,9 +10,8 @@ import {
   TableHead,
   TableRow
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
 import { constants, helper, dateHelper } from "@/utils";
-import { IExpense, IExpenseSearch, ExpenseSearch } from "@/models";
+import { IExpense, IExpenseSearch, ExpenseSearch, IProject } from "@/models";
 import { lookupService, projectService, expenseService } from "@/services";
 import { Icon, LucideIcon } from "@/components";
 import { useStore } from "@/contexts";
@@ -25,6 +24,7 @@ export function ExpenseReportPage() {
   const [expenseTotal, setExpense] = useState<number>(0);
   const [incomeTotal, setIncome] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
+  const [projects, setProjects] = useState<IProject[]>([]);
   const [payload, setPayload] = useState<IExpenseSearch>({
     ...ExpenseSearch,
     startDate: dateHelper.monthStart,
@@ -34,11 +34,12 @@ export function ExpenseReportPage() {
   });
   const queryRef = useRef(payload);
 
-  const { isLoading: loadingProjects, data: projects } = useQuery({
-    queryKey: ["all-user-projects"],
-    refetchOnMount: true,
-    queryFn: async () => await projectService.getAllProjectsAsync()
-  });
+  // fetch projects
+  const fetchProjects = async () => {
+    const allProjects = await projectService.getAllProjectsAsync();
+    const activeProjects = allProjects.filter(x => !x.inactive);
+    setProjects(activeProjects);
+  };
 
   const fetchData = async () => {
     if (loading) return;
@@ -63,7 +64,11 @@ export function ExpenseReportPage() {
   useEffect(() => {
     if (hasMounted.current) return;
     hasMounted.current = true;
-    fetchData();
+    // fetch initial data
+    const loadInitialData = async () => {
+      await Promise.all([fetchProjects(), fetchData()]);
+    };
+    loadInitialData();
   }, []);
 
   useEffect(() => {
@@ -103,8 +108,7 @@ export function ExpenseReportPage() {
     }, constants.DELAY);
   };
 
-  if (loadingProjects || loading)
-    return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
+  if (loading) return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 
   return (
     <TableContainer

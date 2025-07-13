@@ -11,10 +11,9 @@ import {
   TableHead,
   TableRow
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
 import { constants, helper, dateHelper } from "@/utils";
 import { CrudType } from "@/utils/enums";
-import { IExpense, Expense, IExpenseSearch, ExpenseSearch } from "@/models";
+import { IExpense, Expense, IExpenseSearch, ExpenseSearch, IProject } from "@/models";
 import { lookupService, projectService, expenseService } from "@/services";
 import { Icon, LucideIcon } from "@/components";
 import { useStore } from "@/contexts";
@@ -31,6 +30,7 @@ export function ExpensesPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingInit, setLoadingInit] = useState<boolean>(false);
   const [loadingCol, setLoadingCol] = useState<string>(String.empty);
+  const [projects, setProjects] = useState<IProject[]>([]);
   const [presentAlert] = useIonAlert();
 
   // initial search payload
@@ -46,19 +46,17 @@ export function ExpensesPage() {
   });
   const queryRef = useRef(payload);
 
-  const { isLoading: loadingProjects, data: projects } = useQuery({
-    queryKey: ["all-user-projects"],
-    refetchOnMount: true,
-    queryFn: async () => {
-      const projects = await projectService.getAllProjectsAsync();
-      return projects.filter(x => !x.inactive);
-    }
-  });
+  // fetch projects
+  const fetchProjects = async () => {
+    const allProjects = await projectService.getAllProjectsAsync();
+    const activeProjects = allProjects.filter(x => !x.inactive);
+    setProjects(activeProjects);
+  };
 
+  // fetch expenses
   const fetchData = async () => {
     if (loading) return;
-    if (queryRef.current.page === 0) setLoadingInit(true);
-    else setLoading(true);
+    if (queryRef.current.page !== 0) setLoading(true);
     try {
       const response = await expenseService.getExpensesAsync(queryRef.current);
       setRecords(prev => [...prev, ...(response?.data ?? [])]);
@@ -66,15 +64,23 @@ export function ExpensesPage() {
     } catch (error) {
       console.error("error fetching data:", error);
     } finally {
-      if (queryRef.current.page === 0) setLoadingInit(false);
-      else setLoading(false);
+      if (queryRef.current.page !== 0) setLoading(false);
     }
   };
 
   useEffect(() => {
     if (hasMounted.current) return;
     hasMounted.current = true;
-    fetchData();
+    // fetch initial data
+    const loadInitialData = async () => {
+      try {
+        setLoadingInit(true);
+        await Promise.all([fetchProjects(), fetchData()]);
+      } finally {
+        setLoadingInit(false);
+      }
+    };
+    loadInitialData();
   }, []);
 
   useEffect(() => {
@@ -178,7 +184,7 @@ export function ExpensesPage() {
     }, constants.DELAY);
   };
 
-  if (loadingProjects || loadingInit)
+  if (loadingInit)
     return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 
   return (
