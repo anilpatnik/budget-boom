@@ -85,8 +85,8 @@ export const categories = [
     group: "Utilities"
   },
   {
-    id: "COUNCILRATES",
-    name: "Council",
+    id: "COUNCIL",
+    name: "Tax",
     icon: "Landmark",
     group: "Utilities"
   },
