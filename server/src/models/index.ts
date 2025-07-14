@@ -67,11 +67,18 @@ export interface IProjectData {
   count?: number;
 }
 
-export interface IExpenseSearch extends IPaging {
+export interface IExpenseCursor {
+  id?: string;
+  entryDate?: string;
+}
+
+export interface IExpenseSearch {
   startDate?: string;
   endDate?: string;
   categoryId?: string;
   projectId?: string;
+  size?: number;
+  nextCursor?: IExpenseCursor;
 }
 
 export interface IExpense {
@@ -87,7 +94,8 @@ export interface IExpense {
 
 export interface IExpenseData {
   data?: IExpense[];
-  count?: number;
+  hasMore?: boolean;
+  nextCursor?: IExpenseCursor;
 }
 
 export interface IExpenseReport {

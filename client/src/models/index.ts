@@ -118,9 +118,15 @@ export const Expense: IExpense = {
   projectName: String.empty,
   type: CrudType.Read
 };
+
+export interface IExpenseCursor {
+  id?: string;
+  entryDate?: string;
+}
 export interface IExpenseData {
   data?: IExpense[];
-  count?: number;
+  hasMore?: boolean;
+  nextCursor?: IExpenseCursor;
 }
 export interface IExpenseReport {
   data?: IExpense[];
@@ -133,8 +139,8 @@ export interface IExpenseSearch {
   categoryId?: string;
   projectId?: string;
   skip?: boolean;
-  page?: number;
   size?: number;
+  nextCursor?: IExpenseCursor;
 }
 export const ExpenseSearch: IExpenseSearch = {
   startDate: String.empty,
@@ -142,6 +148,5 @@ export const ExpenseSearch: IExpenseSearch = {
   categoryId: String.empty,
   projectId: String.empty,
   skip: false,
-  page: 0,
   size: constants.PAGE_SIZE
 };

@@ -34,12 +34,16 @@ export async function getExpensesAsync(userId: string, expenseSearch: IExpenseSe
     };
   }
   // get expenses
-  const [dbExpenses, count] = await dbService.getExpenses(
+  const {
+    expenses: dbExpsnses,
+    hasMore,
+    nextCursor
+  } = await dbService.getExpensesCursor(
     whereCondition,
-    expenseSearch.page,
+    expenseSearch.nextCursor,
     expenseSearch.size
   );
-  const expenses: IExpense[] = dbExpenses?.map(dbExpense => {
+  const expenses: IExpense[] = dbExpsnses?.map(dbExpense => {
     return {
       id: dbExpense?.id,
       categoryId: dbExpense?.categoryId || String.empty,
@@ -50,7 +54,14 @@ export async function getExpensesAsync(userId: string, expenseSearch: IExpenseSe
       entryDate: dbExpense?.entryDate ? helper.formatDate(dbExpense?.entryDate) : String.empty
     };
   });
-  const expenseData: IExpenseData = { data: helper.removeUndefined(expenses), count };
+  const expenseData: IExpenseData = {
+    data: helper.removeUndefined(expenses),
+    hasMore,
+    nextCursor: {
+      id: nextCursor?.id || String.empty,
+      entryDate: nextCursor?.entryDate ? helper.formatDate(nextCursor.entryDate) : helper.dateNow()
+    }
+  };
   return helper.jsonResponse<IExpenseData>(true, expenseData);
 }
 

@@ -1,7 +1,7 @@
 import { RoleType as dbRoleType } from "@prisma/client";
-import { IExpense, IProject } from "../models";
+import { IExpense, IExpenseCursor, IProject } from "../models";
 import { prisma } from "../providers";
-import { helper } from "../utils";
+import { helper, constants } from "../utils";
 import { RoleType } from "../utils/enums";
 
 //#region enum mapping
@@ -35,7 +35,11 @@ export async function updateProfile(uid: string, name?: string, countryId?: stri
 
 //#region user management
 
-export async function getUsers(where: object = {}, page: number = 0, size: number = 10) {
+export async function getUsers(
+  where: object = {},
+  page: number = 0,
+  size: number = constants.PAGE_SIZE
+) {
   return await prisma.$transaction([
     prisma.user.findMany({
       skip: page, // page * size,
@@ -73,7 +77,11 @@ export async function getAllProjects(userId: string) {
   });
 }
 
-export async function getProjects(userId: string, page: number = 0, size: number = 10) {
+export async function getProjects(
+  userId: string,
+  page: number = 0,
+  size: number = constants.PAGE_SIZE
+) {
   return await prisma.$transaction([
     prisma.project.findMany({
       skip: page, // page * size,
@@ -123,7 +131,11 @@ export async function deleteProjects(userId: string) {
 
 //#region expense management
 
-export async function getExpenses(where: object = {}, page: number = 0, size: number = 10) {
+export async function getExpenses(
+  where: object = {},
+  page: number = 0,
+  size: number = constants.PAGE_SIZE
+) {
   return await prisma.$transaction([
     prisma.expense.findMany({
       include: { project: true },
@@ -134,6 +146,44 @@ export async function getExpenses(where: object = {}, page: number = 0, size: nu
     }),
     prisma.expense.count({ where })
   ]);
+}
+
+export async function getExpensesCursor(
+  where: object = {},
+  nextCursor: IExpenseCursor | null = null,
+  size: number = constants.PAGE_SIZE
+) {
+  // cursor to Prisma-compatible cursor
+  const parseCursor =
+    nextCursor && nextCursor.id
+      ? {
+          id: nextCursor.id,
+          entryDate: helper.parseDate(nextCursor.entryDate)
+        }
+      : undefined;
+  // fetch expenses from database
+  const expenses = await prisma.expense.findMany({
+    include: { project: true },
+    take: size + 1, // fetch one extra to check if more exist
+    where,
+    orderBy: [{ entryDate: "desc" }, { id: "desc" }],
+    cursor: parseCursor ? { entryDate_id: parseCursor } : undefined,
+    skip: parseCursor ? 1 : 0 // skip the cursor item itself
+  });
+
+  const hasMore = expenses.length > size;
+  if (hasMore) expenses.pop(); // remove extra item
+
+  return {
+    expenses,
+    hasMore,
+    nextCursor: hasMore
+      ? {
+          entryDate: expenses[expenses.length - 1].entryDate,
+          id: expenses[expenses.length - 1].id
+        }
+      : undefined
+  };
 }
 
 export async function getExpense(id: string) {

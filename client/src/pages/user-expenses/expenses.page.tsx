@@ -13,7 +13,14 @@ import {
 } from "@mui/material";
 import { constants, helper, dateHelper } from "@/utils";
 import { CrudType } from "@/utils/enums";
-import { IExpense, Expense, IExpenseSearch, ExpenseSearch, IProject } from "@/models";
+import {
+  IExpense,
+  Expense,
+  IExpenseSearch,
+  ExpenseSearch,
+  IProject,
+  IExpenseCursor
+} from "@/models";
 import { lookupService, projectService, expenseService } from "@/services";
 import { Icon, LucideIcon } from "@/components";
 import { useStore } from "@/contexts";
@@ -24,9 +31,12 @@ export function ExpensesPage() {
   const { user } = useStore();
   const { search } = useLocation();
   const hasMounted = useRef(false);
+
   const [records, setRecords] = useState<IExpense[]>([]);
   const [record, setRecord] = useState<IExpense>(Expense);
-  const [total, setTotal] = useState<number>(0);
+  const [nextCursor, setCursor] = useState<IExpenseCursor | undefined>(undefined);
+  const [hasMore, setHasMore] = useState(false);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingInit, setLoadingInit] = useState<boolean>(false);
   const [loadingCol, setLoadingCol] = useState<string>(String.empty);
@@ -34,15 +44,18 @@ export function ExpensesPage() {
   const [presentAlert] = useIonAlert();
 
   // initial search payload
-  const projectId = useMemo(() => {
-    return new URLSearchParams(search).get("q") || String.empty;
+  const queryParams = useMemo(() => {
+    const params = new URLSearchParams(search);
+    return {
+      projectId: params.get("q") || String.empty
+      // categoryId: params.get("m") || String.empty
+    };
   }, [search]);
   const [payload, setPayload] = useState<IExpenseSearch>({
     ...ExpenseSearch,
-    page: 0,
     size: constants.PAGE_SIZE,
-    projectId,
-    skip: Boolean(projectId)
+    projectId: queryParams.projectId,
+    skip: Boolean(queryParams.projectId)
   });
   const queryRef = useRef(payload);
 
@@ -56,15 +69,17 @@ export function ExpensesPage() {
   // fetch expenses
   const fetchData = async () => {
     if (loading) return;
-    if (queryRef.current.page !== 0) setLoading(true);
+    if (hasMore) setLoading(true);
     try {
       const response = await expenseService.getExpensesAsync(queryRef.current);
-      setRecords(prev => [...prev, ...(response?.data ?? [])]);
-      setTotal(response?.count ?? 0);
+      const arrData = response?.data ?? [];
+      setRecords(prev => [...prev, ...arrData]);
+      setHasMore(response?.hasMore ?? false);
+      setCursor(response?.nextCursor);
     } catch (error) {
       console.error("error fetching data:", error);
     } finally {
-      if (queryRef.current.page !== 0) setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -88,19 +103,25 @@ export function ExpensesPage() {
   }, [payload]);
 
   const loadMore = () => {
-    if (records.length < total) {
-      setPayload(prev => ({ ...prev, page: records.length }));
+    if (hasMore) {
+      setPayload(prev => ({ ...prev, nextCursor }));
       setTimeout(() => fetchData(), constants.DELAY);
     }
   };
 
   const addRecord = (item: IExpense) => {
     setRecords(prev => [item, ...prev]);
-    setTotal(prev => prev + 1);
   };
   const deleteRecord = (id: string) => {
-    setRecords(prev => prev.filter(x => x?.id !== id));
-    setTotal(prev => prev - 1);
+    setRecords(prev => {
+      const updated = prev.filter(x => x?.id !== id);
+      // if the deleted ID was the last one used for the cursor
+      if (nextCursor && nextCursor.id === id) {
+        const last = updated[updated.length - 1];
+        if (last) setCursor({ id: last.id, entryDate: last.entryDate });
+      }
+      return updated;
+    });
   };
   const editRecord = (item: IExpense) => {
     setRecords(prev => prev.map(x => (x.id === item.id ? item : x)));
@@ -409,7 +430,7 @@ export function ExpensesPage() {
               )}
             </Fragment>
           ))}
-          {records.length < total && constants.PAGE_SIZE < total && (
+          {hasMore && (
             <TableRow>
               <TableCell colSpan={5}>
                 <IonButton size="small" disabled={loading} onClick={loadMore} className="my-3">
