@@ -29,7 +29,6 @@ export function ExpenseReportPage() {
     ...ExpenseSearch,
     startDate: dateHelper.monthStart,
     endDate: dateHelper.monthEnd,
-    page: 0,
     size: constants.PAGE_SIZE
   });
   const queryRef = useRef(payload);
