@@ -56,4 +56,6 @@ model Expense {
 
   user    User     @relation(fields: [userId], references: [id])
   project Project? @relation(fields: [projectId], references: [id])
+
+  @@unique([entryDate, id], map: "unique_entrydate_id")
 }

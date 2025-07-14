@@ -72,6 +72,7 @@ export async function getAllProjects(userId: string) {
     orderBy: { name: "asc" }
   });
 }
+
 export async function getProjects(userId: string, page: number = 0, size: number = 10) {
   return await prisma.$transaction([
     prisma.project.findMany({
