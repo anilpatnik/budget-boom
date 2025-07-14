@@ -5,7 +5,7 @@ import { authApi } from "@/services";
 export async function getExpensesAsync(payload: IExpenseSearch): Promise<IExpenseData> {
   const response = await authApi.post(ServiceType.Expenses, payload);
   if (response?.data?.resource) return response?.data?.resource;
-  return { data: [{ ...Expense }], count: 0 };
+  return { data: [{ ...Expense }], hasMore: false };
 }
 
 export async function getExpenseAsync(id: string): Promise<IExpense> {
