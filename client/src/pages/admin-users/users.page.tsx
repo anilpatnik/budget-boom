@@ -5,7 +5,6 @@ import {
   IonFabButton,
   IonGrid,
   IonRow,
-  IonSpinner,
   useIonAlert,
   useIonModal
 } from "@ionic/react";
@@ -179,108 +178,112 @@ export function UsersPage() {
           </Paper>
         </IonCol>
       </IonRow>
-      {loadingInit && <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>}
-      {!loadingInit && (
-        <IonRow>
-          <IonCol>
-            <TableContainer
-              component={Paper}
-              sx={{ maxHeight: { xs: window.innerHeight - 212, sm: 600 } }}
-              className="tableContainer">
-              <Table className="styled-table" stickyHeader>
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="left">Name</TableCell>
+      <IonRow>
+        <IonCol>
+          <TableContainer
+            component={Paper}
+            sx={{ maxHeight: { xs: window.innerHeight - 212, sm: 600 } }}
+            className="tableContainer">
+            <Table className="styled-table" stickyHeader>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="left">Name</TableCell>
+                  <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                    Email
+                  </TableCell>
+                  <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                    Role
+                  </TableCell>
+                  <TableCell align="left">
+                    <Box className="flex items-center">
+                      <IonFabButton
+                        id="id-create-button"
+                        title="ADD USER"
+                        size="small"
+                        onClick={() => handleOpen(AdminUser)}>
+                        <Icon name="add" />
+                      </IonFabButton>
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {records?.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell align="left">{item?.name}</TableCell>
                     <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                      Email
+                      {item?.email}
                     </TableCell>
                     <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                      Role
+                      {RoleType[item?.role || 10]?.replace(/([A-Z])/g, " $1")?.trim()}
                     </TableCell>
                     <TableCell align="left">
                       <Box className="flex items-center">
-                        <IonFabButton
-                          id="id-create-button"
-                          title="ADD USER"
+                        <IonButton
+                          id="id-edit-button"
+                          title="EDIT USER"
                           size="small"
-                          onClick={() => handleOpen(AdminUser)}>
-                          <Icon name="add" />
-                        </IonFabButton>
+                          buttonType="icon"
+                          onClick={() => handleOpen(item, "EDIT")}>
+                          {loadingCol === `${item?.uid}-EDIT` ? (
+                            <Icon name="sync-sharp" css="text-xl text-blue-500 icon-spinner" />
+                          ) : (
+                            <Icon name="card-sharp" css="text-xl text-blue-500" />
+                          )}
+                        </IonButton>
+                        <IonButton
+                          id="id-delete-button"
+                          title="DELETE USER"
+                          fill="clear"
+                          onClick={() =>
+                            presentAlert({
+                              header: "Are you sure?",
+                              buttons: [
+                                { text: "Cancel" },
+                                {
+                                  text: "Confirm",
+                                  handler: () => {
+                                    handleDelete(item?.uid || String.empty, "DELETE");
+                                  }
+                                }
+                              ]
+                            })
+                          }>
+                          {loadingCol === `${item?.uid}-DELETE` ? (
+                            <Icon name="sync-sharp" css="text-xl text-red-500 icon-spinner" />
+                          ) : (
+                            <Icon name="trash-bin-sharp" css="text-xl text-red-500" />
+                          )}
+                        </IonButton>
                       </Box>
                     </TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {records?.map((item, index) => (
-                    <TableRow key={index}>
-                      <TableCell align="left">{item?.name}</TableCell>
-                      <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                        {item?.email}
-                      </TableCell>
-                      <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                        {RoleType[item?.role || 10]?.replace(/([A-Z])/g, " $1")?.trim()}
-                      </TableCell>
-                      <TableCell align="left">
-                        <Box className="flex items-center">
-                          <IonButton
-                            id="id-edit-button"
-                            title="EDIT USER"
-                            size="small"
-                            buttonType="icon"
-                            onClick={() => handleOpen(item, "EDIT")}>
-                            {loadingCol === `${item?.uid}-EDIT` ? (
-                              <Icon name="sync-sharp" css="text-xl text-blue-500 icon-spinner" />
-                            ) : (
-                              <Icon name="card-sharp" css="text-xl text-blue-500" />
-                            )}
-                          </IonButton>
-                          <IonButton
-                            id="id-delete-button"
-                            title="DELETE USER"
-                            fill="clear"
-                            onClick={() =>
-                              presentAlert({
-                                header: "Are you sure?",
-                                buttons: [
-                                  { text: "Cancel" },
-                                  {
-                                    text: "Confirm",
-                                    handler: () => {
-                                      handleDelete(item?.uid || String.empty, "DELETE");
-                                    }
-                                  }
-                                ]
-                              })
-                            }>
-                            {loadingCol === `${item?.uid}-DELETE` ? (
-                              <Icon name="sync-sharp" css="text-xl text-red-500 icon-spinner" />
-                            ) : (
-                              <Icon name="trash-bin-sharp" css="text-xl text-red-500" />
-                            )}
-                          </IonButton>
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                  {records.length < total && constants.PAGE_SIZE < total && (
-                    <TableRow>
-                      <TableCell colSpan={4}>
-                        <IonButton
-                          size="small"
-                          disabled={loading}
-                          onClick={loadMore}
-                          className="my-3">
-                          {loading ? "Loading..." : "Load More"}
-                        </IonButton>
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </IonCol>
-        </IonRow>
-      )}
+                ))}
+                {records.length < total && constants.PAGE_SIZE < total && (
+                  <TableRow>
+                    <TableCell colSpan={4}>
+                      <IonButton
+                        size="small"
+                        disabled={loading}
+                        onClick={loadMore}
+                        className="my-3">
+                        {loading ? "Loading..." : "Load More"}
+                      </IonButton>
+                    </TableCell>
+                  </TableRow>
+                )}
+                {loadingInit && (
+                  <TableRow>
+                    <TableCell colSpan={4} className="!text-center !py-10">
+                      Loading...
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </IonCol>
+      </IonRow>
     </IonGrid>
   );
 }

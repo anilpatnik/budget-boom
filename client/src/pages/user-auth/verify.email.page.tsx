@@ -44,6 +44,7 @@ export function VerifyEmailPage() {
 
   if (preLoading)
     return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
+
   if (success) {
     return (
       <IonGrid>

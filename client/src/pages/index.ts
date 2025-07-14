@@ -1,6 +1,6 @@
-export { AppPage } from "./root/app.page";
-export { RootPage } from "./root/root.page";
-export { HomePage } from "./root/home.page";
+export { AppPage } from "./user-home/app.page";
+export { RootPage } from "./user-home/root.page";
+export { HomePage } from "./user-home/home.page";
 
 export { SignInPage } from "./user-auth/login.page";
 export { SignOutPage } from "./user-auth/logout.page";

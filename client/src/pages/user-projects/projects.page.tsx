@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
-import { IonButton, IonFabButton, IonSpinner, useIonAlert, useIonModal } from "@ionic/react";
+import { IonButton, IonFabButton, useIonAlert, useIonModal } from "@ionic/react";
 import {
   Box,
   Paper,
@@ -122,9 +122,6 @@ export function ProjectsPage() {
     const queryParams = new URLSearchParams({ q: id }).toString();
     navigate(`${NavType.Expenses}?${queryParams}`);
   };
-
-  if (loadingInit)
-    return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 
   return (
     <>
@@ -322,6 +319,13 @@ export function ProjectsPage() {
                   <IonButton size="small" disabled={loading} onClick={loadMore} className="my-3">
                     {loading ? "Loading..." : "Load More"}
                   </IonButton>
+                </TableCell>
+              </TableRow>
+            )}
+            {loadingInit && (
+              <TableRow>
+                <TableCell colSpan={6} className="!text-center !py-10">
+                  Loading...
                 </TableCell>
               </TableRow>
             )}

@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, Fragment, useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import { IonButton, IonFabButton, IonSpinner, useIonAlert, useIonModal } from "@ionic/react";
+import { IonButton, IonFabButton, useIonAlert, useIonModal } from "@ionic/react";
 import {
   Box,
   Paper,
@@ -183,9 +183,6 @@ export function ExpensesPage() {
       fetchData();
     }, constants.DELAY);
   };
-
-  if (loadingInit)
-    return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 
   return (
     <TableContainer
@@ -418,6 +415,13 @@ export function ExpensesPage() {
                 <IonButton size="small" disabled={loading} onClick={loadMore} className="my-3">
                   {loading ? "Loading..." : "Load More"}
                 </IonButton>
+              </TableCell>
+            </TableRow>
+          )}
+          {loadingInit && (
+            <TableRow>
+              <TableCell colSpan={5} className="!text-center !py-10">
+                Loading...
               </TableCell>
             </TableRow>
           )}

@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { IonFabButton, IonSpinner, useIonModal } from "@ionic/react";
+import { IonFabButton, useIonModal } from "@ionic/react";
 import {
   Box,
   Paper,
@@ -108,8 +108,6 @@ export function ExpenseReportPage() {
     }, constants.DELAY);
   };
 
-  if (loading) return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
-
   return (
     <TableContainer
       component={Paper}
@@ -184,6 +182,13 @@ export function ExpenseReportPage() {
               </TableCell>
             </TableRow>
           ))}
+          {loading && (
+            <TableRow>
+              <TableCell colSpan={2} className="!text-center !py-10">
+                Loading...
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </TableContainer>
