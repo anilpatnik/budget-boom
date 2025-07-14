@@ -14,5 +14,5 @@ if (process.env.ENVIRONMENT !== "production") {
     console.log(`${process.env.ENVIRONMENT} server: https://localhost:${PORT}`)
   );
 } else {
-  exports.apius = firebase.onRequest(app);
+  exports.api = firebase.onRequest(app);
 }
