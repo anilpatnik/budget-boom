@@ -28,14 +28,19 @@
   - TOKEN_SECRET=
   - CAPTCHA_SECRET=
   - DATABASE_URL=[url](postgresql://postgres:password@localhost:5432/postgres)
-  - SHADOW_DATABASE_URL=[url](postgresql://postgres:password@localhost:5432/postgres)
-- Browse [swagger](https://localhost:44455/swagger)
+- Browse [swagger](https://localhost:44455/docs)
 
 #### Prisma
 
-- Create migrations from schema `npx prisma migrate dev --name init`
-- Connect to database `npx prisma db pull`
-- Create database schema `npx prisma db push`
+- Inspect Prisma vs database schema `npx prisma db pull --print`
+- Generate SQL diff between Prisma vs database
+  ```bash
+    npx prisma migrate diff \
+      --from-schema-datamodel=./prisma/schema.prisma \
+      --to-url="postgresql://URL" \
+      --script
+  ```
+- Push Prisma changes to database `npx prisma db push`
 - Seed database `npx prisma db seed`
 - Browse database `npx prisma studio`
 
