@@ -129,7 +129,7 @@ export async function getExpenses(where: object = {}, page: number = 0, size: nu
       skip: page, // page * size,
       take: size,
       where,
-      orderBy: { entryDate: "desc" }
+      orderBy: [{ entryDate: "desc" }, { id: "desc" }]
     }),
     prisma.expense.count({ where })
   ]);
