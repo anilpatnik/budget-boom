@@ -5,6 +5,10 @@ import { RoleType } from "../utils/enums";
 
 const apiRouter: Router = express.Router();
 
+apiRouter.get("/healthz", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 apiRouter.post("/signin", authCtrl.signInAsync);
 apiRouter.post("/captcha", authCtrl.captchaVerifyAsync);
 
