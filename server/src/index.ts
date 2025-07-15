@@ -14,5 +14,11 @@ if (process.env.ENVIRONMENT !== "production") {
     console.log(`${process.env.ENVIRONMENT} server: https://localhost:${PORT}`)
   );
 } else {
+  /*
+  const PORT = process.env.PORT || 8080;
+  app.listen(PORT, () =>
+    console.log(`${process.env.ENVIRONMENT} server: https://localhost:${PORT}`)
+  );
+  */
   exports.api = firebase.onRequest(app);
 }

@@ -5,7 +5,7 @@ import { VITE_API } from "@/utils/configs";
 import { IUser, User } from "@/models";
 import { firebaseSignOut } from "@/services/firebase";
 
-const ApiUrl = process.env.NODE_ENV !== "production" ? (VITE_API as string) : "/api";
+const ApiUrl = VITE_API as string;
 const openApi = axios.create({ baseURL: ApiUrl });
 const authApi = axios.create({ baseURL: ApiUrl });
 

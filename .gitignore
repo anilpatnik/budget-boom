@@ -17,6 +17,8 @@ backend
 .DS_Store
 .vscode
 .env
+.env.dev
+.env.prod
 .firebase
 .vs
 .hintrc
@@ -41,3 +43,4 @@ ui-debug.log*
 # config files
 expo-env.d.ts
 firebase.config.json
+firebase.config.prod.json

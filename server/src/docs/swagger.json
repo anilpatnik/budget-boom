@@ -285,6 +285,18 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"IExpenseCursor": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"entryDate": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"IExpenseData": {
 				"properties": {
 					"data": {
@@ -293,9 +305,11 @@
 						},
 						"type": "array"
 					},
-					"count": {
-						"type": "number",
-						"format": "double"
+					"hasMore": {
+						"type": "boolean"
+					},
+					"nextCursor": {
+						"$ref": "#/components/schemas/IExpenseCursor"
 					}
 				},
 				"type": "object",
@@ -315,14 +329,6 @@
 			},
 			"IExpenseSearch": {
 				"properties": {
-					"page": {
-						"type": "number",
-						"format": "double"
-					},
-					"size": {
-						"type": "number",
-						"format": "double"
-					},
 					"startDate": {
 						"type": "string"
 					},
@@ -334,6 +340,13 @@
 					},
 					"projectId": {
 						"type": "string"
+					},
+					"size": {
+						"type": "number",
+						"format": "double"
+					},
+					"nextCursor": {
+						"$ref": "#/components/schemas/IExpenseCursor"
 					}
 				},
 				"type": "object",
