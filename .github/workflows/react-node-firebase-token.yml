@@ -61,7 +61,7 @@ jobs:
         run: firebase use --token ${{ secrets.FIREBASE_TOKEN }} ${{ github.ref_name }}
 
       - name: Deploy Firebase Functions
-        run: firebase deploy --only functions --force --token ${{ secrets.FIREBASE_TOKEN }}
+        run: firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
 
   build-deploy-frontend:
     name: Frontend
