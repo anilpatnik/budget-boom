@@ -31,7 +31,7 @@ jobs:
   build-deploy-backend:
     name: Backend
     needs: changes
-    if: ${{ needs.changes.outputs.backend == 'true' }}
+    if: false # ${{ needs.changes.outputs.backend == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -49,8 +49,7 @@ jobs:
           echo ENVIRONMENT=${{ secrets[format('{0}_ENVIRONMENT', env.ENV_NAME)] }} >> .env
           echo TOKEN_SECRET=${{ secrets[format('{0}_TOKEN_SECRET', env.ENV_NAME)] }} >> .env
           echo CAPTCHA_SECRET=${{ secrets[format('{0}_CAPTCHA_SECRET', env.ENV_NAME)] }} >> .env
-          echo DATABASE_URL=${{ secrets[format('{0}_DATABASE_URL', env.ENV_NAME)] }} >> .env
-          echo GOOGLE_APPLICATION_CREDENTIALS=${{ secrets[format('{0}_GOOGLE_APPLICATION_CREDENTIALS', env.ENV_NAME)] }} >> .env
+          echo DATABASE_URL=${{ secrets[format('{0}_DATABASE_URL', env.ENV_NAME)] }} >> .env          
           cat .env
         working-directory: ./server
 
