@@ -1,2 +1,46 @@
-server/*
-!server/backend/**
+# compiled output
+node_modules
+typings
+coverage
+build
+dist
+dev-dist
+android
+ios
+migrations
+
+# custom build output
+frontend
+backend
+
+# dependencies
+.DS_Store
+.vscode
+.env
+.env.dev
+.env.prod
+.firebase
+.vs
+.hintrc
+.pnp
+.pnp.js
+.expo
+*.jks
+*.p8
+*.p12
+*.mobileprovision
+*.orig.*
+
+# logs 
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+firebase-debug.log*
+ui-debug.log*
+
+# config files
+expo-env.d.ts
+firebase.config.json
+firebase.config.prod.json
