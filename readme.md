@@ -33,6 +33,19 @@
   - DATABASE_URL=[url](postgresql://postgres:password@localhost:5432/postgres)
 - Browse [swagger](https://localhost:44455/docs)
 
+#### Firebase
+
+- `firebase logout`
+- `firebase login`
+- `firebase projects:list`
+
+- `firebase use <project-id>`
+- `firebase functions:list`
+- `firebase functions:delete <api>`
+
+- `firebase emulators:start --only functions`
+- `firebase deploy --only functions:<api>`
+
 #### Prisma
 
 - Inspect Prisma vs database schema `npx prisma db pull --print`
