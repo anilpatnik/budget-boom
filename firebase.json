@@ -3,7 +3,7 @@
     "public": "client/frontend",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
-      { "source": "/iap/**", "function": "iap" },
+      { "source": "/api/**", "function": "api" },
       { "source": "!/__/auth/handler/**", "destination": "/index.html" },
       { "source": "**", "destination": "/index.html" }
     ]
