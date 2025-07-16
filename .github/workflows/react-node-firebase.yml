@@ -63,11 +63,13 @@ jobs:
 
       - name: Deploy Firebase Functions
         run: firebase deploy --only functions:api --project ${{ github.ref_name }}
+        env:
+          ENVIRONMENT: production
 
   build-deploy-frontend:
     name: Frontend
     needs: changes
-    if: true # ${{ needs.changes.outputs.frontend == 'true' }}
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

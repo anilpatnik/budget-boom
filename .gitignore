@@ -44,3 +44,4 @@ ui-debug.log*
 expo-env.d.ts
 firebase.config.json
 firebase.config.prod.json
+firebase.config.deploy.json

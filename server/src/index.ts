@@ -1,7 +1,9 @@
-import { https as firebase } from "firebase-functions";
+import * as functions from "firebase-functions";
 import https from "https";
 import fs from "fs";
 import app from "./app";
+
+exports.api = functions.https.onRequest(app);
 
 if (process.env.ENVIRONMENT !== "production") {
   const options = {
@@ -13,6 +15,4 @@ if (process.env.ENVIRONMENT !== "production") {
   httpsServer.listen(PORT, () =>
     console.log(`${process.env.ENVIRONMENT} server: https://localhost:${PORT}`)
   );
-} else {
-  exports.api = firebase.onRequest(app);
 }
