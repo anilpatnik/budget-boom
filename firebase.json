@@ -10,5 +10,5 @@
   },
   "firestore": { "rules": "firestore.rules" },
   "storage": { "rules": "storage.rules" },
-  "functions": { "source": "server", "runtime": "nodejs20" }
+  "functions": { "source": "server/backend", "runtime": "nodejs20" }
 }
