@@ -19,7 +19,7 @@ server/prisma/
 
 # dependencies
 
-.DS_Store
+.DS*Store
 .vscode
 .env
 .env.dev
@@ -31,12 +31,12 @@ server/prisma/
 .pnp.js
 .expo
 *.jks
-*.p8
-*.p12
-*.mobileprovision
-*.orig.*
+_.p8
+_.p12
+_.mobileprovision
+_.orig.\_
 
-# logs 
+# logs
 
 npm-debug.log*
 pnpm-debug.log*
@@ -44,7 +44,7 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 firebase-debug.log*
-ui-debug.log*
+ui-debug.log\*
 
 # config files
 
