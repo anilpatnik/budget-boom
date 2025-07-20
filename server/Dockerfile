@@ -1,5 +1,5 @@
 # Step 1: Build
-FROM alpine:3.22 AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 COPY . .
@@ -11,7 +11,7 @@ RUN npm install @swc/core --legacy-peer-deps
 RUN npm run build
 
 # Step 2: Run
-FROM alpine:3.22
+FROM node:20-alpine
 
 WORKDIR /app
 
