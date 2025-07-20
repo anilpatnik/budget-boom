@@ -2,12 +2,9 @@
 FROM node:20-alpine AS builder
 
 WORKDIR /app
-
-RUN echo "📁 Contents BEFORE build:" && ls -R .
 COPY . .
 
-RUN echo "📁 Files after COPY:" && ls -la && cat tsup.config.ts || echo "tsup.config.ts missing"
-RUN cat tsconfig.json || echo "tsconfig.json missing"
+RUN echo "📁 Contents BEFORE build:" && ls -R .
 
 ENV ENVIRONMENT=production
 
