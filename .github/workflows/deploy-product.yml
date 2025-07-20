@@ -76,7 +76,8 @@ jobs:
         id: encode_creds
         run: |
           echo "ENCODED_CREDS=$(echo '${{ secrets.GOOGLE_CREDENTIALS }}' | base64 -w 0)" >> $GITHUB_OUTPUT
-      - uses: google-github-actions/auth@v2
+      - id: auth
+        uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ env.GOOGLE_CREDENTIALS }}
           service_account: ${{ env.GOOGLE_CREDENTIALS }}
