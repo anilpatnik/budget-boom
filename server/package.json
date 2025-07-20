@@ -5,7 +5,7 @@
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "dev": "tsoa spec & nodemon",
-    "build": "tsup",
+    "build": "tsup src/backend/index.ts --format cjs --target node20 --dts --out-dir backend",
     "start": "node backend/index.js",
     "tsoa:spec": "tsoa spec",
     "prisma:gen": "prisma generate",
