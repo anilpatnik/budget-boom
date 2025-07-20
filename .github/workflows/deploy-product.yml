@@ -4,6 +4,10 @@ on:
   push:
     branches: [product]
 
+permissions:
+  id-token: write
+  contents: read
+
 env:
   PROJECT_ID: ${{ secrets.PROD_FIREBASE_PROJECT_ID }}
   GOOGLE_CREDENTIALS: ${{ secrets.PROD_GOOGLE_CREDENTIALS }}
