@@ -12,7 +12,8 @@ RUN npm ci
 RUN npm install @swc/core --legacy-peer-deps
 RUN npm run build
 
-RUN echo "📁 Contents AFTER build:" && ls -R .
+RUN echo "📁 Contents AFTER COPY (excluding node_modules):" && \
+    find . -type f ! -path "./node_modules/*"
 
 # Step 2: Run
 FROM node:20-alpine
