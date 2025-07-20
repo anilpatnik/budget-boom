@@ -4,18 +4,13 @@ on:
   push:
     branches: [product]
 
-permissions:
-  id-token: write
-  contents: read
-
 env:
   PROJECT_ID: ${{ secrets.PROD_FIREBASE_PROJECT_ID }}
   GOOGLE_CREDENTIALS: ${{ secrets.PROD_GOOGLE_CREDENTIALS }}
-  WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.PROD_WORKLOAD_IDENTITY_PROVIDER }}
   REGION: us-central1
   REPOSITORY: gcf-artifacts
   SERVICE_NAME: express-api
-  IMAGE: us-central1-docker.pkg.dev/${{ secrets.PROD_FIREBASE_PROJECT_ID }}/gcf-artifacts/express-api:latest
+  IMAGE: gcr.io/${{ secrets.PROD_FIREBASE_PROJECT_ID }}/express-api:latest
 
 jobs:
   changes:
@@ -49,6 +44,7 @@ jobs:
         with:
           node-version: "20.x"
           cache: "npm"
+
       - name: 📦 Install Dependencies and Build
         run: |
           npm ci
@@ -59,11 +55,14 @@ jobs:
           VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.PROD_FIREBASE_MESSAGING_SENDER_ID }}
           VITE_FIREBASE_APP_ID: ${{ secrets.PROD_FIREBASE_APP_ID }}
           VITE_CAPTCHA_SITE: ${{ secrets.PROD_CAPTCHA_SITE }}
+
       - uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ env.GOOGLE_CREDENTIALS }}
+
       - name: 📥 Install Firebase CLI
         run: npm install -g firebase-tools
+
       - name: 🚀 Deploy to Firebase Hosting
         run: firebase deploy --only hosting --project ${{ github.ref_name }}
 
@@ -77,36 +76,33 @@ jobs:
         working-directory: ./server
     steps:
       - uses: actions/checkout@v4
+
       - name: Encode GOOGLE_CREDENTIALS to Base64
         id: encode_creds
         run: |
           echo "ENCODED_CREDS=$(echo '${{ secrets.GOOGLE_CREDENTIALS }}' | base64 -w 0)" >> $GITHUB_OUTPUT
-      - id: auth
-        uses: google-github-actions/auth@v2
+
+      - uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ env.GOOGLE_CREDENTIALS }}
-      - name: Configure Docker for Artifact Registry
+          credentials_json: "${{ env.GOOGLE_CREDENTIALS }}"
+
+      - name: Configure Docker for Google Cloud
         run: |
-          gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
-      - uses: docker/setup-buildx-action@v3
-      - uses: docker/build-push-action@v5
-        with:
-          context: ./server
-          file: ./server/Dockerfile
-          push: true
-          tags: ${{ env.IMAGE }}
-      - uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          service: ${{ env.SERVICE_NAME }}
-          image: ${{ env.IMAGE }}
-          region: ${{ env.REGION }}
-          project_id: ${{ env.PROJECT_ID }}
-          allow_unauthenticated: true
-          ingress: all
-          set_env_vars: |
-            ENVIRONMENT=production
-            TOKEN_SECRET=${{ secrets.PROD_TOKEN_SECRET }}
-            CAPTCHA_SECRET=${{ secrets.PROD_CAPTCHA_SECRET }}
-            DATABASE_URL=${{ secrets.PROD_DATABASE_URL }}
-            GOOGLE_CREDENTIALS=${{ steps.encode_creds.outputs.ENCODED_CREDS }}
+          gcloud config set project ${{ env.PROJECT_ID }}
+          gcloud auth configure-docker
+
+      - name: Docker build & push
+        run: |
+          docker build -t ${{ env.IMAGE }} .
+          docker push ${{ env.IMAGE }}
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image ${{ env.IMAGE }} \
+            --region ${{ env.REGION }} \
+            --project ${{ env.PROJECT_ID }} \
+            --platform managed \
+            --allow-unauthenticated \
+            --ingress all \ 
+            --set-env-vars ENVIRONMENT=production,TOKEN_SECRET=${{ secrets.PROD_TOKEN_SECRET }},CAPTCHA_SECRET=${{ secrets.PROD_CAPTCHA_SECRET }},DATABASE_URL=${{ secrets.PROD_DATABASE_URL }},GOOGLE_CREDENTIALS=${{ steps.encode_creds.outputs.ENCODED_CREDS }}
