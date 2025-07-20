@@ -9,7 +9,7 @@ env:
   GOOGLE_CREDENTIALS: ${{ secrets.PROD_GOOGLE_CREDENTIALS }}
   REGION: us-central1
   SERVICE_NAME: express-api
-  IMAGE: gcr.io/${{ secrets.PROD_FIREBASE_PROJECT_ID }}/${{ env.SERVICE_NAME }}:latest # :${{ github.sha }}
+  IMAGE: gcr.io/${{ secrets.PROD_FIREBASE_PROJECT_ID }}/express-api:latest # :${{ github.sha }}
 
 jobs:
   changes:
