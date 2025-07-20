@@ -11,6 +11,7 @@ permissions:
 env:
   PROJECT_ID: ${{ secrets.PROD_FIREBASE_PROJECT_ID }}
   GOOGLE_CREDENTIALS: ${{ secrets.PROD_GOOGLE_CREDENTIALS }}
+  WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.PROD_WORKLOAD_IDENTITY_PROVIDER }}
   REGION: us-central1
   REPOSITORY: gcf-artifacts
   SERVICE_NAME: express-api
@@ -83,7 +84,7 @@ jobs:
       - id: auth
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ env.GOOGLE_CREDENTIALS }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ env.GOOGLE_CREDENTIALS }}
       - name: Configure Docker for Artifact Registry
         run: |
