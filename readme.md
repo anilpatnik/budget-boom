@@ -23,7 +23,7 @@
 
 - Create `firebase.config.json` in **server**
 - Create `.env` in **server**
-  - GOOGLE_APPLICATION_CREDENTIALS=`base64 string on one line`
+  - GOOGLE_CREDENTIALS=`base64 string on one line`
     ```bash
       cat ./firebase.config.json | base64
     ```

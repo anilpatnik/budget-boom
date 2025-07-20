@@ -1,0 +1,59 @@
+# compiled output
+
+node_modules
+typings
+coverage
+build
+dist
+dev-dist
+android
+ios
+migrations
+frontend
+
+# source code
+
+client/
+server/
+
+# dependencies
+
+Dockerfile
+.DS*Store
+.vscode
+.env
+.env.dev
+.env.prod
+.firebase
+.vs
+.hintrc
+.pnp
+.pnp.js
+.expo
+*.jks
+_.p8
+_.p12
+_.mobileprovision
+_.orig.\_
+
+# logs
+
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+firebase-debug.log*
+ui-debug.log\*
+
+# config files
+
+expo-env.d.ts
+firebase.config.json
+firebase.config.prod.json
+firebase.config.deploy.json
+
+nodemon.json
+tsconfig.json
+tsoa.json
+tsup.config.ts

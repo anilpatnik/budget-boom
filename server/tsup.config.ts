@@ -3,15 +3,15 @@ import { defineConfig } from "tsup";
 export default defineConfig({
   entry: ["src/index.ts"],
   outDir: "backend",
-  target: "node18",
-  format: ["esm", "cjs"],
-  // remove all code where ENVIRONMENT !== "production"
+  format: ["esm"],
+  target: "node20",
   define: {
+    // remove all code where ENVIRONMENT !== "production"
     "process.env.ENVIRONMENT": '"production"'
   },
-  clean: true,
-  minify: true,
-  sourcemap: true,
-  splitting: false,
-  dts: false // set to true if you want type definitions
+  dts: false, // not needed for backend apps
+  sourcemap: true, // good for debugging
+  clean: true, // clean before each build
+  splitting: false, // single file output
+  shims: false // don't shim Node globals
 });
