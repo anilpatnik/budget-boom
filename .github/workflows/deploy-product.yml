@@ -85,6 +85,7 @@ jobs:
           file: ./server/Dockerfile
           push: true
           tags: ${{ env.IMAGE }}
+          no-cache: true
       - uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: ${{ env.SERVICE_NAME }}

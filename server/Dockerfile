@@ -4,11 +4,17 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 COPY . .
 
+# 🔍 BEFORE build: list all files
+RUN echo "📁 Contents BEFORE build:" && ls -R .
+
 ENV ENVIRONMENT=production
 
 RUN npm ci
 RUN npm install @swc/core --legacy-peer-deps
 RUN npm run build
+
+# 🔍 BEFORE build: list all files
+RUN echo "📁 Contents AFTER build:" && ls -R .
 
 # Step 2: Run
 FROM node:20-alpine
