@@ -2,12 +2,13 @@
 FROM node:20-alpine AS builder
 
 WORKDIR /app
-COPY . .
 
-ENV ENVIRONMENT=production
-
+COPY package*.json ./
 RUN npm ci
 RUN npm install @swc/core --legacy-peer-deps
+
+COPY . .
+ENV ENVIRONMENT=production
 RUN npm run build
 
 # Step 2: Run
