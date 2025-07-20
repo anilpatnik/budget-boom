@@ -2,10 +2,12 @@
 FROM node:20-alpine AS builder
 
 WORKDIR /app
+
+RUN echo "📁 Contents BEFORE build:" && ls -R .
 COPY . .
 
-# 🔍 BEFORE build: list all files
-RUN echo "📁 Contents BEFORE build:" && ls -R .
+RUN echo "📁 Files after COPY:" && ls -la && cat tsup.config.ts || echo "tsup.config.ts missing"
+RUN cat tsconfig.json || echo "tsconfig.json missing"
 
 ENV ENVIRONMENT=production
 
@@ -13,7 +15,6 @@ RUN npm ci
 RUN npm install @swc/core --legacy-peer-deps
 RUN npm run build
 
-# 🔍 BEFORE build: list all files
 RUN echo "📁 Contents AFTER build:" && ls -R .
 
 # Step 2: Run
