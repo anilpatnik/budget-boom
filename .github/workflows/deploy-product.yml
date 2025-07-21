@@ -7,9 +7,9 @@ on:
 env:
   PROJECT_ID: ${{ secrets.PROD_FIREBASE_PROJECT_ID }}
   GOOGLE_CREDENTIALS: ${{ secrets.PROD_GOOGLE_CREDENTIALS }}
-  SERVICE_NAME: express-api2
+  SERVICE_NAME: express-api
   REGION: us-central1
-  IMAGE: us-central1-docker.pkg.dev/${{ secrets.PROD_FIREBASE_PROJECT_ID }}/gcf-artifacts/express-api2:${{ github.sha }}
+  IMAGE: us-central1-docker.pkg.dev/${{ secrets.PROD_FIREBASE_PROJECT_ID }}/gcf-artifacts/express-api:${{ github.sha }}
 
 jobs:
   changes:
@@ -78,11 +78,6 @@ jobs:
         with:
           node-version: "20.x"
 
-      - name: Encode GOOGLE_CREDENTIALS to Base64
-        id: encode_creds
-        run: |
-          echo "ENCODED_CREDS=$(echo '${{ secrets.GOOGLE_CREDENTIALS }}' | base64 -w 0)" >> $GITHUB_OUTPUT
-
       - uses: google-github-actions/auth@v2
         with:
           credentials_json: "${{ env.GOOGLE_CREDENTIALS }}"
@@ -108,4 +103,4 @@ jobs:
             --platform managed \
             --allow-unauthenticated \
             --ingress all \
-            --set-env-vars ENVIRONMENT=production,TOKEN_SECRET=${{ secrets.PROD_TOKEN_SECRET }},CAPTCHA_SECRET=${{ secrets.PROD_CAPTCHA_SECRET }},DATABASE_URL=${{ secrets.PROD_DATABASE_URL }},GOOGLE_CREDENTIALS=${{ steps.encode_creds.outputs.ENCODED_CREDS }}
+            --set-env-vars ENVIRONMENT=production,TOKEN_SECRET=${{ secrets.PROD_TOKEN_SECRET }},CAPTCHA_SECRET=${{ secrets.PROD_CAPTCHA_SECRET }},DATABASE_URL=${{ secrets.PROD_DATABASE_URL }},GOOGLE_CREDENTIALS=${{ secrets.PROD_GOOGLE_CREDENTIALS_B64 }}
