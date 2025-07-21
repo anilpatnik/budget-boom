@@ -7,9 +7,9 @@ on:
 env:
   PROJECT_ID: ${{ secrets.PROD_FIREBASE_PROJECT_ID }}
   GOOGLE_CREDENTIALS: ${{ secrets.PROD_GOOGLE_CREDENTIALS }}
-  SERVICE_NAME: express-api
+  SERVICE_NAME: express-api2
   REGION: us-central1
-  IMAGE: us-central1-docker.pkg.dev/${{ secrets.PROD_FIREBASE_PROJECT_ID }}/gcf-artifacts/express-api:${{ github.sha }}
+  IMAGE: us-central1-docker.pkg.dev/${{ secrets.PROD_FIREBASE_PROJECT_ID }}/gcf-artifacts/express-api2:${{ github.sha }}
 
 jobs:
   changes:
