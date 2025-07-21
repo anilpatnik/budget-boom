@@ -5,7 +5,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm ci
+RUN npm install
 RUN npx prisma generate
 
 ENV ENVIRONMENT=production
@@ -20,9 +20,8 @@ WORKDIR /app
 
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package*.json ./
-# COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/node_modules ./node_modules
 
-RUN npm ci --omit=dev
 RUN echo "📁 Contents AFTER Run:" && find . -type f ! -path "./node_modules/*"
 
 ENV NODE_ENV=production
