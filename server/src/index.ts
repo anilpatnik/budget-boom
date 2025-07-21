@@ -15,6 +15,6 @@ if (process.env.ENVIRONMENT !== "production") {
 } else {
   const PORT: number = 8080;
   app.listen(PORT, () =>
-    console.log(`${process.env.ENVIRONMENT} server: http://localhost:${PORT}`)
+    console.log(`${process.env.ENVIRONMENT} server: https://localhost:${PORT}`)
   );
 }
