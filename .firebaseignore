@@ -9,18 +9,18 @@ dev-dist
 android
 ios
 migrations
+client
 frontend
-
-# source code
-
-client/
-server/src/
-server/prisma/
+backend
+prisma
 
 # dependencies
 
-.DS_Store
+Dockerfile
+.dockerignore
+.DS*Store
 .vscode
+.git
 .env
 .env.dev
 .env.prod
@@ -31,12 +31,12 @@ server/prisma/
 .pnp.js
 .expo
 *.jks
-*.p8
-*.p12
-*.mobileprovision
-*.orig.*
+_.p8
+_.p12
+_.mobileprovision
+_.orig.\_
 
-# logs 
+# logs
 
 npm-debug.log*
 pnpm-debug.log*
@@ -44,7 +44,7 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 firebase-debug.log*
-ui-debug.log*
+ui-debug.log\*
 
 # config files
 
@@ -52,3 +52,7 @@ expo-env.d.ts
 firebase.config.json
 firebase.config.prod.json
 firebase.config.deploy.json
+
+tslint.json
+nodemon.json
+tsoa.json

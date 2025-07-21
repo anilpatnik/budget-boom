@@ -4,8 +4,6 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 COPY . .
 
-RUN echo "📁 Contents BEFORE Build:" && find . -type f ! -path "./node_modules/*"
-
 ENV ENVIRONMENT=production
 
 RUN npm ci

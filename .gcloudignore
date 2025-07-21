@@ -9,18 +9,18 @@ dev-dist
 android
 ios
 migrations
+client
 frontend
-
-# source code
-
-client/
-server/src/
-server/prisma/
+backend
+prisma
 
 # dependencies
 
+Dockerfile
+.dockerignore
 .DS*Store
 .vscode
+.git
 .env
 .env.dev
 .env.prod
@@ -52,3 +52,7 @@ expo-env.d.ts
 firebase.config.json
 firebase.config.prod.json
 firebase.config.deploy.json
+
+tslint.json
+nodemon.json
+tsoa.json
