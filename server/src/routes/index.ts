@@ -1,13 +1,9 @@
-import express, { Request, Response, Router } from "express";
+import express, { Router } from "express";
 import { authCtrl, userCtrl, projectCtrl, expenseCtrl } from "../controllers";
 import { authMiddleware } from "../middlewares";
 import { RoleType } from "../utils/enums";
 
 const apiRouter: Router = express.Router();
-
-apiRouter.get("/healthz", (req: Request, res: Response) => {
-  res.status(200).json({ status: "ok" });
-});
 
 apiRouter.post("/signin", authCtrl.signInAsync);
 apiRouter.post("/captcha", authCtrl.captchaVerifyAsync);
