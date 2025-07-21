@@ -1,12 +1,13 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "main": "backend/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "dev": "tsoa spec & nodemon",
     "build": "tsup",
-    "start": "node backend/index.js",
+    "start": "node dist/index.js",
+    "postinstall": "prisma generate",
     "tsoa:spec": "tsoa spec",
     "prisma:gen": "prisma generate",
     "prisma:seed": "ts-node src/prisma/seed.ts"

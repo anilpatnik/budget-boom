@@ -2,12 +2,17 @@
 FROM node:20-alpine AS builder
 
 WORKDIR /app
-COPY . .
+
+COPY package*.json ./
+RUN npm install
+RUN npm install @swc/core --legacy-peer-deps
+
+COPY prisma ./prisma
+RUN npx prisma generate
 
 ENV ENVIRONMENT=production
 
-RUN npm ci
-RUN npm install @swc/core --legacy-peer-deps
+COPY . .
 RUN npm run build
 
 RUN echo "📁 Contents AFTER Build:" && find . -type f ! -path "./node_modules/*"
@@ -17,12 +22,14 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY --from=builder /app/backend ./backend
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
 
-RUN npm ci --only=production --legacy-peer-deps
-
 RUN echo "📁 Contents AFTER Run:" && find . -type f ! -path "./node_modules/*"
+
+ENV NODE_ENV=production
+ENV PORT=8080
 
 EXPOSE 8080
 

@@ -12,7 +12,6 @@ migrations
 client
 frontend
 backend
-prisma
 
 # dependencies
 
