@@ -74,7 +74,7 @@ jobs:
       SERVICE_NAME: express-api
       REPOSITORY: gcf-artifacts
       REGION: us-central1
-      IMAGE: us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/gcf-artifacts/express-api:latest
+      IMAGE: us-central1-docker.pkg.dev/${{ secrets.PROD_FIREBASE_PROJECT_ID }}/gcf-artifacts/express-api:latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -105,6 +105,7 @@ jobs:
 
       - name: Deploy to Cloud Run
         run: |
+          IMAGE="us-central1-docker.pkg.dev/$PROJECT_ID/gcf-artifacts/express-api:latest"
           gcloud run deploy $SERVICE_NAME \
             --image $IMAGE \
             --region $REGION \
