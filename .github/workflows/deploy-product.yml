@@ -42,7 +42,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20.x"
-          cache: "npm"
 
       - name: 📦 Install Dependencies and Build
         run: |
@@ -108,5 +107,5 @@ jobs:
             --project $PROJECT_ID \
             --platform managed \
             --allow-unauthenticated \
-            --ingress all \ 
+            --ingress all \
             --set-env-vars ENVIRONMENT=production,TOKEN_SECRET=${{ secrets.PROD_TOKEN_SECRET }},CAPTCHA_SECRET=${{ secrets.PROD_CAPTCHA_SECRET }},DATABASE_URL=${{ secrets.PROD_DATABASE_URL }},GOOGLE_CREDENTIALS=${{ steps.encode_creds.outputs.ENCODED_CREDS }}

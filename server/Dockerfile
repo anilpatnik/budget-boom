@@ -24,6 +24,8 @@ COPY --from=builder /app/package*.json ./
 
 RUN npm ci --only=production --legacy-peer-deps
 
+RUN echo "📁 Contents AFTER Run:" && find . -type f ! -path "./node_modules/*"
+
 EXPOSE 8080
 
 CMD ["npm", "run", "start"]
