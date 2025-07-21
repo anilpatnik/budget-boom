@@ -10,10 +10,10 @@ env:
   SERVICE_NAME: express-api
   REGION: us-central1
   IMAGE: us-central1-docker.pkg.dev/${{ secrets.PROD_FIREBASE_PROJECT_ID }}/gcf-artifacts/express-api:${{ github.sha }}
+  IMAGE_CACHE: us-central1-docker.pkg.dev/${{ secrets.PROD_FIREBASE_PROJECT_ID }}/gcf-artifacts/express-api-cache
 
 jobs:
   changes:
-    if: false
     name: 🔍 Check for Changes
     runs-on: ubuntu-latest
     outputs:
@@ -40,6 +40,14 @@ jobs:
         working-directory: ./client
     steps:
       - uses: actions/checkout@v4
+
+      - name: 💾 Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: ./client/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('client/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: 🧰 Setup Node.js
         uses: actions/setup-node@v4
@@ -90,11 +98,14 @@ jobs:
       - name: 🔑 Authenticate Docker for Artifact Registry
         run: gcloud auth configure-docker ${REGION}-docker.pkg.dev
 
-      - name: 🏗️ Build Docker Image
-        run: docker build -t $IMAGE .
-
-      - name: 📤 Push Docker Image
-        run: docker push $IMAGE
+      - name: 🏗️ Build & Push Docker Image with Cache
+        uses: docker/build-push-action@v5
+        with:
+          context: ./server
+          push: true
+          tags: ${{ env.IMAGE }}
+          cache-from: type=registry,ref=${{ env.IMAGE_CACHE }}
+          cache-to: type=registry,ref=${{ env.IMAGE_CACHE }},mode=max
 
       - name: 🚀 Deploy to Cloud Run
         run: |
