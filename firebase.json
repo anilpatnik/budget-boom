@@ -3,12 +3,14 @@
     "public": "client/frontend",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
-      { "source": "/api/**", "function": "api" },
+      {
+        "source": "/api/**",
+        "run": { "serviceId": "express-api", "region": "us-central1" }
+      },
       { "source": "!/__/auth/handler/**", "destination": "/index.html" },
       { "source": "**", "destination": "/index.html" }
     ]
   },
   "firestore": { "rules": "firestore.rules" },
-  "storage": { "rules": "storage.rules" },
-  "functions": { "source": "server", "runtime": "nodejs20" }
+  "storage": { "rules": "storage.rules" }
 }

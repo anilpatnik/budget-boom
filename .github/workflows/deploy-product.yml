@@ -33,7 +33,7 @@ jobs:
     name: Frontend
     runs-on: ubuntu-latest
     needs: changes
-    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    if: true # ${{ needs.changes.outputs.frontend == 'true' }}
     defaults:
       run:
         working-directory: ./client
@@ -74,9 +74,6 @@ jobs:
         working-directory: ./server
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
 
       - uses: google-github-actions/auth@v2
         with:
@@ -86,7 +83,7 @@ jobs:
         run: gcloud config set project $PROJECT_ID
 
       - name: Authenticate Docker for Artifact Registry
-        run: gcloud auth configure-docker us-central1-docker.pkg.dev
+        run: gcloud auth configure-docker ${REGION}-docker.pkg.dev
 
       - name: Build Docker image
         run: docker build -t $IMAGE .
@@ -104,10 +101,9 @@ jobs:
             --allow-unauthenticated \
             --ingress all \
             --set-env-vars "ENVIRONMENT=production,\
-          TOKEN_SECRET=${{ secrets.PROD_TOKEN_SECRET }},\
-          CAPTCHA_SECRET=${{ secrets.PROD_CAPTCHA_SECRET }},\
-          DATABASE_URL=${{ secrets.PROD_DATABASE_URL }},\
-          GOOGLE_CREDENTIALS=${{ secrets.PROD_GOOGLE_CREDENTIALS_B64 }}"
+            TOKEN_SECRET=${{ secrets.PROD_TOKEN_SECRET }},\
+            CAPTCHA_SECRET=${{ secrets.PROD_CAPTCHA_SECRET }},\
+            DATABASE_URL=${{ secrets.PROD_DATABASE_URL }}"
 
       - name: Show Cloud Run URL
         run: gcloud run services describe $SERVICE_NAME --region $REGION --format='value(status.url)'

@@ -13,8 +13,10 @@ app.use(helmet());
 app.use(securityMiddleware);
 // routes
 app.use("/api", apiRouter);
-// swagger
-if (process.env.ENVIRONMENT !== "production") app.use(swaggerMiddleware);
+if (process.env.ENVIRONMENT !== "production") {
+  // swagger
+  app.use(swaggerMiddleware);
+}
 // error handler
 app.use(errorMiddleware);
 
