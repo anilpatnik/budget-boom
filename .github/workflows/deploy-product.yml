@@ -103,4 +103,12 @@ jobs:
             --platform managed \
             --allow-unauthenticated \
             --ingress all \
-            --set-env-vars ENVIRONMENT=production,TOKEN_SECRET=${{ secrets.PROD_TOKEN_SECRET }},CAPTCHA_SECRET=${{ secrets.PROD_CAPTCHA_SECRET }},DATABASE_URL=${{ secrets.PROD_DATABASE_URL }},GOOGLE_CREDENTIALS=${{ secrets.PROD_GOOGLE_CREDENTIALS_B64 }}
+            --set-env-vars \
+              ENVIRONMENT=production,\
+              TOKEN_SECRET=${{ secrets.PROD_TOKEN_SECRET }},\
+              CAPTCHA_SECRET=${{ secrets.PROD_CAPTCHA_SECRET }},\
+              DATABASE_URL=${{ secrets.PROD_DATABASE_URL }},\
+              GOOGLE_CREDENTIALS=${{ secrets.PROD_GOOGLE_CREDENTIALS_B64 }}
+
+      - name: Show Cloud Run URL
+        run: gcloud run services describe $SERVICE_NAME --region $REGION --format='value(status.url)'
