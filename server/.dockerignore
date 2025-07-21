@@ -10,17 +10,14 @@ android
 ios
 migrations
 frontend
-
-# source code
-
-client/
-server/
+backend
 
 # dependencies
 
 Dockerfile
 .DS*Store
 .vscode
+.git
 .env
 .env.dev
 .env.prod
