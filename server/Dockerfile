@@ -3,16 +3,13 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY . .
+
 RUN npm install
 RUN npm install @swc/core --legacy-peer-deps
-
-COPY prisma ./prisma
 RUN npx prisma generate
 
 ENV ENVIRONMENT=production
-
-COPY . .
 RUN npm run build
 
 RUN echo "📁 Contents AFTER Build:" && find . -type f ! -path "./node_modules/*"
