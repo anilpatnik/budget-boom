@@ -5,7 +5,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm install
+RUN npm ci
 RUN npx prisma generate
 
 ENV ENVIRONMENT=production
