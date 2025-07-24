@@ -62,20 +62,3 @@ export function getAuthTypes(providerData: UserInfo[] | undefined): AuthType[] |
 }
 
 //#endregion
-
-//#region jwt helpers
-
-export function createToken(payload: IToken) {
-  return jwt.sign(payload, TOKEN_SECRET as string, { expiresIn: "7d" });
-}
-
-export function verifyToken(token: string): Promise<IToken | string> {
-  return new Promise((resolve, reject) => {
-    jwt.verify(token, TOKEN_SECRET as string, (error, payload) => {
-      if (error) return reject(error.name);
-      return resolve(payload as IToken);
-    });
-  });
-}
-
-//#endregion

@@ -5,6 +5,7 @@ import {
   IonFabButton,
   IonGrid,
   IonRow,
+  IonSpinner,
   useIonAlert,
   useIonModal
 } from "@ionic/react";
@@ -275,7 +276,7 @@ export function UsersPage() {
                 {loadingInit && (
                   <TableRow>
                     <TableCell colSpan={4} className="!text-center !py-10">
-                      Loading...
+                      <IonSpinner name="lines-sharp-small"></IonSpinner>
                     </TableCell>
                   </TableRow>
                 )}

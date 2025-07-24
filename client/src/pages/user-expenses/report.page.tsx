@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { IonFabButton, useIonModal } from "@ionic/react";
+import { IonFabButton, IonSpinner, useIonModal } from "@ionic/react";
 import {
   Box,
   Paper,
@@ -184,7 +184,7 @@ export function ExpenseReportPage() {
           {loading && (
             <TableRow>
               <TableCell colSpan={2} className="!text-center !py-10">
-                Loading...
+                <IonSpinner name="lines-sharp-small"></IonSpinner>
               </TableCell>
             </TableRow>
           )}

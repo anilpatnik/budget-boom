@@ -15,16 +15,16 @@ import {
 
 // auth
 @Route()
+@Security("bearerAuth")
 @Tags("🔓 Auth Routes")
 export class AuthController extends Controller {
   @Post("/signin")
-  public async signInAsync(@Body() body: { uid: string }): Promise<IResponse<IUser>> {
+  public async signInAsync(): Promise<IResponse<IUser>> {
     return new Promise<IResponse<IUser>>(resolve => {
       resolve({ success: true });
     });
   }
   @Post("/profile")
-  @Security("bearerAuth")
   public async updateProfileAsync(
     @Body() body: { name: string; countryId: string }
   ): Promise<IResponse<string>> {
@@ -33,7 +33,6 @@ export class AuthController extends Controller {
     });
   }
   @Delete("/profile")
-  @Security("bearerAuth")
   public async deleteProfileAsync(): Promise<IResponse<string>> {
     return new Promise<IResponse<string>>(resolve => {
       resolve({ success: true });

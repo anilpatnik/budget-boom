@@ -3,7 +3,7 @@ import { authService } from "../services";
 
 export async function signInAsync(req: Request, res: Response, next: NextFunction) {
   try {
-    const { uid } = req.body;
+    const uid = req?.auth?.uid || String.empty;
     const result = await authService.signInAsync(uid);
     res.json(result);
   } catch (error) {

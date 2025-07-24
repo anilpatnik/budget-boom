@@ -1,6 +1,5 @@
 import { FirebaseError, initializeApp } from "firebase/app";
 import {
-  UserCredential,
   GoogleAuthProvider,
   applyActionCode,
   confirmPasswordReset,
@@ -13,7 +12,9 @@ import {
   signOut,
   updatePassword,
   updateProfile,
-  verifyPasswordResetCode
+  verifyPasswordResetCode,
+  onIdTokenChanged,
+  onAuthStateChanged
 } from "firebase/auth";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import {
@@ -22,6 +23,7 @@ import {
   VITE_FIREBASE_MESSAGING_SENDER_ID,
   VITE_FIREBASE_PROJECT_ID
 } from "@/utils/configs";
+import { fbHelper } from "@/utils";
 
 const authDomain =
   process.env.NODE_ENV !== "production"
@@ -59,10 +61,10 @@ export {
   updatePassword,
   updateProfile,
   uploadBytesResumable,
-  verifyPasswordResetCode
+  verifyPasswordResetCode,
+  onIdTokenChanged,
+  onAuthStateChanged
 };
-
-export type { UserCredential };
 
 // firebase auth errors
 export const ErrorCodes: Record<string, string> = {
@@ -92,4 +94,15 @@ export async function uploadFile(file: File | Blob, filePath: string) {
 }
 export async function downloadFile(filePath: string) {
   return await getDownloadURL(ref(firebaseBlob, filePath));
+}
+
+// firebase token
+export async function refreshToken(forcre: boolean = true) {
+  const user = firebaseAuth.currentUser;
+  if (user) {
+    const newToken = await user.getIdToken(forcre);
+    fbHelper.setToken(newToken);
+    return newToken;
+  }
+  return null;
 }

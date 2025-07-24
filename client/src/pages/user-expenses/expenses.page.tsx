@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, Fragment, useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import { IonButton, IonFabButton, useIonAlert, useIonModal } from "@ionic/react";
+import { IonButton, IonFabButton, IonSpinner, useIonAlert, useIonModal } from "@ionic/react";
 import {
   Box,
   Paper,
@@ -442,7 +442,7 @@ export function ExpensesPage() {
           {loadingInit && (
             <TableRow>
               <TableCell colSpan={5} className="!text-center !py-10">
-                Loading...
+                <IonSpinner name="lines-sharp-small"></IonSpinner>
               </TableCell>
             </TableRow>
           )}

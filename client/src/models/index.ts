@@ -3,10 +3,8 @@ import { AuthType, CrudType, RoleType, SearchType } from "@/utils/enums";
 
 export interface IUser {
   name?: string;
-  email?: string;
   photo?: string;
   role?: RoleType;
-  token?: string;
   countryId?: string;
   currency?: string;
   auth?: boolean;
@@ -14,10 +12,8 @@ export interface IUser {
 }
 export const User: IUser = {
   name: String.empty,
-  email: String.empty,
   photo: String.empty,
   role: RoleType.User,
-  token: String.empty,
   countryId: String.empty,
   currency: String.empty,
   auth: false,

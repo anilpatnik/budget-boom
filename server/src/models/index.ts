@@ -18,10 +18,8 @@ export interface IToken {
 
 export interface IUser {
   name?: string;
-  email?: string;
   photo?: string;
   role?: RoleType;
-  token?: string;
   countryId?: string;
 }
 

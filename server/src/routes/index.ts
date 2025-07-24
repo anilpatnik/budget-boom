@@ -5,8 +5,8 @@ import { RoleType } from "../utils/enums";
 
 const apiRouter: Router = express.Router();
 
-apiRouter.post("/signin", authCtrl.signInAsync);
 apiRouter.post("/captcha", authCtrl.captchaVerifyAsync);
+apiRouter.post("/signin", authMiddleware(), authCtrl.signInAsync);
 
 apiRouter.post("/profile", authMiddleware(), authCtrl.updateProfileAsync);
 apiRouter.delete("/profile", authMiddleware(), authCtrl.deleteProfileAsync);

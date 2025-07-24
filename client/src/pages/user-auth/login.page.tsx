@@ -14,7 +14,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Icon, InputField, PasswordField } from "@/components";
-import { constants, helper } from "@/utils";
+import { constants, fbHelper, helper } from "@/utils";
 import { NavType, RoleType } from "@/utils/enums";
 import { VITE_CAPTCHA_SITE } from "@/utils/configs";
 import { authService, lookupService } from "@/services";
@@ -71,17 +71,16 @@ export function SignInPage() {
         : await authService.signInWithEmail(email, password);
       success = res?.success;
       if (res?.success) {
-        auth = res?.resource?.token?.length > constants.TOKEN_LENGTH;
+        const token = fbHelper.getToken();
+        auth = (token?.length ?? 0) > constants.TOKEN_LENGTH;
         role = res?.resource?.role || RoleType.User;
         setAuth(prev => ({
           ...prev,
           external,
           auth,
           name: res?.resource?.name,
-          email: res?.resource?.email,
           role: res?.resource?.role,
           photo: res?.resource?.photo,
-          token: res?.resource?.token,
           countryId: res?.resource?.countryId,
           currency: lookupService.getCountry(res?.resource?.countryId ?? navigator.language)?.code
         }));

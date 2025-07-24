@@ -19,17 +19,11 @@
 					"name": {
 						"type": "string"
 					},
-					"email": {
-						"type": "string"
-					},
 					"photo": {
 						"type": "string"
 					},
 					"role": {
 						"$ref": "#/components/schemas/RoleType"
-					},
-					"token": {
-						"type": "string"
 					},
 					"countryId": {
 						"type": "string"
@@ -429,26 +423,12 @@
 				"tags": [
 					"🔓 Auth Routes"
 				],
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"properties": {
-									"uid": {
-										"type": "string"
-									}
-								},
-								"required": [
-									"uid"
-								],
-								"type": "object"
-							}
-						}
+				"security": [
+					{
+						"bearerAuth": []
 					}
-				}
+				],
+				"parameters": []
 			}
 		},
 		"/profile": {
