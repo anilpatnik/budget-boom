@@ -54,23 +54,27 @@ function PreRoute({
 function TabLayout() {
   return (
     <StoreProvider>
-      <IonPage id="main-content">
-        {location.pathname !== NavType.Root && location.pathname !== NavType.Home ? (
-          <>
-            <Header />
-            <IonContent className="custom-content">
-              <div className="pb-16">
-                <Outlet />
-              </div>
-            </IonContent>
-            <TabMenu />
-            <ToastContainer />
-          </>
-        ) : (
-          <IonContent>
+      <IonPage>
+        <Header />
+        <IonContent className="custom-content">
+          <div className="pb-16">
             <Outlet />
-          </IonContent>
-        )}
+          </div>
+        </IonContent>
+        <TabMenu />
+        <ToastContainer />
+      </IonPage>
+    </StoreProvider>
+  );
+}
+
+function RootLayout() {
+  return (
+    <StoreProvider>
+      <IonPage>
+        <IonContent>
+          <Outlet />
+        </IonContent>
       </IonPage>
     </StoreProvider>
   );
@@ -79,7 +83,7 @@ function TabLayout() {
 export const router = createBrowserRouter([
   {
     path: NavType.Root,
-    element: <TabLayout />,
+    element: <RootLayout />,
     children: [
       {
         index: true,
@@ -89,7 +93,13 @@ export const router = createBrowserRouter([
       {
         path: NavType.Home,
         element: <HomePage />
-      },
+      }
+    ]
+  },
+  {
+    path: NavType.Root,
+    element: <TabLayout />,
+    children: [
       {
         path: NavType.PrivacyPolicy,
         element: <PrivacyPolicy />
