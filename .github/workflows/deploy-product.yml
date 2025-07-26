@@ -13,7 +13,6 @@ env:
 
 jobs:
   changes:
-    if: false
     name: 🔍 Check for Changes
     runs-on: ubuntu-latest
     outputs:
@@ -34,12 +33,20 @@ jobs:
     name: 🎨 Frontend Build & Deploy
     runs-on: ubuntu-latest
     needs: changes
-    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    if: true # ${{ needs.changes.outputs.frontend == 'true' }}
     defaults:
       run:
         working-directory: ./client
     steps:
       - uses: actions/checkout@v4
+
+      - name: 💾 Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: ./client/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('client/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: 🧰 Setup Node.js
         uses: actions/setup-node@v4
@@ -73,7 +80,7 @@ jobs:
     name: ⚙️ Backend Build & Deploy
     runs-on: ubuntu-latest
     needs: changes
-    if: ${{ needs.changes.outputs.backend == 'true' }}
+    if: true # ${{ needs.changes.outputs.backend == 'true' }}
     defaults:
       run:
         working-directory: ./server
