@@ -1,7 +1,7 @@
 #### Postgres
 
 - Create Postgres and pgAdmin `docker-compose up -d`
-- Create database schema `npx prisma db push`
+- Push Prisma changes to database `npx prisma db push`
 - Seed database `npx prisma db seed`
 - Browse database `npx prisma studio`
 - Browse [pgadmin](http://localhost:8085)
@@ -11,26 +11,27 @@
 #### Frontend
 
 - Create `.env` in **client**
-  - NEXT_PUBLIC_FIREBASE_API_KEY=
-  - NEXT_PUBLIC_FIREBASE_PROJECT_ID=
-  - NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
-  - NEXT_PUBLIC_FIREBASE_APP_ID=
-  - NEXT_PUBLIC_CAPTCHA_SITE=
-  - NEXT_PUBLIC_API=[url](https://localhost:44455)
+  - VITE_SECRET=
+  - VITE_FIREBASE_API_KEY=
+  - VITE_FIREBASE_PROJECT_ID=
+  - VITE_FIREBASE_MESSAGING_SENDER_ID=
+  - VITE_FIREBASE_APP_ID=
+  - VITE_CAPTCHA_SITE=
+  - VITE_API=[url](https://localhost:44455)
 - Browse [app](https://localhost:44454)
 
 #### Backend
 
 - Create `firebase.config.json` in **server**
 - Create `.env` in **server**
-  - GOOGLE_CREDENTIALS=`base64 string on one line`
+  - ENVIRONMENT=development
+  - CAPTCHA_SECRET=
+  - DATABASE_URL=[url](postgresql://postgres:password@localhost:5432/postgres)
+  - GOOGLE_APPLICATION_CREDENTIALS=./firebase.config.json
+  - _optional_ GOOGLE_CREDENTIALS=`base64 string on one line`
     ```bash
       cat ./firebase.config.json | base64
     ```
-  - ENVIRONMENT=development
-  - TOKEN_SECRET=
-  - CAPTCHA_SECRET=
-  - DATABASE_URL=[url](postgresql://postgres:password@localhost:5432/postgres)
 - Browse [swagger](https://localhost:44455/docs)
 
 #### Firebase

@@ -1,29 +1,38 @@
 import { Link } from "react-router-dom";
-import { IonFooter, IonToolbar } from "@ionic/react";
 import { NavType } from "@/utils/enums";
 
 export function Footer() {
   return (
-    <IonFooter
-      className="ion-hide-md-down footer"
-      style={{ border: 0, boxShadow: "none", textAlign: "center" }}>
-      <IonToolbar>
-        <div className="flex justify-center items-center">
-          <Link id="id-terms-conditions-link" className="mr-2" to={NavType.TermsConditions}>
-            terms and conditions
-          </Link>
-          <Link id="id-privacy-policy-link" className="ml-2" to={NavType.PrivacyPolicy}>
-            privacy policy
-          </Link>
-          <a
-            id="id-email-contact-link"
-            className="mx-5 text-xs lowercase"
-            href="mailto:admin@appdigital.com.au">
-            admin@appdigital.com.au
-          </a>
-          <span id="id-copyright-text">© {new Date().getFullYear()} app digital pty ltd</span>
+    <div className="text-center my-4 p-4">
+      <div className="ion-hide-md-up">
+        <div className="text-sm text-gray-700">
+          <div>By using this website, you agree to our</div>
+          <div className="my-2">
+            <Link to={NavType.PrivacyPolicy} className="mx-1 text-blue-600 hover:underline">
+              Privacy Policy
+            </Link>
+            and
+            <Link to={NavType.TermsConditions} className="mx-1 text-blue-600 hover:underline">
+              Terms of Use
+            </Link>
+          </div>
         </div>
-      </IonToolbar>
-    </IonFooter>
+      </div>
+      <div className="ion-hide-md-down">
+        <div className="text-sm text-gray-700">
+          By using this website, you agree to our
+          <Link to={NavType.PrivacyPolicy} className="mx-1 text-blue-600 hover:underline">
+            Privacy Policy
+          </Link>
+          and
+          <Link to={NavType.TermsConditions} className="mx-1 text-blue-600 hover:underline">
+            Terms of Use
+          </Link>
+        </div>
+      </div>
+      <div className="mt-2 text-sm text-gray-500">
+        &copy; {new Date().getFullYear()} App Digital Pty Ltd. All rights reserved.
+      </div>
+    </div>
   );
 }

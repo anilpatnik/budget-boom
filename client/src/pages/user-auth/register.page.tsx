@@ -208,11 +208,6 @@ export function SignUpPage() {
                           RESET
                         </IonButton>
                       </form>
-                      <div className="ion-margin-top privacy">
-                        By clicking on Sign Up, I agree to the website
-                        <Link to={NavType.TermsConditions}> Terms and Conditions</Link> and
-                        <Link to={NavType.PrivacyPolicy}> Privacy Policy</Link>
-                      </div>
                     </IonCardContent>
                   </IonCard>
                 </IonCol>

@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import { VitePWA } from "vite-plugin-pwa";
 import fs from "node:fs";
-import * as path from "path";
+import path from "path";
 import tailwindcss from "@tailwindcss/vite";
 
 // https://vitejs.dev/config/

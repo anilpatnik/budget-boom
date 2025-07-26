@@ -20,7 +20,7 @@ import {
   ProjectsHomePage,
   ExpensesHomePage
 } from "@/pages";
-import { Header, TabMenu } from "@/layouts";
+import { Footer, Header, TabMenu } from "@/layouts";
 import { PrivacyPolicy, TermsConditions } from "@/legal";
 
 function PreRoute({
@@ -36,45 +36,60 @@ function PreRoute({
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isAllowed = roles && roles.length > 0 && roles.includes(user?.role ?? RoleType.User);
+  const roleAllowed = !roles || roles.includes(user?.role ?? RoleType.User);
+  const isAuth = user?.auth || false;
 
   useEffect(() => {
-    if (!user?.auth && (routerType === RouterType.User || routerType === RouterType.Role)) {
+    if (!isAuth && (routerType === RouterType.User || routerType === RouterType.Role)) {
       navigate(NavType.SignIn, { replace: true, state: location.pathname });
-    } else if (user?.auth && routerType === RouterType.Auth) {
+    } else if (isAuth && routerType === RouterType.Auth) {
       navigate(NavType.Root, { replace: true });
-    } else if (user?.auth && routerType === RouterType.Role && !isAllowed) {
+    } else if (isAuth && routerType === RouterType.Role && !roleAllowed) {
       navigate(NavType.Root, { replace: true });
     }
-  }, [user?.auth, routerType, isAllowed, location.pathname, navigate]);
+  }, [isAuth, routerType, roleAllowed, location.pathname, navigate]);
 
-  return children ? children : <Outlet />;
+  return children || <Outlet />;
 }
 
-function TabLayout() {
+type Props = {
+  header?: boolean;
+  footer?: boolean;
+  tabMenu?: boolean;
+  toast?: boolean;
+  preRoute?: boolean;
+  routerType?: RouterType;
+  roles?: RoleType[];
+  children?: any;
+};
+function AppLayout({
+  header = false,
+  footer = false,
+  tabMenu = false,
+  toast = false,
+  preRoute = false,
+  routerType,
+  roles,
+  children
+}: Props) {
   return (
     <StoreProvider>
       <IonPage>
-        <Header />
+        {header && <Header />}
         <IonContent className="custom-content">
-          <div className="pb-16">
-            <Outlet />
+          <div className={tabMenu ? "pb-16" : ""}>
+            {preRoute ? (
+              <PreRoute routerType={routerType} roles={roles}>
+                {children}
+              </PreRoute>
+            ) : (
+              <Outlet />
+            )}
           </div>
         </IonContent>
-        <TabMenu />
-        <ToastContainer />
-      </IonPage>
-    </StoreProvider>
-  );
-}
-
-function RootLayout() {
-  return (
-    <StoreProvider>
-      <IonPage>
-        <IonContent>
-          <Outlet />
-        </IonContent>
+        {footer && <Footer />}
+        {tabMenu && <TabMenu />}
+        {toast && <ToastContainer />}
       </IonPage>
     </StoreProvider>
   );
@@ -83,113 +98,78 @@ function RootLayout() {
 export const router = createBrowserRouter([
   {
     path: NavType.Root,
-    element: <RootLayout />,
+    element: <AppLayout />,
     children: [
-      {
-        index: true,
-        path: NavType.Root,
-        element: <RootPage />
-      },
-      {
-        path: NavType.Home,
-        element: <HomePage />
-      }
+      { path: NavType.Root, element: <RootPage /> },
+      { path: "*", element: <RootPage /> },
+      { path: NavType.PrivacyPolicy, element: <PrivacyPolicy /> },
+      { path: NavType.TermsConditions, element: <TermsConditions /> }
     ]
   },
   {
     path: NavType.Root,
-    element: <TabLayout />,
+    element: <AppLayout footer />,
+    children: [{ path: NavType.Home, element: <HomePage /> }]
+  },
+  {
+    path: NavType.Root,
+    element: <AppLayout header footer toast preRoute routerType={RouterType.Auth} />,
     children: [
-      {
-        path: NavType.PrivacyPolicy,
-        element: <PrivacyPolicy />
-      },
-      {
-        path: NavType.TermsConditions,
-        element: <TermsConditions />
-      },
-      {
-        element: <PreRoute routerType={RouterType.Auth} />,
-        children: [
-          {
-            path: NavType.SignIn,
-            element: <SignInPage />
-          },
-          {
-            path: NavType.SignUp,
-            element: <SignUpPage />
-          },
-          {
-            path: NavType.ForgotPassword,
-            element: <ForgotPasswordPage />
-          },
-          {
-            path: NavType.Callback,
-            element: <CallbackPage />
-          },
-          {
-            path: `${NavType.VerifyEmail}/:${constants.ACTION_CODE}`,
-            element: <VerifyEmailPage />
-          },
-          {
-            path: `${NavType.ResetPassword}/:${constants.ACTION_CODE}`,
-            element: <ResetPasswordPage />
-          }
-        ]
-      },
-      {
-        element: <PreRoute routerType={RouterType.User} />,
-        children: [
-          {
-            path: NavType.Profile,
-            element: <ProfileHomePage />
-          },
-          {
-            path: NavType.SignOut,
-            element: <SignOutPage />
-          }
-        ]
-      },
-      {
-        element: <PreRoute routerType={RouterType.User} roles={[RoleType.User]} />,
-        children: [
-          {
-            path: NavType.Expenses,
-            element: <ExpensesHomePage />
-          }
-        ]
-      },
-      {
-        element: <PreRoute routerType={RouterType.User} roles={[RoleType.User]} />,
-        children: [
-          {
-            path: NavType.Report,
-            element: <ExpensesHomePage />
-          }
-        ]
-      },
-      {
-        element: <PreRoute routerType={RouterType.User} roles={[RoleType.User]} />,
-        children: [
-          {
-            path: NavType.Projects,
-            element: <ProjectsHomePage />
-          }
-        ]
-      },
-      {
-        element: <PreRoute routerType={RouterType.Role} roles={[RoleType.Admin]} />,
-        children: [
-          {
-            path: NavType.Users,
-            element: <UsersHomePage />
-          }
-        ]
-      },
-      {
-        path: "*",
-        element: <RootPage />
-      }
+      { path: NavType.SignIn, element: <SignInPage /> },
+      { path: NavType.SignUp, element: <SignUpPage /> },
+      { path: NavType.ForgotPassword, element: <ForgotPasswordPage /> },
+      { path: NavType.Callback, element: <CallbackPage /> },
+      { path: `${NavType.VerifyEmail}/:${constants.ACTION_CODE}`, element: <VerifyEmailPage /> },
+      { path: `${NavType.ResetPassword}/:${constants.ACTION_CODE}`, element: <ResetPasswordPage /> }
     ]
+  },
+  {
+    path: NavType.Root,
+    element: (
+      <AppLayout
+        header
+        tabMenu
+        toast
+        preRoute
+        routerType={RouterType.User}
+        roles={[RoleType.User, RoleType.Admin]}
+      />
+    ),
+    children: [
+      { path: NavType.Profile, element: <ProfileHomePage /> },
+      { path: NavType.SignOut, element: <SignOutPage /> }
+    ]
+  },
+  {
+    path: NavType.Root,
+    element: (
+      <AppLayout
+        header
+        tabMenu
+        toast
+        preRoute
+        routerType={RouterType.User}
+        roles={[RoleType.User]}
+      />
+    ),
+    children: [
+      { path: NavType.Expenses, element: <ExpensesHomePage /> },
+      { path: NavType.Projects, element: <ProjectsHomePage /> },
+      { path: NavType.Report, element: <ExpensesHomePage /> }
+    ]
+  },
+  {
+    path: NavType.Root,
+    element: (
+      <AppLayout
+        header
+        tabMenu
+        toast
+        preRoute
+        routerType={RouterType.Role}
+        roles={[RoleType.Admin]}
+      />
+    ),
+    children: [{ path: NavType.Users, element: <UsersHomePage /> }]
   }
 ]);
