@@ -2,6 +2,7 @@ import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton } from 
 import { constants } from "@/utils";
 import { NavType } from "@/utils/enums";
 import { Icon, LucideIcon } from "@/components";
+import { Footer } from "@/layouts";
 
 export function HomePage() {
   return (
@@ -100,7 +101,7 @@ export function HomePage() {
         </div>
       </div>
 
-      <div>
+      <div className="mb-24">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">Powerful Features</h2>
           <div className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -275,6 +276,8 @@ export function HomePage() {
           </IonCard>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

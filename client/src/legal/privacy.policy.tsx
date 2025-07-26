@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import { IonButton } from "@ionic/react";
 import { constants } from "@/utils";
 import { NavType } from "@/utils/enums";
 
@@ -157,6 +159,23 @@ export function PrivacyPolicy() {
         </a>
         and we will respond within 72 hours.
       </p>
+      <div className="flex items-center justify-center my-10 space-x-4">
+        <Link to={NavType.TermsConditions}>
+          <IonButton color="secondary" size="small" shape="round" fill="outline">
+            Terms of use
+          </IonButton>
+        </Link>
+        <Link to={NavType.Home}>
+          <IonButton color="secondary" size="small" shape="round" fill="outline">
+            Home
+          </IonButton>
+        </Link>
+        <Link to={NavType.SignIn}>
+          <IonButton color="secondary" size="small" shape="round" fill="outline">
+            Sign In
+          </IonButton>
+        </Link>
+      </div>
     </div>
   );
 }

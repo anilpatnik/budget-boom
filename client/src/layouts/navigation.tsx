@@ -101,15 +101,11 @@ export const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       { path: NavType.Root, element: <RootPage /> },
-      { path: "*", element: <RootPage /> },
+      { path: NavType.Home, element: <HomePage /> },
       { path: NavType.PrivacyPolicy, element: <PrivacyPolicy /> },
-      { path: NavType.TermsConditions, element: <TermsConditions /> }
+      { path: NavType.TermsConditions, element: <TermsConditions /> },
+      { path: "*", element: <RootPage /> }
     ]
-  },
-  {
-    path: NavType.Root,
-    element: <AppLayout footer />,
-    children: [{ path: NavType.Home, element: <HomePage /> }]
   },
   {
     path: NavType.Root,
