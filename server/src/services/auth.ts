@@ -31,12 +31,7 @@ export async function signInAsync(uid: string) {
   const token: IToken = { id: dbUserId, uid: authUser?.uid, role };
   await fbService.createToken(token);
   // return model
-  const userModel: IUser = {
-    name: authUser?.displayName,
-    photo: authUser?.photoURL,
-    role,
-    countryId: dbUser?.countryId || String.empty
-  };
+  const userModel: IUser = { role, countryId: dbUser?.countryId || String.empty };
   return helper.jsonResponse<IUser>(true, helper.removeUndefined(userModel));
 }
 

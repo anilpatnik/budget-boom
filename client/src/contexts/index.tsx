@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from "react";
 import { IonContent, IonPage, IonSpinner } from "@ionic/react";
-import { useLocalStorage } from "usehooks-ts";
 import { IUser } from "@/models";
 import { constants } from "@/utils";
 import { fbService } from "@/services";
+import { useSecureLocalStorage } from "@/hooks";
 
 type ContextProps = {
   user: IUser;
@@ -12,7 +12,7 @@ type ContextProps = {
 const StoreContext = createContext({} as ContextProps);
 const StoreProvider = ({ children }: any) => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [user, setAuth] = useLocalStorage<IUser>(constants.AUTH, {});
+  const [user, setAuth] = useSecureLocalStorage<IUser>(constants.AUTH, {});
   useEffect(() => {
     const unsub = fbService.onAuthStateChanged(fbService.firebaseAuth, async fbUser => {
       // if (fbUser) console.log("User signed in", fbUser);

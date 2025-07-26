@@ -1,9 +1,11 @@
 import { toast, Slide, TypeOptions, ToastPosition } from "react-toastify";
+import CryptoJS from "crypto-js";
 import { IExpense } from "@/models";
 import { lookupService } from "@/services";
 import { AuthType } from "@/utils/enums";
+import { VITE_SECRET } from "@/utils/configs";
 
-export const categoryMap = Object.fromEntries(lookupService.categories.map(cat => [cat.id, cat]));
+//#region price helpers
 
 export function parsePrice(expense: boolean, price: number) {
   return expense ? parseFloat((-1 * price)?.toString()) : parseFloat(price?.toString());
@@ -39,6 +41,10 @@ export function totalExpense(items: IExpense[]) {
   return items?.map(x => (x.price && x.price < 0 ? x.price : 0)).reduce((sum, i) => sum + i, 0);
 }
 
+//#endregion
+
+//#region common helpers
+
 export function toastify(
   message: string = String.empty,
   color: TypeOptions = "default",
@@ -67,3 +73,22 @@ export function newPassword() {
   }
   return password;
 }
+
+export const categoryMap = Object.fromEntries(lookupService.categories.map(cat => [cat.id, cat]));
+
+//#endregion
+
+//#region crypto helpers
+
+export function encryptData(data: any) {
+  const strData = JSON.stringify(data);
+  return CryptoJS.AES.encrypt(strData, VITE_SECRET).toString();
+}
+
+export function decryptData(cipherText: string) {
+  const bytes = CryptoJS.AES.decrypt(cipherText, VITE_SECRET);
+  const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+  return JSON.parse(decryptedData);
+}
+
+//#endregion

@@ -14,10 +14,10 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Icon, InputField, PasswordField } from "@/components";
-import { constants, fbHelper, helper } from "@/utils";
+import { constants, helper } from "@/utils";
 import { NavType, RoleType } from "@/utils/enums";
 import { VITE_CAPTCHA_SITE } from "@/utils/configs";
-import { authService, lookupService } from "@/services";
+import { authService, fbService, lookupService } from "@/services";
 import { useStore } from "@/contexts";
 
 export function SignInPage() {
@@ -45,8 +45,6 @@ export function SignInPage() {
   // Handle the submission of the sign-in form
   const handleLogin = async (external: boolean, email: string, password: string) => {
     let success = false;
-    let auth = false;
-    let role = RoleType.User;
     try {
       if (!external) {
         // get recaptcha response
@@ -71,16 +69,14 @@ export function SignInPage() {
         : await authService.signInWithEmail(email, password);
       success = res?.success;
       if (res?.success) {
-        const token = fbHelper.getToken();
-        auth = (token?.length ?? 0) > constants.TOKEN_LENGTH;
-        role = res?.resource?.role || RoleType.User;
+        const fbUser = fbService.firebaseAuth.currentUser;
         setAuth(prev => ({
           ...prev,
           external,
-          auth,
-          name: res?.resource?.name,
-          role: res?.resource?.role,
-          photo: res?.resource?.photo,
+          auth: fbUser?.emailVerified || false,
+          name: fbUser?.displayName || String.empty,
+          photo: fbUser?.photoURL || String.empty,
+          role: res?.resource?.role || RoleType.User,
           countryId: res?.resource?.countryId,
           currency: lookupService.getCountry(res?.resource?.countryId ?? navigator.language)?.code
         }));

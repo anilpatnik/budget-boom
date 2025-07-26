@@ -16,12 +16,6 @@
 			},
 			"IUser": {
 				"properties": {
-					"name": {
-						"type": "string"
-					},
-					"photo": {
-						"type": "string"
-					},
 					"role": {
 						"$ref": "#/components/schemas/RoleType"
 					},

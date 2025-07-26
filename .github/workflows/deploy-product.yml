@@ -51,6 +51,7 @@ jobs:
           npm ci
           npm run build
         env:
+          VITE_SECRET: ${{ secrets.PROD_TOKEN_SECRET }}
           VITE_FIREBASE_API_KEY: ${{ secrets.PROD_FIREBASE_API_KEY }}
           VITE_FIREBASE_PROJECT_ID: ${{ env.PROJECT_ID }}
           VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.PROD_FIREBASE_MESSAGING_SENDER_ID }}
@@ -106,7 +107,6 @@ jobs:
             --allow-unauthenticated \
             --ingress all \
             --set-env-vars "ENVIRONMENT=production,\
-            TOKEN_SECRET=${{ secrets.PROD_TOKEN_SECRET }},\
             CAPTCHA_SECRET=${{ secrets.PROD_CAPTCHA_SECRET }},\
             DATABASE_URL=${{ secrets.PROD_DATABASE_URL }}"
 

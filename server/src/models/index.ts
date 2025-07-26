@@ -17,8 +17,6 @@ export interface IToken {
 }
 
 export interface IUser {
-  name?: string;
-  photo?: string;
   role?: RoleType;
   countryId?: string;
 }

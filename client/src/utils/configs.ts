@@ -1,3 +1,4 @@
+export const VITE_SECRET = import.meta.env.VITE_SECRET;
 export const VITE_FIREBASE_API_KEY = import.meta.env.VITE_FIREBASE_API_KEY;
 export const VITE_FIREBASE_PROJECT_ID = import.meta.env.VITE_FIREBASE_PROJECT_ID;
 export const VITE_FIREBASE_MESSAGING_SENDER_ID = import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID;

@@ -1,9 +1,7 @@
 import { formatISO } from "date-fns";
-import jwt from "jsonwebtoken";
-import { IResponse, IToken } from "../models";
+import { IResponse } from "../models";
 import { UserInfo } from "../providers";
 import { AuthType } from "./enums";
-import { TOKEN_SECRET } from "./configs";
 
 //#region date helpers
 
