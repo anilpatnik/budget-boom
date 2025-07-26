@@ -216,7 +216,7 @@ export function HomePage() {
                   <span className="font-medium">€</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className="text-2xl">JP</span>
+                  <span className="text-2xl">🇯🇵</span>
                   <span className="font-medium">¥</span>
                 </div>
               </div>
