@@ -1,8 +1,9 @@
-import { Dispatch, SetStateAction, createContext, useContext } from "react";
-import { useLocalStorage } from "usehooks-ts";
+import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from "react";
+import { IonContent, IonPage, IonSpinner } from "@ionic/react";
 import { IUser } from "@/models";
 import { constants } from "@/utils";
-import { setToken } from "@/services";
+import { fbService } from "@/services";
+import { useSecureLocalStorage } from "@/hooks";
 
 type ContextProps = {
   user: IUser;
@@ -10,9 +11,30 @@ type ContextProps = {
 };
 const StoreContext = createContext({} as ContextProps);
 const StoreProvider = ({ children }: any) => {
-  const [user, setAuth] = useLocalStorage<IUser>(constants.AUTH, {});
-  setToken(); // set auth api header token
-  return <StoreContext.Provider value={{ user, setAuth }}>{children}</StoreContext.Provider>;
+  const [loading, setLoading] = useState<boolean>(true);
+  const [user, setAuth] = useSecureLocalStorage<IUser>(constants.AUTH, {});
+  useEffect(() => {
+    const unsub = fbService.onAuthStateChanged(fbService.firebaseAuth, async fbUser => {
+      // if (fbUser) console.log("User signed in", fbUser);
+      // else console.log("User signed out");
+      await fbService.refreshToken();
+      setLoading(false);
+    });
+    return () => unsub();
+  }, []);
+  return (
+    <StoreContext.Provider value={{ user, setAuth }}>
+      {loading ? (
+        <IonPage>
+          <IonContent>
+            <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>
+          </IonContent>
+        </IonPage>
+      ) : (
+        children
+      )}
+    </StoreContext.Provider>
+  );
 };
 
 const useStore = () => useContext(StoreContext);

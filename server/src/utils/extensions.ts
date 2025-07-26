@@ -1,13 +1,15 @@
 import { IToken } from "../models";
+
 export {};
 
 declare global {
   interface StringConstructor {
     empty: string;
-    isNullOrEmpty: (val: any) => boolean;
+    isNullOrEmpty(val: any): boolean;
   }
+
   namespace Express {
-    interface Request extends IToken {
+    interface Request {
       auth?: IToken;
     }
   }
@@ -16,5 +18,5 @@ declare global {
 // string extensions
 String.empty = "";
 String.isNullOrEmpty = function (val: any): boolean {
-  return !val ? true : false;
+  return val === null || val === undefined || val === "";
 };

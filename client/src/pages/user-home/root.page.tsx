@@ -6,7 +6,7 @@ import { useStore } from "@/contexts";
 export function RootPage() {
   const { user } = useStore();
   useEffect(() => {
-    if (user.auth && user.role === RoleType.Admin) window.location.replace(NavType.Profile);
+    if (user.auth && user.role === RoleType.Admin) window.location.replace(NavType.Users);
     else if (user.auth) window.location.replace(NavType.Expenses);
     else window.location.replace(NavType.Home);
   }, []);

@@ -1,9 +1,7 @@
 import { formatISO } from "date-fns";
-import jwt from "jsonwebtoken";
-import { IResponse, IToken } from "../models";
+import { IResponse } from "../models";
 import { UserInfo } from "../providers";
 import { AuthType } from "./enums";
-import { TOKEN_SECRET } from "./configs";
 
 //#region date helpers
 
@@ -58,23 +56,6 @@ export function getAuthTypes(providerData: UserInfo[] | undefined): AuthType[] |
     if (x.providerId.includes(AuthType.Google)) return AuthType.Google;
     if (x.providerId.includes(AuthType.Facebook)) return AuthType.Facebook;
     return AuthType.Email;
-  });
-}
-
-//#endregion
-
-//#region jwt helpers
-
-export function createToken(payload: IToken) {
-  return jwt.sign(payload, TOKEN_SECRET as string, { expiresIn: "7d" });
-}
-
-export function verifyToken(token: string): Promise<IToken | string> {
-  return new Promise((resolve, reject) => {
-    jwt.verify(token, TOKEN_SECRET as string, (error, payload) => {
-      if (error) return reject(error.name);
-      return resolve(payload as IToken);
-    });
   });
 }
 

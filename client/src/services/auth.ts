@@ -28,7 +28,7 @@ export async function signInWithEmail(email: string, password: string) {
     );
     if (fbUser?.user?.uid?.length === 0 || !fbUser?.user?.emailVerified)
       throw new Error("SignIn Failed!");
-    if (fbUser) return await getUser(fbUser);
+    if (fbUser) return await getUser();
     return { success: false, resource: fbUser };
   } catch (error) {
     const err = fbService.ErrorMessage(error as fbService.FirebaseError | Error);
@@ -41,7 +41,7 @@ export async function signInWithGoogle() {
     const provider = new fbService.GoogleAuthProvider();
     const fbUser = await fbService.signInWithPopup(fbService.firebaseAuth, provider);
     if (fbUser?.user?.uid?.length === 0) throw new Error("SignUp Failed!");
-    if (fbUser) return await getUser(fbUser);
+    if (fbUser) return await getUser();
     return { success: false, resource: fbUser };
   } catch (error) {
     const err = fbService.ErrorMessage(error as fbService.FirebaseError | Error);
@@ -49,9 +49,10 @@ export async function signInWithGoogle() {
   }
 }
 
-export async function getUser(fbUser: fbService.UserCredential) {
+export async function getUser() {
   // const zone = new Date().getTimezoneOffset().toString();
-  const response = await openApi.post(ServiceType.SignIn, fbUser.user);
+  await fbService.refreshToken(false);
+  const response = await authApi.post(ServiceType.SignIn);
   const { success, resource } = response.data;
   return { success, resource };
 }

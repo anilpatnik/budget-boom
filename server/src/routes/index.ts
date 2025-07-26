@@ -5,8 +5,15 @@ import { RoleType } from "../utils/enums";
 
 const apiRouter: Router = express.Router();
 
-apiRouter.post("/signin", authCtrl.signInAsync);
+//#region public routes
+
 apiRouter.post("/captcha", authCtrl.captchaVerifyAsync);
+
+//#endregion
+
+//#region private routes
+
+apiRouter.post("/signin", authMiddleware(), authCtrl.signInAsync);
 
 apiRouter.post("/profile", authMiddleware(), authCtrl.updateProfileAsync);
 apiRouter.delete("/profile", authMiddleware(), authCtrl.deleteProfileAsync);
@@ -27,5 +34,7 @@ apiRouter.get("/expenses/:expenseid", authMiddleware(), expenseCtrl.getExpenseAs
 apiRouter.post("/expense", authMiddleware(), expenseCtrl.upsertExpenseAsync);
 apiRouter.delete("/expenses/:expenseid", authMiddleware(), expenseCtrl.deleteExpenseAsync);
 apiRouter.post("/expenses/report", authMiddleware(), expenseCtrl.getExpenseReportAsync);
+
+//#endregion
 
 export { apiRouter };

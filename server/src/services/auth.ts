@@ -27,18 +27,11 @@ export async function signInAsync(uid: string) {
     );
     dbUserId = user.id;
   }
-  // jwt token
-  const tokenAuth: IToken = { id: dbUserId, uid: authUser?.uid, role };
-  const token = helper.createToken(tokenAuth);
+  // token claims
+  const token: IToken = { id: dbUserId, uid: authUser?.uid, role };
+  await fbService.createToken(token);
   // return model
-  const userModel: IUser = {
-    name: authUser?.displayName,
-    email: authUser?.email,
-    photo: authUser?.photoURL,
-    role,
-    token,
-    countryId: dbUser?.countryId || String.empty
-  };
+  const userModel: IUser = { role, countryId: dbUser?.countryId || String.empty };
   return helper.jsonResponse<IUser>(true, helper.removeUndefined(userModel));
 }
 
