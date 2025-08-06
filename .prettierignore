@@ -1,7 +1,14 @@
-# Ignore artifacts:
+node_modules
+typings
+coverage
+build
+dist
+dev-dist
+android
+ios
+migrations
 frontend
 backend
-coverage
-
-# Ignore all HTML files:
+.next
+out
 *.html

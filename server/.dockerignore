@@ -1,5 +1,3 @@
-# compiled output
-
 node_modules
 typings
 coverage
@@ -9,48 +7,39 @@ dev-dist
 android
 ios
 migrations
-client
 frontend
 backend
+.next
+out
 
-# dependencies
-
-Dockerfile
-.dockerignore
-.DS*Store
+.DS_Store
 .vscode
-.git
-.env
-.env.dev
-.env.prod
-.firebase
 .vs
 .hintrc
 .pnp
 .pnp.js
+*.pem
 .expo
 *.jks
-_.p8
-_.p12
-_.mobileprovision
-_.orig.\_
+*.p8
+*.p12
+*.mobileprovision
+*.orig.*
+.env*
+.firebase
+.vercel
 
-# logs
+*-debug.*
+*-error.*
 
-npm-debug.log*
-pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-firebase-debug.log*
-ui-debug.log\*
-
-# config files
-
+*.tsbuildinfo
 expo-env.d.ts
-firebase.config.json
-firebase.config.prod.json
-firebase.config.deploy.json
+next-env.d.ts
+firebase.config*
+
+Dockerfile
+.dockerignore
+.git
 
 tslint.json
 nodemon.json
