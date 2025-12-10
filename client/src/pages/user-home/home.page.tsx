@@ -19,7 +19,8 @@ export function HomePage() {
         </div>
         <div className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-8">
           The smart and easy way to manage your budget, track expenses, and achieve your financial
-          goals with our intuitive Budgetezy tool. Perfect for personal use and project management
+          goals with our intuitive mybudgeteasy tool. Perfect for personal use and project
+          management
         </div>
       </div>
 
@@ -33,7 +34,7 @@ export function HomePage() {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Take Control?</h2>
           <div className="max-w-md">
             <div className="text-lg mb-6">
-              Join thousands of users who trust Budgetezy to manage their finances effortlessly
+              Join thousands of users who trust mybudgeteasy to manage their finances effortlessly
             </div>
             <div className="mb-6">
               <IonButton color="warning" fill="solid" shape="round" href={NavType.SignUp}>
