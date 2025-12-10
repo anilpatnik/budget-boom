@@ -50,8 +50,8 @@ export function Header() {
                   <img
                     alt={String.empty}
                     src={constants.LOGO_IMG}
-                    height="48px"
-                    width="48px"
+                    height="64px"
+                    width="64px"
                     loading="lazy"
                     className="cursor-pointer"
                   />
@@ -61,8 +61,8 @@ export function Header() {
                 <img
                   alt={String.empty}
                   src={constants.LOGO_IMG}
-                  height="48px"
-                  width="48px"
+                  height="64px"
+                  width="64px"
                   loading="lazy"
                 />
               )}
@@ -76,8 +76,8 @@ export function Header() {
                   <img
                     alt={String.empty}
                     src={constants.LOGO_IMG}
-                    height="48px"
-                    width="48px"
+                    height="64px"
+                    width="64px"
                     loading="lazy"
                   />
                 </Box>
