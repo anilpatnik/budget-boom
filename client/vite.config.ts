@@ -13,8 +13,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
       manifest: {
-        name: "my💰easy",
-        short_name: "my💰easy",
+        name: "My Budget",
+        short_name: "My Budget",
         description: "track, analyze, and manage your income and expenses",
         start_url: "/",
         display: "standalone",
@@ -28,13 +28,13 @@ export default defineConfig({
         screenshots: [
           {
             src: "screenshot1.jpg",
-            sizes: "1092x669",
+            sizes: "902x790",
             type: "image/jpg",
             form_factor: "wide"
           },
           {
             src: "screenshot2.jpg",
-            sizes: "344x582",
+            sizes: "373x824",
             type: "image/jpg",
             form_factor: "narrow"
           }
