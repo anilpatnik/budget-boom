@@ -50,8 +50,8 @@ export function Header() {
                   <img
                     alt={String.empty}
                     src={constants.LOGO_IMG}
-                    height="64px"
-                    width="64px"
+                    height="128px"
+                    width="128px"
                     loading="lazy"
                     className="cursor-pointer"
                   />
@@ -60,7 +60,7 @@ export function Header() {
               {user?.auth && (
                 <img
                   alt={String.empty}
-                  src={constants.LOGO_IMG}
+                  src={constants.LOGO_IMG_2}
                   height="64px"
                   width="64px"
                   loading="lazy"
@@ -75,7 +75,7 @@ export function Header() {
                 <Box sx={{ flexGrow: 0 }} className="ion-hide-md-down">
                   <img
                     alt={String.empty}
-                    src={constants.LOGO_IMG}
+                    src={constants.LOGO_IMG_2}
                     height="64px"
                     width="64px"
                     loading="lazy"

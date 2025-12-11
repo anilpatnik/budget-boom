@@ -12,8 +12,8 @@ export function HomePage() {
           <img
             alt={String.empty}
             src={constants.LOGO_IMG}
-            height="64px"
-            width="64px"
+            height="128px"
+            width="128px"
             loading="lazy"
           />
         </div>

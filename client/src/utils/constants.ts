@@ -1,8 +1,10 @@
 import logo from "@/assets/logo.png";
+import logo2 from "@/assets/logo2.png";
 import banner from "@/assets/banner.png";
 import profile from "@/assets/profile.jpg";
 
 export const LOGO_IMG = logo;
+export const LOGO_IMG_2 = logo2;
 export const BANNER_IMG = banner;
 export const PROFILE_IMG = profile;
 export const TWO_DECIMAL_PATTERN = /^\d+(\.\d{0,2})?$/;
