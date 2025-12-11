@@ -13,8 +13,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
       manifest: {
-        name: "myBudgetezy",
-        short_name: "myBudgetezy",
+        name: "My Budget",
+        short_name: "My Budget",
         description: "track, analyze, and manage your income and expenses",
         start_url: "/",
         display: "standalone",
