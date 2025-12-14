@@ -41,7 +41,9 @@ function PreRoute({
 
   useEffect(() => {
     if (!isAuth && (routerType === RouterType.User || routerType === RouterType.Role)) {
-      navigate(NavType.SignIn, { replace: true, state: location.pathname });
+      // custom login disabled
+      // navigate(NavType.SignIn, { replace: true, state: location.pathname });
+      navigate(NavType.Root, { replace: true });
     } else if (isAuth && routerType === RouterType.Auth) {
       navigate(NavType.Root, { replace: true });
     } else if (isAuth && routerType === RouterType.Role && !roleAllowed) {

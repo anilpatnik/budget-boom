@@ -126,7 +126,7 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
           </div>
           <div className="my-6">
             <IonButton id="id-submit-button" size="small" color="secondary" type="submit">
-              <Icon name="search-sharp" slot="start" />
+              <Icon name="search-sharp" slot="start" css="mr-1" />
               SEARCH
             </IonButton>
             <IonButton

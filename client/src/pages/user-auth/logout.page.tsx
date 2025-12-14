@@ -20,7 +20,7 @@ export function SignOutPage() {
     localStorage.clear();
     await fbService.firebaseSignOut();
     setAuth({ ...User });
-    navigate(NavType.SignIn);
+    navigate(NavType.Home);
   };
   return <IonSpinner className="spinner-center" name="lines-sharp-small"></IonSpinner>;
 }

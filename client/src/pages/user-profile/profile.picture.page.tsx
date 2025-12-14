@@ -93,9 +93,9 @@ export function ProfilePicturePage() {
               })
             }>
             {loading ? (
-              <Icon name="sync-sharp" css="icon-spinner" slot="start" />
+              <Icon name="sync-sharp" css="mr-2 icon-spinner" slot="start" />
             ) : (
-              <Icon name="trash-bin-sharp" slot="start" />
+              <Icon name="trash-bin-sharp" slot="start" css="mr-2" />
             )}
             DELETE YOUR ACCOUNT
           </IonButton>
@@ -133,9 +133,9 @@ export function ProfilePicturePage() {
             disabled={loading}
             onClick={handleSubmit}>
             {loading ? (
-              <Icon name="sync-sharp" css="icon-spinner" slot="start" />
+              <Icon name="sync-sharp" css="mr-2 icon-spinner" slot="start" />
             ) : (
-              <Icon name="caret-forward-sharp" slot="start" />
+              <Icon name="caret-forward-sharp" slot="start" css="mr-2" />
             )}
             UPLOAD
           </IonButton>

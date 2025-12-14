@@ -233,19 +233,9 @@ export function TermsConditions() {
         to the jurisdiction of the courts of VIC.
       </p>
       <div className="flex items-center justify-center my-10 space-x-4">
-        <Link to={NavType.PrivacyPolicy}>
-          <IonButton color="secondary" size="small" shape="round" fill="outline">
-            Privacy Policy
-          </IonButton>
-        </Link>
         <Link to={NavType.Home}>
           <IonButton color="secondary" size="small" shape="round" fill="outline">
-            Home
-          </IonButton>
-        </Link>
-        <Link to={NavType.SignIn}>
-          <IonButton color="secondary" size="small" shape="round" fill="outline">
-            Sign In
+            Back
           </IonButton>
         </Link>
       </div>

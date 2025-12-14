@@ -1,10 +1,52 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonButton } from "@ionic/react";
-import { constants } from "@/utils";
-import { NavType } from "@/utils/enums";
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonButton,
+  IonLoading
+} from "@ionic/react";
+import { constants, helper } from "@/utils";
+import { NavType, RoleType } from "@/utils/enums";
+import { authService, fbService, lookupService } from "@/services";
+import { useStore } from "@/contexts";
 import { Icon, LucideIcon } from "@/components";
 import { Footer } from "@/layouts";
 
 export function HomePage() {
+  const { setAuth } = useStore();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const handleLogin = async () => {
+    let success = false;
+    try {
+      setLoading(true);
+      const res = await authService.signInWithGoogle();
+      success = res?.success;
+      if (res?.success) {
+        const fbUser = fbService.firebaseAuth.currentUser;
+        setAuth(prev => ({
+          ...prev,
+          external: true,
+          auth: fbUser?.emailVerified || false,
+          name: fbUser?.displayName || String.empty,
+          photo: fbUser?.photoURL || String.empty,
+          role: res?.resource?.role || RoleType.User,
+          countryId: res?.resource?.countryId,
+          currency: lookupService.getCountry(res?.resource?.countryId ?? navigator.language)?.code
+        }));
+      } else {
+        if (res?.resource) helper.toastify(res?.resource, constants.ERROR, constants.FAILURE_DELAY);
+      }
+    } finally {
+      setTimeout(() => {
+        if (success) navigate(NavType.Root, { replace: true });
+        setLoading(false);
+      }, constants.DELAY);
+    }
+  };
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="text-center mb-16">
@@ -19,7 +61,7 @@ export function HomePage() {
         </div>
         <div className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-8">
           The smart and easy way to manage your budget, track expenses, and achieve your financial
-          goals with our intuitive mybudgeteasy tool. Perfect for personal use and project
+          goals with our intuitive My Budget Easy tool. Perfect for personal use and project
           management
         </div>
       </div>
@@ -34,17 +76,13 @@ export function HomePage() {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Take Control?</h2>
           <div className="max-w-md">
             <div className="text-lg mb-6">
-              Join thousands of users who trust mybudgeteasy to manage their finances effortlessly
+              Join thousands of users who trust
+              <span className="font-semibold mx-1">My Budget Easy</span>to manage their finances
+              effortlessly
             </div>
-            <div className="mb-6">
-              <IonButton color="warning" fill="solid" shape="round" href={NavType.SignUp}>
-                Sign Up Now
-              </IonButton>
-            </div>
-            <div className="text-lg mb-6">Already have an account?</div>
             <div>
-              <IonButton color="light" fill="solid" shape="round" href={NavType.SignIn}>
-                Sign In
+              <IonButton type="button" className="google-button" onClick={handleLogin}>
+                <Icon name="logo-google" slot="start" css="mr-3" /> Continue with Google
               </IonButton>
             </div>
           </div>
@@ -233,20 +271,20 @@ export function HomePage() {
             </IonCardHeader>
             <IonCardContent className="space-y-4 my-3">
               <div className="text-base	text-gray-600 mb-6">
-                Multiple authentication options to keep your financial data safe
+                Secure and seamless authentication powered by your Google account
               </div>
               <div className="space-y-3">
                 <div className="flex items-center text-sm text-gray-600">
                   <LucideIcon name="Mail" css="w-4 h-4 text-blue-500 mr-2" />
-                  Email and password login
+                  One-click sign-in with Google
                 </div>
                 <div className="flex items-center text-sm text-gray-600">
                   <Icon name="logo-google" css="w-4 h-4 text-red-500 mr-2" />
-                  Gmail integration
+                  OAuth-based secure authentication
                 </div>
                 <div className="flex items-center text-sm text-gray-600">
                   <LucideIcon name="Lock" css="w-4 h-4 text-yellow-500 mr-2" />
-                  Password recovery
+                  No password storage or management
                 </div>
               </div>
             </IonCardContent>
@@ -277,8 +315,14 @@ export function HomePage() {
           </IonCard>
         </div>
       </div>
-
       <Footer />
+      <IonLoading
+        isOpen={loading || false}
+        spinner="circles"
+        message="Loading..."
+        showBackdrop={loading || false}
+        translucent={loading || false}
+      />
     </div>
   );
 }

@@ -160,19 +160,9 @@ export function PrivacyPolicy() {
         and we will respond within 72 hours.
       </p>
       <div className="flex items-center justify-center my-10 space-x-4">
-        <Link to={NavType.TermsConditions}>
-          <IonButton color="secondary" size="small" shape="round" fill="outline">
-            Terms of use
-          </IonButton>
-        </Link>
         <Link to={NavType.Home}>
           <IonButton color="secondary" size="small" shape="round" fill="outline">
-            Home
-          </IonButton>
-        </Link>
-        <Link to={NavType.SignIn}>
-          <IonButton color="secondary" size="small" shape="round" fill="outline">
-            Sign In
+            Back
           </IonButton>
         </Link>
       </div>
