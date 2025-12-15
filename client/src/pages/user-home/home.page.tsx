@@ -81,7 +81,11 @@ export function HomePage() {
               effortlessly
             </div>
             <div>
-              <IonButton type="button" className="google-button" onClick={handleLogin}>
+              <IonButton
+                type="button"
+                color="warning"
+                className="google-button"
+                onClick={handleLogin}>
                 <Icon name="logo-google" slot="start" css="mr-3" /> Continue with Google
               </IonButton>
             </div>
