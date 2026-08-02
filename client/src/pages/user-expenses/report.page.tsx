@@ -95,7 +95,6 @@ export function ExpenseReportPage() {
   const handleSearch = (item: IExpenseSearch) => {
     setPayload(prev => ({
       ...prev,
-      page: 0,
       startDate: item?.startDate,
       endDate: item?.endDate,
       projectId: item?.projectId,

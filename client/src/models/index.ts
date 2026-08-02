@@ -61,7 +61,7 @@ export interface IAdminUserSearch {
 export const AdminUserSearch: IAdminUserSearch = {
   searchType: SearchType.Name,
   searchInput: String.empty,
-  role: RoleType.User,
+  role: undefined,
   active: false,
   page: 0,
   size: constants.PAGE_SIZE
@@ -135,6 +135,7 @@ export interface IExpenseSearch {
   categoryId?: string;
   projectId?: string;
   skip?: boolean;
+  page?: number;
   size?: number;
   nextCursor?: IExpenseCursor;
 }
@@ -144,5 +145,6 @@ export const ExpenseSearch: IExpenseSearch = {
   categoryId: String.empty,
   projectId: String.empty,
   skip: false,
+  page: 0,
   size: constants.PAGE_SIZE
 };

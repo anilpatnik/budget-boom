@@ -73,6 +73,7 @@ export interface IExpenseSearch {
   endDate?: string;
   categoryId?: string;
   projectId?: string;
+  page?: number;
   size?: number;
   nextCursor?: IExpenseCursor;
 }

@@ -22,7 +22,7 @@ import {
   TableRow
 } from "@mui/material";
 import { constants, helper } from "@/utils";
-import { CrudType, RoleType } from "@/utils/enums";
+import { CrudType, RoleType, SearchType } from "@/utils/enums";
 import { AdminUser, IAdminUser, AdminUserSearch, IAdminUserSearch } from "@/models";
 import { userService } from "@/services";
 import { Icon } from "@/components";
@@ -142,8 +142,8 @@ export function UsersPage() {
     const input = e.target.value;
     setPayload(prev => ({ ...prev, searchInput: input }));
     // set name or email
-    if (input.includes("@")) setPayload(prev => ({ ...prev, searchType: 20 }));
-    else setPayload(prev => ({ ...prev, searchType: 10 }));
+    if (input.includes("@")) setPayload(prev => ({ ...prev, searchType: SearchType.Email }));
+    else setPayload(prev => ({ ...prev, searchType: SearchType.Name }));
   };
   const handleSubmit = (e: any) => {
     e.preventDefault();

@@ -192,15 +192,16 @@ export function ExpensesPage() {
   const handleSearch = (item: IExpenseSearch) => {
     setPayload(prev => ({
       ...prev,
-      page: 0,
       projectId: item?.projectId,
       categoryId: item?.categoryId,
       startDate: item?.startDate,
       endDate: item?.endDate,
-      skip: item?.skip
+      skip: item?.skip,
+      nextCursor: undefined
     }));
     setTimeout(() => {
       setRecords([]);
+      setCursor(undefined);
       fetchData();
     }, constants.DELAY);
   };
