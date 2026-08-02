@@ -19,6 +19,8 @@
     "firebase": "^11.9.1",
     "formik": "^2.4.6",
     "ionicons": "^8.0.9",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
     "lucide-react": "^0.525.0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",

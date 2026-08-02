@@ -16,6 +16,7 @@ import { lookupService, projectService, expenseService } from "@/services";
 import { Icon, LucideIcon } from "@/components";
 import { useStore } from "@/contexts";
 import { ExpenseReportSearchPage } from "./report.search.page";
+import { ExpensePDFExportPage } from "./pdf-export.page";
 
 export function ExpenseReportPage() {
   const { user } = useStore();
@@ -92,6 +93,20 @@ export function ExpenseReportPage() {
       });
     }, constants.DELAY);
   };
+  const [presentPDFExportModal, dismissPDFExportModal] = useIonModal(ExpensePDFExportPage, {
+    expenses: records,
+    countryId: user?.countryId,
+    currency: user?.currency,
+    handleClose: () => dismissPDFExportModal()
+  });
+  const handlePDFExportOpen = () => {
+    setTimeout(() => {
+      presentPDFExportModal({
+        backdropDismiss: false,
+        keyboardClose: false
+      });
+    }, constants.DELAY);
+  };
   const handleSearch = (item: IExpenseSearch) => {
     setPayload(prev => ({
       ...prev,
@@ -143,14 +158,24 @@ export function ExpenseReportPage() {
               )}
             </TableCell>
             <TableCell align="left">
-              <IonFabButton
-                id="id-search-button"
-                title="SEARCH EXPENSES"
-                color="warning"
-                size="small"
-                onClick={() => handleSearchOpen()}>
-                <Icon name="options-sharp" />
-              </IonFabButton>
+              <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
+                <IonFabButton
+                  id="id-search-button"
+                  title="SEARCH EXPENSES"
+                  color="warning"
+                  size="small"
+                  onClick={() => handleSearchOpen()}>
+                  <Icon name="options-sharp" />
+                </IonFabButton>
+                <IonFabButton
+                  id="id-pdf-export-button"
+                  title="EXPORT TO PDF"
+                  color="success"
+                  size="small"
+                  onClick={() => handlePDFExportOpen()}>
+                  <Icon name="download-sharp" />
+                </IonFabButton>
+              </div>
             </TableCell>
           </TableRow>
         </TableHead>
