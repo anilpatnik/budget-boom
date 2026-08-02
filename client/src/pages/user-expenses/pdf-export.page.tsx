@@ -24,12 +24,7 @@ type Props = {
   handleClose: () => void;
 };
 
-export function ExpensePDFExportPage({
-  expenses,
-  countryId,
-  currency,
-  handleClose
-}: Props) {
+export function ExpensePDFExportPage({ expenses, countryId, currency, handleClose }: Props) {
   const [isGenerating, setIsGenerating] = useState(false);
 
   // Calculate previous month's start and end dates
@@ -99,9 +94,6 @@ export function ExpensePDFExportPage({
               BACK
             </IonButton>
           </IonButtons>
-          <div slot="end" className="mr-4">
-            <IonLabel className="text-sm font-semibold">Export to PDF</IonLabel>
-          </div>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">

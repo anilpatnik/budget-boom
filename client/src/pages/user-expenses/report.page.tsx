@@ -158,7 +158,7 @@ export function ExpenseReportPage() {
               )}
             </TableCell>
             <TableCell align="left">
-              <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
+              <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
                 <IonFabButton
                   id="id-search-button"
                   title="SEARCH EXPENSES"
