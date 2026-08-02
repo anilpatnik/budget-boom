@@ -11,7 +11,7 @@ export async function getExpensesAsync(userId: string, expenseSearch: IExpenseSe
   if (expenseSearch.categoryId) {
     whereCondition.categoryId = { equals: expenseSearch.categoryId, mode: "insensitive" };
   }
-  if (expenseSearch.startDate && expenseSearch.endDate) {
+  if (expenseSearch.startDate && expenseSearch.startDate.trim() && expenseSearch.endDate && expenseSearch.endDate.trim()) {
     whereCondition.entryDate = {
       gte: new Date(helper.formatDate(expenseSearch.startDate)),
       lte: new Date(helper.formatDate(expenseSearch.endDate))
@@ -79,7 +79,7 @@ export async function getExpenseReportAsync(userId: string, expenseSearch: IExpe
   if (expenseSearch.projectId) {
     whereCondition.projectId = expenseSearch.projectId;
   }
-  if (expenseSearch.startDate && expenseSearch.endDate) {
+  if (expenseSearch.startDate && expenseSearch.startDate.trim() && expenseSearch.endDate && expenseSearch.endDate.trim()) {
     whereCondition.entryDate = {
       gte: new Date(helper.formatDate(expenseSearch.startDate)),
       lte: new Date(helper.formatDate(expenseSearch.endDate))

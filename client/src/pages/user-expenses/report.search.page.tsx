@@ -23,17 +23,24 @@ type Props = {
 export function ExpenseReportSearchPage({ search, projects, handleClose, handleSearch }: Props) {
   const formik = useFormik({
     initialValues: {
-      startDate: search?.startDate || dateHelper.monthStart,
-      endDate: search?.endDate || dateHelper.monthEnd,
+      startDate: search?.startDate || String.empty,
+      endDate: search?.endDate || String.empty,
       projectId: search?.projectId || String.empty,
-      skip: search?.skip || false
+      skip: search?.skip || true
     },
     validateOnMount: false,
     validationSchema: Yup.object({
-      startDate: Yup.date().required("required"),
-      endDate: Yup.date()
-        .min(Yup.ref("startDate"), "End Date should not be less than Start Date")
-        .required("required")
+      startDate: Yup.date().when("skip", {
+        is: false,
+        then: schema => schema.required("required")
+      }),
+      endDate: Yup.date().when("skip", {
+        is: false,
+        then: schema =>
+          schema
+            .min(Yup.ref("startDate"), "End Date should not be less than Start Date")
+            .required("required")
+      })
     }),
     onSubmit: async values => {
       const search: IExpenseSearch = {
@@ -121,10 +128,10 @@ export function ExpenseReportSearchPage({ search, projects, handleClose, handleS
               onClick={() =>
                 formik.resetForm({
                   values: {
-                    startDate: dateHelper.monthStart,
-                    endDate: dateHelper.monthEnd,
+                    startDate: String.empty,
+                    endDate: String.empty,
                     projectId: String.empty,
-                    skip: false
+                    skip: true
                   }
                 })
               }

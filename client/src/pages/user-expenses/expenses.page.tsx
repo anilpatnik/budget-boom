@@ -53,8 +53,6 @@ export function ExpensesPage() {
   }, [search]);
   const [payload, setPayload] = useState<IExpenseSearch>({
     ...ExpenseSearch,
-    startDate: dateHelper.monthStart,
-    endDate: dateHelper.monthEnd,
     size: constants.PAGE_SIZE,
     projectId: queryParams.projectId,
     skip: Boolean(queryParams.projectId)

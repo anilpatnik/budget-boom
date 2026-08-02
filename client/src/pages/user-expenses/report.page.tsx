@@ -27,8 +27,8 @@ export function ExpenseReportPage() {
   const [projects, setProjects] = useState<IProject[]>([]);
   const [payload, setPayload] = useState<IExpenseSearch>({
     ...ExpenseSearch,
-    startDate: dateHelper.monthStart,
-    endDate: dateHelper.monthEnd,
+    startDate: String.empty,
+    endDate: String.empty,
     size: constants.PAGE_SIZE
   });
   const queryRef = useRef(payload);
@@ -133,7 +133,7 @@ export function ExpenseReportPage() {
                   {helper.formatPrice(incomeTotal + expenseTotal, user?.countryId, user?.currency)}
                 </div>
               </div>
-              {!queryRef.current.skip && (
+              {!queryRef.current.skip && queryRef.current?.startDate && queryRef.current?.endDate && (
                 <div className="mt-2 flex items-center text-blue-700">
                   <div className="mr-2">📅</div>
                   <div>{dateHelper.dateFormat(queryRef.current?.startDate ?? String.empty)}</div>
