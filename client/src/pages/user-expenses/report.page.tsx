@@ -182,7 +182,7 @@ export function ExpenseReportPage() {
           ))}
           {loading && (
             <TableRow>
-              <TableCell colSpan={2} className="!text-center !py-10">
+              <TableCell colSpan={2}>
                 <IonSpinner name="lines-sharp-small"></IonSpinner>
               </TableCell>
             </TableRow>
