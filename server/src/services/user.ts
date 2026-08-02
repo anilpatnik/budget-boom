@@ -5,54 +5,39 @@ import { helper } from "../utils";
 import { RoleType, SearchType } from "../utils/enums";
 
 export async function getUsersAsync(uid: string, userSearch: IAdminUserSearch) {
-  let whereCondition = {};
-  whereCondition = { ...whereCondition, uid: { not: uid } };
-  // name or email filter
+  let whereCondition: any = { uid: { not: uid } };
+
   if (userSearch?.searchInput) {
     if (userSearch.searchType === SearchType.Name) {
-      whereCondition = {
-        ...whereCondition,
-        name: { contains: userSearch.searchInput, mode: "insensitive" }
-      };
-    }
-    if (userSearch.searchType === SearchType.Email) {
-      whereCondition = {
-        ...whereCondition,
-        email: { contains: userSearch.searchInput, mode: "insensitive" }
-      };
+      whereCondition.name = { contains: userSearch.searchInput, mode: "insensitive" };
+    } else if (userSearch.searchType === SearchType.Email) {
+      whereCondition.email = { contains: userSearch.searchInput, mode: "insensitive" };
     }
   }
-  // active users only
+
   if (userSearch.active) {
-    whereCondition = {
-      ...whereCondition,
-      inactive: { equals: false }
-    };
+    whereCondition.inactive = false;
   }
-  // role filter
-  if (userSearch?.role && userSearch?.role !== RoleType.Admin) {
+
+  if (userSearch?.role) {
     const dbrole = dbService.getdbRoleType(userSearch.role);
-    whereCondition = {
-      ...whereCondition,
-      role: { equals: dbrole }
-    };
+    whereCondition.role = dbrole;
   }
-  // get all users
+
   const [dbUsers, count] = await dbService.getUsers(
     whereCondition,
     userSearch.page,
     userSearch.size
   );
-  const users: IAdminUser[] = dbUsers?.map(dbUser => {
-    const role = dbUser?.role ? dbService.getRoleType(dbUser.role) : RoleType.User;
-    return {
-      id: dbUser?.id,
-      uid: dbUser?.uid,
-      name: dbUser?.name || String.empty,
-      email: dbUser?.email,
-      role
-    };
-  });
+
+  const users: IAdminUser[] = dbUsers?.map(dbUser => ({
+    id: dbUser?.id,
+    uid: dbUser?.uid,
+    name: dbUser?.name || "",
+    email: dbUser?.email,
+    role: dbUser?.role ? dbService.getRoleType(dbUser.role) : RoleType.User
+  })) || [];
+
   const userData: IAdminUserData = { data: users, count };
   return helper.jsonResponse<IAdminUserData>(true, userData);
 }
@@ -82,36 +67,31 @@ export async function getUserAsync(uid: string) {
 }
 
 export async function upsertUserAsync(request: IAdminUser) {
-  let uid: string = String.empty;
-  if (!request?.uid) {
-    uid = await createUserRecordAsync(
-      request?.name,
-      request?.email,
-      request?.password,
-      request?.role
-    );
-  } else {
-    uid = await updateUserRecordAsync(
-      request?.uid,
-      request?.name,
-      request?.emailVerified,
-      request?.disabled,
-      request?.role
-    );
-  }
+  const uid = request?.uid
+    ? await updateUserRecordAsync(
+        request.uid,
+        request?.name,
+        request?.emailVerified,
+        request?.disabled,
+        request?.role
+      )
+    : await createUserRecordAsync(request?.name, request?.email, request?.password, request?.role);
+
   return helper.jsonResponse<string>(true, uid);
 }
 
 export async function deleteUserAsync(uid: string) {
-  // auth user
   await fbService.deleteAuthUser(uid);
-  // db user
+  
   const dbUser = await dbService.getUser(uid);
   if (dbUser) {
-    await dbService.deleteExpenses(dbUser.id);
-    await dbService.deleteProjects(dbUser.id);
+    await Promise.all([
+      dbService.deleteExpenses(dbUser.id),
+      dbService.deleteProjects(dbUser.id)
+    ]);
     await dbService.deleteUser(dbUser.id);
   }
+
   return helper.jsonResponse<string>(true, "User deleted!");
 }
 
