@@ -31,8 +31,12 @@ out
 
 *-debug.*
 *-error.*
+*.log
 
 *.tsbuildinfo
 expo-env.d.ts
 next-env.d.ts
 firebase.config*
+
+*.md
+!README.md
