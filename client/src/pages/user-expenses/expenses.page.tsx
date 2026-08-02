@@ -221,32 +221,6 @@ export function ExpensesPage() {
 
   return (
     <Box>
-      {/* Filter status and reset button */}
-      {(payload.projectId || payload.categoryId || (payload.startDate && payload.endDate)) && (
-        <Box
-          sx={{
-            p: 2,
-            bgcolor: "#f5f5f5",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center"
-          }}>
-          <Box>
-            {payload.projectId && <span className="mr-3">🏗️ Project: {payload.projectId}</span>}
-            {payload.categoryId && <span className="mr-3">📂 Category: {payload.categoryId}</span>}
-            {payload.startDate && payload.endDate && (
-              <span className="mr-3">
-                📅 {dateHelper.dateFormat(payload.startDate)} -{" "}
-                {dateHelper.dateFormat(payload.endDate)}
-              </span>
-            )}
-          </Box>
-          <IonButton color="danger" size="small" onClick={handleReset}>
-            <Icon name="close-circle" slot="start" />
-            RESET
-          </IonButton>
-        </Box>
-      )}
 
       <TableContainer
         component={Paper}
@@ -304,15 +278,28 @@ export function ExpensesPage() {
                     onClick={() => handleOpen(Expense)}>
                     <Icon name="add" />
                   </IonFabButton>
-                  <IonFabButton
-                    id="id-search-button"
-                    title="SEARCH EXPENSES"
-                    color="warning"
-                    size="small"
-                    className="ml-5"
-                    onClick={() => handleSearchOpen()}>
-                    <Icon name="options-sharp" />
-                  </IonFabButton>
+                  {!payload.projectId && !payload.categoryId && !(payload.startDate && payload.endDate) && (
+                    <IonFabButton
+                      id="id-search-button"
+                      title="SEARCH EXPENSES"
+                      color="warning"
+                      size="small"
+                      className="ml-5"
+                      onClick={() => handleSearchOpen()}>
+                      <Icon name="options-sharp" />
+                    </IonFabButton>
+                  )}
+                  {(payload.projectId || payload.categoryId || (payload.startDate && payload.endDate)) && (
+                    <IonFabButton
+                      id="id-reset-button"
+                      title="RESET FILTERS"
+                      color="danger"
+                      size="small"
+                      className="ml-5"
+                      onClick={() => handleReset()}>
+                      <Icon name="close-circle-sharp" />
+                    </IonFabButton>
+                  )}
                 </Box>
               </TableCell>
             </TableRow>
