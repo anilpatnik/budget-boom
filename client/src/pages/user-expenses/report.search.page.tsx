@@ -23,8 +23,8 @@ type Props = {
 export function ExpenseReportSearchPage({ search, projects, handleClose, handleSearch }: Props) {
   const formik = useFormik({
     initialValues: {
-      startDate: search?.startDate || String.empty,
-      endDate: search?.endDate || String.empty,
+      startDate: search?.startDate || dateHelper.monthStart,
+      endDate: search?.endDate || dateHelper.monthEnd,
       projectId: search?.projectId || String.empty,
       skip: search?.skip || true
     },
@@ -128,8 +128,8 @@ export function ExpenseReportSearchPage({ search, projects, handleClose, handleS
               onClick={() =>
                 formik.resetForm({
                   values: {
-                    startDate: String.empty,
-                    endDate: String.empty,
+                    startDate: dateHelper.monthStart,
+                    endDate: dateHelper.monthEnd,
                     projectId: String.empty,
                     skip: true
                   }

@@ -69,7 +69,8 @@ export function ExpensesPage() {
   // fetch expenses
   const fetchData = async () => {
     if (loading) return;
-    if (hasMore) setLoading(true);
+    if (!hasMore && records.length > 0) return; // Don't load more if no more data
+    setLoading(true);
     try {
       const response = await expenseService.getExpensesAsync(queryRef.current);
       const arrData = response?.data ?? [];
@@ -206,11 +207,43 @@ export function ExpensesPage() {
     }, constants.DELAY);
   };
 
+  const handleReset = () => {
+    setPayload({
+      ...ExpenseSearch,
+      size: constants.PAGE_SIZE,
+      projectId: String.empty,
+      skip: false
+    });
+    setRecords([]);
+    setCursor(undefined);
+    setTimeout(fetchData, constants.DELAY);
+  };
+
   return (
-    <TableContainer
-      component={Paper}
-      sx={{ maxHeight: { xs: window.innerHeight - 212, sm: 600 } }}
-      className="tableContainer">
+    <Box>
+      {/* Filter status and reset button */}
+      {(payload.projectId || payload.categoryId || (payload.startDate && payload.endDate)) && (
+        <Box sx={{ p: 2, bgcolor: "#f5f5f5", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Box>
+            {payload.projectId && <span className="mr-3">🏗️ Project: {payload.projectId}</span>}
+            {payload.categoryId && <span className="mr-3">📂 Category: {payload.categoryId}</span>}
+            {payload.startDate && payload.endDate && (
+              <span className="mr-3">
+                📅 {dateHelper.dateFormat(payload.startDate)} - {dateHelper.dateFormat(payload.endDate)}
+              </span>
+            )}
+          </Box>
+          <IonButton color="danger" size="small" onClick={handleReset}>
+            <Icon name="close-circle" slot="start" />
+            RESET
+          </IonButton>
+        </Box>
+      )}
+      
+      <TableContainer
+        component={Paper}
+        sx={{ maxHeight: { xs: window.innerHeight - 212, sm: 600 } }}
+        className="tableContainer">
       <Table className="styled-table" stickyHeader>
         <TableHead>
           <TableRow>
@@ -450,5 +483,6 @@ export function ExpensesPage() {
         </TableBody>
       </Table>
     </TableContainer>
+    </Box>
   );
 }
