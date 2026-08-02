@@ -12,9 +12,7 @@ export enum CrudType {
 }
 
 export enum AuthType {
-  Email = "password",
-  Google = "google",
-  Facebook = "facebook"
+  Google = "google"
 }
 
 export enum RoleType {

@@ -60,7 +60,7 @@ export function toastify(
 }
 
 export function externaLogin(providers: AuthType[] | undefined) {
-  return providers?.some(x => x.includes(AuthType.Google) || x.includes(AuthType.Facebook));
+  return providers?.some(x => x.includes(AuthType.Google));
 }
 
 export function newPassword() {

@@ -5,9 +5,7 @@ export enum RouterType {
 }
 
 export enum AuthType {
-  Email = "password",
-  Google = "google",
-  Facebook = "facebook"
+  Google = "google"
 }
 
 export enum RoleType {
@@ -48,10 +46,6 @@ export enum NavType {
   TermsConditions = "/terms-of-use",
   SignIn = "/signin",
   SignOut = "/signout",
-  SignUp = "/signup",
-  VerifyEmail = "/verify-email",
-  ForgotPassword = "/forgot-password",
-  ResetPassword = "/reset-password",
   Callback = "/callback",
   Profile = "/profile",
   Users = "/users",
@@ -59,7 +53,12 @@ export enum NavType {
   Projects = "/projects",
   Expenses = "/expenses",
   Report = "/report",
-  NotFound = "/404"
+  NotFound = "/404",
+  // Deprecated: Email/password authentication routes - no longer used
+  SignUp = "/signup",
+  VerifyEmail = "/verify-email",
+  ForgotPassword = "/forgot-password",
+  ResetPassword = "/reset-password"
 }
 
 export enum ServiceType {

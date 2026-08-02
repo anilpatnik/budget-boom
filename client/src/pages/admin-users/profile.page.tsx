@@ -192,9 +192,7 @@ export function UserProfilePage({ user, handleClose, handleNew, handleEdit }: Pr
                   <IonLabel>Login With</IonLabel>
                   {formik.values.providers?.map((x: AuthType, index: number) => (
                     <span key={index} className="ion-padding-start">
-                      {x === AuthType.Email && <Icon name="mail-outline" />}
                       {x === AuthType.Google && <Icon name="logo-google" />}
-                      {x === AuthType.Facebook && <Icon name="logo-facebook" />}
                     </span>
                   ))}
                 </div>

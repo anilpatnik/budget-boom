@@ -46,17 +46,11 @@ export function removeUndefined(obj: any, defaults = [undefined, null, NaN, Stri
 //#region firebase helpers
 
 export function IsExternaLogin(providerData: UserInfo[] | undefined) {
-  return providerData?.some(
-    x => x.providerId.includes(AuthType.Google) || x.providerId.includes(AuthType.Facebook)
-  );
+  return providerData?.some(x => x.providerId.includes(AuthType.Google));
 }
 
 export function getAuthTypes(providerData: UserInfo[] | undefined): AuthType[] | undefined {
-  return providerData?.map(x => {
-    if (x.providerId.includes(AuthType.Google)) return AuthType.Google;
-    if (x.providerId.includes(AuthType.Facebook)) return AuthType.Facebook;
-    return AuthType.Email;
-  });
+  return providerData?.map(() => AuthType.Google);
 }
 
 //#endregion
