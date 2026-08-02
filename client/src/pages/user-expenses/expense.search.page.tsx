@@ -24,8 +24,8 @@ type Props = {
 export function ExpenseSearchPage({ search, projects, handleClose, handleSearch }: Props) {
   const formik = useFormik({
     initialValues: {
-      startDate: search?.startDate || String.empty,
-      endDate: search?.endDate || String.empty,
+      startDate: search?.startDate || dateHelper.monthStart,
+      endDate: search?.endDate || dateHelper.monthEnd,
       projectId: search?.projectId || String.empty,
       categoryId: search?.categoryId || String.empty,
       skip: search?.skip || true
