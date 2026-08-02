@@ -10,21 +10,21 @@ import {
 } from "@ionic/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { dateHelper, pdfHelper } from "@/utils";
-import { IExpense } from "@/models";
+import { dateHelper, pdfHelper, helper } from "@/utils";
+import { IExpenseSearch } from "@/models";
 import { DateField, Icon } from "@/components";
+import { expenseService } from "@/services";
 import { subMonths, startOfMonth, endOfMonth } from "date-fns";
 import { formatISO } from "date-fns";
 import { useState } from "react";
 
 type Props = {
-  expenses: IExpense[];
   countryId: string;
   currency: string;
   handleClose: () => void;
 };
 
-export function ExpensePDFExportPage({ expenses, countryId, currency, handleClose }: Props) {
+export function ExpensePDFExportPage({ countryId, currency, handleClose }: Props) {
   const [isGenerating, setIsGenerating] = useState(false);
 
   // Calculate previous month's start and end dates
@@ -56,17 +56,26 @@ export function ExpensePDFExportPage({ expenses, countryId, currency, handleClos
   const handleExportPDF = async (values: { startDate: string; endDate: string }) => {
     setIsGenerating(true);
     try {
-      // Filter expenses by date range
-      const filteredExpenses = expenses.filter(expense => {
-        const expenseDate = new Date(expense.entryDate || "");
-        const startDate = new Date(values.startDate);
-        const endDate = new Date(values.endDate);
-        endDate.setHours(23, 59, 59, 999); // Include entire end date
-        return expenseDate >= startDate && expenseDate <= endDate;
+      // Fetch individual expense records from API for the selected date range
+      const searchPayload: IExpenseSearch = {
+        startDate: values.startDate,
+        endDate: values.endDate,
+        skip: false,
+        size: 1000
+      };
+
+      const response = await expenseService.getExpensesAsync(searchPayload);
+      const fetchedExpenses = response?.data ?? [];
+
+      // Sort by date for better organization
+      const sortedExpenses = [...fetchedExpenses].sort((a, b) => {
+        const dateA = new Date(a.entryDate || "").getTime();
+        const dateB = new Date(b.entryDate || "").getTime();
+        return dateA - dateB;
       });
 
       pdfHelper.generateExpensePDF({
-        expenses: filteredExpenses,
+        expenses: sortedExpenses,
         startDate: values.startDate,
         endDate: values.endDate,
         countryId,
@@ -76,6 +85,7 @@ export function ExpensePDFExportPage({ expenses, countryId, currency, handleClos
       handleClose();
     } catch (error) {
       console.error("Error generating PDF:", error);
+      helper.toastify("Error generating PDF. Please try again.", "error", 3000);
     } finally {
       setIsGenerating(false);
     }

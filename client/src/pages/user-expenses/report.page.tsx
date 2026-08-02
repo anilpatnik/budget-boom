@@ -94,7 +94,6 @@ export function ExpenseReportPage() {
     }, constants.DELAY);
   };
   const [presentPDFExportModal, dismissPDFExportModal] = useIonModal(ExpensePDFExportPage, {
-    expenses: records,
     countryId: user?.countryId,
     currency: user?.currency,
     handleClose: () => dismissPDFExportModal()
