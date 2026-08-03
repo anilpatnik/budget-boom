@@ -28,7 +28,7 @@ export function ExpensePage({ projects, expense, handleClose, handleNew, handleE
       price: Math.abs(expense?.price || 0),
       expenditure: !(expense?.price && expense?.price > 0),
       notes: expense?.notes || String.empty,
-      isTaxable: expense?.isTaxable !== undefined ? expense.isTaxable : true
+      isTaxable: expense?.id?.length === 0 ? true : (expense?.isTaxable || false)
     },
     validateOnMount: false,
     validationSchema: Yup.object({
