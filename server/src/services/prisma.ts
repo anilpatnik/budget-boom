@@ -234,14 +234,15 @@ export async function getIncomeTotal(where: object = {}) {
 }
 
 export async function upsertExpense(userId: string, expense: IExpense) {
-  const { id, projectId, categoryId, price = 0, notes, entryDate } = expense;
+  const { id, projectId, categoryId, price = 0, notes, entryDate, isTaxable } = expense;
   const expenseData = {
     userId,
     categoryId,
     projectId: projectId || null,
     price,
     notes,
-    entryDate: helper.parseDate(entryDate)
+    entryDate: helper.parseDate(entryDate),
+    isTaxable
   };
 
   return prisma.expense.upsert({
