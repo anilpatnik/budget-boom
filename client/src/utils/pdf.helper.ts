@@ -29,35 +29,15 @@ export function generateExpensePDF(options: PDFExportOptions) {
 
   // Add date range
   doc.setFontSize(10);
-  doc.text(
-    `Period: ${dateHelper.dateFormat(startDate)} - ${dateHelper.dateFormat(endDate)}`,
-    14,
-    25
-  );
-
-  // Prepare table data
-  const tableData = expenses.map(expense => {
-    const category = lookupService.getCategory(expense.categoryId || "");
-    const transactionType = (expense.price ?? 0) > 0 ? "Income" : "Expense";
-    const amount = helper.formatPrice(expense.price ?? 0, countryId, currency);
-    const taxIndicator = expense.isTaxable ? "✓" : "";
-    
-    // Build row with conditional notes field
-    const row: any[] = [
-      dateHelper.dateFormat(expense.entryDate || ""),
-      category.name || "",
-      amount,
-      transactionType,
-      taxIndicator
-    ];
-
-    // Add notes only if not empty
-    if (expense.notes && expense.notes.trim()) {
-      row.push(expense.notes);
-    }
-
-    return row;
-  });
+  if (startDate && endDate) {
+    doc.text(
+      `Period: ${dateHelper.dateFormat(startDate)} - ${dateHelper.dateFormat(endDate)}`,
+      14,
+      25
+    );
+  } else {
+    doc.text("Period: All time", 14, 25);
+  }
 
   // Determine if we have notes in any expense
   const hasNotes = expenses.some(e => e.notes && e.notes.trim());
@@ -110,17 +90,13 @@ export function generateExpensePDF(options: PDFExportOptions) {
       const pageWidth = pageSize.getWidth();
       doc.setFontSize(8);
       doc.text(`Generated on ${dateHelper.dateFormat(new Date())}`, 14, pageHeight - 10);
-      doc.text(
-        `Page ${(doc as any).internal.pages.length}`,
-        pageWidth - 30,
-        pageHeight - 10
-      );
+      doc.text(`Page ${doc.getNumberOfPages()}`, pageWidth - 30, pageHeight - 10);
     }
   });
 
   // Download PDF
   const generateGUID = () => {
-    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
       const r = (Math.random() * 16) | 0;
       const v = c === "x" ? r : (r & 0x3) | 0x8;
       return v.toString(16);

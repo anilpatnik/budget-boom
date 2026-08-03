@@ -506,7 +506,7 @@ export function ExpensesPage() {
             )}
             {loadingInit && (
               <TableRow>
-                <TableCell colSpan={5} className="text-center! py-10!">
+                <TableCell colSpan={5} className="!text-center !py-10">
                   <IonSpinner name="lines-sharp-small"></IonSpinner>
                 </TableCell>
               </TableRow>

@@ -29,6 +29,7 @@ out
 .firebase
 .vercel
 
+
 *-debug.*
 *-error.*
 *.log
@@ -38,5 +39,9 @@ expo-env.d.ts
 next-env.d.ts
 firebase.config*
 
+ssl.key
+ssl.pem
+
 *.md
 !README.md
+

@@ -324,7 +324,7 @@ export function ProjectsPage() {
             )}
             {loadingInit && (
               <TableRow>
-                <TableCell colSpan={6} className="text-center! py-10!">
+                <TableCell colSpan={6} className="!text-center !py-10">
                   <IonSpinner name="lines-sharp-small"></IonSpinner>
                 </TableCell>
               </TableRow>
@@ -338,12 +338,12 @@ export function ProjectsPage() {
           type="button"
           title="Add Project"
           className="
-            fixed bottom-20 right-4 z-999
+            fixed bottom-20 right-4 z-[999]
             md:hidden
             flex items-center justify-center
             w-14 h-14
             bg-blue-600 text-white
-            rounded-full!
+            !rounded-full
             shadow-lg
             hover:bg-blue-700
             transition

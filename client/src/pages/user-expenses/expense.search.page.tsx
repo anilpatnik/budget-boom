@@ -29,7 +29,7 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
       projectId: search?.projectId || String.empty,
       categoryId: search?.categoryId || String.empty,
       isTaxable: search?.isTaxable !== undefined ? search.isTaxable : undefined,
-      skip: search?.skip || true
+      skip: search?.skip ?? true
     },
     validateOnMount: false,
     validationSchema: Yup.object({
@@ -138,7 +138,7 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
               control={
                 <Switch
                   checked={formik.values.isTaxable === true}
-                  onChange={(e) => {
+                  onChange={e => {
                     if (e.target.checked) {
                       formik.setFieldValue("isTaxable", true);
                     } else {
