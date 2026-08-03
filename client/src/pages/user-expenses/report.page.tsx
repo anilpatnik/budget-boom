@@ -16,6 +16,7 @@ import { lookupService, projectService, expenseService } from "@/services";
 import { Icon, LucideIcon } from "@/components";
 import { useStore } from "@/contexts";
 import { ExpenseReportSearchPage } from "./report.search.page";
+import { ExpensePDFExportPage } from "./pdf-export.page";
 
 export function ExpenseReportPage() {
   const { user } = useStore();
@@ -92,10 +93,22 @@ export function ExpenseReportPage() {
       });
     }, constants.DELAY);
   };
+  const [presentPDFExportModal, dismissPDFExportModal] = useIonModal(ExpensePDFExportPage, {
+    countryId: user?.countryId,
+    currency: user?.currency,
+    handleClose: () => dismissPDFExportModal()
+  });
+  const handlePDFExportOpen = () => {
+    setTimeout(() => {
+      presentPDFExportModal({
+        backdropDismiss: false,
+        keyboardClose: false
+      });
+    }, constants.DELAY);
+  };
   const handleSearch = (item: IExpenseSearch) => {
     setPayload(prev => ({
       ...prev,
-      page: 0,
       startDate: item?.startDate,
       endDate: item?.endDate,
       projectId: item?.projectId,
@@ -134,7 +147,7 @@ export function ExpenseReportPage() {
                   {helper.formatPrice(incomeTotal + expenseTotal, user?.countryId, user?.currency)}
                 </div>
               </div>
-              {!queryRef.current.skip && (
+              {queryRef.current?.startDate && queryRef.current?.endDate && (
                 <div className="mt-2 flex items-center text-blue-700">
                   <div className="mr-2">📅</div>
                   <div>{dateHelper.dateFormat(queryRef.current?.startDate ?? String.empty)}</div>
@@ -144,14 +157,24 @@ export function ExpenseReportPage() {
               )}
             </TableCell>
             <TableCell align="left">
-              <IonFabButton
-                id="id-search-button"
-                title="SEARCH EXPENSES"
-                color="warning"
-                size="small"
-                onClick={() => handleSearchOpen()}>
-                <Icon name="options-sharp" />
-              </IonFabButton>
+              <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                <IonFabButton
+                  id="id-search-button"
+                  title="SEARCH EXPENSES"
+                  color="warning"
+                  size="small"
+                  onClick={() => handleSearchOpen()}>
+                  <Icon name="options-sharp" />
+                </IonFabButton>
+                <IonFabButton
+                  id="id-pdf-export-button"
+                  title="EXPORT TO PDF"
+                  color="success"
+                  size="small"
+                  onClick={() => handlePDFExportOpen()}>
+                  <Icon name="download-sharp" />
+                </IonFabButton>
+              </div>
             </TableCell>
           </TableRow>
         </TableHead>
@@ -183,7 +206,7 @@ export function ExpenseReportPage() {
           ))}
           {loading && (
             <TableRow>
-              <TableCell colSpan={2} className="!text-center !py-10">
+              <TableCell colSpan={2} className="text-center! py-10!">
                 <IonSpinner name="lines-sharp-small"></IonSpinner>
               </TableCell>
             </TableRow>

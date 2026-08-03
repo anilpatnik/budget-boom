@@ -61,7 +61,7 @@ export interface IAdminUserSearch {
 export const AdminUserSearch: IAdminUserSearch = {
   searchType: SearchType.Name,
   searchInput: String.empty,
-  role: RoleType.User,
+  role: undefined,
   active: false,
   page: 0,
   size: constants.PAGE_SIZE
@@ -102,6 +102,7 @@ export interface IExpense {
   categoryId?: string;
   projectId?: string;
   projectName?: string;
+  isTaxable?: boolean;
   type?: CrudType;
 }
 export const Expense: IExpense = {
@@ -112,6 +113,7 @@ export const Expense: IExpense = {
   categoryId: String.empty,
   projectId: String.empty,
   projectName: String.empty,
+  isTaxable: false,
   type: CrudType.Read
 };
 
@@ -134,7 +136,9 @@ export interface IExpenseSearch {
   endDate?: string;
   categoryId?: string;
   projectId?: string;
+  isTaxable?: boolean;
   skip?: boolean;
+  page?: number;
   size?: number;
   nextCursor?: IExpenseCursor;
 }
@@ -143,6 +147,8 @@ export const ExpenseSearch: IExpenseSearch = {
   endDate: String.empty,
   categoryId: String.empty,
   projectId: String.empty,
+  isTaxable: undefined,
   skip: false,
+  page: 0,
   size: constants.PAGE_SIZE
 };

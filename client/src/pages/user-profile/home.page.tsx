@@ -13,7 +13,6 @@ import { AccordionType } from "@/utils/enums";
 import { useStore } from "@/contexts";
 import { Icon } from "@/components";
 import { ProfileInfoPage } from "./profile.info.page";
-import { ProfilePasswordPage } from "./profile.password.page";
 import { ProfilePicturePage } from "./profile.picture.page";
 
 export function ProfileHomePage() {
@@ -72,23 +71,6 @@ export function ProfileHomePage() {
             )}
           </div>
         </IonAccordion>
-        {!user.external && (
-          <IonAccordion
-            id="id-change-password-tab"
-            value={AccordionType.Step2}
-            className="ion-margin-vertical">
-            <IonItem slot="header" color="light">
-              Change Password
-            </IonItem>
-            <div className="ion-padding" slot="content">
-              {accordionValue === AccordionType.Step2 && (
-                <LazyLoading>
-                  <ProfilePasswordPage />
-                </LazyLoading>
-              )}
-            </div>
-          </IonAccordion>
-        )}
       </IonAccordionGroup>
     </>
   );

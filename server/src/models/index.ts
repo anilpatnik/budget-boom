@@ -73,6 +73,9 @@ export interface IExpenseSearch {
   endDate?: string;
   categoryId?: string;
   projectId?: string;
+  isTaxable?: boolean;
+  skip?: boolean;
+  page?: number;
   size?: number;
   nextCursor?: IExpenseCursor;
 }
@@ -85,6 +88,7 @@ export interface IExpense {
   categoryId?: string;
   projectId?: string;
   projectName?: string;
+  isTaxable?: boolean;
   type?: CrudType;
 }
 

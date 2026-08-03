@@ -11,10 +11,6 @@ import {
   CallbackPage,
   SignInPage,
   SignOutPage,
-  SignUpPage,
-  ForgotPasswordPage,
-  VerifyEmailPage,
-  ResetPasswordPage,
   ProfileHomePage,
   UsersHomePage,
   ProjectsHomePage,
@@ -114,11 +110,7 @@ export const router = createBrowserRouter([
     element: <AppLayout header footer toast preRoute routerType={RouterType.Auth} />,
     children: [
       { path: NavType.SignIn, element: <SignInPage /> },
-      { path: NavType.SignUp, element: <SignUpPage /> },
-      { path: NavType.ForgotPassword, element: <ForgotPasswordPage /> },
-      { path: NavType.Callback, element: <CallbackPage /> },
-      { path: `${NavType.VerifyEmail}/:${constants.ACTION_CODE}`, element: <VerifyEmailPage /> },
-      { path: `${NavType.ResetPassword}/:${constants.ACTION_CODE}`, element: <ResetPasswordPage /> }
+      { path: NavType.Callback, element: <CallbackPage /> }
     ]
   },
   {

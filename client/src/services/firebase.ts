@@ -1,18 +1,10 @@
 import { FirebaseError, initializeApp } from "firebase/app";
 import {
   GoogleAuthProvider,
-  applyActionCode,
-  confirmPasswordReset,
-  createUserWithEmailAndPassword,
   getAuth,
-  sendEmailVerification,
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  updatePassword,
   updateProfile,
-  verifyPasswordResetCode,
   onIdTokenChanged,
   onAuthStateChanged
 } from "firebase/auth";
@@ -48,20 +40,12 @@ export {
   firebaseBlob,
   FirebaseError,
   GoogleAuthProvider,
-  applyActionCode,
-  confirmPasswordReset,
-  createUserWithEmailAndPassword,
   firebaseSignOut,
   getDownloadURL,
   ref as firebaseRef,
-  sendEmailVerification,
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
   signInWithPopup,
-  updatePassword,
   updateProfile,
   uploadBytesResumable,
-  verifyPasswordResetCode,
   onIdTokenChanged,
   onAuthStateChanged
 };

@@ -59,6 +59,17 @@ export function ExpensesPage() {
   });
   const queryRef = useRef(payload);
 
+  // Check if filters are actively applied (not default state)
+  const hasActiveFilters = () => {
+    return (
+      payload.projectId ||
+      payload.categoryId ||
+      payload.isTaxable !== undefined ||
+      payload.startDate !== dateHelper.monthStart ||
+      payload.endDate !== dateHelper.monthEnd
+    );
+  };
+
   // fetch projects
   const fetchProjects = async () => {
     const allProjects = await projectService.getAllProjectsAsync();
@@ -69,7 +80,8 @@ export function ExpensesPage() {
   // fetch expenses
   const fetchData = async () => {
     if (loading) return;
-    if (hasMore) setLoading(true);
+    if (!hasMore && queryRef.current.nextCursor) return; // Don't load more if no more data available
+    setLoading(true);
     try {
       const response = await expenseService.getExpensesAsync(queryRef.current);
       const arrData = response?.data ?? [];
@@ -104,7 +116,9 @@ export function ExpensesPage() {
 
   const loadMore = () => {
     if (hasMore) {
-      setPayload(prev => ({ ...prev, nextCursor }));
+      const newPayload = { ...queryRef.current, nextCursor };
+      setPayload(newPayload);
+      queryRef.current = newPayload;
       setTimeout(() => fetchData(), constants.DELAY);
     }
   };
@@ -192,262 +206,314 @@ export function ExpensesPage() {
   const handleSearch = (item: IExpenseSearch) => {
     setPayload(prev => ({
       ...prev,
-      page: 0,
       projectId: item?.projectId,
       categoryId: item?.categoryId,
+      isTaxable: item?.isTaxable,
       startDate: item?.startDate,
       endDate: item?.endDate,
-      skip: item?.skip
+      skip: item?.skip,
+      nextCursor: undefined
     }));
     setTimeout(() => {
       setRecords([]);
+      setCursor(undefined);
+      fetchData();
+    }, constants.DELAY);
+  };
+
+  const handleReset = () => {
+    setLoading(true);
+    const newPayload = {
+      ...ExpenseSearch,
+      size: constants.PAGE_SIZE,
+      projectId: String.empty,
+      categoryId: String.empty,
+      isTaxable: undefined,
+      startDate: dateHelper.monthStart,
+      endDate: dateHelper.monthEnd,
+      skip: true
+    };
+    setPayload(newPayload);
+    queryRef.current = newPayload;
+    setHasMore(true);
+    setTimeout(() => {
+      setRecords([]);
+      setCursor(undefined);
       fetchData();
     }, constants.DELAY);
   };
 
   return (
-    <TableContainer
-      component={Paper}
-      sx={{ maxHeight: { xs: window.innerHeight - 212, sm: 600 } }}
-      className="tableContainer">
-      <Table className="styled-table" stickyHeader>
-        <TableHead>
-          <TableRow>
-            <TableCell align="left">Date</TableCell>
-            <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-              Category
-            </TableCell>
-            <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-              <div className="space-y-2">
-                <div className="text-green-700">
-                  {helper.formatPrice(helper.totalIncome(records), user?.countryId, user?.currency)}
+    <Box>
+      <TableContainer
+        component={Paper}
+        sx={{ maxHeight: { xs: window.innerHeight - 212, sm: 600 } }}
+        className="tableContainer">
+        <Table className="styled-table" stickyHeader>
+          <TableHead>
+            <TableRow>
+              <TableCell align="left">Date</TableCell>
+              <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                Category
+              </TableCell>
+              <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                <div className="space-y-2">
+                  <div className="text-green-700">
+                    {helper.formatPrice(
+                      helper.totalIncome(records),
+                      user?.countryId,
+                      user?.currency
+                    )}
+                  </div>
+                  <div className="text-red-700">
+                    {helper.formatPrice(
+                      helper.totalExpense(records),
+                      user?.countryId,
+                      user?.currency
+                    )}
+                  </div>
                 </div>
-                <div className="text-red-700">
-                  {helper.formatPrice(
-                    helper.totalExpense(records),
-                    user?.countryId,
-                    user?.currency
+              </TableCell>
+              <TableCell align="left" sx={{ display: { xs: "table-cell", sm: "none" } }}>
+                <div className="space-y-2">
+                  <div className="text-green-700">
+                    {helper.formatPrice(
+                      helper.totalIncome(records),
+                      user?.countryId,
+                      user?.currency
+                    )}
+                  </div>
+                  <div className="text-red-700">
+                    {helper.formatPrice(
+                      helper.totalExpense(records),
+                      user?.countryId,
+                      user?.currency
+                    )}
+                  </div>
+                </div>
+              </TableCell>
+              <TableCell align="left">
+                <Box className="flex">
+                  <IonFabButton
+                    id="id-create-button"
+                    title="ADD EXPENSE"
+                    size="small"
+                    onClick={() => handleOpen(Expense)}>
+                    <Icon name="add" />
+                  </IonFabButton>
+                  {!hasActiveFilters() && (
+                    <IonFabButton
+                      id="id-search-button"
+                      title="SEARCH EXPENSES"
+                      color="warning"
+                      size="small"
+                      className="ml-5"
+                      onClick={() => handleSearchOpen()}>
+                      <Icon name="options-sharp" />
+                    </IonFabButton>
                   )}
-                </div>
-              </div>
-            </TableCell>
-            <TableCell align="left" sx={{ display: { xs: "table-cell", sm: "none" } }}>
-              <div className="space-y-2">
-                <div className="text-green-700">
-                  {helper.formatPrice(helper.totalIncome(records), user?.countryId, user?.currency)}
-                </div>
-                <div className="text-red-700">
-                  {helper.formatPrice(
-                    helper.totalExpense(records),
-                    user?.countryId,
-                    user?.currency
+                  {hasActiveFilters() && (
+                    <IonFabButton
+                      id="id-reset-button"
+                      title="RESET FILTERS"
+                      color="danger"
+                      size="small"
+                      className="ml-5"
+                      onClick={() => handleReset()}>
+                      <Icon name="close-circle-sharp" />
+                    </IonFabButton>
                   )}
-                </div>
-              </div>
-            </TableCell>
-            <TableCell align="left">
-              <Box className="flex">
-                <IonFabButton
-                  id="id-create-button"
-                  title="ADD EXPENSE"
-                  size="small"
-                  onClick={() => handleOpen(Expense)}>
-                  <Icon name="add" />
-                </IonFabButton>
-                <IonFabButton
-                  id="id-search-button"
-                  title="SEARCH EXPENSES"
-                  color="warning"
-                  size="small"
-                  className="ml-5"
-                  onClick={() => handleSearchOpen()}>
-                  <Icon name="options-sharp" />
-                </IonFabButton>
-              </Box>
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {records?.map((item, index) => (
-            <Fragment key={index}>
-              <TableRow>
-                <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  {item?.entryDate && dateHelper.dateFormat(item.entryDate)}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{ display: { xs: "table-cell", sm: "none" } }}
-                  rowSpan={2}>
-                  <div>
-                    <div className="mb-3.5 mt-1.5">
-                      {item?.entryDate && dateHelper.dateFormat(item.entryDate)}
+                </Box>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {records?.map((item, index) => (
+              <Fragment key={index}>
+                <TableRow>
+                  <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                    {item?.entryDate && dateHelper.dateFormat(item.entryDate)}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    sx={{ display: { xs: "table-cell", sm: "none" } }}
+                    rowSpan={2}>
+                    <div>
+                      <div className="mb-3.5 mt-1.5">
+                        {item?.entryDate && dateHelper.dateFormat(item.entryDate)}
+                      </div>
+                      <div className="flex items-center">
+                        {item?.price && (
+                          <div className="text-xl mr-3">{item.price < 0 ? `📉` : `📈`}</div>
+                        )}
+                        {item?.categoryId && (
+                          <LucideIcon
+                            name={lookupService.getCategory(item.categoryId).icon}
+                            css="text-2xl"
+                          />
+                        )}
+                      </div>
                     </div>
-                    <div className="flex items-center">
-                      {item?.price && (
-                        <div className="text-xl mr-3">{item.price < 0 ? `📉` : `📈`}</div>
-                      )}
-                      {item?.categoryId && (
+                  </TableCell>
+                  <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                    {item?.categoryId && (
+                      <Box className="flex items-center">
                         <LucideIcon
                           name={lookupService.getCategory(item.categoryId).icon}
-                          css="text-2xl"
+                          css="text-2xl text-black mr-2"
                         />
-                      )}
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  {item?.categoryId && (
+                        {item?.notes ? item.notes : lookupService.getCategory(item.categoryId).name}
+                        {item?.isTaxable && (
+                          <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                            TAX
+                          </span>
+                        )}
+                      </Box>
+                    )}
+                  </TableCell>
+                  <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
+                    {item?.price && (
+                      <Box
+                        className={
+                          item.price < 0 ? "text-red-700 font-bold" : "text-green-700 font-bold"
+                        }>
+                        {helper.formatPrice(item.price, user?.countryId, user?.currency)}
+                      </Box>
+                    )}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    sx={{
+                      display: { xs: "table-cell", sm: "none" },
+                      borderBottom: "none",
+                      borderTop: "none"
+                    }}>
+                    {item?.price && (
+                      <Box
+                        className={
+                          item.price < 0 ? "text-red-700 font-bold" : "text-green-700 font-bold"
+                        }>
+                        {helper.formatPrice(item.price, user?.countryId, user?.currency)}
+                      </Box>
+                    )}
+                  </TableCell>
+                  <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                     <Box className="flex items-center">
-                      <LucideIcon
-                        name={lookupService.getCategory(item.categoryId).icon}
-                        css="text-2xl text-black mr-2"
-                      />
-                      {item?.notes ? item.notes : lookupService.getCategory(item.categoryId).name}
-                    </Box>
-                  )}
-                </TableCell>
-                <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  {item?.price && (
-                    <Box
-                      className={
-                        item.price < 0 ? "text-red-700 font-bold" : "text-green-700 font-bold"
-                      }>
-                      {helper.formatPrice(item.price, user?.countryId, user?.currency)}
-                    </Box>
-                  )}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: { xs: "table-cell", sm: "none" },
-                    borderBottom: "none",
-                    borderTop: "none"
-                  }}>
-                  {item?.price && (
-                    <Box
-                      className={
-                        item.price < 0 ? "text-red-700 font-bold" : "text-green-700 font-bold"
-                      }>
-                      {helper.formatPrice(item.price, user?.countryId, user?.currency)}
-                    </Box>
-                  )}
-                </TableCell>
-                <TableCell align="left" sx={{ display: { xs: "none", sm: "table-cell" } }}>
-                  <Box className="flex items-center">
-                    <IonButton
-                      id="id-edit-button"
-                      title="EDIT EXPENSE"
-                      size="small"
-                      buttonType="icon"
-                      onClick={() => handleOpen(item, "EDIT")}>
-                      {loadingCol === `${item?.id}-EDIT` ? (
-                        <Icon name="sync-sharp" css="text-xl text-blue-500 icon-spinner" />
-                      ) : (
-                        <Icon name="card-sharp" css="text-xl text-blue-500" />
-                      )}
-                    </IonButton>
-                    <IonButton
-                      id="id-delete-button"
-                      title="DELETE EXPENSE"
-                      fill="clear"
-                      onClick={() =>
-                        presentAlert({
-                          header: "Are you sure?",
-                          buttons: [
-                            { text: "Cancel" },
-                            {
-                              text: "Confirm",
-                              handler: () => {
-                                handleDelete(item?.id || String.empty, "DELETE");
+                      <IonButton
+                        id="id-edit-button"
+                        title="EDIT EXPENSE"
+                        size="small"
+                        buttonType="icon"
+                        onClick={() => handleOpen(item, "EDIT")}>
+                        {loadingCol === `${item?.id}-EDIT` ? (
+                          <Icon name="sync-sharp" css="text-xl text-blue-500 icon-spinner" />
+                        ) : (
+                          <Icon name="card-sharp" css="text-xl text-blue-500" />
+                        )}
+                      </IonButton>
+                      <IonButton
+                        id="id-delete-button"
+                        title="DELETE EXPENSE"
+                        fill="clear"
+                        onClick={() =>
+                          presentAlert({
+                            header: "Are you sure?",
+                            buttons: [
+                              { text: "Cancel" },
+                              {
+                                text: "Confirm",
+                                handler: () => {
+                                  handleDelete(item?.id || String.empty, "DELETE");
+                                }
                               }
-                            }
-                          ]
-                        })
-                      }>
-                      {loadingCol === `${item?.id}-DELETE` ? (
-                        <Icon name="sync-sharp" css="text-xl text-red-500 icon-spinner" />
-                      ) : (
-                        <Icon name="trash-bin-sharp" css="text-xl text-red-500" />
-                      )}
-                    </IonButton>
-                  </Box>
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: { xs: "table-cell", sm: "none" },
-                    borderBottom: "none",
-                    borderTop: "none"
-                  }}>
-                  <Box className="flex items-center">
-                    <IonButton
-                      id="id-edit-button"
-                      title="EDIT EXPENSE"
-                      size="small"
-                      buttonType="icon"
-                      onClick={() => handleOpen(item, "EDIT")}>
-                      {loadingCol === `${item?.id}-EDIT` ? (
-                        <Icon name="sync-sharp" css="text-xl text-blue-500 icon-spinner" />
-                      ) : (
-                        <Icon name="card-sharp" css="text-xl text-blue-500" />
-                      )}
-                    </IonButton>
-                    <IonButton
-                      id="id-delete-button"
-                      title="DELETE EXPENSE"
-                      fill="clear"
-                      onClick={() =>
-                        presentAlert({
-                          header: "Are you sure?",
-                          buttons: [
-                            { text: "Cancel" },
-                            {
-                              text: "Confirm",
-                              handler: () => {
-                                handleDelete(item?.id || String.empty, "DELETE");
+                            ]
+                          })
+                        }>
+                        {loadingCol === `${item?.id}-DELETE` ? (
+                          <Icon name="sync-sharp" css="text-xl text-red-500 icon-spinner" />
+                        ) : (
+                          <Icon name="trash-bin-sharp" css="text-xl text-red-500" />
+                        )}
+                      </IonButton>
+                    </Box>
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    sx={{
+                      display: { xs: "table-cell", sm: "none" },
+                      borderBottom: "none",
+                      borderTop: "none"
+                    }}>
+                    <Box className="flex items-center">
+                      <IonButton
+                        id="id-edit-button"
+                        title="EDIT EXPENSE"
+                        size="small"
+                        buttonType="icon"
+                        onClick={() => handleOpen(item, "EDIT")}>
+                        {loadingCol === `${item?.id}-EDIT` ? (
+                          <Icon name="sync-sharp" css="text-xl text-blue-500 icon-spinner" />
+                        ) : (
+                          <Icon name="card-sharp" css="text-xl text-blue-500" />
+                        )}
+                      </IonButton>
+                      <IonButton
+                        id="id-delete-button"
+                        title="DELETE EXPENSE"
+                        fill="clear"
+                        onClick={() =>
+                          presentAlert({
+                            header: "Are you sure?",
+                            buttons: [
+                              { text: "Cancel" },
+                              {
+                                text: "Confirm",
+                                handler: () => {
+                                  handleDelete(item?.id || String.empty, "DELETE");
+                                }
                               }
-                            }
-                          ]
-                        })
-                      }>
-                      {loadingCol === `${item?.id}-DELETE` ? (
-                        <Icon name="sync-sharp" css="text-xl text-red-500 icon-spinner" />
-                      ) : (
-                        <Icon name="trash-bin-sharp" css="text-xl text-red-500" />
-                      )}
-                    </IonButton>
-                  </Box>
-                </TableCell>
-              </TableRow>
-              {item?.categoryId && (
-                <TableRow sx={{ display: { xs: "table-row", sm: "none" } }}>
-                  <TableCell colSpan={3}>
-                    <Box>
-                      {item?.notes ? item.notes : lookupService.getCategory(item.categoryId).name}
+                            ]
+                          })
+                        }>
+                        {loadingCol === `${item?.id}-DELETE` ? (
+                          <Icon name="sync-sharp" css="text-xl text-red-500 icon-spinner" />
+                        ) : (
+                          <Icon name="trash-bin-sharp" css="text-xl text-red-500" />
+                        )}
+                      </IonButton>
                     </Box>
                   </TableCell>
                 </TableRow>
-              )}
-            </Fragment>
-          ))}
-          {hasMore && (
-            <TableRow>
-              <TableCell colSpan={5}>
-                <IonButton size="small" disabled={loading} onClick={loadMore} className="my-3">
-                  {loading ? "Loading..." : "Load More"}
-                </IonButton>
-              </TableCell>
-            </TableRow>
-          )}
-          {loadingInit && (
-            <TableRow>
-              <TableCell colSpan={5} className="!text-center !py-10">
-                <IonSpinner name="lines-sharp-small"></IonSpinner>
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                {item?.categoryId && (
+                  <TableRow sx={{ display: { xs: "table-row", sm: "none" } }}>
+                    <TableCell colSpan={3}>
+                      <Box>
+                        {item?.notes ? item.notes : lookupService.getCategory(item.categoryId).name}
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </Fragment>
+            ))}
+            {hasMore && (
+              <TableRow>
+                <TableCell colSpan={5}>
+                  <IonButton size="small" disabled={loading} onClick={loadMore} className="my-3">
+                    {loading ? "Loading..." : "Load More"}
+                  </IonButton>
+                </TableCell>
+              </TableRow>
+            )}
+            {loadingInit && (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center! py-10!">
+                  <IonSpinner name="lines-sharp-small"></IonSpinner>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }

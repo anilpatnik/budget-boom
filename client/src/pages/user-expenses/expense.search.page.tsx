@@ -13,7 +13,7 @@ import { dateHelper } from "@/utils";
 import { IExpenseSearch, IProject } from "@/models";
 import { lookupService } from "@/services";
 import { DateField, SelectField, Icon } from "@/components";
-import { Switch } from "@mui/material";
+import { Switch, FormControlLabel } from "@mui/material";
 
 type Props = {
   search?: IExpenseSearch;
@@ -28,14 +28,22 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
       endDate: search?.endDate || dateHelper.monthEnd,
       projectId: search?.projectId || String.empty,
       categoryId: search?.categoryId || String.empty,
-      skip: search?.skip || false
+      isTaxable: search?.isTaxable !== undefined ? search.isTaxable : undefined,
+      skip: search?.skip ?? true
     },
     validateOnMount: false,
     validationSchema: Yup.object({
-      startDate: Yup.date().required("required"),
-      endDate: Yup.date()
-        .min(Yup.ref("startDate"), "End Date should not be less than Start Date")
-        .required("required")
+      startDate: Yup.date().when("skip", {
+        is: false,
+        then: schema => schema.required("required")
+      }),
+      endDate: Yup.date().when("skip", {
+        is: false,
+        then: schema =>
+          schema
+            .min(Yup.ref("startDate"), "End Date should not be less than Start Date")
+            .required("required")
+      })
     }),
     onSubmit: async values => {
       const search: IExpenseSearch = {
@@ -43,6 +51,7 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
         endDate: values?.skip ? String.empty : values?.endDate,
         projectId: values?.projectId,
         categoryId: values?.categoryId,
+        isTaxable: values?.isTaxable,
         skip: values?.skip
       };
       handleSearch(search);
@@ -115,13 +124,31 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
               payload={projects || []}
             />
           </div>
-          <div className="my-6">
-            <IonLabel class="text-sm text-gray-700">Skip Date Range</IonLabel>
-            <Switch
-              id="skip"
-              name="skip"
-              checked={formik.values.skip}
-              onChange={formik.handleChange}
+          <div className="my-6 flex items-center gap-6">
+            <div className="flex-1">
+              <IonLabel class="text-sm text-gray-700">Skip Date Range</IonLabel>
+              <Switch
+                id="skip"
+                name="skip"
+                checked={formik.values.skip}
+                onChange={formik.handleChange}
+              />
+            </div>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={formik.values.isTaxable === true}
+                  onChange={e => {
+                    if (e.target.checked) {
+                      formik.setFieldValue("isTaxable", true);
+                    } else {
+                      formik.setFieldValue("isTaxable", undefined);
+                    }
+                  }}
+                  color="primary"
+                />
+              }
+              label="Taxed"
             />
           </div>
           <div className="my-6">
@@ -140,7 +167,8 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
                     endDate: dateHelper.monthEnd,
                     projectId: String.empty,
                     categoryId: String.empty,
-                    skip: false
+                    isTaxable: undefined,
+                    skip: true
                   }
                 })
               }

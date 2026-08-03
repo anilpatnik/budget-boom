@@ -3,39 +3,26 @@ import { helper } from "../utils";
 import * as dbService from "./prisma";
 
 export async function getExpensesAsync(userId: string, expenseSearch: IExpenseSearch) {
-  let whereCondition = {};
-  // user filter
-  whereCondition = {
-    ...whereCondition,
-    userId: { equals: userId }
-  };
-  // project filter
+  let whereCondition: any = { userId };
+
   if (expenseSearch.projectId) {
-    whereCondition = {
-      ...whereCondition,
-      projectId: { equals: expenseSearch.projectId }
-    };
+    whereCondition.projectId = expenseSearch.projectId;
   }
-  // category filter
   if (expenseSearch.categoryId) {
-    whereCondition = {
-      ...whereCondition,
-      categoryId: { equals: expenseSearch.categoryId, mode: "insensitive" }
+    whereCondition.categoryId = { equals: expenseSearch.categoryId, mode: "insensitive" };
+  }
+  if (expenseSearch.isTaxable !== undefined) {
+    whereCondition.isTaxable = expenseSearch.isTaxable;
+  }
+  if (!expenseSearch.skip && expenseSearch.startDate && expenseSearch.startDate.trim() && expenseSearch.endDate && expenseSearch.endDate.trim()) {
+    whereCondition.entryDate = {
+      gte: new Date(helper.formatDate(expenseSearch.startDate)),
+      lte: new Date(helper.formatDate(expenseSearch.endDate))
     };
   }
-  // date filter
-  if (expenseSearch.startDate && expenseSearch.endDate) {
-    whereCondition = {
-      ...whereCondition,
-      entryDate: {
-        gte: new Date(helper.formatDate(expenseSearch.startDate)),
-        lte: new Date(helper.formatDate(expenseSearch.endDate))
-      }
-    };
-  }
-  // get expenses
+
   const {
-    expenses: dbExpsnses,
+    expenses: dbExpenses,
     hasMore,
     nextCursor
   } = await dbService.getExpensesCursor(
@@ -43,25 +30,27 @@ export async function getExpensesAsync(userId: string, expenseSearch: IExpenseSe
     expenseSearch.nextCursor,
     expenseSearch.size
   );
-  const expenses: IExpense[] = dbExpsnses?.map(dbExpense => {
-    return {
-      id: dbExpense?.id,
-      categoryId: dbExpense?.categoryId || String.empty,
-      projectId: dbExpense?.projectId || String.empty,
-      projectName: dbExpense?.project?.name || String.empty,
-      price: dbExpense?.price || 0,
-      notes: dbExpense?.notes || String.empty,
-      entryDate: dbExpense?.entryDate ? helper.formatDate(dbExpense?.entryDate) : String.empty
-    };
-  });
+
+  const expenses: IExpense[] = dbExpenses?.map(dbExpense => ({
+    id: dbExpense?.id,
+    categoryId: dbExpense?.categoryId || "",
+    projectId: dbExpense?.projectId || "",
+    projectName: dbExpense?.project?.name || "",
+    price: dbExpense?.price || 0,
+    notes: dbExpense?.notes || "",
+    isTaxable: dbExpense?.isTaxable || false,
+    entryDate: dbExpense?.entryDate ? helper.formatDate(dbExpense?.entryDate) : ""
+  })) || [];
+
   const expenseData: IExpenseData = {
     data: helper.removeUndefined(expenses),
     hasMore,
     nextCursor: {
-      id: nextCursor?.id || String.empty,
+      id: nextCursor?.id || "",
       entryDate: nextCursor?.entryDate ? helper.formatDate(nextCursor.entryDate) : helper.dateNow()
     }
   };
+
   return helper.jsonResponse<IExpenseData>(true, expenseData);
 }
 
@@ -73,6 +62,7 @@ export async function getExpenseAsync(expenseId: string) {
     projectId: dbExpense?.projectId || String.empty,
     price: dbExpense?.price || 0,
     notes: dbExpense?.notes || String.empty,
+    isTaxable: dbExpense?.isTaxable || false,
     entryDate: dbExpense?.entryDate ? helper.formatDate(dbExpense?.entryDate) : String.empty
   };
   return helper.jsonResponse<IExpense>(true, helper.removeUndefined(expense));
@@ -89,41 +79,30 @@ export async function deleteExpenseAsync(expenseId: string) {
 }
 
 export async function getExpenseReportAsync(userId: string, expenseSearch: IExpenseSearch) {
-  let whereCondition = {};
-  // user filter
-  whereCondition = {
-    ...whereCondition,
-    userId: { equals: userId }
-  };
-  // project filter
+  let whereCondition: any = { userId };
+
   if (expenseSearch.projectId) {
-    whereCondition = {
-      ...whereCondition,
-      projectId: { equals: expenseSearch.projectId }
-    };
+    whereCondition.projectId = expenseSearch.projectId;
   }
-  // date filter
-  if (expenseSearch.startDate && expenseSearch.endDate) {
-    whereCondition = {
-      ...whereCondition,
-      entryDate: {
-        gte: new Date(helper.formatDate(expenseSearch.startDate)),
-        lte: new Date(helper.formatDate(expenseSearch.endDate))
-      }
+  if (expenseSearch.isTaxable !== undefined) {
+    whereCondition.isTaxable = expenseSearch.isTaxable;
+  }
+  if (!expenseSearch.skip && expenseSearch.startDate && expenseSearch.startDate.trim() && expenseSearch.endDate && expenseSearch.endDate.trim()) {
+    whereCondition.entryDate = {
+      gte: new Date(helper.formatDate(expenseSearch.startDate)),
+      lte: new Date(helper.formatDate(expenseSearch.endDate))
     };
   }
 
-  // get expenses
-  const dbExpenses = await dbService.getExpenseTotalByCategoryId(whereCondition);
-  const expenses = helper.removeUndefined(dbExpenses);
-
-  // get expense and income total
-  const dbExpense = await dbService.getExpenseTotal(whereCondition);
-  const dbIncome = await dbService.getIncomeTotal(whereCondition);
+  const [categoryTotals, expenseTotal, incomeTotal] = await Promise.all([
+    dbService.getExpenseTotalByCategoryId(whereCondition),
+    dbService.getExpenseTotal(whereCondition),
+    dbService.getIncomeTotal(whereCondition)
+  ]);
 
   return helper.jsonResponse<IExpenseReport>(true, {
-    data: expenses,
-    expense: dbExpense,
-    income: dbIncome
+    data: helper.removeUndefined(categoryTotals),
+    expense: expenseTotal,
+    income: incomeTotal
   });
 }

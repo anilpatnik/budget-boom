@@ -30,10 +30,17 @@ export function ExpenseReportSearchPage({ search, projects, handleClose, handleS
     },
     validateOnMount: false,
     validationSchema: Yup.object({
-      startDate: Yup.date().required("required"),
-      endDate: Yup.date()
-        .min(Yup.ref("startDate"), "End Date should not be less than Start Date")
-        .required("required")
+      startDate: Yup.date().when("skip", {
+        is: false,
+        then: schema => schema.required("required")
+      }),
+      endDate: Yup.date().when("skip", {
+        is: false,
+        then: schema =>
+          schema
+            .min(Yup.ref("startDate"), "End Date should not be less than Start Date")
+            .required("required")
+      })
     }),
     onSubmit: async values => {
       const search: IExpenseSearch = {

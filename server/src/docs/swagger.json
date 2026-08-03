@@ -52,9 +52,7 @@
 			},
 			"AuthType": {
 				"enum": [
-					"password",
-					"google",
-					"facebook"
+					"google"
 				],
 				"type": "string"
 			},
@@ -266,6 +264,9 @@
 					"projectName": {
 						"type": "string"
 					},
+					"isTaxable": {
+						"type": "boolean"
+					},
 					"type": {
 						"$ref": "#/components/schemas/CrudType"
 					}
@@ -328,6 +329,13 @@
 					},
 					"projectId": {
 						"type": "string"
+					},
+					"isTaxable": {
+						"type": "boolean"
+					},
+					"page": {
+						"type": "number",
+						"format": "double"
 					},
 					"size": {
 						"type": "number",

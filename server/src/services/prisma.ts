@@ -40,9 +40,10 @@ export async function getUsers(
   page: number = 0,
   size: number = constants.PAGE_SIZE
 ) {
+  const skip = page * size;
   return await prisma.$transaction([
     prisma.user.findMany({
-      skip: page, // page * size,
+      skip,
       take: size,
       where,
       orderBy: { updatedAt: "desc" }
@@ -82,9 +83,10 @@ export async function getProjects(
   page: number = 0,
   size: number = constants.PAGE_SIZE
 ) {
+  const skip = page * size;
   return await prisma.$transaction([
     prisma.project.findMany({
-      skip: page, // page * size,
+      skip,
       take: size,
       where: { userId },
       orderBy: { name: "asc" }
@@ -136,10 +138,11 @@ export async function getExpenses(
   page: number = 0,
   size: number = constants.PAGE_SIZE
 ) {
+  const skip = page * size;
   return await prisma.$transaction([
     prisma.expense.findMany({
       include: { project: true },
-      skip: page, // page * size,
+      skip,
       take: size,
       where,
       orderBy: [{ entryDate: "desc" }, { id: "desc" }]
@@ -216,7 +219,7 @@ export async function getExpenseTotalByCategoryId(where: object = {}) {
 
 export async function getExpenseTotal(where: object = {}) {
   const result = await prisma.expense.aggregate({
-    where: { ...where, price: { lte: 0 } },
+    where: { ...where, price: { lt: 0 } },
     _sum: { price: true }
   });
   return result._sum.price || 0;
@@ -224,22 +227,24 @@ export async function getExpenseTotal(where: object = {}) {
 
 export async function getIncomeTotal(where: object = {}) {
   const result = await prisma.expense.aggregate({
-    where: { ...where, price: { gte: 0 } },
+    where: { ...where, price: { gt: 0 } },
     _sum: { price: true }
   });
   return result._sum.price || 0;
 }
 
 export async function upsertExpense(userId: string, expense: IExpense) {
-  const { id, projectId, categoryId, price = 0, notes, entryDate } = expense;
-  const expenseData: any = {
+  const { id, projectId, categoryId, price = 0, notes, entryDate, isTaxable } = expense;
+  const expenseData = {
     userId,
     categoryId,
     projectId: projectId || null,
     price,
     notes,
-    entryDate: helper.parseDate(entryDate)
+    entryDate: helper.parseDate(entryDate),
+    isTaxable
   };
+
   return prisma.expense.upsert({
     where: { id, userId },
     update: expenseData,
