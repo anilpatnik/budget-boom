@@ -7,7 +7,7 @@ import {
   IonPage,
   IonToolbar
 } from "@ionic/react";
-import { Switch, FormControlLabel } from "@mui/material";
+import { Switch } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { dateHelper } from "@/utils";
@@ -26,7 +26,6 @@ export function ExpenseReportSearchPage({ search, projects, handleClose, handleS
       startDate: search?.startDate || dateHelper.monthStart,
       endDate: search?.endDate || dateHelper.monthEnd,
       projectId: search?.projectId || String.empty,
-      isTaxable: search?.isTaxable !== undefined ? search.isTaxable : undefined,
       skip: search?.skip || false
     },
     validateOnMount: false,
@@ -48,7 +47,6 @@ export function ExpenseReportSearchPage({ search, projects, handleClose, handleS
         startDate: values?.skip ? String.empty : values?.startDate,
         endDate: values?.skip ? String.empty : values?.endDate,
         projectId: values?.projectId,
-        isTaxable: values?.isTaxable,
         skip: values?.skip
       };
       handleSearch(search);
@@ -109,31 +107,13 @@ export function ExpenseReportSearchPage({ search, projects, handleClose, handleS
               payload={projects || []}
             />
           </div>
-          <div className="my-6 flex items-center gap-6">
-            <div className="flex-1">
-              <IonLabel class="text-sm text-gray-700">Skip Date Range</IonLabel>
-              <Switch
-                id="skip"
-                name="skip"
-                checked={formik.values.skip}
-                onChange={formik.handleChange}
-              />
-            </div>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={formik.values.isTaxable === true}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      formik.setFieldValue("isTaxable", true);
-                    } else {
-                      formik.setFieldValue("isTaxable", undefined);
-                    }
-                  }}
-                  color="primary"
-                />
-              }
-              label="Taxed"
+          <div className="my-6">
+            <IonLabel class="text-sm text-gray-700">Skip Date Range</IonLabel>
+            <Switch
+              id="skip"
+              name="skip"
+              checked={formik.values.skip}
+              onChange={formik.handleChange}
             />
           </div>
           <div className="my-6">
@@ -151,7 +131,6 @@ export function ExpenseReportSearchPage({ search, projects, handleClose, handleS
                     startDate: dateHelper.monthStart,
                     endDate: dateHelper.monthEnd,
                     projectId: String.empty,
-                    isTaxable: undefined,
                     skip: false
                   }
                 })
