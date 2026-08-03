@@ -21,10 +21,7 @@ export function generateExpensePDF(options: PDFExportOptions) {
 
   // Add title
   doc.setFontSize(16);
-  let titleText = "Expense Report";
-  if (isTaxable) {
-    titleText += " (Taxed)";
-  }
+  const titleText = "Expense Report";
   doc.text(titleText, 14, 15);
 
   // Add date range
