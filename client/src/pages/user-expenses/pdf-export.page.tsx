@@ -41,27 +41,35 @@ export function ExpensePDFExportPage({ countryId, currency, handleClose }: Props
     initialValues: {
       startDate: defaultStartDate,
       endDate: defaultEndDate,
-      isTaxable: true as boolean | undefined
+      isTaxable: true as boolean | undefined,
+      skip: false
     },
     validateOnMount: false,
     validationSchema: Yup.object({
-      startDate: Yup.date().required("Start Date is required"),
-      endDate: Yup.date()
-        .min(Yup.ref("startDate"), "End Date should not be less than Start Date")
-        .required("End Date is required")
+      startDate: Yup.date().when("skip", {
+        is: false,
+        then: schema => schema.required("Start Date is required")
+      }),
+      endDate: Yup.date().when("skip", {
+        is: false,
+        then: schema =>
+          schema
+            .min(Yup.ref("startDate"), "End Date should not be less than Start Date")
+            .required("End Date is required")
+      })
     }),
     onSubmit: async values => {
       handleExportPDF(values);
     }
   });
 
-  const handleExportPDF = async (values: { startDate: string; endDate: string; isTaxable?: boolean }) => {
+  const handleExportPDF = async (values: { startDate: string; endDate: string; isTaxable?: boolean; skip: boolean }) => {
     setIsGenerating(true);
     try {
       // Fetch individual expense records from API for the selected date range
       const searchPayload: IExpenseSearch = {
-        startDate: values.startDate,
-        endDate: values.endDate,
+        startDate: values?.skip ? String.empty : values.startDate,
+        endDate: values?.skip ? String.empty : values.endDate,
         isTaxable: values.isTaxable,
         skip: false,
         size: 1000
@@ -112,7 +120,7 @@ export function ExpensePDFExportPage({ countryId, currency, handleClose }: Props
       </IonHeader>
       <IonContent className="ion-padding">
         <form onSubmit={formik.handleSubmit}>
-          <div className="my-6 flex items-center">
+          <div className="my-6 flex items-center gap-10">
             <div>
               <DateField
                 name="startDate"
@@ -125,7 +133,7 @@ export function ExpensePDFExportPage({ countryId, currency, handleClose }: Props
                 }
               />
             </div>
-            <div className="ml-10">
+            <div>
               <DateField
                 name="endDate"
                 label="End Date"
@@ -138,7 +146,16 @@ export function ExpensePDFExportPage({ countryId, currency, handleClose }: Props
               />
             </div>
           </div>
-          <div className="my-6">
+          <div className="my-6 flex items-center gap-6">
+            <div className="flex-1">
+              <IonLabel class="text-sm text-gray-700">Skip Date Range</IonLabel>
+              <Switch
+                id="skip"
+                name="skip"
+                checked={formik.values.skip}
+                onChange={formik.handleChange}
+              />
+            </div>
             <FormControlLabel
               control={
                 <Switch
@@ -153,7 +170,7 @@ export function ExpensePDFExportPage({ countryId, currency, handleClose }: Props
                   color="primary"
                 />
               }
-              label="Taxed (for reporting purposes)"
+              label="Taxed"
             />
           </div>
 
@@ -185,7 +202,8 @@ export function ExpensePDFExportPage({ countryId, currency, handleClose }: Props
                   values: {
                     startDate: defaultStartDate,
                     endDate: defaultEndDate,
-                    isTaxable: undefined
+                    isTaxable: true,
+                    skip: false
                   }
                 })
               }
