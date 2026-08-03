@@ -17,6 +17,7 @@ import { expenseService } from "@/services";
 import { subMonths, startOfMonth, endOfMonth } from "date-fns";
 import { formatISO } from "date-fns";
 import { useState } from "react";
+import { Switch, FormControlLabel } from "@mui/material";
 
 type Props = {
   countryId: string;
@@ -39,7 +40,8 @@ export function ExpensePDFExportPage({ countryId, currency, handleClose }: Props
   const formik = useFormik({
     initialValues: {
       startDate: defaultStartDate,
-      endDate: defaultEndDate
+      endDate: defaultEndDate,
+      isTaxable: undefined as boolean | undefined
     },
     validateOnMount: false,
     validationSchema: Yup.object({
@@ -53,13 +55,14 @@ export function ExpensePDFExportPage({ countryId, currency, handleClose }: Props
     }
   });
 
-  const handleExportPDF = async (values: { startDate: string; endDate: string }) => {
+  const handleExportPDF = async (values: { startDate: string; endDate: string; isTaxable?: boolean }) => {
     setIsGenerating(true);
     try {
       // Fetch individual expense records from API for the selected date range
       const searchPayload: IExpenseSearch = {
         startDate: values.startDate,
         endDate: values.endDate,
+        isTaxable: values.isTaxable,
         skip: false,
         size: 1000
       };
@@ -79,7 +82,8 @@ export function ExpensePDFExportPage({ countryId, currency, handleClose }: Props
         startDate: values.startDate,
         endDate: values.endDate,
         countryId,
-        currency
+        currency,
+        isTaxable: values.isTaxable
       });
 
       handleClose();
@@ -134,6 +138,24 @@ export function ExpensePDFExportPage({ countryId, currency, handleClose }: Props
               />
             </div>
           </div>
+          <div className="my-6">
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={formik.values.isTaxable === true}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      formik.setFieldValue("isTaxable", true);
+                    } else {
+                      formik.setFieldValue("isTaxable", undefined);
+                    }
+                  }}
+                  color="primary"
+                />
+              }
+              label="Tax Related (if checked, include only tax expenses in PDF)"
+            />
+          </div>
 
           <div className="my-6">
             <IonButton
@@ -162,7 +184,8 @@ export function ExpensePDFExportPage({ countryId, currency, handleClose }: Props
                 formik.resetForm({
                   values: {
                     startDate: defaultStartDate,
-                    endDate: defaultEndDate
+                    endDate: defaultEndDate,
+                    isTaxable: undefined
                   }
                 })
               }

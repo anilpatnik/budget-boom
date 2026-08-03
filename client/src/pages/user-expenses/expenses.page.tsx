@@ -195,6 +195,7 @@ export function ExpensesPage() {
       ...prev,
       projectId: item?.projectId,
       categoryId: item?.categoryId,
+      isTaxable: item?.isTaxable,
       startDate: item?.startDate,
       endDate: item?.endDate,
       skip: item?.skip,
@@ -212,6 +213,8 @@ export function ExpensesPage() {
       ...ExpenseSearch,
       size: constants.PAGE_SIZE,
       projectId: String.empty,
+      categoryId: String.empty,
+      isTaxable: undefined,
       skip: false
     });
     setRecords([]);
@@ -278,7 +281,7 @@ export function ExpensesPage() {
                     onClick={() => handleOpen(Expense)}>
                     <Icon name="add" />
                   </IonFabButton>
-                  {!payload.projectId && !payload.categoryId && !(payload.startDate && payload.endDate) && (
+                  {!payload.projectId && !payload.categoryId && !(payload.startDate && payload.endDate) && payload.isTaxable === undefined && (
                     <IonFabButton
                       id="id-search-button"
                       title="SEARCH EXPENSES"
@@ -289,7 +292,7 @@ export function ExpensesPage() {
                       <Icon name="options-sharp" />
                     </IonFabButton>
                   )}
-                  {(payload.projectId || payload.categoryId || (payload.startDate && payload.endDate)) && (
+                  {(payload.projectId || payload.categoryId || (payload.startDate && payload.endDate) || payload.isTaxable !== undefined) && (
                     <IonFabButton
                       id="id-reset-button"
                       title="RESET FILTERS"
@@ -340,6 +343,11 @@ export function ExpensesPage() {
                           css="text-2xl text-black mr-2"
                         />
                         {item?.notes ? item.notes : lookupService.getCategory(item.categoryId).name}
+                        {item?.isTaxable && (
+                          <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                            TAX
+                          </span>
+                        )}
                       </Box>
                     )}
                   </TableCell>

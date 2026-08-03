@@ -13,7 +13,7 @@ import { dateHelper } from "@/utils";
 import { IExpenseSearch, IProject } from "@/models";
 import { lookupService } from "@/services";
 import { DateField, SelectField, Icon } from "@/components";
-import { Switch } from "@mui/material";
+import { Switch, FormControlLabel } from "@mui/material";
 
 type Props = {
   search?: IExpenseSearch;
@@ -28,6 +28,7 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
       endDate: search?.endDate || dateHelper.monthEnd,
       projectId: search?.projectId || String.empty,
       categoryId: search?.categoryId || String.empty,
+      isTaxable: search?.isTaxable !== undefined ? search.isTaxable : undefined,
       skip: search?.skip || true
     },
     validateOnMount: false,
@@ -50,6 +51,7 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
         endDate: values?.skip ? String.empty : values?.endDate,
         projectId: values?.projectId,
         categoryId: values?.categoryId,
+        isTaxable: values?.isTaxable,
         skip: values?.skip
       };
       handleSearch(search);
@@ -123,6 +125,24 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
             />
           </div>
           <div className="my-6">
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={formik.values.isTaxable === true}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      formik.setFieldValue("isTaxable", true);
+                    } else {
+                      formik.setFieldValue("isTaxable", undefined);
+                    }
+                  }}
+                  color="primary"
+                />
+              }
+              label="Tax Related (if checked, show only tax expenses)"
+            />
+          </div>
+          <div className="my-6">
             <IonLabel class="text-sm text-gray-700">Skip Date Range</IonLabel>
             <Switch
               id="skip"
@@ -143,10 +163,11 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
               onClick={() =>
                 formik.resetForm({
                   values: {
-                    startDate: String.empty,
-                    endDate: String.empty,
+                    startDate: dateHelper.monthStart,
+                    endDate: dateHelper.monthEnd,
                     projectId: String.empty,
                     categoryId: String.empty,
+                    isTaxable: undefined,
                     skip: true
                   }
                 })

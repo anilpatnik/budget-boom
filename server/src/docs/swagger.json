@@ -264,6 +264,9 @@
 					"projectName": {
 						"type": "string"
 					},
+					"isTaxable": {
+						"type": "boolean"
+					},
 					"type": {
 						"$ref": "#/components/schemas/CrudType"
 					}
@@ -326,6 +329,9 @@
 					},
 					"projectId": {
 						"type": "string"
+					},
+					"isTaxable": {
+						"type": "boolean"
 					},
 					"page": {
 						"type": "number",

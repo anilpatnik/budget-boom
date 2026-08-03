@@ -50,6 +50,7 @@ model Expense {
   notes      String?
   categoryId String?
   projectId  String?
+  isTaxable  Boolean  @default(false)
   inactive   Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt

@@ -11,16 +11,21 @@ export interface PDFExportOptions {
   countryId: string;
   currency: string;
   fileName?: string;
+  isTaxable?: boolean;
 }
 
 export function generateExpensePDF(options: PDFExportOptions) {
-  const { expenses, startDate, endDate, countryId, currency, fileName } = options;
+  const { expenses, startDate, endDate, countryId, currency, fileName, isTaxable } = options;
 
   const doc = new jsPDF();
 
   // Add title
   doc.setFontSize(16);
-  doc.text("Expense Report", 14, 15);
+  let titleText = "Expense Report";
+  if (isTaxable) {
+    titleText += " (Tax Related)";
+  }
+  doc.text(titleText, 14, 15);
 
   // Add date range
   doc.setFontSize(10);
@@ -35,13 +40,15 @@ export function generateExpensePDF(options: PDFExportOptions) {
     const category = lookupService.getCategory(expense.categoryId || "");
     const transactionType = (expense.price ?? 0) > 0 ? "Income" : "Expense";
     const amount = helper.formatPrice(expense.price ?? 0, countryId, currency);
+    const taxIndicator = expense.isTaxable ? "✓" : "";
     
     // Build row with conditional notes field
     const row: any[] = [
       dateHelper.dateFormat(expense.entryDate || ""),
       category.name || "",
       amount,
-      transactionType
+      transactionType,
+      taxIndicator
     ];
 
     // Add notes only if not empty
@@ -60,7 +67,8 @@ export function generateExpensePDF(options: PDFExportOptions) {
     { header: "Date", dataKey: "date" },
     { header: "Category", dataKey: "category" },
     { header: "Amount", dataKey: "amount" },
-    { header: "Type", dataKey: "type" }
+    { header: "Type", dataKey: "type" },
+    { header: "Tax", dataKey: "tax" }
   ];
 
   if (hasNotes) {
@@ -72,12 +80,14 @@ export function generateExpensePDF(options: PDFExportOptions) {
     const category = lookupService.getCategory(expense.categoryId || "");
     const transactionType = (expense.price ?? 0) > 0 ? "Income" : "Expense";
     const amount = helper.formatPrice(expense.price ?? 0, countryId, currency);
+    const taxIndicator = expense.isTaxable ? "Yes" : "No";
 
     const row: any = {
       date: dateHelper.dateFormat(expense.entryDate || ""),
       category: category.name || "",
       amount: amount,
-      type: transactionType
+      type: transactionType,
+      tax: taxIndicator
     };
 
     if (hasNotes && expense.notes && expense.notes.trim()) {

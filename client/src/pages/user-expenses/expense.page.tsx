@@ -3,6 +3,7 @@ import { IonButton, IonButtons, IonContent, IonHeader, IonPage, IonToolbar } fro
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import toast, { Toaster } from "react-hot-toast";
+import { Switch, FormControlLabel } from "@mui/material";
 import { constants, helper, dateHelper } from "@/utils";
 import { CrudType } from "@/utils/enums";
 import { IExpense, IProject } from "@/models";
@@ -26,7 +27,8 @@ export function ExpensePage({ projects, expense, handleClose, handleNew, handleE
       categoryId: expense?.categoryId || "FOOD",
       price: Math.abs(expense?.price || 0),
       expenditure: !(expense?.price && expense?.price > 0),
-      notes: expense?.notes || String.empty
+      notes: expense?.notes || String.empty,
+      isTaxable: expense?.isTaxable || false
     },
     validateOnMount: false,
     validationSchema: Yup.object({
@@ -51,6 +53,7 @@ export function ExpensePage({ projects, expense, handleClose, handleNew, handleE
           categoryId: values?.categoryId,
           price: helper.parsePrice(values?.expenditure, values?.price),
           notes: values?.notes,
+          isTaxable: values?.isTaxable,
           type: CrudType.Create
         };
         const res = await expenseService.upsertExpenseAsync(newExpense);
@@ -77,6 +80,7 @@ export function ExpensePage({ projects, expense, handleClose, handleNew, handleE
           categoryId: values?.categoryId,
           price: helper.parsePrice(values?.expenditure, values?.price),
           notes: values?.notes,
+          isTaxable: values?.isTaxable,
           type: CrudType.Update
         };
         const res = await expenseService.upsertExpenseAsync(updateExpense);
@@ -185,6 +189,18 @@ export function ExpensePage({ projects, expense, handleClose, handleNew, handleE
               errorMessage={formik.errors.projectId}
               handleChange={formik.handleChange}
               payload={projects || []}
+            />
+          </div>
+          <div className="my-6">
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={formik.values.isTaxable}
+                  onChange={(e) => formik.setFieldValue("isTaxable", e.target.checked)}
+                  color="primary"
+                />
+              }
+              label="Tax (for reporting purposes)"
             />
           </div>
           <div className="my-6">

@@ -11,6 +11,9 @@ export async function getExpensesAsync(userId: string, expenseSearch: IExpenseSe
   if (expenseSearch.categoryId) {
     whereCondition.categoryId = { equals: expenseSearch.categoryId, mode: "insensitive" };
   }
+  if (expenseSearch.isTaxable !== undefined && expenseSearch.isTaxable !== null) {
+    whereCondition.isTaxable = expenseSearch.isTaxable;
+  }
   if (expenseSearch.startDate && expenseSearch.startDate.trim() && expenseSearch.endDate && expenseSearch.endDate.trim()) {
     whereCondition.entryDate = {
       gte: new Date(helper.formatDate(expenseSearch.startDate)),
@@ -35,6 +38,7 @@ export async function getExpensesAsync(userId: string, expenseSearch: IExpenseSe
     projectName: dbExpense?.project?.name || "",
     price: dbExpense?.price || 0,
     notes: dbExpense?.notes || "",
+    isTaxable: dbExpense?.isTaxable || false,
     entryDate: dbExpense?.entryDate ? helper.formatDate(dbExpense?.entryDate) : ""
   })) || [];
 
@@ -58,6 +62,7 @@ export async function getExpenseAsync(expenseId: string) {
     projectId: dbExpense?.projectId || String.empty,
     price: dbExpense?.price || 0,
     notes: dbExpense?.notes || String.empty,
+    isTaxable: dbExpense?.isTaxable || false,
     entryDate: dbExpense?.entryDate ? helper.formatDate(dbExpense?.entryDate) : String.empty
   };
   return helper.jsonResponse<IExpense>(true, helper.removeUndefined(expense));
@@ -78,6 +83,9 @@ export async function getExpenseReportAsync(userId: string, expenseSearch: IExpe
 
   if (expenseSearch.projectId) {
     whereCondition.projectId = expenseSearch.projectId;
+  }
+  if (expenseSearch.isTaxable !== undefined && expenseSearch.isTaxable !== null) {
+    whereCondition.isTaxable = expenseSearch.isTaxable;
   }
   if (expenseSearch.startDate && expenseSearch.startDate.trim() && expenseSearch.endDate && expenseSearch.endDate.trim()) {
     whereCondition.entryDate = {
