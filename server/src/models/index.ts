@@ -74,6 +74,7 @@ export interface IExpenseSearch {
   categoryId?: string;
   projectId?: string;
   isTaxable?: boolean;
+  skip?: boolean;
   page?: number;
   size?: number;
   nextCursor?: IExpenseCursor;

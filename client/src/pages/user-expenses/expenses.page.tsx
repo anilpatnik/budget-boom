@@ -209,16 +209,21 @@ export function ExpensesPage() {
   };
 
   const handleReset = () => {
-    setPayload({
+    const newPayload = {
       ...ExpenseSearch,
       size: constants.PAGE_SIZE,
       projectId: String.empty,
       categoryId: String.empty,
       isTaxable: undefined,
-      skip: false
-    });
+      startDate: dateHelper.monthStart,
+      endDate: dateHelper.monthEnd,
+      skip: true
+    };
+    setPayload(newPayload);
+    queryRef.current = newPayload;
     setRecords([]);
     setCursor(undefined);
+    setHasMore(true);
     setTimeout(fetchData, constants.DELAY);
   };
 
