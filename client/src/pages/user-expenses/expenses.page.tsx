@@ -59,6 +59,17 @@ export function ExpensesPage() {
   });
   const queryRef = useRef(payload);
 
+  // Check if filters are actively applied (not default state)
+  const hasActiveFilters = () => {
+    return (
+      payload.projectId ||
+      payload.categoryId ||
+      payload.isTaxable !== undefined ||
+      payload.startDate !== dateHelper.monthStart ||
+      payload.endDate !== dateHelper.monthEnd
+    );
+  };
+
   // fetch projects
   const fetchProjects = async () => {
     const allProjects = await projectService.getAllProjectsAsync();
@@ -69,7 +80,7 @@ export function ExpensesPage() {
   // fetch expenses
   const fetchData = async () => {
     if (loading) return;
-    if (!hasMore && records.length > 0) return; // Don't load more if no more data
+    if (!hasMore && queryRef.current.nextCursor) return; // Don't load more if no more data available
     setLoading(true);
     try {
       const response = await expenseService.getExpensesAsync(queryRef.current);
@@ -105,7 +116,9 @@ export function ExpensesPage() {
 
   const loadMore = () => {
     if (hasMore) {
-      setPayload(prev => ({ ...prev, nextCursor }));
+      const newPayload = { ...queryRef.current, nextCursor };
+      setPayload(newPayload);
+      queryRef.current = newPayload;
       setTimeout(() => fetchData(), constants.DELAY);
     }
   };
@@ -209,6 +222,7 @@ export function ExpensesPage() {
   };
 
   const handleReset = () => {
+    setLoading(true);
     const newPayload = {
       ...ExpenseSearch,
       size: constants.PAGE_SIZE,
@@ -221,15 +235,16 @@ export function ExpensesPage() {
     };
     setPayload(newPayload);
     queryRef.current = newPayload;
-    setRecords([]);
-    setCursor(undefined);
     setHasMore(true);
-    setTimeout(fetchData, constants.DELAY);
+    setTimeout(() => {
+      setRecords([]);
+      setCursor(undefined);
+      fetchData();
+    }, constants.DELAY);
   };
 
   return (
     <Box>
-
       <TableContainer
         component={Paper}
         sx={{ maxHeight: { xs: window.innerHeight - 212, sm: 600 } }}
@@ -286,7 +301,7 @@ export function ExpensesPage() {
                     onClick={() => handleOpen(Expense)}>
                     <Icon name="add" />
                   </IonFabButton>
-                  {!payload.projectId && !payload.categoryId && !(payload.startDate && payload.endDate) && payload.isTaxable === undefined && (
+                  {!hasActiveFilters() && (
                     <IonFabButton
                       id="id-search-button"
                       title="SEARCH EXPENSES"
@@ -297,7 +312,7 @@ export function ExpensesPage() {
                       <Icon name="options-sharp" />
                     </IonFabButton>
                   )}
-                  {(payload.projectId || payload.categoryId || (payload.startDate && payload.endDate) || payload.isTaxable !== undefined) && (
+                  {hasActiveFilters() && (
                     <IonFabButton
                       id="id-reset-button"
                       title="RESET FILTERS"
