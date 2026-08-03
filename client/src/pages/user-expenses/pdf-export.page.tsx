@@ -41,7 +41,7 @@ export function ExpensePDFExportPage({ countryId, currency, handleClose }: Props
     initialValues: {
       startDate: defaultStartDate,
       endDate: defaultEndDate,
-      isTaxable: undefined as boolean | undefined
+      isTaxable: true as boolean | undefined
     },
     validateOnMount: false,
     validationSchema: Yup.object({
@@ -153,7 +153,7 @@ export function ExpensePDFExportPage({ countryId, currency, handleClose }: Props
                   color="primary"
                 />
               }
-              label="Tax Related (if checked, include only tax expenses in PDF)"
+              label="Taxed (for reporting purposes)"
             />
           </div>
 

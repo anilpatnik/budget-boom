@@ -124,7 +124,16 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
               payload={projects || []}
             />
           </div>
-          <div className="my-6">
+          <div className="my-6 flex items-center gap-6">
+            <div className="flex-1">
+              <IonLabel class="text-sm text-gray-700">Skip Date Range</IonLabel>
+              <Switch
+                id="skip"
+                name="skip"
+                checked={formik.values.skip}
+                onChange={formik.handleChange}
+              />
+            </div>
             <FormControlLabel
               control={
                 <Switch
@@ -139,16 +148,7 @@ export function ExpenseSearchPage({ search, projects, handleClose, handleSearch 
                   color="primary"
                 />
               }
-              label="Tax Related (if checked, show only tax expenses)"
-            />
-          </div>
-          <div className="my-6">
-            <IonLabel class="text-sm text-gray-700">Skip Date Range</IonLabel>
-            <Switch
-              id="skip"
-              name="skip"
-              checked={formik.values.skip}
-              onChange={formik.handleChange}
+              label="Taxed"
             />
           </div>
           <div className="my-6">

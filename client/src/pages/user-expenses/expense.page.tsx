@@ -28,7 +28,7 @@ export function ExpensePage({ projects, expense, handleClose, handleNew, handleE
       price: Math.abs(expense?.price || 0),
       expenditure: !(expense?.price && expense?.price > 0),
       notes: expense?.notes || String.empty,
-      isTaxable: expense?.isTaxable || false
+      isTaxable: expense?.isTaxable !== undefined ? expense.isTaxable : true
     },
     validateOnMount: false,
     validationSchema: Yup.object({
@@ -142,18 +142,30 @@ export function ExpensePage({ projects, expense, handleClose, handleNew, handleE
               }
             />
           </div>
-          <div className="my-6">
-            <InputField
-              name="price"
-              label="Amount"
-              type="number"
-              fullWidth={false}
-              startAdor={true}
-              startAdorText="$"
-              value={formik.values.price > 0 ? formik.values.price.toString() : String.empty}
-              touched={formik.touched.price}
-              errorMessage={formik.errors.price}
-              handleChange={e => formik.setFieldValue("price", e.target.value)}
+          <div className="my-6 flex items-end gap-6">
+            <div className="flex-1">
+              <InputField
+                name="price"
+                label="Amount"
+                type="number"
+                fullWidth={false}
+                startAdor={true}
+                startAdorText="$"
+                value={formik.values.price > 0 ? formik.values.price.toString() : String.empty}
+                touched={formik.touched.price}
+                errorMessage={formik.errors.price}
+                handleChange={e => formik.setFieldValue("price", e.target.value)}
+              />
+            </div>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={formik.values.isTaxable}
+                  onChange={(e) => formik.setFieldValue("isTaxable", e.target.checked)}
+                  color="primary"
+                />
+              }
+              label="Taxed"
             />
           </div>
           <div className="my-6">
@@ -189,18 +201,6 @@ export function ExpensePage({ projects, expense, handleClose, handleNew, handleE
               errorMessage={formik.errors.projectId}
               handleChange={formik.handleChange}
               payload={projects || []}
-            />
-          </div>
-          <div className="my-6">
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={formik.values.isTaxable}
-                  onChange={(e) => formik.setFieldValue("isTaxable", e.target.checked)}
-                  color="primary"
-                />
-              }
-              label="Tax (for reporting purposes)"
             />
           </div>
           <div className="my-6">

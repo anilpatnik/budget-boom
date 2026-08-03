@@ -23,7 +23,7 @@ export function generateExpensePDF(options: PDFExportOptions) {
   doc.setFontSize(16);
   let titleText = "Expense Report";
   if (isTaxable) {
-    titleText += " (Tax Related)";
+    titleText += " (Taxed)";
   }
   doc.text(titleText, 14, 15);
 
