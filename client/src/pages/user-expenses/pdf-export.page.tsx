@@ -71,7 +71,7 @@ export function ExpensePDFExportPage({ countryId, currency, handleClose }: Props
         startDate: values?.skip ? String.empty : values.startDate,
         endDate: values?.skip ? String.empty : values.endDate,
         isTaxable: values.isTaxable,
-        skip: false,
+        skip: values.skip,
         size: 1000
       };
 
