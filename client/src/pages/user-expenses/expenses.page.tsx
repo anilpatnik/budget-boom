@@ -64,9 +64,7 @@ export function ExpensesPage() {
     return (
       payload.projectId ||
       payload.categoryId ||
-      payload.isTaxable !== undefined ||
-      payload.startDate !== dateHelper.monthStart ||
-      payload.endDate !== dateHelper.monthEnd
+      payload.isTaxable !== undefined
     );
   };
 
@@ -363,9 +361,9 @@ export function ExpensesPage() {
                           css="text-2xl text-black mr-2"
                         />
                         {item?.notes ? item.notes : lookupService.getCategory(item.categoryId).name}
-                        {item?.isTaxable && (
-                          <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                            TAX
+                        {!item?.isTaxable && (
+                          <span className="ml-2 text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded">
+                            NO TAX
                           </span>
                         )}
                       </Box>

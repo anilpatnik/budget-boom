@@ -333,6 +333,9 @@
 					"isTaxable": {
 						"type": "boolean"
 					},
+					"skip": {
+						"type": "boolean"
+					},
 					"page": {
 						"type": "number",
 						"format": "double"
