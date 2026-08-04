@@ -54,10 +54,10 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     port: 44454,
-    https: {
+    https: fs.existsSync("../ssl.key") && fs.existsSync("../ssl.pem") ? {
       key: fs.readFileSync("../ssl.key"),
       cert: fs.readFileSync("../ssl.pem")
-    }
+    } : false
   },
   resolve: {
     alias: { "@": path.resolve(__dirname, "./src") }
