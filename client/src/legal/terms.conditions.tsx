@@ -5,8 +5,9 @@ import { NavType } from "@/utils/enums";
 
 export function TermsConditions() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="text-center mb-16">
+    <div className="overflow-y-auto max-h-screen">
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center mb-16">
         <div className="flex justify-center items-center mb-8">
           <a href={NavType.Root}>
             <img
@@ -238,6 +239,7 @@ export function TermsConditions() {
             Back
           </IonButton>
         </Link>
+      </div>
       </div>
     </div>
   );

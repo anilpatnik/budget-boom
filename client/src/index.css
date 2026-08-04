@@ -33,11 +33,20 @@ ion-header {
 }
 ion-content {
   --offset-bottom: auto !important;
-  --overflow: hidden;
-  overflow: auto;
+  overflow: auto !important;
+  height: 100% !important;
   &::-webkit-scrollbar {
     display: none;
   }
+}
+ion-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+ion-page ion-content {
+  flex: 1;
+  overflow-y: auto;
 }
 ion-card {
   border-radius: 20px;
