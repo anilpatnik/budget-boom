@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import { VitePWA } from "vite-plugin-pwa";
-import fs from "node:fs";
 import path from "path";
 import tailwindcss from "@tailwindcss/vite";
 
@@ -53,11 +52,7 @@ export default defineConfig({
   build: { outDir: "frontend" },
   server: {
     host: "0.0.0.0",
-    port: 44454,
-    https: fs.existsSync("../ssl.key") && fs.existsSync("../ssl.pem") ? {
-      key: fs.readFileSync("../ssl.key"),
-      cert: fs.readFileSync("../ssl.pem")
-    } : false
+    port: 44454
   },
   resolve: {
     alias: { "@": path.resolve(__dirname, "./src") }
