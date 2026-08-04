@@ -275,7 +275,7 @@ export function UsersPage() {
                 )}
                 {loadingInit && (
                   <TableRow>
-                    <TableCell colSpan={4} className="!text-center !py-10">
+                    <TableCell colSpan={4} className="text-center! py-10!">
                       <IonSpinner name="lines-sharp-small"></IonSpinner>
                     </TableCell>
                   </TableRow>

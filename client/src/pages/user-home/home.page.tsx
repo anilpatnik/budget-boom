@@ -48,7 +48,8 @@ export function HomePage() {
     }
   };
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="overflow-y-auto max-h-screen">
+      <div className="container mx-auto px-4 py-8">
       <div className="text-center mb-16">
         <div className="flex justify-center items-center mb-8">
           <img
@@ -70,7 +71,7 @@ export function HomePage() {
         <img
           src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
           alt="Person using expense management software"
-          className="w-full h-[500px] object-cover rounded-2xl shadow-2xl"
+          className="w-full h-125 object-cover rounded-2xl shadow-2xl"
         />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4 bg-black/50 rounded-2xl">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Take Control?</h2>
@@ -86,7 +87,7 @@ export function HomePage() {
                 color="warning"
                 className="google-button"
                 onClick={handleLogin}>
-                <Icon name="logo-google" slot="start" css="mr-3" /> Continue with Google
+                <Icon name="logo-google" slot="start" css="mr-3" /> Continue with Gmail
               </IonButton>
             </div>
           </div>
@@ -327,6 +328,7 @@ export function HomePage() {
         showBackdrop={loading || false}
         translucent={loading || false}
       />
+      </div>
     </div>
   );
 }
