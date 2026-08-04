@@ -50,7 +50,7 @@ export function HomePage() {
   return (
     <div className="overflow-y-auto max-h-screen">
       <div className="container mx-auto px-4 py-8">
-      <div className="text-center mb-16">
+        <div className="text-center mb-16">
         <div className="flex justify-center items-center mb-8">
           <img
             alt={String.empty}
@@ -60,10 +60,8 @@ export function HomePage() {
             loading="lazy"
           />
         </div>
-        <div className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-8">
-          The smart and easy way to manage your budget, track expenses, and achieve your financial
-          goals with our intuitive My Budget Easy tool. Perfect for personal use and project
-          management
+        <div className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+          Smart budgeting made simple. Track every expense, organize by project, visualize spending patterns, and achieve your financial goals with confidence.
         </div>
       </div>
 
@@ -98,7 +96,7 @@ export function HomePage() {
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">How It Works</h2>
           <div className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Simple, intuitive workflow to manage your expenses in just a few steps
+            Four simple steps to take control of your finances
           </div>
         </div>
 
@@ -109,7 +107,7 @@ export function HomePage() {
             </div>
             <h3 className="text-xl font-semibold mb-2">Add Expenses</h3>
             <div className="text-gray-600">
-              Quickly log your expenses with date, amount, and category
+              Log expenses instantly with custom categories and attach notes
             </div>
           </div>
 
@@ -117,9 +115,9 @@ export function HomePage() {
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <LucideIcon name="FolderOpen" css="w-8 h-8 text-green-600" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">Organize Projects</h3>
+            <h3 className="text-xl font-semibold mb-2">Organize by Projects</h3>
             <div className="text-gray-600">
-              Group expenses by projects and set budgets to stay on track
+              Group related expenses into projects and monitor budgets in real-time
             </div>
           </div>
 
@@ -127,9 +125,9 @@ export function HomePage() {
             <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <LucideIcon name="ChartLine" css="w-8 h-8 text-purple-600" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">Analyze Data</h3>
+            <h3 className="text-xl font-semibold mb-2">Visualize Spending</h3>
             <div className="text-gray-600">
-              Get insights with reports to understand spending patterns
+              See detailed reports and charts to identify spending patterns instantly
             </div>
           </div>
 
@@ -137,9 +135,9 @@ export function HomePage() {
             <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <LucideIcon name="CheckCircle" css="w-8 h-8 text-orange-600" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">Stay Informed</h3>
+            <h3 className="text-xl font-semibold mb-2">Take Control</h3>
             <div className="text-gray-600">
-              Make informed financial decisions with real-time tracking
+              Make smarter financial decisions with actionable insights and forecasts
             </div>
           </div>
         </div>
